@@ -17,13 +17,14 @@
 # thanh nguyen <thanhnguyen.icsc@gmail.com>, 2017
 # ThuND <thu.nd@komit-consulting.com>, 2017
 # Dang Hanh <hanh.dtm@komit-consulting.com>, 2017
+# DuyBQ <duybq86@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-23 13:27+0000\n"
 "PO-Revision-Date: 2017-06-23 13:27+0000\n"
-"Last-Translator: Dang Hanh <hanh.dtm@komit-consulting.com>, 2017\n"
+"Last-Translator: DuyBQ <duybq86@gmail.com>, 2018\n"
 "Language-Team: Vietnamese (https://www.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -57,7 +58,7 @@ msgid ""
 "<p>Best regards,</p>\n"
 msgstr ""
 "\n"
-"<p>Dear\n"
+"<p>Gửi\n"
 "% if object.partner_id.is_company and object.child_ids:\n"
 "    ${object.partner_id.child_ids[0].name}\n"
 "% else :\n"
@@ -69,7 +70,7 @@ msgstr ""
 "    với tham chiếu: ${object.partner_ref}\n"
 "% endif\n"
 "% if object.origin:\n"
-"    (Nguồn gốc RFQ: ${object.origin})\n"
+"    (Y/c báo giá ban đầu: ${object.origin})\n"
 "% endif\n"
 "tổng giá trị <strong>${object.amount_total} ${object.currency_id.name}</strong>\n"
 "từ ${object.company_id.name}.\n"
@@ -103,7 +104,7 @@ msgid ""
 "<p>Thank you,</p>\n"
 msgstr ""
 "\n"
-"<p>Dear ${object.partner_id.name} \n"
+"<p>Gửi ${object.partner_id.name} \n"
 "% if object.partner_id.parent_id:\n"
 "    (<i>${object.partner_id.parent_id.name}</i>)\n"
 "% endif\n"
@@ -114,7 +115,7 @@ msgstr ""
 "    với tham chiếu: ${object.partner_ref}\n"
 "% endif\n"
 "% if object.origin:\n"
-"    (Nguồn gốc RFQ: ${object.origin})\n"
+"    (Y/c báo giá ban đầu: ${object.origin})\n"
 "% endif\n"
 "tổng giá trị <strong>${object.amount_total} ${object.currency_id.name}</strong>\n"
 "từ ${object.company_id.name}.\n"
@@ -130,6 +131,9 @@ msgid ""
 "Creates the dropship Route and add more complex tests\n"
 "-This installs the module stock_dropshipping."
 msgstr ""
+"\n"
+"Creates the dropship Route and add more complex tests\n"
+"-This installs the module stock_dropshipping."
 
 #. module: purchase
 #: code:addons/purchase/models/stock.py:87
@@ -688,7 +692,7 @@ msgstr "Giá trị thẩm định hai lần *"
 #. module: purchase
 #: selection:purchase.report,state:0
 msgid "Draft RFQ"
-msgstr "RFQ Dự thảo"
+msgstr "Y/c báo giá Dự thảo"
 
 #. module: purchase
 #: model:ir.model.fields,field_description:purchase.field_purchase_order_dest_address_id
@@ -933,7 +937,7 @@ msgid ""
 "Most propositions of purchase orders are created automatically\n"
 "                by Odoo based on inventory needs."
 msgstr ""
-"Hầu hết các đề xuất cho các đơn hàng mua đều được tạo tự động bởi Odoo dựa "
+"Hầu hết các đề xuất cho các đơn hàng mua đều được tạo tự động bởi Hệ thống dựa "
 "trên nhu cầu về lượng dự trữ được tính toán tự động"
 
 #. module: purchase
@@ -1088,7 +1092,7 @@ msgstr "Giá Nhà cung cấp"
 #. module: purchase
 #: model:ir.ui.view,arch_db:purchase.purchase_order_form
 msgid "Print RFQ"
-msgstr "In RFQ"
+msgstr "In Y/c báo giá"
 
 #. module: purchase
 #: model:ir.model,name:purchase.model_procurement_order
@@ -1368,27 +1372,27 @@ msgstr "Báo giá"
 #. module: purchase
 #: selection:purchase.order,state:0
 msgid "RFQ"
-msgstr ""
+msgstr "Yêu cầu báo giá"
 
 #. module: purchase
 #: model:mail.message.subtype,name:purchase.mt_rfq_approved
 msgid "RFQ Approved"
-msgstr "RFQ được duyệt"
+msgstr "Y/c báo giá đã duyệt"
 
 #. module: purchase
 #: model:mail.message.subtype,name:purchase.mt_rfq_confirmed
 msgid "RFQ Confirmed"
-msgstr "RFQ được xác nhận"
+msgstr "Y/c báo giá đã xác nhận"
 
 #. module: purchase
 #: model:mail.message.subtype,name:purchase.mt_rfq_done
 msgid "RFQ Done"
-msgstr "RFQ Hoàn thành"
+msgstr "Y/c báo giá Hoàn thành"
 
 #. module: purchase
 #: selection:purchase.order,state:0 selection:purchase.report,state:0
 msgid "RFQ Sent"
-msgstr "RFQ đã được gửi"
+msgstr "Y/c báo giá đã được gửi"
 
 #. module: purchase
 #: model:mail.template,report_name:purchase.email_template_edi_purchase
@@ -1398,12 +1402,12 @@ msgstr ""
 #. module: purchase
 #: model:ir.actions.act_window,name:purchase.act_res_partner_2_purchase_order
 msgid "RFQs and Purchases"
-msgstr "RFQs và Đơn hàng"
+msgstr "Y/c báo giá và Đơn hàng"
 
 #. module: purchase
 #: model:ir.ui.view,arch_db:purchase.purchase_order_form
 msgid "Re-Send RFQ by Email"
-msgstr "Gửi lại RFQ bằng Email"
+msgstr "Gửi lại Y/c báo giá bằng Email"
 
 #. module: purchase
 #: model:ir.ui.view,arch_db:purchase.purchase_order_form
@@ -1525,7 +1529,7 @@ msgstr "Gửi Đơn hàng"
 #. module: purchase
 #: model:ir.ui.view,arch_db:purchase.purchase_order_form
 msgid "Send RFQ by Email"
-msgstr "Gửi RFQ"
+msgstr "Gửi Y/c báo giá"
 
 #. module: purchase
 #: model:ir.model.fields,field_description:purchase.field_purchase_order_line_sequence
@@ -1753,8 +1757,8 @@ msgstr "Hoá đơn nhà cung cấp này đã được điều chỉnh từ: %s"
 #: model:ir.actions.act_window,help:purchase.act_res_partner_2_purchase_order
 msgid "This vendor has no purchase order. Click to create a new RfQ."
 msgstr ""
-"Nhà cung cấp này chưa có đơn hàng nào với chúng ta. Bấm để tạo mới một RFQ "
-"(Yêu cầu Báo giá)."
+"Nhà cung cấp này chưa có đơn hàng nào với chúng ta. Bấm để tạo mới một Y/c báo giá"
+"(RFQ)."
 
 #. module: purchase
 #: model:ir.model.fields,help:purchase.field_purchase_order_picking_type_id
