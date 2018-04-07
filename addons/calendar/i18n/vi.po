@@ -10,6 +10,7 @@
 # son dang <son.dang@doda100.com>, 2016
 # Phạm Lân <phamquanglan@gmail.com>, 2016
 # Tuan Tran <tmtuan.projects@gmail.com>, 2017
+# DuyBQ <duybq86@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
@@ -180,7 +181,7 @@ msgstr ""
 "                                % if attendee.common_name != object.common_name:\n"
 "                                <span style=\"margin-left:5px\">${attendee.common_name}</span>\n"
 "                                % else:\n"
-"                                <span style=\"margin-left:5px\">You</span>\n"
+"                                <span style=\"margin-left:5px\">Bạn</span>\n"
 "                                % endif\n"
 "                            </li>\n"
 "                        % endfor\n"
@@ -330,7 +331,7 @@ msgstr ""
 "                        <ul>\n"
 "                        % if object.event_id.location:\n"
 "                            <li>Địa điểm: ${object.event_id.location}\n"
-"                            (<a href=\"http://maps.google.com/maps?oi=map&q=${object.event_id.location}\">View Map</a>)\n"
+"                            (<a href=\"http://maps.google.com/maps?oi=map&q=${object.event_id.location}\">Xem bản đồ</a>)\n"
 "                            </li>\n"
 "                        % endif\n"
 "                        % if object.event_id.description :\n"
@@ -479,7 +480,7 @@ msgstr ""
 "            <td style=\"padding:10px 10px 10px 5px;font-size: 14px;\">\n"
 "                <p style=\"font-size: 20px; text-align: center;\">Nhắc nhở về <strong>${object.event_id.name}</strong></p>\n"
 "                <p>\n"
-"                    <strong>Dear ${object.common_name}</strong>,<br />\n"
+"                    <strong>Gửi ${object.common_name}</strong>,<br />\n"
 "                    Đây là lời nhắc nhở cho sự kiện dưới đây:\n"
 "                </p>\n"
 "                <table style=\"margin-top: 20px;\"><tr>\n"
@@ -499,7 +500,7 @@ msgstr ""
 "                        <ul>\n"
 "                        % if object.event_id.location:\n"
 "                            <li>Địa điểm: ${object.event_id.location}\n"
-"                            (<a href=\"http://maps.google.com/maps?oi=map&q=${object.event_id.location}\">View Map</a>)\n"
+"                            (<a href=\"http://maps.google.com/maps?oi=map&q=${object.event_id.location}\">Xem bản đồ</a>)\n"
 "                            </li>\n"
 "                        % endif\n"
 "                        % if object.event_id.description :\n"
@@ -516,7 +517,7 @@ msgstr ""
 "                                % if attendee.common_name != object.common_name:\n"
 "                                <span style=\"margin-left:5px\">${attendee.common_name}</span>\n"
 "                                % else:\n"
-"                                <span style=\"margin-left:5px\">You</span>\n"
+"                                <span style=\"margin-left:5px\">Bạn</span>\n"
 "                                % endif\n"
 "                            </li>\n"
 "                        % endfor\n"
@@ -558,12 +559,14 @@ msgid ""
 "%s at %s To\n"
 " %s at %s (%s)"
 msgstr ""
+"%s tại %s Đến\n"
+" %s tại %s (%s)"
 
 #. module: calendar
 #: code:addons/calendar/models/calendar.py:637
 #, python-format
 msgid "%s at (%s To %s) (%s)"
-msgstr ""
+msgstr "%s tại (%s đến %s) (%s)"
 
 #. module: calendar
 #: code:addons/calendar/models/calendar.py:191
@@ -676,7 +679,7 @@ msgstr "Lịch"
 #: model:ir.ui.view,arch_db:calendar.calendar_alarm_view_form
 #: model:ir.ui.view,arch_db:calendar.view_calendar_alarm_tree
 msgid "Calendar Alarm"
-msgstr "Báo động Lịch"
+msgstr "Lịch nhắc nhở"
 
 #. module: calendar
 #: model:ir.ui.view,arch_db:calendar.invitation_page_anonymous
@@ -821,12 +824,12 @@ msgstr ""
 #. module: calendar
 #: model:ir.model,name:calendar.model_mail_compose_message
 msgid "Email composition wizard"
-msgstr "Đồ thuật soạn thảo email"
+msgstr "Thuật sĩ soạn thảo email"
 
 #. module: calendar
 #: model:ir.model,name:calendar.model_survey_mail_compose_message
 msgid "Email composition wizard for Survey"
-msgstr "Đồ thuật soạn thảo email cho Khảo sát"
+msgstr "Thuật sĩ soạn thảo email cho Khảo sát"
 
 #. module: calendar
 #: model:ir.model.fields,help:calendar.field_calendar_attendee_email
@@ -884,7 +887,7 @@ msgstr "Thời gian Sự kiện"
 #. module: calendar
 #: model:ir.model,name:calendar.model_calendar_alarm
 msgid "Event alarm"
-msgstr "Báo động sự kiện"
+msgstr "Nhắc nhở sự kiện"
 
 #. module: calendar
 #: code:addons/calendar/models/calendar.py:1059
@@ -1015,7 +1018,7 @@ msgstr "Lời mời"
 #. module: calendar
 #: model:ir.model,name:calendar.model_mail_wizard_invite
 msgid "Invite wizard"
-msgstr "Đồ thuật Mời"
+msgstr "Thuật sĩ Mời sự kiện"
 
 #. module: calendar
 #: selection:calendar.event,byday:0
@@ -1106,7 +1109,7 @@ msgstr "Kiểu Cuộc gặp"
 #. module: calendar
 #: model:ir.model.fields,field_description:calendar.field_calendar_attendee_event_id
 msgid "Meeting linked"
-msgstr ""
+msgstr "Cuộc gặp đã liên kết"
 
 #. module: calendar
 #: model:ir.actions.act_window,name:calendar.action_calendar_event
@@ -1433,7 +1436,7 @@ msgstr "Tên tag đã tồn tại!"
 #. module: calendar
 #: model:ir.model.fields,field_description:calendar.field_calendar_event_categ_ids
 msgid "Tags"
-msgstr ""
+msgstr "Thẻ"
 
 #. module: calendar
 #: model:ir.ui.view,arch_db:calendar.view_calendar_event_form
@@ -1566,7 +1569,7 @@ msgstr ""
 #. module: calendar
 #: model:ir.ui.view,arch_db:calendar.view_calendar_event_form
 msgid "e.g. Business Lunch"
-msgstr "vd Ăn trưa công việc"
+msgstr "vd Ăn trưa, công việc"
 
 #. module: calendar
 #: code:addons/calendar/models/calendar.py:1057
