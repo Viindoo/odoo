@@ -15,6 +15,7 @@
 # lam nguyen <lamev.inc@gmail.com>, 2017
 # thanh nguyen <thanhnguyen.icsc@gmail.com>, 2017
 # Dang Hanh <hanh.dtm@komit-consulting.com>, 2017
+# DuyBQ <duybq86@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
@@ -119,6 +120,92 @@ msgid ""
 "</p>\n"
 "</div>"
 msgstr ""
+"\n"
+"% set company = ctx.get('company', user.company_id)\n"
+"<div>\n"
+"% if ctx.get('has_button_access'):\n"
+"<div itemscope itemtype=\"http://schema.org/EmailMessage\">\n"
+"    <div itemprop=\"potentialAction\" itemscope itemtype=\"http://schema.org/ViewAction\">\n"
+"        <link itemprop=\"target\" href=\"${ctx['button_access']['url']}\"/>\n"
+"        <link itemprop=\"url\" href=\"${ctx['button_access']['url']}\"/>\n"
+"        <meta itemprop=\"name\" content=\"View ${ctx['model_name']}\"/>\n"
+"    </div>\n"
+"</div>\n"
+"% endif\n"
+"% if not ctx['is_discussion'] or not len(ctx['actions']) == 0 or ctx.get('has_button_access'):\n"
+"<div summary=\"o_mail_notification\" style=\"padding: 0px; width:600px;\">\n"
+"<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" style=\"width: 600px; margin-top: 5px;\">\n"
+"<tbody><tr>\n"
+"    <td valign=\"center\">\n"
+"        % if ctx.get('has_button_access'):\n"
+"        <a href=\"${ctx['button_access']['url']}\" style=\"padding: 8px 12px; font-size: 12px; color: #FFFFFF; text-decoration: none !important; font-weight: 400; background-color: #875A7B; border: 0px solid #875A7B; border-radius:3px\">${ctx['button_access']['title']}</a>\n"
+"        % endif\n"
+"\n"
+"        % if ctx.get('has_button_follow'):\n"
+"        % if ctx.get('has_button_access'):\n"
+"           |\n"
+"        % endif\n"
+"        <a href=\"${ctx['button_follow']['url']}\" style=\"color: #875A7B; text-decoration: none !important;\">${ctx['button_follow']['title']}</a>\n"
+"        % elif ctx.get('has_button_unfollow'):\n"
+"        % if ctx.get('has_button_access'):\n"
+"           |\n"
+"        % endif\n"
+"        <a href=\"${ctx['button_unfollow']['url']}\" style=\"color: #875A7B; text-decoration: none !important;\">${ctx['button_unfollow']['title']}</a>\n"
+"        % endif\n"
+"\n"
+"        % if ctx.get('actions'):\n"
+"        % for action in ctx['actions']:\n"
+"        |\n"
+"        <a href=\"${action['url']}\" style=\"color: #875A7B; text-decoration:none !important;\">${action['title']}</a>\n"
+"        % endfor\n"
+"        % endif\n"
+"    </td>\n"
+"    <td valign=\"center\" align=\"right\">\n"
+"        <img src=\"/logo.png?company=${company.id}\" style=\"padding: 0px; margin: 0px; height: auto; max-width: 80px; max-height: 40px;\" alt=\"${company.name}\">\n"
+"    </td>\n"
+"</tr>\n"
+"<tr>\n"
+"    <td colspan=\"2\" style=\"text-align:center;\">\n"
+"        <hr width=\"100%\"\n"
+"            style=\"background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin:10px 0;\">\n"
+"        % if ctx.get('subtype') and ctx.get('subtype').internal:\n"
+"        <p style=\"background-color: #f2dede; padding: 5px; margin-bottom: 16px;\">\n"
+"            <strong>Thảo luận nội bộ</strong>: Gửi một phản hồi thảo luận nội bộ. Người theo dõi sẽ không nhận được bất kỳ thông báo qua email.\n"
+"        </p>\n"
+"        % endif\n"
+"    </td>\n"
+"</tr>\n"
+"</tbody></table>\n"
+"</div>\n"
+"% endif\n"
+"<div>\n"
+"    ${object.body | safe}\n"
+"</div>\n"
+"% if ctx.get('tracking'):\n"
+"    <ul>\n"
+"    % for tracking in ctx['tracking']\n"
+"        <li>${tracking[0]} : ${tracking[1]} -&gt; ${tracking[2]}</li>\n"
+"    % endfor\n"
+"    </ul>\n"
+"% endif\n"
+"\n"
+"% if ctx.get('signature'):\n"
+"    ${ctx['signature'] | safe}\n"
+"% endif\n"
+"<br/>\n"
+"<p style=\"color: #555555;\">\n"
+"    Sent by\n"
+"    % if ctx.get('website_url'):\n"
+"    <a href=\"${ctx['website_url']}\" style=\"text-decoration:none; color: #875A7B;\">\n"
+"    % endif\n"
+"    ${ctx.get('company_name')}\n"
+"    % if ctx.get('website_url'):\n"
+"    </a>\n"
+"    % endif\n"
+"    using\n"
+"    <a target=\"_blank\" href=\"https://www.odoo.com\" style=\"text-decoration:none; color: #875A7B;\">Hệ thống</a>.\n"
+"</p>\n"
+"</div>"
 
 #. module: mail
 #: code:addons/mail/models/mail_channel.py:674
@@ -346,7 +433,7 @@ msgid ""
 "                            <span attrs=\"{'invisible':['|', ('model', '=', False), ('composition_mode', '=', 'mass_mail')]}\">Followers of the document and</span>"
 msgstr ""
 "<span attrs=\"{'invisible': [('composition_mode', '!=', 'mass_mail')]}\">\n"
-"                                <strong>Gửi email hàng loại</strong> cho\n"
+"                                <strong>Gửi email hàng loạt</strong> cho\n"
 "                                <span attrs=\"{'invisible': [('use_active_domain', '=', True)]}\">các bản ghi được chọn</span>\n"
 "                                <span attrs=\"{'invisible': [('use_active_domain', '=', False)]}\">cho bộ lọc hiện hành</span>.\n"
 "                            </span>\n"
@@ -362,6 +449,12 @@ msgid ""
 "                                    If you want to use only selected records please uncheck this selection box :\n"
 "                                </span>"
 msgstr ""
+"<span attrs=\"{'invisible': [('use_active_domain', '=', True)]}\">\n"
+"                                    Nếu bạn muốn gửi nó cho tất cả các bản ghi phù hợp với tiêu chí tìm kiếm của bạn, hãy đánh dấu ô này:\n"
+"                                </span>\n"
+"                                <span attrs=\"{'invisible': [('use_active_domain', '=', False)]}\">\n"
+"                                    Nếu bạn chỉ muốn sử dụng các bản ghi đã chọn, hãy bỏ chọn hộp lựa chọn này:\n"
+"                                </span>"
 
 #. module: mail
 #: model:ir.ui.view,arch_db:mail.email_template_form
@@ -391,6 +484,12 @@ msgid ""
 "                                The email will be sent for all the records selected in the list.<br/>\n"
 "                                Confirming this wizard will probably take a few minutes blocking your browser."
 msgstr ""
+"<strong>\n"
+"                                    Tất cả hồ sơ phù hợp với bộ lọc tìm kiếm hiện tại của bạn sẽ được gửi đi, không chỉ \n"
+"                                    các id được chọn trong chế độ xem danh sách.\n"
+"                                </strong><br/>\n"
+"                                Email sẽ được gửi cho tất cả hồ sơ được chọn trong danh sách. Xác nhận thuật sỹ <br/>\n"
+"                                này có thể sẽ mất vài phút để chặn trình duyệt của bạn."
 
 #. module: mail
 #: model:ir.ui.view,arch_db:mail.message_activity_done
@@ -403,6 +502,8 @@ msgid ""
 "<strong>Only records checked in list view will be used.</strong><br/>\n"
 "                                The email will be sent for all the records selected in the list."
 msgstr ""
+"<strong>Chỉ các bản ghi được kiểm tra trong chế độ xem danh sách sẽ được sử dụng.</strong><br/>\n"
+"                                Email sẽ được gửi cho tất cả hồ sơ được chọn trong danh sách."
 
 #. module: mail
 #: model:ir.ui.view,arch_db:mail.mail_activity_view_form_popup
@@ -924,7 +1025,7 @@ msgstr "Phản hồi khác"
 #. module: mail
 #: model:ir.model,name:mail.model_mail_shortcode
 msgid "Canned Response / Shortcode"
-msgstr ""
+msgstr "Trả lời tự động/Biểu tượng"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_mail_email_cc
@@ -4953,12 +5054,12 @@ msgid ""
 "through the invite button."
 msgstr ""
 "Nhóm này có thể được thấy bởi những người không phải là thành viên. "
-"Invisible groups can add members through the invite button."
+"Các nhóm có thể thêm các thành viên thông qua nút mời."
 
 #. module: mail
 #: model:ir.ui.view,arch_db:mail.view_mail_search
 msgid "Thread"
-msgstr "Luồng"
+msgstr "Chủ đề"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_mail_email_to
@@ -5016,7 +5117,7 @@ msgstr "Hôm nay"
 #: model:ir.ui.view,arch_db:mail.mail_activity_view_search
 #: model:ir.ui.view,arch_db:mail.res_partner_view_search_inherit_mail
 msgid "Today Activities"
-msgstr ""
+msgstr "Hoạt động hôm nay"
 
 #. module: mail
 #: model:mail.activity.type,name:mail.mail_activity_data_todo
@@ -5028,7 +5129,7 @@ msgstr "Cần làm"
 #: code:addons/mail/static/src/js/activity.js:36
 #, python-format
 msgid "Tomorrow"
-msgstr ""
+msgstr "Ngày mai"
 
 #. module: mail
 #: model:ir.ui.view,arch_db:mail.mail_channel_view_form
@@ -5044,6 +5145,8 @@ msgid ""
 "Tracked values are stored in a separate model. This field allow to "
 "reconstruct the tracking and to generate statistics on the model."
 msgstr ""
+"Các giá trị truy vết được lưu trữ trong một model riêng. Trường này "
+"cho phép tái tạo lại việc theo dõi và tạo thống kê về model."
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_ir_model_fields_track_visibility
@@ -5088,7 +5191,7 @@ msgstr ""
 #: code:addons/mail/models/mail_mail.py:235
 #, python-format
 msgid "Unable to connect to SMTP Server"
-msgstr ""
+msgstr "Không thể kết nối với Máy chủ SMTP"
 
 #. module: mail
 #: code:addons/mail/models/mail_message.py:31
@@ -5115,7 +5218,7 @@ msgstr ""
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_shortcode_unicode_source
 msgid "Unicode Character"
-msgstr ""
+msgstr "Ký tự Unicode"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_account_analytic_account_message_unread
@@ -5282,7 +5385,7 @@ msgstr "Ngừng nhận cập nhật từ kênh"
 #: code:addons/mail/models/mail_template.py:510
 #, python-format
 msgid "Unsupported report type %s found."
-msgstr ""
+msgstr "Không hỗ trợ loại báo cáo %s được tìm thấy."
 
 #. module: mail
 #. openerp-web
@@ -5318,7 +5421,7 @@ msgstr "Sử dụng hệ thống email của bạn"
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_message_subtype_sequence
 msgid "Used to order subtypes."
-msgstr ""
+msgstr "Được sử dụng để đặt các phân nhóm phụ."
 
 #. module: mail
 #: model:ir.ui.view,arch_db:mail.view_mail_alias_search
@@ -5353,6 +5456,9 @@ msgid ""
 "and Enterprise versions. Online users already benefit from a ready-to-use "
 "email server (@mycompany.odoo.com)."
 msgstr ""
+"Sử dụng máy chủ email riêng của bạn là bắt buộc để gửi/nhận email trong các phiên "
+"bản Cộng đồng và Doanh nghiệp. Người dùng trực tuyến đã được hưởng lợi từ một "
+"máy chủ email có sẵn để sử dụng (@tencongty.com)."
 
 #. module: mail
 #: code:addons/mail/models/mail_thread.py:670
@@ -5365,7 +5471,7 @@ msgstr "Xem"
 #: code:addons/mail/models/mail_thread.py:668
 #, python-format
 msgid "View %s"
-msgstr ""
+msgstr "Xem %s"
 
 #. module: mail
 #. openerp-web
@@ -5416,7 +5522,7 @@ msgstr "Thông điệp có phải là một ghi chú nội bộ không (chế đ
 #. module: mail
 #: model:ir.model.fields,help:mail.field_ir_model_is_mail_thread
 msgid "Whether this model supports messages and notifications."
-msgstr ""
+msgstr "Cho dù model này hỗ trợ các thông điệp và thông báo."
 
 #. module: mail
 #: model:ir.ui.view,arch_db:mail.mail_channel_view_form
@@ -5613,7 +5719,7 @@ msgstr ""
 #: code:addons/mail/static/src/xml/client_action.xml:11
 #, python-format
 msgid "enable desktop notifications"
-msgstr "kích hoạt thông báo desktop"
+msgstr "kích hoạt thông báo trên máy"
 
 #. module: mail
 #. openerp-web
@@ -5637,7 +5743,7 @@ msgstr "từ:"
 #. module: mail
 #: model:mail.channel,name:mail.channel_all_employees
 msgid "general"
-msgstr "chung chung"
+msgstr "Toàn công ty"
 
 #. module: mail
 #: model:ir.ui.view,arch_db:mail.message_origin_link
@@ -5648,7 +5754,7 @@ msgstr "đã được"
 #: code:addons/mail/models/mail_alias.py:282
 #, python-format
 msgid "incorrectly configured alias"
-msgstr ""
+msgstr "không chính xác cấu hình bí danh"
 
 #. module: mail
 #: code:addons/mail/models/mail_alias.py:278
