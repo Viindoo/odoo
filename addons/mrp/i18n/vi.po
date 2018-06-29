@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * mrp
-#
+# 
 # Translators:
 # Martin Trigaux, 2017
 # fanha99 <fanha99@hotmail.com>, 2017
@@ -18,13 +18,14 @@
 # thanh nguyen <thanhnguyen.icsc@gmail.com>, 2017
 # Duc Dao <blakice12@gmail.com>, 2017
 # DuyBQ <duybq86@gmail.com>, 2018
+# Tri Bui <tribd@trobz.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-19 13:42+0000\n"
 "PO-Revision-Date: 2018-02-19 13:42+0000\n"
-"Last-Translator: Duc Dao <blakice12@gmail.com>, 2017\n"
+"Last-Translator: Tri Bui <tribd@trobz.com>, 2018\n"
 "Language-Team: Vietnamese (https://www.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -580,8 +581,8 @@ msgstr "Chi tiết Định mức"
 #, python-format
 msgid "BoM line product %s should not be same as BoM product."
 msgstr ""
-"Sản phẩm trong chi tiết BoM (dòng trong BoM) không được trùng với Sản phẩm "
-"BoM (sản phẩm tạo ra theo BoM)"
+"Sản phẩm %s trong chi tiết BoM (dòng trong BoM) không được trùng với Sản phẩm "
+"BoM (Thành phẩm của BoM)"
 
 #. module: mrp
 #: model:product.product,name:mrp.product_product_computer_desk_bolt
@@ -1288,6 +1289,9 @@ msgid ""
 "                                    order for this product, the delivery order will contain the raw\n"
 "                                    materials, instead of the finished product."
 msgstr ""
+"Nếu Sản phẩm là một thành phẩm: khi xử lý đơn bán/mua cho Sản phẩm\n"
+"                                    này, phiếu giao nhận sẽ chứa các thành phần (nguyên liệu thô)\n"
+"                                    thay vì thành phẩm."
 
 #. module: mrp
 #: model:ir.ui.view,arch_db:mrp.mrp_bom_form_view
@@ -1297,6 +1301,10 @@ msgid ""
 "                                    the raw materials of that product will be added to the\n"
 "                                    manufacturing order of the final product."
 msgstr ""
+"Nếu sản phẩm là một bán thành phẩm: Khi xử lý một lệnh sản xuất\n"
+"                                    mà chứa sản phầm này như một thành phần (nguyên vật liệu thô),\n"
+"                                    các thành phần (nguyên vật liệu thô) của sản phẩm này sẽ được thêm\n"
+"                                    vào lệnh sản xuất làm nguyên vật liệu thô của thành phẩm của lệnh sản xuất."
 
 #. module: mrp
 #: model:ir.ui.view,arch_db:mrp.mrp_workcenter_kanban
@@ -1312,7 +1320,7 @@ msgstr "Đang Thực hiện"
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_document_index_content
 msgid "Indexed Content"
-msgstr ""
+msgstr "Nội dung được đánh chỉ mục"
 
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_stock_move_line_lot_produced_qty
@@ -1347,7 +1355,7 @@ msgstr ""
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production_is_locked
 msgid "Is Locked"
-msgstr ""
+msgstr "Bị Khoá"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_workcenter_productivity_loss_manual
