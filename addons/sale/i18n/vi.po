@@ -82,12 +82,12 @@ msgid ""
 "</p>\n"
 msgstr ""
 "\n"
-"<p>Dear ${object.partner_id.name}\n"
+"<p>Gửi ${object.partner_id.name}\n"
 "% set access_action = object.with_context(force_website=True).get_access_action()\n"
 "% set is_online = access_action and access_action['type'] == 'ir.actions.act_url'\n"
-"% set doc_name = 'báo giá' if object.state in ('draft', 'sent') else 'xác nhận đặt hàng'\n"
+"% set doc_name = 'báo giá' if object.state in ('dự thảo', 'gửi') else 'xác nhận đặt hàng'\n"
 "% set pay_sign_name =  object.get_portal_confirmation_action()\n"
-"% set access_name = is_online and object.state in ('draft', 'sent') and pay_sign_name in ('pay', 'sign') and 'Chấp thuận và %s trực tuyến' % pay_sign_name or 'Xem %s' % doc_name\n"
+"% set access_name = is_online and object.state in ('dự thảo', 'gửi') and pay_sign_name in ('thanh toán', 'ký nhận') and 'Chấp thuận và %s trực tuyến' % pay_sign_name or 'Xem %s' % doc_name\n"
 "% set access_url = is_online and object.get_mail_url() or ''\n"
 "\n"
 "% if object.partner_id.parent_id:\n"
@@ -192,7 +192,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:sale.portal_order_page
 #: model:ir.ui.view,arch_db:sale.report_saleorder_document
 msgid "&amp;nbsp;<span>on</span>&amp;nbsp;"
-msgstr ""
+msgstr "&amp;nbsp;<span>trên</span>&amp;nbsp;"
 
 #. module: sale
 #: model:mail.template,body_html:sale.mail_template_data_notification_email_sale_order
@@ -306,6 +306,8 @@ msgid ""
 "<span class=\"label label-danger\"><i class=\"fa fa-fw fa-warning\"/><span "
 "class=\"hidden-xs\"> Problem</span></span>"
 msgstr ""
+"<span class=\"label label-danger\"><i class=\"fa fa-fw fa-warning\"/><span "
+"class=\"hidden-xs\"> Vấn đề</span></span>"
 
 #. module: sale
 #: model:ir.ui.view,arch_db:sale.portal_my_quotations
