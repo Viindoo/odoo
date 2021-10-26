@@ -285,7 +285,8 @@ class PurchaseOrderLine(models.Model):
 
     @api.depends('move_ids.state', 'move_ids.product_uom_qty', 'move_ids.product_uom')
     def _compute_qty_received(self):
-        super(PurchaseOrderLine, self)._compute_qty_received()
+        from_stock_lines = self.filtered(lambda order_line: order_line.qty_received_method == 'stock_moves')
+        super(PurchaseOrderLine, self - from_stock_lines)._compute_qty_received()
         for line in self:
             if line.qty_received_method == 'stock_moves':
                 total = 0.0
@@ -426,7 +427,7 @@ class PurchaseOrderLine(models.Model):
             move_dests_initial_demand = self.product_id.uom_id._compute_quantity(
                 sum(move_dests.filtered(lambda m: m.state != 'cancel' and not m.location_dest_id.usage == 'supplier').mapped('product_qty')),
                 self.product_uom, rounding_method='HALF-UP')
-            qty_to_attach = move_dests_initial_demand - qty
+            qty_to_attach = min(self.product_qty, move_dests_initial_demand) - qty
             qty_to_push = self.product_qty - move_dests_initial_demand
 
         if float_compare(qty_to_attach, 0.0, precision_rounding=self.product_uom.rounding) > 0:
