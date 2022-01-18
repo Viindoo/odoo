@@ -49,6 +49,14 @@ class AccountMove(models.Model):
     _check_company_auto = True
     _sequence_index = "journal_id"
 
+    def init(self):
+        self.env.cr.execute("""
+            CREATE INDEX IF NOT EXISTS account_move_to_check_idx
+            ON account_move(journal_id) WHERE to_check = true;
+            CREATE INDEX IF NOT EXISTS account_move_payment_idx
+            ON account_move(journal_id, state, payment_state, move_type, date);
+        """)
+
     @property
     def _sequence_monthly_regex(self):
         return self.journal_id.sequence_override_regex or super()._sequence_monthly_regex
@@ -1961,9 +1969,9 @@ class AccountMove(models.Model):
             raise ValidationError(_('Posted journal entry must have an unique sequence number per company.\n'
                                     'Problematic numbers: %s\n') % ', '.join(r[1] for r in res))
 
-    @api.constrains('ref', 'move_type', 'partner_id', 'journal_id', 'invoice_date')
+    @api.constrains('ref', 'move_type', 'partner_id', 'journal_id', 'invoice_date', 'state')
     def _check_duplicate_supplier_reference(self):
-        moves = self.filtered(lambda move: move.is_purchase_document() and move.ref)
+        moves = self.filtered(lambda move: move.state == 'posted' and move.is_purchase_document() and move.ref)
         if not moves:
             return
 
@@ -2669,15 +2677,18 @@ class AccountMove(models.Model):
                 refund_repartition_line = tax_repartition_lines_mapping[invoice_repartition_line]
 
                 # Find the right account.
-                account_id = self.env['account.move.line']._get_default_tax_account(refund_repartition_line).id
-                if not account_id:
-                    if not invoice_repartition_line.account_id:
-                        # Keep the current account as the current one comes from the base line.
-                        account_id = line_vals['account_id']
-                    else:
-                        tax = invoice_repartition_line.invoice_tax_id
-                        base_line = self.line_ids.filtered(lambda line: tax in line.tax_ids.flatten_taxes_hierarchy())[0]
-                        account_id = base_line.account_id.id
+                if cancel:
+                    account_id = line_vals['account_id']
+                else:
+                    account_id = self.env['account.move.line']._get_default_tax_account(refund_repartition_line).id
+                    if not account_id:
+                        if not invoice_repartition_line.account_id:
+                            # Keep the current account as the current one comes from the base line.
+                            account_id = line_vals['account_id']
+                        else:
+                            tax = invoice_repartition_line.invoice_tax_id
+                            base_line = self.line_ids.filtered(lambda line: tax in line.tax_ids.flatten_taxes_hierarchy())[0]
+                            account_id = base_line.account_id.id
 
                 tags = refund_repartition_line.tag_ids
                 if line_vals.get('tax_ids'):
@@ -3139,7 +3150,6 @@ class AccountMove(models.Model):
             custom_layout="mail.mail_notification_paynow",
             model_description=self.with_context(lang=lang).type_name,
             force_email=True,
-            wizard_opened=True
         )
         return {
             'name': _('Send Invoice'),
@@ -3468,7 +3478,7 @@ class AccountMoveLine(models.Model):
         help="The move of this entry line.")
     move_name = fields.Char(string='Number', related='move_id.name', store=True, index=True)
     date = fields.Date(related='move_id.date', store=True, readonly=True, index=True, copy=False, group_operator='min')
-    ref = fields.Char(related='move_id.ref', store=True, copy=False, index=True, readonly=False)
+    ref = fields.Char(related='move_id.ref', store=True, copy=False, index=True, readonly=True)
     parent_state = fields.Selection(related='move_id.state', store=True, readonly=True)
     journal_id = fields.Many2one(related='move_id.journal_id', store=True, index=True, copy=False)
     company_id = fields.Many2one(related='move_id.company_id', store=True, readonly=True)

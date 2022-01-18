@@ -116,15 +116,18 @@ const Wysiwyg = Widget.extend({
                 }
             },
             isHintBlacklisted: node => {
-                return node.hasAttribute &&
-                    (node.hasAttribute('data-target') || node.hasAttribute('data-oe-model'));
+                return (node.classList && node.classList.contains('nav-item')) || (
+                    node.hasAttribute && (
+                        node.hasAttribute('data-target') ||
+                        node.hasAttribute('data-oe-model')
+                    )
+                );
             },
             filterMutationRecords: (records) => {
                 return records.filter((record) => {
                     return !(record.target.classList && record.target.classList.contains('o_header_standard'));
                 });
             },
-            noScrollSelector: 'body, .note-editable, .o_content, #wrapwrap',
             commands: commands,
             plugins: options.editorPlugins,
         }, editorCollaborationOptions));
@@ -901,7 +904,8 @@ const Wysiwyg = Widget.extend({
             if (options.forceOpen || !this.linkTools) {
                 const $btn = this.toolbar.$el.find('#create-link');
                 if (!this.linkTools || ![options.link, ...wysiwygUtils.ancestors(options.link)].includes(this.linkTools.$link[0])) {
-                    this.linkTools = new weWidgets.LinkTools(this, {wysiwyg: this, noFocusUrl: options.noFocusUrl}, this.odooEditor.editable, {}, $btn, options.link || this.lastMediaClicked);
+                    const linkToolsData = Object.assign({}, this.options.defaultDataForLinkTools);
+                    this.linkTools = new weWidgets.LinkTools(this, {wysiwyg: this, noFocusUrl: options.noFocusUrl}, this.odooEditor.editable, linkToolsData, $btn, options.link || this.lastMediaClicked);
                 }
                 this.linkTools.noFocusUrl = options.noFocusUrl;
                 const _onMousedown = ev => {
@@ -1140,6 +1144,7 @@ const Wysiwyg = Widget.extend({
             }
             $(this.lastMediaClicked).remove();
             this.lastMediaClicked = undefined;
+            this.odooEditor.toolbarHide();
         });
         $toolbar.find('#fa-resize div').click(e => {
             if (!this.lastMediaClicked) {
@@ -1304,9 +1309,16 @@ const Wysiwyg = Widget.extend({
      * Handle custom keyboard shortcuts.
      */
     _handleShortcuts: function (e) {
-        // Open the link modal / tool when CTRL+K is pressed.
+        // Open the link tool when CTRL+K is pressed.
         if (e && e.key === 'k' && (e.ctrlKey || e.metaKey)) {
             e.preventDefault();
+            const targetEl = this.odooEditor.document.getSelection().baseNode; // FIXME this is undefined on Firefox after clicking on an image and hitting CTRL-K
+            // Link tool is different if the selection is an image or a text.
+            if (targetEl instanceof HTMLElement
+                    && (targetEl.tagName === 'IMG' || targetEl.querySelectorAll('img').length === 1)) {
+                core.bus.trigger('activate_image_link_tool');
+                return;
+            }
             this.toggleLinkTools();
         }
         // Override selectAll (CTRL+A) to restrict it to the editable zone / current snippet and prevent traceback.
@@ -1634,10 +1646,13 @@ const Wysiwyg = Widget.extend({
     _getSnippetsCommands: function () {
         const snippetCommandCallback = (selector) => {
             const $separatorBody = $(selector);
-            const $clonedBody = $separatorBody.clone();
+            const $clonedBody = $separatorBody.clone().removeClass('oe_snippet_body');
             const range = getDeepRange(this.odooEditor.editable);
             const block = closestElement(range.endContainer, 'p, div, ol, ul, cl, h1, h2, h3, h4, h5, h6');
-            block && block.after($clonedBody[0]);
+            if (block) {
+                block.after($clonedBody[0]);
+                this.snippetsMenu.callPostSnippetDrop($clonedBody);
+            }
         };
         return [
             {

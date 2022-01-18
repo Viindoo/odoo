@@ -214,7 +214,9 @@ var SnippetEditor = Widget.extend({
                     },
                 },
             });
-            const $scrollable = (this.options.wysiwyg.snippetsMenu && this.options.wysiwyg.snippetsMenu.$scrollable)
+            const modalAncestorEl = this.$target[0].closest('.modal');
+            const $scrollable = modalAncestorEl && $(modalAncestorEl)
+                || (this.options.wysiwyg.snippetsMenu && this.options.wysiwyg.snippetsMenu.$scrollable)
                 || (this.$scrollingElement.length && this.$scrollingElement)
                 || $().getScrollingElement(this.ownerDocument);
             this.draggableComponent = new SmoothScrollOnDrag(this, this.$el, $scrollable, smoothScrollOptions);
@@ -905,12 +907,6 @@ var SnippetEditor = Widget.extend({
             },
         });
 
-        // If a modal is open, the scroll target must be that modal
-        const $openModal = self.$editable.find('.modal:visible');
-        if ($openModal.length) {
-            self.draggableComponent.$scrollTarget = $openModal;
-        }
-
         // Trigger a scroll on the draggable element so that jQuery updates
         // the position of the drop zones.
         self.draggableComponent.$scrollTarget.on('scroll.scrolling_element', function () {
@@ -1304,6 +1300,13 @@ var SnippetsMenu = Widget.extend({
             if ($target.closest(this._notActivableElementsSelector).length) {
                 return;
             }
+            const $oeStructure = $target.closest('.oe_structure');
+            if ($oeStructure.length && !$oeStructure.children().length && this.$snippets) {
+                // If empty oe_structure, encourage using snippets in there by
+                // making them "wizz" in the panel.
+                this.$snippets.odooBounce();
+                return;
+            }
             this._activateSnippet($target);
         };
 
@@ -1564,6 +1567,38 @@ var SnippetsMenu = Widget.extend({
      */
     activateSnippet: async function ($snippet) {
         return this._activateSnippet($snippet);
+    },
+
+    /**
+     * Postprocesses a snippet node when it has been inserted in the dom.
+     *
+     * @param {jQuery} $target
+     * @returns {Promise}
+     */
+    callPostSnippetDrop: async function ($target) {
+        // First call the onBuilt of all options of each item in the snippet
+        // (and so build their editor instance first).
+        await this._callForEachChildSnippet($target, function (editor, $snippet) {
+            return editor.buildSnippet();
+        });
+        // The snippet is now fully built, notify the editor for changed
+        // content.
+        $target.trigger('content_changed');
+
+        // Now notifies that a snippet was dropped (at the moment, useful to
+        // start public widgets for instance (no saved content)).
+        await this._mutex.exec(() => {
+            const proms = [];
+            this.trigger_up('snippet_dropped', {
+                $target: $target,
+                addPostDropAsync: prom => proms.push(prom),
+            });
+            return Promise.all(proms);
+        });
+
+        // Lastly, ensure that the snippets or its related parts are added to
+        // the invisible DOM list if needed.
+        await this._updateInvisibleDOM();
     },
 
     //--------------------------------------------------------------------------
@@ -2355,7 +2390,7 @@ var SnippetsMenu = Widget.extend({
                 handle: '.oe_snippet_thumbnail:not(.o_we_already_dragging)',
                 helper: function () {
                     const dragSnip = this.cloneNode(true);
-                    dragSnip.querySelectorAll('.o_delete_btn').forEach(
+                    dragSnip.querySelectorAll('.o_delete_btn, .o_rename_btn').forEach(
                         el => el.remove()
                     );
                     return dragSnip;
@@ -2510,32 +2545,7 @@ var SnippetsMenu = Widget.extend({
                             // (mutexed as well).
                             dragAndDropResolve();
 
-                            // First call the onBuilt of all options of each
-                            // item in the snippet (and so build their editor
-                            // instance first).
-                            await self._callForEachChildSnippet($target, function (editor, $snippet) {
-                                return editor.buildSnippet();
-                            });
-                            // The snippet is now fully built, notify the
-                            // editor for changed content.
-                            $target.trigger('content_changed');
-
-                            // Now notifies that a snippet was dropped (at the
-                            // moment, useful to start public widgets for
-                            // instance (no saved content)).
-                            await self._mutex.exec(() => {
-                                const proms = [];
-                                self.trigger_up('snippet_dropped', {
-                                    $target: $target,
-                                    addPostDropAsync: prom => proms.push(prom),
-                                });
-                                return Promise.all(proms);
-                            });
-
-                            // Lastly, ensure that the snippets or its related
-                            // parts are added to the invisible DOM list if
-                            // needed.
-                            await self._updateInvisibleDOM();
+                            await self.callPostSnippetDrop($target);
 
                             // Restore editor to its normal edition state, also
                             // make sure the undroppable snippets are updated.
