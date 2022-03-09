@@ -78,15 +78,15 @@ msgid ""
 "<p>Click on <b> Action Create Report </b> to submit selected expenses to "
 "your manager</p>"
 msgstr ""
-"<p>Bấm vào <b> Tác vụ tạo báo cáo </b> để nộp chi phí đã chọn tới quản lý "
-"của bạn</p>"
+"<p>Nhấp vào <b> Hành động tạo bảng kê </b> dể gửi chi phí đã chọn tới quản "
+"lý của bạn</p>"
 
 #. module: hr_expense
 #. openerp-web
 #: code:addons/hr_expense/static/src/js/tours/hr_expense.js:0
 #, python-format
 msgid "<p>Click on <b> Create Report </b> to create the report.</p>"
-msgstr "<p>Bấm vào <b> Tạo báo cáo </b> để tạo báo cáo.</p>"
+msgstr "<p>Bấm vào <b> Tạo bảng kê </b> để tạo bảng kê.</p>"
 
 #. module: hr_expense
 #. openerp-web
@@ -251,7 +251,12 @@ msgstr "Tất cả kê khai"
 #: model:ir.model.fields,field_description:hr_expense.field_hr_expense__amount_residual
 #: model:ir.model.fields,field_description:hr_expense.field_hr_expense_sheet__amount_residual
 msgid "Amount Due"
-msgstr "Khoản đến hạn"
+msgstr "Số tiền phải trả"
+
+#. module: hr_expense
+#: model:ir.model.fields,field_description:hr_expense.field_hr_expense__total_amount
+msgid "Amount paid"
+msgstr "Số tiền thanh toán"
 
 #. module: hr_expense
 #. openerp-web
@@ -462,13 +467,13 @@ msgstr "Tạo"
 #: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_view_expenses_analysis_tree
 #: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_view_form
 msgid "Create Report"
-msgstr "Tạo báo cáo"
+msgstr "Tạo bảng kê"
 
 #. module: hr_expense
 #: model_terms:ir.actions.act_window,help:hr_expense.action_hr_expense_account
 #: model_terms:ir.actions.act_window,help:hr_expense.action_hr_expense_sheet_all_all
 msgid "Create a new expense report"
-msgstr "Tạo báo cáo chi phí mới"
+msgstr "Tạo bảng kê chi tiêu mới"
 
 #. module: hr_expense
 #: model_terms:ir.ui.view,arch_db:hr_expense.res_config_settings_view_form
@@ -1140,7 +1145,7 @@ msgstr "Chi tiều cần kê khai của tôi"
 #: model:ir.ui.menu,name:hr_expense.menu_hr_expense_sheet_my_reports
 #: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_sheet_view_search
 msgid "My Reports"
-msgstr "Báo cáo của tôi"
+msgstr "Kê khai của tôi"
 
 #. module: hr_expense
 #: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_sheet_view_search
@@ -1334,7 +1339,7 @@ msgstr "Đã thanh toán"
 #: model:ir.model.fields,field_description:hr_expense.field_hr_expense__payment_mode
 #: model:ir.model.fields,field_description:hr_expense.field_hr_expense_sheet__payment_mode
 msgid "Paid By"
-msgstr "Đã thanh toán bằng"
+msgstr "Thanh toán bởi"
 
 #. module: hr_expense
 #: model_terms:ir.ui.view,arch_db:hr_expense.view_hr_expense_sheet_form
