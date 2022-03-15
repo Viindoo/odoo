@@ -1015,6 +1015,7 @@ class Message(models.Model):
                 record_name = self.env[message_sudo.model] \
                     .browse(message_sudo.res_id) \
                     .sudo() \
+                    .exists() \
                     .with_prefetch(thread_ids_by_model_name[message_sudo.model]) \
                     .display_name
             else:
