@@ -991,8 +991,12 @@ class AccountBankStatementLine(models.Model):
             company_currency = st_line.journal_id.company_id.currency_id
             journal_currency = st_line.journal_id.currency_id if st_line.journal_id.currency_id != company_currency else False
 
+            line_ids_commands = []
             line_vals_list = self._prepare_move_line_default_vals()
-            line_ids_commands = [(1, liquidity_lines.id, line_vals_list[0])]
+            if liquidity_lines:
+                line_ids_commands.append((1, liquidity_lines.id, line_vals_list[0]))
+            else:
+                line_ids_commands.append((0, 0, line_vals_list[0]))
 
             if suspense_lines:
                 line_ids_commands.append((1, suspense_lines.id, line_vals_list[1]))
