@@ -36,7 +36,9 @@ odoo.define('web.FavoriteMenu', function (require) {
         get icon() {
             return FACET_ICONS.favorite;
         }
-
+        get WARNING() {
+            return this.env._t("Warning");
+        }
         /**
          * @override
          */
