@@ -372,7 +372,12 @@ class Meeting(models.Model):
                     'start': startdate.replace(tzinfo=None),
                     'stop': enddate.replace(tzinfo=None)
                 })
-
+    
+    @api.onchange('allday','start_date')
+    def _onchange_start(self):
+        if self.allday == True and self.start_date:
+            self.start = self.start_date
+            
     @api.constrains('start', 'stop', 'start_date', 'stop_date')
     def _check_closing_date(self):
         for meeting in self:
