@@ -362,22 +362,22 @@ class Meeting(models.Model):
                 # because fullcalendar just drops times for full day events.
                 # i.e. Christmas is on 25/12 for everyone
                 # even if people don't celebrate it simultaneously
+                
+                user_tz = pytz.timezone(self.env.user.tz)
+                
                 enddate = fields.Datetime.from_string(meeting.stop_date)
                 enddate = enddate.replace(hour=18)
-
+                enddate = user_tz.localize(enddate, is_dst=None).astimezone(pytz.UTC)
+                
                 startdate = fields.Datetime.from_string(meeting.start_date)
                 startdate = startdate.replace(hour=8)  # Set 8 AM
-
+                startdate = user_tz.localize(startdate, is_dst=None).astimezone(pytz.UTC)
+                
                 meeting.write({
                     'start': startdate.replace(tzinfo=None),
                     'stop': enddate.replace(tzinfo=None)
                 })
-    
-    @api.onchange('allday','start_date')
-    def _onchange_start(self):
-        if self.allday == True and self.start_date:
-            self.start = self.start_date
-            
+
     @api.constrains('start', 'stop', 'start_date', 'stop_date')
     def _check_closing_date(self):
         for meeting in self:
@@ -722,6 +722,10 @@ class Meeting(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        for vals in vals_list:
+            if vals['start'] == False :
+                vals['start'] = vals['start_date']
+                vals['stop'] = vals['stop_date']
         vals_list = [  # Else bug with quick_create when we are filter on an other user
             dict(vals, user_id=self.env.user.id) if not 'user_id' in vals else vals
             for vals in vals_list
