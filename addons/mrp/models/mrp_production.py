@@ -1067,7 +1067,7 @@ class MrpProduction(models.Model):
 
     def action_view_mrp_production_childs(self):
         self.ensure_one()
-        mrp_production_ids = self._get_children()
+        mrp_production_ids = self._get_children().ids
         action = {
             'res_model': 'mrp.production',
             'type': 'ir.actions.act_window',
@@ -1087,7 +1087,7 @@ class MrpProduction(models.Model):
 
     def action_view_mrp_production_sources(self):
         self.ensure_one()
-        mrp_production_ids = self._get_sources()
+        mrp_production_ids = self._get_sources().ids
         action = {
             'res_model': 'mrp.production',
             'type': 'ir.actions.act_window',
@@ -1699,9 +1699,10 @@ class MrpProduction(models.Model):
                 order_exception, visited = exception
                 order_exceptions.update(order_exception)
                 visited_objects += visited
-            visited_objects = self.env[visited_objects[0]._name].concat(*visited_objects)
+            visited_objects = [sm for sm in visited_objects if sm._name == 'stock.move']
             impacted_object = []
-            if visited_objects and visited_objects._name == 'stock.move':
+            if visited_objects:
+                visited_objects = self.env[visited_objects[0]._name].concat(*visited_objects)
                 visited_objects |= visited_objects.mapped('move_orig_ids')
                 impacted_object = visited_objects.filtered(lambda m: m.state not in ('done', 'cancel')).mapped('picking_id')
             values = {
