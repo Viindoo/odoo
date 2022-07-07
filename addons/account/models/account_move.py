@@ -417,7 +417,7 @@ class AccountMove(models.Model):
         """
         lock_dates = self._get_violated_lock_dates(invoice_date, has_tax)
         today = fields.Date.today()
-        highest_name = self.highest_name or self._get_last_sequence(relaxed=True)
+        highest_name = self.highest_name or self._get_last_sequence(relaxed=True, lock=False)
         number_reset = self._deduce_sequence_number_reset(highest_name)
         if lock_dates:
             invoice_date = lock_dates[-1][0] + timedelta(days=1)
@@ -479,7 +479,7 @@ class AccountMove(models.Model):
             if new_currency != self.currency_id:
                 self.currency_id = new_currency
                 self._onchange_currency()
-        if self.state == 'draft' and self._get_last_sequence() and self.name and self.name != '/':
+        if self.state == 'draft' and self._get_last_sequence(lock=False) and self.name and self.name != '/':
             self.name = '/'
 
     @api.onchange('partner_id')
@@ -1215,7 +1215,7 @@ class AccountMove(models.Model):
             )
         )
         self = self.sorted(lambda m: (m.date, m.ref or '', m.id))
-        highest_name = self[0]._get_last_sequence() if self else False
+        highest_name = self[0]._get_last_sequence(lock=False) if self else False
 
         # Group the moves by journal and month
         for move in self:
@@ -1275,7 +1275,7 @@ class AccountMove(models.Model):
     @api.depends('journal_id', 'date')
     def _compute_highest_name(self):
         for record in self:
-            record.highest_name = record._get_last_sequence()
+            record.highest_name = record._get_last_sequence(lock=False)
 
     @api.onchange('name', 'highest_name')
     def _onchange_name_warning(self):
@@ -2303,7 +2303,7 @@ class AccountMove(models.Model):
                 raise UserError(_('You cannot overwrite the values ensuring the inalterability of the accounting.'))
             if (move.posted_before and 'journal_id' in vals and move.journal_id.id != vals['journal_id']):
                 raise UserError(_('You cannot edit the journal of an account move if it has been posted once.'))
-            if (move.name and move.name != '/' and 'journal_id' in vals and move.journal_id.id != vals['journal_id']):
+            if (move.name and move.name != '/' and move.sequence_number not in (0, 1) and 'journal_id' in vals and move.journal_id.id != vals['journal_id']):
                 raise UserError(_('You cannot edit the journal of an account move if it already has a sequence number assigned.'))
 
             # You can't change the date of a move being inside a locked period.
