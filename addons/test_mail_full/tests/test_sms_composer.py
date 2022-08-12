@@ -207,11 +207,10 @@ class TestSMSComposerComment(TestMailFullCommon, TestMailFullRecipients):
 
 
 class TestSMSComposerBatch(TestMailFullCommon):
-
     @classmethod
     def setUpClass(cls):
         super(TestSMSComposerBatch, cls).setUpClass()
-        cls._test_body = 'Hello {{ object.name }} zizisse an SMS.'
+        cls._test_body = 'Zizisse an SMS.'
 
         cls._create_records_for_batch('mail.test.sms', 3)
         cls.sms_template = cls._create_sms_template('mail.test.sms')
@@ -230,12 +229,8 @@ class TestSMSComposerBatch(TestMailFullCommon):
             with self.mockSMSGateway():
                 messages = composer._action_send_sms()
 
-        for record, message in zip(self.records, messages):
-            self.assertSMSNotification(
-                [{'partner': record.customer_id}],
-                'Hello %s zizisse an SMS.' % record.name,
-                message
-            )
+        for record in self.records:
+            self.assertSMSNotification([{'partner': r.customer_id} for r in self.records], 'Zizisse an SMS.', messages)
 
     def test_composer_batch_active_ids(self):
         with self.with_user('employee'):
@@ -250,12 +245,8 @@ class TestSMSComposerBatch(TestMailFullCommon):
             with self.mockSMSGateway():
                 messages = composer._action_send_sms()
 
-        for record, message in zip(self.records, messages):
-            self.assertSMSNotification(
-                [{'partner': record.customer_id}],
-                'Hello %s zizisse an SMS.' % record.name,
-                message
-            )
+        for record in self.records:
+            self.assertSMSNotification([{'partner': r.customer_id} for r in self.records], 'Zizisse an SMS.', messages)
 
     def test_composer_batch_domain(self):
         with self.with_user('employee'):
@@ -271,12 +262,8 @@ class TestSMSComposerBatch(TestMailFullCommon):
             with self.mockSMSGateway():
                 messages = composer._action_send_sms()
 
-        for record, message in zip(self.records, messages):
-            self.assertSMSNotification(
-                [{'partner': record.customer_id}],
-                'Hello %s zizisse an SMS.' % record.name,
-                message
-            )
+        for record in self.records:
+            self.assertSMSNotification([{'partner': r.customer_id} for r in self.records], 'Zizisse an SMS.', messages)
 
     def test_composer_batch_res_ids(self):
         with self.with_user('employee'):
@@ -291,12 +278,8 @@ class TestSMSComposerBatch(TestMailFullCommon):
             with self.mockSMSGateway():
                 messages = composer._action_send_sms()
 
-        for record, message in zip(self.records, messages):
-            self.assertSMSNotification(
-                [{'partner': record.customer_id}],
-                'Hello %s zizisse an SMS.' % record.name,
-                message
-            )
+        for record in self.records:
+            self.assertSMSNotification([{'partner': r.customer_id} for r in self.records], 'Zizisse an SMS.', messages)
 
 
 class TestSMSComposerMass(TestMailFullCommon):
@@ -304,9 +287,9 @@ class TestSMSComposerMass(TestMailFullCommon):
     @classmethod
     def setUpClass(cls):
         super(TestSMSComposerMass, cls).setUpClass()
-        cls._test_body = 'Hello {{ object.name }} zizisse an SMS.'
+        cls._test_body = 'Zizisse an SMS.'
 
-        cls._create_records_for_batch('mail.test.sms', 10)
+        cls._create_records_for_batch('mail.test.sms', 3)
         cls.sms_template = cls._create_sms_template('mail.test.sms')
 
     def test_composer_mass_active_domain(self):
@@ -325,10 +308,7 @@ class TestSMSComposerMass(TestMailFullCommon):
                 composer.action_send_sms()
 
         for record in self.records:
-            self.assertSMSOutgoing(
-                record.customer_id, None,
-                content='Hello %s zizisse an SMS.' % record.name
-            )
+            self.assertSMSOutgoing(record.customer_id, None, content=self._test_body)
 
     def test_composer_mass_active_domain_w_template(self):
         with self.with_user('employee'):
@@ -346,10 +326,7 @@ class TestSMSComposerMass(TestMailFullCommon):
                 composer.action_send_sms()
 
         for record in self.records:
-            self.assertSMSOutgoing(
-                record.customer_id, None,
-                content='Dear %s this is an SMS.' % record.display_name
-            )
+            self.assertSMSOutgoing(record.customer_id, None, content='Dear %s this is an SMS.' % record.display_name)
 
     def test_composer_mass_active_ids(self):
         with self.with_user('employee'):
@@ -365,11 +342,8 @@ class TestSMSComposerMass(TestMailFullCommon):
             with self.mockSMSGateway():
                 composer.action_send_sms()
 
-        for partner, record in zip(self.partners, self.records):
-            self.assertSMSOutgoing(
-                partner, None,
-                content='Hello %s zizisse an SMS.' % record.name
-            )
+        for partner in self.partners:
+            self.assertSMSOutgoing(partner, None, content=self._test_body)
 
     def test_composer_mass_active_ids_w_blacklist(self):
         self.env['phone.blacklist'].create([{
@@ -391,17 +365,10 @@ class TestSMSComposerMass(TestMailFullCommon):
             with self.mockSMSGateway():
                 composer.action_send_sms()
 
-        for partner, record in zip(self.partners[5:], self.records[5:]):
-            self.assertSMSOutgoing(
-                partner, partner.phone_sanitized,
-                content='Hello %s zizisse an SMS.' % record.name
-            )
-        for partner, record in zip(self.partners[:5], self.records[:5]):
-            self.assertSMSCanceled(
-                partner, partner.phone_sanitized,
-                failure_type='sms_blacklist',
-                content='Hello %s zizisse an SMS.' % record.name
-            )
+        for partner in self.partners[5:]:
+            self.assertSMSOutgoing(partner, partner.phone_sanitized, content=self._test_body)
+        for partner in self.partners[:5]:
+            self.assertSMSCanceled(partner, partner.phone_sanitized, failure_type='sms_blacklist', content=self._test_body)
 
     def test_composer_mass_active_ids_wo_blacklist(self):
         self.env['phone.blacklist'].create([{
@@ -423,22 +390,17 @@ class TestSMSComposerMass(TestMailFullCommon):
             with self.mockSMSGateway():
                 composer.action_send_sms()
 
-        for partner, record in zip(self.partners, self.records):
-            self.assertSMSOutgoing(
-                partner, partner.phone_sanitized,
-                content='Hello %s zizisse an SMS.' % record.name
-            )
+        for partner in self.partners:
+            self.assertSMSOutgoing(partner, partner.phone_sanitized, content=self._test_body)
 
     def test_composer_mass_active_ids_w_blacklist_and_done(self):
-        """ Create some duplicates + blacklist. record[5] will have duplicated
-        number on 6 and 7. """
         self.env['phone.blacklist'].create([{
             'number': p.phone_sanitized,
             'active': True,
         } for p in self.partners[:5]])
-        for p in self.partners[5:8]:
-            p.mobile = self.partners[5].mobile
-            self.assertEqual(p.phone_sanitized, self.partners[5].phone_sanitized)
+        for p in self.partners[8:]:
+            p.mobile = self.partners[8].mobile
+            self.assertEqual(p.phone_sanitized, self.partners[8].phone_sanitized)
 
         with self.with_user('employee'):
             composer = self.env['sms.composer'].with_context(
@@ -454,29 +416,12 @@ class TestSMSComposerMass(TestMailFullCommon):
             with self.mockSMSGateway():
                 composer.action_send_sms()
 
-        self.assertSMSOutgoing(
-            self.partners[5], self.partners[5].phone_sanitized,
-            content='Hello %s zizisse an SMS.' % self.records[5].name
-        )
-        for partner, record in zip(self.partners[8:], self.records[8:]):
-            self.assertSMSOutgoing(
-                partner, partner.phone_sanitized,
-                content='Hello %s zizisse an SMS.' % record.name
-            )
-        # duplicates
-        for partner, record in zip(self.partners[6:8], self.records[6:8]):
-            self.assertSMSCanceled(
-                partner, partner.phone_sanitized,
-                failure_type='sms_duplicate',
-                content='Hello %s zizisse an SMS.' % record.name
-            )
-        # blacklist
-        for partner, record in zip(self.partners[:5], self.records[:5]):
-            self.assertSMSCanceled(
-                partner, partner.phone_sanitized,
-                failure_type='sms_blacklist',
-                content='Hello %s zizisse an SMS.' % record.name
-            )
+        for partner in self.partners[8:]:
+            self.assertSMSOutgoing(partner, partner.phone_sanitized, content=self._test_body)
+        for partner in self.partners[5:8]:
+            self.assertSMSCanceled(partner, partner.phone_sanitized, failure_type='sms_duplicate', content=self._test_body)
+        for partner in self.partners[:5]:
+            self.assertSMSCanceled(partner, partner.phone_sanitized, failure_type='sms_blacklist', content=self._test_body)
 
     def test_composer_mass_active_ids_w_template(self):
         with self.with_user('employee'):
@@ -493,10 +438,7 @@ class TestSMSComposerMass(TestMailFullCommon):
                 composer.action_send_sms()
 
         for record in self.records:
-            self.assertSMSOutgoing(
-                record.customer_id, None,
-                content='Dear %s this is an SMS.' % record.display_name
-            )
+            self.assertSMSOutgoing(record.customer_id, None, content='Dear %s this is an SMS.' % record.display_name)
 
     def test_composer_mass_active_ids_w_template_and_lang(self):
         self.env['res.lang']._activate_lang('fr_FR')
@@ -530,15 +472,9 @@ class TestSMSComposerMass(TestMailFullCommon):
 
         for record in self.records:
             if record.customer_id == self.partners[2]:
-                self.assertSMSOutgoing(
-                    record.customer_id, None,
-                    content='Cher·e· %s ceci est un SMS.' % record.display_name
-                )
+                self.assertSMSOutgoing(record.customer_id, None, content='Cher·e· %s ceci est un SMS.' % record.display_name)
             else:
-                self.assertSMSOutgoing(
-                    record.customer_id, None,
-                    content='Dear %s this is an SMS.' % record.display_name
-                )
+                self.assertSMSOutgoing(record.customer_id, None, content='Dear %s this is an SMS.' % record.display_name)
 
     def test_composer_mass_active_ids_w_template_and_log(self):
         with self.with_user('employee'):
@@ -555,10 +491,7 @@ class TestSMSComposerMass(TestMailFullCommon):
                 composer.action_send_sms()
 
         for record in self.records:
-            self.assertSMSOutgoing(
-                record.customer_id, None,
-                content='Dear %s this is an SMS.' % record.display_name
-            )
+            self.assertSMSOutgoing(record.customer_id, None, content='Dear %s this is an SMS.' % record.display_name)
             self.assertSMSLogged(record, 'Dear %s this is an SMS.' % record.display_name)
 
     def test_composer_template_context_action(self):
@@ -608,10 +541,7 @@ class TestSMSComposerMass(TestMailFullCommon):
                 messages = composer._action_send_sms()
 
         number = self.partners[2].phone_get_sanitized_number()
-        self.assertSMSNotification(
-            [{'partner': test_record_2.customer_id, 'number': number}],
-            "Hello %s ceci est en français." % test_record_2.display_name, messages
-        )
+        self.assertSMSNotification([{'partner': test_record_2.customer_id, 'number': number}], "Hello %s ceci est en français." % test_record_2.display_name, messages)
 
         # Composer creation with context from a template context action (simulate) - mass (multiple recipient)
         with self.with_user('employee'):
@@ -633,11 +563,5 @@ class TestSMSComposerMass(TestMailFullCommon):
             with self.mockSMSGateway():
                 composer.action_send_sms()
 
-        self.assertSMSOutgoing(
-            test_record_1.customer_id, None,
-            content='Dear %s this is an SMS.' % test_record_1.display_name
-        )
-        self.assertSMSOutgoing(
-            test_record_2.customer_id, None,
-            content="Hello %s ceci est en français." % test_record_2.display_name
-        )
+        self.assertSMSOutgoing(test_record_1.customer_id, None, content='Dear %s this is an SMS.' % test_record_1.display_name)
+        self.assertSMSOutgoing(test_record_2.customer_id, None, content="Hello %s ceci est en français." % test_record_2.display_name)

@@ -58,16 +58,14 @@ const LinkTools = Link.extend({
             return this._super(...arguments);
         }
         const $contents = this.$link.contents();
-        if (this.shouldUnlink()) {
+        if (!this.$link.attr('href') && !this.colorCombinationClass) {
             $contents.unwrap();
         }
         this._observer.disconnect();
         this._super(...arguments);
         this._removeHintClasses();
     },
-    shouldUnlink: function () {
-        return !this.$link.attr('href') && !this.colorCombinationClass
-    },
+
     applyLinkToDom() {
         this._observer.disconnect();
         this._removeHintClasses();
