@@ -3563,6 +3563,13 @@ class AccountMove(models.Model):
 
         return groups
 
+    def _is_downpayment(self):
+        ''' Return true if the invoice is a downpayment.
+        Down-payments can be created from a sale order. This method is overridden in the sale order module.
+        '''
+        return False
+
+
 class AccountMoveLine(models.Model):
     _name = "account.move.line"
     _description = "Journal Item"
@@ -4820,6 +4827,17 @@ class AccountMoveLine(models.Model):
         return result
 
     @api.model
+    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
+        if operator == 'ilike':
+            args = ['|', '|',
+                    ('name', 'ilike', name),
+                    ('move_id', 'ilike', name),
+                    ('product_id', 'ilike', name)]
+            return self._search(args, limit=limit, access_rights_uid=name_get_uid)
+
+        return super()._name_search(name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
+
+    @api.model
     def invalidate_cache(self, fnames=None, ids=None):
         # Invalidate cache of related moves
         if fnames is None or 'move_id' in fnames:
@@ -5350,7 +5368,7 @@ class AccountMoveLine(models.Model):
                 raise UserError(_("Entries are not from the same account: %s != %s")
                                 % (account.display_name, line.account_id.display_name))
 
-        sorted_lines = self.sorted(key=lambda line: (line.date_maturity or line.date, line.currency_id))
+        sorted_lines = self.sorted(key=lambda line: (line.date_maturity or line.date, line.currency_id, line.amount_currency))
 
         # ==== Collect all involved lines through the existing reconciliation ====
 
@@ -5648,3 +5666,9 @@ class AccountMoveLine(models.Model):
         if self.payment_id:
             domains.append([('res_model', '=', 'account.payment'), ('res_id', '=', self.payment_id.id)])
         return domains
+
+    def _get_downpayment_lines(self):
+        ''' Return the downpayment move lines associated with the move line.
+        This method is overridden in the sale order module.
+        '''
+        return self.env['account.move.line']
