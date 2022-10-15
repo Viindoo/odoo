@@ -1120,7 +1120,7 @@ class Channel(models.Model):
         else:
             all_channel_partners = self.env['mail.channel.partner'].with_context(active_test=False)
             channel_partners = all_channel_partners.search([('partner_id', '!=', partner.id), ('channel_id', '=', self.id)])
-            msg = _("You are in a private conversation with <b>@%s</b>.", channel_partners[0].partner_id.name if channel_partners else _('Anonymous'))
+            msg = _("You are in a private conversation with <b>@%s</b>.", _(" @").join(partners.partner_id.name for partners in channel_partners) if channel_partners else _('Anonymous'))
         msg += _("""<br><br>
             Type <b>@username</b> to mention someone, and grab his attention.<br>
             Type <b>#channel</b> to mention a channel.<br>
