@@ -251,6 +251,7 @@ class AccountMove(models.Model):
              "This is needed when cancelling the source: it will post the inverse journal entry to cancel that part too.")
     tax_cash_basis_move_id = fields.Many2one(
         comodel_name='account.move',
+        index=True,
         string="Origin Tax Cash Basis Entry",
         help="The journal entry from which this tax cash basis journal entry has been created.")
 
@@ -2008,6 +2009,10 @@ class AccountMove(models.Model):
         if move.is_invoice(include_receipts=True):
             # Make sure to recompute payment terms. This could be necessary if the date is different for example.
             # Also, this is necessary when creating a credit note because the current invoice is copied.
+
+            if move.currency_id != self.company_id.currency_id:
+                move.with_context(check_move_validity=False)._onchange_currency()
+                move._check_balanced()
             move._recompute_payment_terms_lines()
 
         return move
