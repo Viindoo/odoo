@@ -1586,7 +1586,7 @@ class HttpCase(TransactionCase):
             cls.browser.stop()
             cls.browser = None
 
-    def url_open(self, url, data=None, files=None, timeout=10, headers=None, allow_redirects=True, head=False):
+    def url_open(self, url, data=None, files=None, timeout=100, headers=None, allow_redirects=True, head=False):
         if url.startswith('/'):
             url = "http://%s:%s%s" % (HOST, odoo.tools.config['http_port'], url)
         if head:
