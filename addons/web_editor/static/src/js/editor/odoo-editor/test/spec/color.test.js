@@ -1,0 +1,157 @@
+import { BasicEditor, testEditor, unformat } from '../utils.js';
+import { rgbToHex } from '../../src/utils/utils.js';
+
+const setColor = (color, mode) => {
+    return async editor => {
+        await editor.execCommand('applyColor', color, mode);
+    };
+};
+
+describe('applyColor', () => {
+    it('should apply a color to a slice of text in a span in a font', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: '<p>a<font>b<span>c[def]g</span>h</font>i</p>',
+            stepFunction: setColor('rgb(255, 0, 0)', 'color'),
+            contentAfter: '<p>a<font>b<span>c</span></font>' +
+                '<font style="color: rgb(255, 0, 0);"><span>[def]</span></font>' +
+                '<font><span>g</span>h</font>i</p>',
+        });
+    });
+    it('should apply a background color to a slice of text in a span in a font', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: '<p>a<font>b<span>c[def]g</span>h</font>i</p>',
+            stepFunction: setColor('rgb(255, 0, 0)', 'backgroundColor'),
+            contentAfter: '<p>a<font>b<span>c</span></font>' +
+                '<font style="background-color: rgb(255, 0, 0);"><span>[def]</span></font>' +
+                '<font><span>g</span>h</font>i</p>',
+        });
+    });
+    it('should get ready to type with a different color', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: '<p>ab[]cd</p>',
+            stepFunction: setColor('rgb(255, 0, 0)', 'color'),
+            contentAfter: '<p>ab<font style="color: rgb(255, 0, 0);">[]\u200B</font>cd</p>',
+        });
+    });
+    it('should get ready to type with a different background color', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: '<p>ab[]cd</p>',
+            stepFunction: setColor('rgb(255, 0, 0)', 'backgroundColor'),
+            contentAfter: '<p>ab<font style="background-color: rgb(255, 0, 0);">[]\u200B</font>cd</p>',
+        });
+    });
+    it('should apply a color on empty selection', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: '<p>[<br></p><p><br></p><p>]<br></p>',
+            stepFunction: setColor('rgb(255, 0, 0)', 'color'),
+            contentAfterEdit: '<p><font data-oe-zws-empty-inline="" style="color: rgb(255, 0, 0);">[\u200B</font></p>' +
+                              '<p><font data-oe-zws-empty-inline="" style="color: rgb(255, 0, 0);">\u200B</font></p>' +
+                              '<p><font data-oe-zws-empty-inline="" style="color: rgb(255, 0, 0);">]\u200B</font></p>',
+            contentAfter: '<p>[</p><p></p><p>]</p>',
+        });
+    });
+    it('should apply a background color on empty selection', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: '<p>[<br></p><p><br></p><p>]<br></p>',
+            stepFunction: setColor('rgb(255, 0, 0)', 'background-color'),
+            contentAfterEdit: '<p><font data-oe-zws-empty-inline="" style="background-color: rgb(255, 0, 0);">[\u200B</font></p>' +
+                              '<p><font data-oe-zws-empty-inline="" style="background-color: rgb(255, 0, 0);">\u200B</font></p>' +
+                              '<p><font data-oe-zws-empty-inline="" style="background-color: rgb(255, 0, 0);">]\u200B</font></p>',
+            contentAfter: '<p>[</p><p></p><p>]</p>',
+        });
+    });
+    it('should not merge line on background color change', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: '<p><strong>[abcd</strong><br><strong>efghi]</strong></p>',
+            stepFunction: setColor('rgb(255, 0, 0)', 'backgroundColor'),
+            contentAfter: '<p><strong><font style="background-color: rgb(255, 0, 0);">[abcd</font></strong><br>' +
+                          '<strong><font style="background-color: rgb(255, 0, 0);">efghi]</font></strong></p>',
+        });
+    });
+    it('should not merge line on color change', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: '<p><strong>[abcd</strong><br><strong>efghi]</strong></p>',
+            stepFunction: setColor('rgb(255, 0, 0)', 'color'),
+            contentAfter: '<p><strong><font style="color: rgb(255, 0, 0);">[abcd</font></strong><br>' +
+                          '<strong><font style="color: rgb(255, 0, 0);">efghi]</font></strong></p>',
+        });
+    });
+    it('should not apply color on an uneditable element', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: '<p>[a</p><p contenteditable="false">b</p><p>c]</p>',
+            stepFunction: setColor('rgb(255, 0, 0)', 'color'),
+            contentAfter: unformat(`
+                <p><font style="color: rgb(255, 0, 0);">[a</font></p>
+                <p contenteditable="false">b</p>
+                <p><font style="color: rgb(255, 0, 0);">c]</font></p>
+            `),
+        });
+    });
+    it('should not apply background color on an uneditable selected cell in a table', async () => {
+        await testEditor(BasicEditor, {
+            contentBefore: unformat(`
+                <table><tbody>
+                    <tr><td>[ab</td></tr>
+                    <tr><td contenteditable="false">cd]</td></tr>
+                </tbody></table>
+            `),
+            stepFunction: setColor('rgb(255, 0, 0)', 'background-color'),
+            contentAfter: unformat(`
+                <table><tbody>
+                    <tr><td style="background-color: rgb(255, 0, 0);">[]ab</td></tr>
+                    <tr><td contenteditable="false">cd</td></tr>
+                </tbody></table>
+            `),
+        });
+    });
+});
+describe('rgbToHex', () => {
+    it('should convert an rgb color to hexadecimal', async () => {
+        window.chai.expect(rgbToHex('rgb(0, 0, 255)')).to.be.equal('#0000ff');
+        window.chai.expect(rgbToHex('rgb(0,0,255)')).to.be.equal('#0000ff');
+    });
+    it('should convert an rgba color to hexadecimal (background is hexadecimal)', async () => {
+        const parent = document.createElement('div');
+        const node = document.createElement('div');
+        parent.style.backgroundColor = '#ff0000'; // red, should be irrelevant
+        node.style.backgroundColor = '#0000ff'; // blue
+        parent.append(node);
+        document.body.append(parent);
+        // white with 50% opacity over blue = light blue
+        window.chai.expect(rgbToHex('rgba(255, 255, 255, 0.5)', node)).to.be.equal('#7f7fff');
+        parent.remove();
+    });
+    it('should convert an rgba color to hexadecimal (background is color name)', async () => {
+        const parent = document.createElement('div');
+        const node = document.createElement('div');
+        parent.style.backgroundColor = '#ff0000'; // red, should be irrelevant
+        node.style.backgroundColor = 'blue'; // blue
+        parent.append(node);
+        document.body.append(parent);
+        // white with 50% opacity over blue = light blue
+        window.chai.expect(rgbToHex('rgba(255, 255, 255, 0.5)', node)).to.be.equal('#7f7fff');
+        parent.remove();
+    });
+    it('should convert an rgba color to hexadecimal (background is rgb)', async () => {
+        const parent = document.createElement('div');
+        const node = document.createElement('div');
+        parent.style.backgroundColor = '#ff0000'; // red, should be irrelevant
+        node.style.backgroundColor = 'rgb(0, 0, 255)'; // blue
+        parent.append(node);
+        document.body.append(parent);
+        // white with 50% opacity over blue = light blue
+        window.chai.expect(rgbToHex('rgba(255, 255, 255, 0.5)', node)).to.be.equal('#7f7fff');
+        parent.remove();
+    });
+    it('should convert an rgba color to hexadecimal (background is rgba)', async () => {
+        const parent = document.createElement('div');
+        const node = document.createElement('div');
+        parent.style.backgroundColor = 'rgb(255, 0, 0)'; // red
+        node.style.backgroundColor = 'rgba(0, 0, 255, 0.5)'; // blue
+        parent.append(node);
+        document.body.append(parent);
+        // white with 50% opacity over blue with 50% opacity over red = light purple
+        window.chai.expect(rgbToHex('rgba(255, 255, 255, 0.5)', node)).to.be.equal('#bf7fbf');
+        parent.remove();
+    });
+});
