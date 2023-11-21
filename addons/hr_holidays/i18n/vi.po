@@ -126,7 +126,7 @@ msgstr "%s (từ %s đến %s)"
 #: code:addons/hr_holidays/models/hr_leave_allocation.py:0
 #, python-format
 msgid "%s (from %s to No Limit)"
-msgstr "%s (từ %s đến Không giới hạn)"
+msgstr "%s (từ %s đến Không thời hạn)"
 
 #. module: hr_holidays
 #. odoo-python
@@ -207,7 +207,7 @@ msgstr "(dựa trên thời gian làm việc)"
 #: code:addons/hr_holidays/static/src/dashboard/time_off_card.xml:0
 #, python-format
 msgid "(valid until"
-msgstr ""
+msgstr "(có hiệu lực đến"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_hour_from__10
@@ -527,7 +527,7 @@ msgstr ""
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_view_kanban
 msgid "<i class=\"fa fa-thumbs-up\"/> Approve"
-msgstr "<i class=\"fa fa-thumbs-up\"/> Duyệt"
+msgstr "<i class=\"fa fa-thumbs-up\"/> Phê duyệt"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_kanban
@@ -633,21 +633,24 @@ msgid ""
 "                           Time Off\n"
 "                        </span>"
 msgstr ""
+"<span class=\"o_stat_text\">\n"
+"                           Nghỉ phép\n"
+"                        </span>"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.edit_holiday_status_form
 msgid "<span class=\"o_stat_text\">Accruals</span>"
-msgstr "<span class=\"o_stat_text\">Lũy kế</span>"
+msgstr "<span class=\"o_stat_text\">Tích lũy</span>"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.edit_holiday_status_form
 msgid "<span class=\"o_stat_text\">Allocations</span>"
-msgstr "<span class=\"o_stat_text\">Cấp phát</span>"
+msgstr "<span class=\"o_stat_text\">Phân bổ</span>"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.edit_holiday_status_form
 msgid "<span class=\"o_stat_text\">Time Off</span>"
-msgstr "<span class=\"o_stat_text\">Nghỉ</span>"
+msgstr "<span class=\"o_stat_text\">Nghỉ phép</span>"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_view_form
@@ -756,7 +759,7 @@ msgstr "Cấp phát Luỹ kế"
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_level_view_form
 msgid "Accrual Level"
-msgstr "Cấp độ Lũy kế"
+msgstr "Mức độ tích lũy"
 
 #. module: hr_holidays
 #: model:ir.model,name:hr_holidays.model_hr_leave_accrual_plan
@@ -764,26 +767,26 @@ msgstr "Cấp độ Lũy kế"
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_allocation__accrual_plan_id
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
 msgid "Accrual Plan"
-msgstr "Kế hoạch Lũy kế"
+msgstr "Phương pháp tích lũy"
 
 #. module: hr_holidays
 #: model:ir.model,name:hr_holidays.model_hr_leave_accrual_level
 msgid "Accrual Plan Level"
-msgstr "Cấp độ Kế hoạch Lũy kế"
+msgstr "Mức độ phương pháp tích lũy"
 
 #. module: hr_holidays
 #. odoo-python
 #: code:addons/hr_holidays/models/hr_leave_accrual_plan.py:0
 #, python-format
 msgid "Accrual Plan's Employees"
-msgstr "Kế hoạch Lũy kế của Nhân viên"
+msgstr "Nhân viên của phương pháp tích lũy"
 
 #. module: hr_holidays
 #: model:ir.actions.act_window,name:hr_holidays.open_view_accrual_plans
 #: model:ir.ui.menu,name:hr_holidays.hr_holidays_accrual_menu_configuration
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_tree
 msgid "Accrual Plans"
-msgstr "Kế hoạch Lũy kế"
+msgstr "Phương pháp tích lũy"
 
 #. module: hr_holidays
 #: model:ir.actions.server,name:hr_holidays.hr_leave_allocation_cron_accrual_ir_actions_server
@@ -794,12 +797,12 @@ msgstr "Nghỉ Luỹ kế: Cập nhật số lần nghỉ"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__accruals_ids
 msgid "Accruals"
-msgstr "Lũy kế"
+msgstr "Tích lũy"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__accrual_count
 msgid "Accruals count"
-msgstr "Số lượng lũy kế"
+msgstr "Số tích lũy"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__message_needaction
@@ -891,12 +894,12 @@ msgstr "Thêm một lý do..."
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Add some description for the people that will validate it"
-msgstr ""
+msgstr "Thêm một số thông tin cho người xác nhận"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__added_value_type
 msgid "Added Value Type"
-msgstr "Kiểu giá trị gia tăng"
+msgstr "Loại giá trị gia tăng"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
@@ -911,7 +914,7 @@ msgstr "Quản trị viên"
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_plan__transition_mode__end_of_accrual
 msgid "After this accrual's period"
-msgstr "Sau khoảng thời gian lũy kế này"
+msgstr "Sau giai đoạn tích lũy này"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_date_from_period__pm
@@ -926,7 +929,7 @@ msgstr "Tất cả Cấp phát"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__all_employee_ids
 msgid "All Employee"
-msgstr ""
+msgstr "Tất cả nhân viên"
 
 #. module: hr_holidays
 #: model:ir.actions.act_window,name:hr_holidays.action_hr_holidays_dashboard
@@ -991,7 +994,7 @@ msgstr "Kiểu Thông báo Cấp phát"
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_employee_public__allocation_remaining_display
 #: model:ir.model.fields,field_description:hr_holidays.field_res_users__allocation_remaining_display
 msgid "Allocation Remaining Display"
-msgstr ""
+msgstr "Hiển thị phân bổ còn lại"
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -1036,7 +1039,7 @@ msgstr ""
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__week_day
 msgid "Allocation on"
-msgstr "Cấp phát trên"
+msgstr "Phân bổ vào"
 
 #. module: hr_holidays
 #. odoo-python
@@ -1090,7 +1093,7 @@ msgstr "Cấp phát"
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.edit_holiday_status_form
 msgid "Allow To Attach Supporting Document"
-msgstr "Cho phép đính kèm tài liệu hỗ trợ"
+msgstr "Cho phép đính kèm tài liệu liên quan"
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_allocation__holiday_type
@@ -1182,7 +1185,7 @@ msgstr "Được chấp thuận bởi Cán bộ Quản lý Nghỉ"
 #: code:addons/hr_holidays/static/src/dashboard/time_off_card.xml:0
 #, python-format
 msgid "Approved:"
-msgstr ""
+msgstr "Đã phê duyệt"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__first_month__apr
@@ -1193,7 +1196,7 @@ msgstr "Tháng Tư"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_departure_wizard__archive_allocation
 msgid "Archive Employee Allocations"
-msgstr "Lưu trữ Cấp phát Nhân viên"
+msgstr "Lưu trữ phân bổ của nhân viên"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.edit_holiday_status_form
@@ -1206,7 +1209,7 @@ msgstr "Đã lưu trữ"
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.view_hr_holidays_filter
 msgid "Archived Time Off"
-msgstr "Nghỉ đã lưu trữ"
+msgstr "Nghỉ phép đã lưu trữ"
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -1228,7 +1231,7 @@ msgstr "Vào cuối năm, các khoản lũy kế chưa sử dụng sẽ"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__supported_attachment_ids
 msgid "Attach File"
-msgstr "Đính kèm Tệp"
+msgstr "Đính kèm tệp"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__message_attachment_count
@@ -1381,12 +1384,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_holidays_cancel_leave_form
 #, python-format
 msgid "Cancel Time Off"
-msgstr ""
+msgstr "Hủy nghỉ phép"
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_departure_wizard__cancel_leaves
 msgid "Cancel all time off after this date."
-msgstr "Hủy bỏ tất cả thời gian nghỉ sau ngày này."
+msgstr "Hủy tất cả nghỉ phép sau ngày này."
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_view_form
@@ -1434,7 +1437,7 @@ msgstr ""
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Click on any date or on this button to request a time-off"
-msgstr ""
+msgstr "Nhấp vào bất kỳ ngày nào hoặc vào nút này để đề nghị nghỉ phép"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__color
@@ -1505,7 +1508,7 @@ msgstr "Được Xác nhận"
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Congrats, we can see that your request has been validated."
-msgstr ""
+msgstr "Xin chúc mừng! Chúng tôi thấy rằng đề nghị của bạn đã được xác nhận."
 
 #. module: hr_holidays
 #: model:ir.model,name:hr_holidays.model_res_partner
@@ -1518,11 +1521,13 @@ msgid ""
 "Count of allocations for this time off type (approved or waiting for "
 "approbation) with a validity period starting this year."
 msgstr ""
+"Số lượng phân bổ cho loại nghỉ phép này (đã phê duyệt hoặc đang chờ phê "
+"duyệt) có thời hạn hiệu lực bắt đầu từ năm nay."
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.edit_holiday_status_form
 msgid "Count of plans linked to this time off type."
-msgstr ""
+msgstr "Số lượng kế hoạch liên kết với loại nghỉ phép này."
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.edit_holiday_status_form
@@ -1530,6 +1535,8 @@ msgid ""
 "Count of time off requests for this time off type (approved or waiting for "
 "approbation) with a start date in the current year."
 msgstr ""
+"Số lượng đề nghị nghỉ phép cho loại nghỉ phép này (đã phê duyệt hoặc đang "
+"chờ phê duyệt) có ngày bắt đầu trong năm nay."
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__icon_id
@@ -1620,7 +1627,7 @@ msgstr "Ngày bắt đầu khoảng thời gian"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_allocation__lastcall
 msgid "Date of the last accrual allocation"
-msgstr "Ngày cấp phát lũy kế cuối cùng"
+msgstr "Ngày phân bổ tích lũy cuối cùng"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_allocation__nextcall
@@ -1669,12 +1676,12 @@ msgstr "Xoá"
 #: code:addons/hr_holidays/static/src/views/hooks.js:0
 #, python-format
 msgid "Delete Confirmation"
-msgstr ""
+msgstr "Xóa xác nhận"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_holidays_cancel_leave_form
 msgid "Delete Time Off"
-msgstr ""
+msgstr "Xóa nghỉ phép"
 
 #. module: hr_holidays
 #: model:ir.model,name:hr_holidays.model_hr_department
@@ -1713,7 +1720,7 @@ msgstr "Mô tả"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_allocation__name_validity
 msgid "Description with validity"
-msgstr "Mô tả có giá trị"
+msgstr "Mô tả kèm hiệu lực"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_holidays_cancel_leave_form
@@ -1757,7 +1764,7 @@ msgstr "Menu sổ xuống"
 #, python-format
 msgid ""
 "Due to a change in global time offs, you have been granted %s day(s) back."
-msgstr ""
+msgstr "Do có sự thay đổi về nghỉ phép chung, bạn đã được cấp lại %s ngày."
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_report_calendar__duration
@@ -1825,12 +1832,12 @@ msgstr "Nhân viên"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__active_employee
 msgid "Employee Active"
-msgstr ""
+msgstr "Nhân viên hiện tại"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__employee_requests
 msgid "Employee Requests"
-msgstr "Yêu cầu của Nhân viên"
+msgstr "Nhân viên Đề nghị"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__category_id
@@ -1864,7 +1871,7 @@ msgstr "Ngày kết thúc"
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_type__employee_requests__yes
 msgid "Extra Days Requests Allowed"
-msgstr "Yêu cầu thêm Ngày nghỉ"
+msgstr "Cho phép đề nghị cộng thêm ngày"
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_type__employee_requests
@@ -1873,6 +1880,9 @@ msgid ""
 "\n"
 "        Not Allowed: User cannot request an allocation."
 msgstr ""
+"Cho phép đề nghị cộng thêm ngày: Người dùng có thể đề nghị phân bổ cho chính mình.\n"
+"\n"
+"Không cho phép: Người dùng không thể đề nghị phân bổ."
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__first_month__feb
@@ -1930,7 +1940,7 @@ msgstr "Ngày đầu tiên"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__first_day_display
 msgid "First Day Display"
-msgstr "Hiển thị Ngày đầu tiên"
+msgstr "Hiển thị ngày đầu tiên"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__first_month
@@ -1940,12 +1950,12 @@ msgstr "Tháng đầu tiên"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__first_month_day
 msgid "First Month Day"
-msgstr "Ngày đầu tháng"
+msgstr "Ngày của tháng đầu tiên"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__first_month_day_display
 msgid "First Month Day Display"
-msgstr "Hiển thị Ngày đầu tháng"
+msgstr "Hiển thị ngày của tháng đầu tiên"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__message_follower_ids
@@ -2061,7 +2071,7 @@ msgstr ""
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__has_valid_allocation
 msgid "Has Valid Allocation"
-msgstr "Có Cấp phát hợp lệ"
+msgstr "Có phân bổ hợp lệ"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__is_hatched
@@ -2234,7 +2244,7 @@ msgstr ""
 #: code:addons/hr_holidays/models/hr_leave_allocation.py:0
 #, python-format
 msgid "Incorrect state for new allocation"
-msgstr ""
+msgstr "Trạng thái phân bổ mới không chính xác"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__message_is_follower
@@ -2245,7 +2255,7 @@ msgstr "Là người theo dõi"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_allocation__is_officer
 msgid "Is Officer"
-msgstr "Là Cán bộ"
+msgstr "Là nhân viên phụ trách"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__unpaid
@@ -2294,7 +2304,7 @@ msgstr "Theo dõi các PTO của bạn."
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__time_type
 msgid "Kind of Time Off"
-msgstr ""
+msgstr "Loại nghỉ phép"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_holidays_cancel_leave____last_update
@@ -2402,28 +2412,28 @@ msgstr "Chú giải"
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Let's approve it"
-msgstr ""
+msgstr "Hãy phê duyệt"
 
 #. module: hr_holidays
 #. odoo-javascript
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Let's discover the Time Off application"
-msgstr ""
+msgstr "Hãy khám phá ứng dụng Nghỉ phép"
 
 #. module: hr_holidays
 #. odoo-javascript
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Let's go validate it"
-msgstr ""
+msgstr "Hãy xác nhận"
 
 #. module: hr_holidays
 #. odoo-javascript
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Let's try to create a Sick Time Off, select it in the list"
-msgstr ""
+msgstr "Hãy thử tạo một đơn Nghỉ ốm bằng cách chọn trong danh sách"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_plan__level_ids
@@ -2488,7 +2498,7 @@ msgstr "Giới hạn của"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__maximum_leave
 msgid "Limit to"
-msgstr "Giới hạn đến"
+msgstr "Giới hạn tới"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__linked_request_ids
@@ -2567,7 +2577,7 @@ msgstr ""
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__postpone_max_days
 msgid "Maximum amount of accruals to transfer"
-msgstr ""
+msgstr "Số lượng tích lũy tối đa cần chuyển"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__first_month__may
@@ -2634,7 +2644,7 @@ msgstr "Buổi sáng"
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__multi_employee
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_allocation__multi_employee
 msgid "Multi Employee"
-msgstr "Nhiều Nhân viên"
+msgstr "Nhiều nhân viên"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__my_activity_date_deadline
@@ -2705,7 +2715,7 @@ msgstr "Mới"
 #: code:addons/hr_holidays/models/hr_leave.py:0
 #, python-format
 msgid "New %(leave_type)s Request created by %(user)s"
-msgstr "Đơn xin nghỉ có kiểu là %(leave_type)s được tạo bởi %(user)s"
+msgstr "Đề nghị %(leave_type)s mới được tạo bởi %(user)s"
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -2784,12 +2794,12 @@ msgstr "Không giới hạn"
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
 msgid "No rule has been set up for this accrual plan."
-msgstr ""
+msgstr "Không có quy tắc nào được thiết lập cho kế hoạch tích lũy này."
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_type__allocation_validation_type__no
 msgid "No validation needed"
-msgstr "Không cần xác thực"
+msgstr "Không cần xác nhận"
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -3043,7 +3053,7 @@ msgstr "Đã lên kế hoạch"
 #: code:addons/hr_holidays/static/src/dashboard/time_off_card.xml:0
 #, python-format
 msgid "Planned:"
-msgstr ""
+msgstr "Đã lên kế hoạch:"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_employee__hr_icon_display__presence_holiday_present
@@ -3173,7 +3183,7 @@ msgstr "Nghỉ còn lại"
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_departure_wizard__archive_allocation
 msgid "Remove employee from existing accrual plans."
-msgstr "Xóa nhân viên khỏi các kế hoạch lũy kế hiện có."
+msgstr "Xóa nhân viên khỏi kế hoạch tích lũy hiện có."
 
 #. module: hr_holidays
 #: model:ir.ui.menu,name:hr_holidays.menu_hr_holidays_report
@@ -3213,7 +3223,7 @@ msgstr "Đã yêu cầu (Ngày/Giờ)"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__requires_allocation
 msgid "Requires allocation"
-msgstr "Yêu cầu cấp phát"
+msgstr "Yêu cầu phân bổ"
 
 #. module: hr_holidays
 #: model:ir.actions.act_window,name:hr_holidays.resource_calendar_global_leaves_action_from_calendar
@@ -3297,7 +3307,7 @@ msgstr "Ngày thứ hai"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__second_day_display
 msgid "Second Day Display"
-msgstr "Hiển thị Ngày thứ 2"
+msgstr "Hiển thị ngày thứ hai"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__second_month
@@ -3307,19 +3317,19 @@ msgstr "Tháng thứ hai"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__second_month_day
 msgid "Second Month Day"
-msgstr "Ngày tháng thứ hai"
+msgstr "Ngày của tháng thứ hai"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__second_month_day_display
 msgid "Second Month Day Display"
-msgstr "Hiển thị ngày tháng thứ hai"
+msgstr "Hiển thị ngày của tháng thứ hai"
 
 #. module: hr_holidays
 #. odoo-javascript
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Select Time Off"
-msgstr ""
+msgstr "Chọn đơn nghỉ phép"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_holidays_summary_employee__holiday_type
@@ -3334,13 +3344,16 @@ msgid ""
 "        - No validation needed: The employee's request is automatically approved.\n"
 "        - Approved by Time Off Officer: The employee's request need to be manually approved by the Time Off Officer."
 msgstr ""
+"Lựa chọn cấp độ phê duyệt cần thiết cho đơn của nhân viên\n"
+"- Không cần xác nhận: Đơn của nhân viên được tự động phê duyệt.\n"
+"- Phê duyệt bởi người phụ trách nghỉ phép: Đơn của nhân viên cần được người phụ trách nghỉ phép phê duyệt thủ công."
 
 #. module: hr_holidays
 #. odoo-javascript
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Select the request you just created"
-msgstr ""
+msgstr "Chọn đơn bạn vừa tạo"
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_employee__leave_manager_id
@@ -3368,7 +3381,7 @@ msgstr "Trình tự"
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_accrual_level__sequence
 msgid "Sequence is generated automatically by start time delta."
-msgstr "Trình tự được tạo tự động theo thời gian bắt đầu."
+msgstr "Trình tự được tạo tự động theo delta thời gian bắt đầu."
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_accrual_level__postpone_max_days
@@ -3380,7 +3393,7 @@ msgstr ""
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_plan__show_transition_mode
 msgid "Show Transition Mode"
-msgstr ""
+msgstr "Hiển thị chế độ chuyển"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.view_hr_holidays_filter
@@ -3401,8 +3414,8 @@ msgid ""
 "Specify if this accrual plan can only be used with this Time Off Type.\n"
 "                Leave empty if this accrual plan can be used with any Time Off Type."
 msgstr ""
-"Chỉ định nếu kế hoạch lũy kế này có thể chỉ được sử dụng với Kiểu nghỉ này.\n"
-"                Để trống nếu kế hoạch lũy kế này có thể được sử dụng với bất kì Kiểu nghỉ nào."
+"Xác định xem có phải kế hoạch tích lũy này chỉ có thể được sử dụng cho Loại nghỉ phép này hay không.\n"
+"                Để trống nếu kế hoạch tích lũy này có thể được sử dụng cho bất kỳ Loại nghỉ phép nào."
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__date_from
@@ -3496,7 +3509,7 @@ msgstr "Bị từ chối"
 #: code:addons/hr_holidays/static/src/tours/hr_holidays_tour.js:0
 #, python-format
 msgid "Submit your request"
-msgstr ""
+msgstr "Gửi đơn của bạn"
 
 #. module: hr_holidays
 #. odoo-python
@@ -3524,28 +3537,28 @@ msgstr "Chủ Nhật"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__supported_attachment_ids_count
 msgid "Supported Attachment Ids Count"
-msgstr "Số lượng Ids Tệp đính kèm được hỗ trợ"
+msgstr "Số ID tệp đính kèm liên quan"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__leave_type_support_document
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__support_document
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_view_form
 msgid "Supporting Document"
-msgstr "Tài liệu hỗ trợ"
+msgstr "Tài liệu liên quan"
 
 #. module: hr_holidays
 #. odoo-python
 #: code:addons/hr_holidays/models/hr_leave.py:0
 #, python-format
 msgid "Supporting Documents"
-msgstr "Tài liệu hỗ trợ"
+msgstr "Tài liệu liên quan"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__leave_type_request_unit
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_allocation__type_request_unit
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__request_unit
 msgid "Take Time Off in"
-msgstr "Tính nghỉ theo"
+msgstr "Nghỉ phép tính bằng"
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -3567,21 +3580,23 @@ msgid ""
 "This field defines the number of days, months or years after which accrual "
 "is used."
 msgstr ""
-"Khoản lũy kế bắt đầu sau một khoảng thời gian xác định kể từ ngày bắt đầu "
-"của nhân viên.Trường này xác định số ngày, tháng hoặc năm sau đó lũy kế được"
-" sử dụng."
+"Thời gian tích lũy bắt đầu sau một giai đoạn xác định kể từ ngày bắt đầu "
+"phân bổ. Trường này xác định số ngày, tháng hoặc năm mà sau đó thời gian "
+"tích lũy được sử dụng."
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave__color
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_type__color
 msgid ""
 "The color selected here will be used in every screen with the time off type."
-msgstr "Màu được chọn sẽ được sử dụng trong mọi khung hình với kiểu nghỉ này."
+msgstr ""
+"Màu sắc được chọn ở đây sẽ được sử dụng ở mọi màn hình có loại nghỉ phép "
+"này."
 
 #. module: hr_holidays
 #: model:ir.model.constraint,message:hr_holidays.constraint_hr_leave_accrual_level_check_dates
 msgid "The dates you've set up aren't correct. Please check them."
-msgstr "Ngày thiết lập không chính xác. Vui lòng kiểm tra lại."
+msgstr "Ngày bạn đã chọn không chính xác. Vui lòng kiểm tra lại."
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_type__time_type
@@ -3589,6 +3604,8 @@ msgid ""
 "The distinction between working time (ex. Attendance) and absence (ex. "
 "Training) will be used in the computation of Accrual's plan rate."
 msgstr ""
+"Sự khác biệt giữa thời gian làm việc (VD: Chuyên cần) và vắng mặt (VD: Đào "
+"tạo) sẽ được sử dụng để tính tỷ lệ kế hoạch tích lũy."
 
 #. module: hr_holidays
 #: model:ir.model.constraint,message:hr_holidays.constraint_hr_leave_allocation_duration_check
@@ -3623,8 +3640,7 @@ msgid ""
 "The number of hours/days that will be incremented in the specified Time Off "
 "Type for every period"
 msgstr ""
-"Số giờ / số ngày sẽ tăng lên trong Thời gian nghỉ được chỉ định Nhập cho mọi"
-" khoảng thời gian"
+"Số giờ/ngày sẽ tăng lên trong Loại nghỉ phép đã định cho mỗi giai đoạn"
 
 #. module: hr_holidays
 #. odoo-python
@@ -3641,7 +3657,7 @@ msgstr ""
 #. module: hr_holidays
 #: model:ir.model.constraint,message:hr_holidays.constraint_hr_leave_stress_day_date_from_after_day_to
 msgid "The start date must be anterior than the end date."
-msgstr ""
+msgstr "Ngày bắt đầu phải trước ngày kết thúc."
 
 #. module: hr_holidays
 #: model:ir.model.constraint,message:hr_holidays.constraint_hr_leave_date_check2
@@ -3686,7 +3702,7 @@ msgstr "Thời gian nghỉ đã được tự động phê duyệt"
 #: code:addons/hr_holidays/models/hr_leave.py:0
 #, python-format
 msgid "The time off has been canceled: %s"
-msgstr ""
+msgstr "Đơn nghỉ phép đã bị hủy: %s"
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_type__sequence
@@ -3741,7 +3757,8 @@ msgstr ""
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_accrual_level__start_type
 msgid "This field defines the unit of time after which the accrual starts."
-msgstr "Trường này xác định đơn vị thời gian mà sau đó lũy kế bắt đầu."
+msgstr ""
+"Trường này xác định đơn vị thời gian sau đó thời gian tích lũy bắt đầu."
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_type__has_valid_allocation
@@ -3760,7 +3777,7 @@ msgstr "Sửa đổi này không được phép ở trạng thái hiện tại."
 #: code:addons/hr_holidays/models/hr_leave.py:0
 #, python-format
 msgid "This time off cannot be canceled."
-msgstr ""
+msgstr "Không thể hủy đơn nghỉ phép này."
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_type__leaves_taken
@@ -3838,7 +3855,7 @@ msgstr "Lịch Nghỉ"
 #: code:addons/hr_holidays/models/hr_employee.py:0
 #, python-format
 msgid "Time Off Dashboard"
-msgstr "Bảng thông tin Nghỉ"
+msgstr "Trang tổng quan Nghỉ phép"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__private_name
@@ -3882,7 +3899,7 @@ msgstr "Xin nghỉ"
 #. module: hr_holidays
 #: model:res.groups,name:hr_holidays.group_hr_holidays_responsible
 msgid "Time Off Responsible"
-msgstr "Nghỉ có lương"
+msgstr "Người phụ trách nghỉ phép"
 
 #. module: hr_holidays
 #: model:mail.activity.type,name:hr_holidays.mail_act_leave_second_approval
@@ -3959,7 +3976,7 @@ msgstr "Phân tích Nghỉ"
 #. module: hr_holidays
 #: model:ir.actions.server,name:hr_holidays.action_hr_holidays_by_employee_and_type_report
 msgid "Time off Analysis by Employee and Time Off Type"
-msgstr "Phân tích thời gian nghỉ theo Nhân viên và Kiểu nghỉ"
+msgstr "Phân tích nghỉ phép theo nhân viên và loại nghỉ phép"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_form
@@ -4044,7 +4061,7 @@ msgstr "Chờ duyệt"
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.view_hr_leave_allocation_filter
 msgid "To Approve or Approved Allocations"
-msgstr ""
+msgstr "Phân bổ Cần phê duyệt hoặc Đã phê duyệt"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.view_hr_holidays_filter
@@ -4084,7 +4101,7 @@ msgstr "Hoạt động hôm nay"
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_employee_base__allocations_count
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_employee_public__allocations_count
 msgid "Total number of allocations"
-msgstr "Tổng số lần cấp phát"
+msgstr "Tổng số lượng phân bổ"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_employee__allocation_count
@@ -4110,7 +4127,7 @@ msgstr ""
 #. module: hr_holidays
 #: model:hr.leave.type,name:hr_holidays.holiday_status_training
 msgid "Training Time Off"
-msgstr ""
+msgstr "Nghỉ để đào tạo"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__action_with_unused_accruals__postponed
@@ -4125,12 +4142,12 @@ msgstr "Thứ Ba"
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__frequency__bimonthly
 msgid "Twice a month"
-msgstr "Hai lần một tháng"
+msgstr "Hai lần mỗi tháng"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__frequency__biyearly
 msgid "Twice a year"
-msgstr "Hai lần một năm"
+msgstr "Hai lần mỗi năm"
 
 #. module: hr_holidays
 #. odoo-python
@@ -4138,7 +4155,7 @@ msgstr "Hai lần một năm"
 #, python-format
 msgid ""
 "Two public holidays cannot overlap each other for the same working hours."
-msgstr ""
+msgstr "Hai ngày nghỉ lễ không thể trùng nhau trong cùng một giờ làm việc."
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.view_hr_holidays_filter
@@ -4230,17 +4247,17 @@ msgstr "Kiểu xác thực"
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_form
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_form_manager
 msgid "Validity Period"
-msgstr "Thời gian hiệu lực"
+msgstr "Thời hạn hiệu lực"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_tree
 msgid "Validity Start"
-msgstr "Bắt đầu hiệu lực"
+msgstr "Ngày bắt đầu hiệu lực"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_tree
 msgid "Validity Stop"
-msgstr "Dừng hiệu lực"
+msgstr "Ngày hết hiệu lực"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_type__color_name__violet
@@ -4321,7 +4338,7 @@ msgstr "Ngày hàng năm"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__yearly_day_display
 msgid "Yearly Day Display"
-msgstr "Hiển thị Ngày hàng năm"
+msgstr "Hiển thị ngày hàng năm"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_accrual_level__yearly_month
@@ -4340,9 +4357,9 @@ msgid ""
 "\n"
 "              No Limit: Time Off requests can be taken without any prior allocation."
 msgstr ""
-"Có: Yêu cầu nghỉ cần phải có một cấp phát hợp lệ.\n"
+"Có: Đơn nghỉ phép cần phải có phân bổ hợp lệ.\n"
 "\n"
-"              Không giới hạn: Yêu cầu nghỉ có thể được thực hiện mà không cần cấp phát trước."
+"              Không giới hạn: Đơn nghỉ phép có thể được tạo mà không cần phân bổ trước."
 
 #. module: hr_holidays
 #. odoo-python
@@ -4391,7 +4408,7 @@ msgstr ""
 #. module: hr_holidays
 #: model:ir.model.constraint,message:hr_holidays.constraint_hr_leave_accrual_level_start_count_check
 msgid "You can not start an accrual in the past."
-msgstr "Bạn không thể bắt đầu một lũy kế trong quá khứ"
+msgstr "Bạn không thể bắt đầu tích lũy vào thời điểm đã qua. "
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -4401,13 +4418,15 @@ msgstr "Bạn không thể bắt đầu một lũy kế trong quá khứ"
 msgid ""
 "You can select the period you need to take off, from start date to end date"
 msgstr ""
+"Bạn có thể chọn giai đoạn bạn cần nghỉ phép, từ ngày bắt đầu đến ngày kết "
+"thúc"
 
 #. module: hr_holidays
 #. odoo-python
 #: code:addons/hr_holidays/models/hr_leave.py:0
 #, python-format
 msgid "You can't manually archive/unarchive a time off."
-msgstr ""
+msgstr "Bạn không thể lưu trữ/hủy lưu một đơn nghỉ phép theo cách thủ công."
 
 #. module: hr_holidays
 #. odoo-python
@@ -4415,14 +4434,14 @@ msgstr ""
 #, python-format
 msgid ""
 "You cannot archive an allocation which is in confirm or validate state."
-msgstr ""
+msgstr "Bạn không thể lưu trữ phân bổ ở trạng thái xác nhận hoặc xác thực."
 
 #. module: hr_holidays
 #. odoo-python
 #: code:addons/hr_holidays/models/hr_leave.py:0
 #, python-format
 msgid "You cannot delete a time off assigned to several employees"
-msgstr ""
+msgstr "Bạn không thể xóa đơn nghỉ phép được chỉ định cho nhiều nhân viên"
 
 #. module: hr_holidays
 #. odoo-python
@@ -4436,7 +4455,7 @@ msgstr "Bạn không thể xoá một bản ghi nghỉ mà ở trạng thái %s"
 #: code:addons/hr_holidays/models/hr_leave.py:0
 #, python-format
 msgid "You cannot delete a time off which is in the past"
-msgstr "Bạn không thể xóa một bản ghi nghỉ trong quá khứ"
+msgstr "Bạn không nên xoá một đơn nghỉ phép ở thời điểm đã qua"
 
 #. module: hr_holidays
 #. odoo-python
@@ -4444,7 +4463,7 @@ msgstr "Bạn không thể xóa một bản ghi nghỉ trong quá khứ"
 #, python-format
 msgid ""
 "You cannot delete an allocation request which has some validated leaves."
-msgstr "Bạn không thể xóa một yêu cầu cấp phát đã được xác thực."
+msgstr "Bạn không thể xóa đơn phân bổ có một số đơn nghỉ phép đã xác thực."
 
 #. module: hr_holidays
 #. odoo-python
@@ -4478,7 +4497,7 @@ msgstr ""
 #: code:addons/hr_holidays/models/hr_leave.py:0
 #, python-format
 msgid "You must be %s's Manager to approve this leave"
-msgstr ""
+msgstr "Bạn phải là Quản lý của %s để phê duyệt đơn nghỉ phép này"
 
 #. module: hr_holidays
 #. odoo-python
@@ -4498,11 +4517,13 @@ msgid ""
 "You must either be a Time off Officer or Time off Manager to approve this "
 "leave"
 msgstr ""
+"Bạn phải là Người phụ trách nghỉ phép hoặc Quản lý nghỉ phép để phê duyệt "
+"đơn nghỉ phép này"
 
 #. module: hr_holidays
 #: model:ir.model.constraint,message:hr_holidays.constraint_hr_leave_accrual_level_added_value_greater_than_zero
 msgid "You must give a rate greater than 0 in accrual plan levels."
-msgstr "Bạn phải cung cấp tỷ lệ lớn hơn 0 trong các cấp kế hoạch lũy kế."
+msgstr "Bạn phải đặt tỷ lệ lớn hơn 0 ở các mốc kế hoạch tích lũy."
 
 #. module: hr_holidays
 #. odoo-python
@@ -4533,7 +4554,7 @@ msgstr "%(leave_type)s của bạn vào %(date)s đã bị từ chối"
 #: code:addons/hr_holidays/wizard/hr_holidays_cancel_leave.py:0
 #, python-format
 msgid "Your time off has been canceled."
-msgstr ""
+msgstr "Đơn nghỉ phép của bạn đã bị hủy."
 
 #. module: hr_holidays
 #. odoo-python
@@ -4550,13 +4571,13 @@ msgstr "sau ngày cấp phát"
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
 msgid "after allocation start date"
-msgstr "sau ngày bắt đầu cấp phát"
+msgstr "sau ngày bắt đầu phân bổ"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_level_view_form
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
 msgid "and on the"
-msgstr "và trên"
+msgstr "và vào ngày"
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -4578,7 +4599,7 @@ msgstr " Theo Kiểu nghỉ"
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
 msgid "day of the month"
-msgstr "ngày của tháng"
+msgstr "ngày trong tháng"
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -4608,15 +4629,15 @@ msgstr "ngày"
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
 msgid "days of the months"
-msgstr "các ngày trong tháng"
+msgstr "ngày trong tháng"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_form
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_form_manager
 msgid "e.g. Time Off type (From validity start to validity end / no limit)"
 msgstr ""
-"vd: Kiểu nghỉ (Từ khi bắt đầu có hiệu lực đến khi kết thúc hiệu lực / không "
-"có giới hạn)"
+"VD: Loại nghỉ phép (Từ ngày bắt đầu hiệu lực đến ngày hết hiệu lực/không "
+"giới hạn)"
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -4642,7 +4663,7 @@ msgstr "trong"
 #: code:addons/hr_holidays/models/hr_leave_accrual_plan_level.py:0
 #, python-format
 msgid "last day"
-msgstr "ngày cuối cùng"
+msgstr "cuối cùng"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
@@ -4679,7 +4700,7 @@ msgstr "trên"
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_level_view_form
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
 msgid "on the"
-msgstr "trên"
+msgstr "vào ngày"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_plan_view_form
@@ -4714,7 +4735,7 @@ msgstr "đến"
 #: code:addons/hr_holidays/static/src/dashboard/time_off_card.xml:0
 #, python-format
 msgid "valid until"
-msgstr ""
+msgstr "hợp lệ cho đến"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_report_calendar_view_search
