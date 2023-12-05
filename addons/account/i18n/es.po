@@ -30,8 +30,8 @@
 # Óscar Fonseca <tecnico@extreme-micro.com>, 2023
 # Juan Carlos Bravo, 2023
 # Lucia Pacheco, 2023
-# Larissa Manderfeld, 2023
 # Pedro M. Baeza <pedro.baeza@tecnativa.com>, 2023
+# Larissa Manderfeld, 2023
 # 
 msgid ""
 msgstr ""
@@ -39,7 +39,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-02 10:33+0000\n"
 "PO-Revision-Date: 2022-09-22 05:44+0000\n"
-"Last-Translator: Pedro M. Baeza <pedro.baeza@tecnativa.com>, 2023\n"
+"Last-Translator: Larissa Manderfeld, 2023\n"
 "Language-Team: Spanish (https://app.transifex.com/odoo/teams/41243/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -235,13 +235,15 @@ msgid ""
 "%s reached an invalid state regarding its related statement line.\n"
 "To be consistent, the journal entry must always have exactly one suspense line."
 msgstr ""
+"%s alcanzó un estado que no es válido con respecto a su línea de estado de cuenta correspondiente.\n"
+"Para que sea coherente, el asiento contable debe tener siempre solo una línea en suspenso."
 
 #. module: account
 #. odoo-python
 #: code:addons/account/models/account_bank_statement.py:0
 #, python-format
 msgid "%s Statement %s"
-msgstr ""
+msgstr "%s Extracto bancario %s"
 
 #. module: account
 #. odoo-python
@@ -3679,6 +3681,8 @@ msgid ""
 "Cannot generate an unused journal code. Please change the name for journal "
 "%s."
 msgstr ""
+"No se puede generar un código de diario sin usar. Cambie el nombre del "
+"diario %s."
 
 #. module: account
 #. odoo-python
@@ -4965,6 +4969,7 @@ msgstr "Monedas"
 #: model:ir.model.fields,field_description:account.field_account_automatic_entry_wizard__company_currency_id
 #: model:ir.model.fields,field_description:account.field_account_bank_statement__currency_id
 #: model:ir.model.fields,field_description:account.field_account_chart_template__currency_id
+#: model:ir.model.fields,field_description:account.field_account_invoice_report__currency_id
 #: model:ir.model.fields,field_description:account.field_account_journal__currency_id
 #: model:ir.model.fields,field_description:account.field_account_move__currency_id
 #: model:ir.model.fields,field_description:account.field_account_move_line__currency_id
@@ -9154,7 +9159,7 @@ msgstr "Cargar más Límite"
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_automatic_entry_wizard__lock_date_message
 msgid "Lock Date Message"
-msgstr ""
+msgstr "Mensaje de fecha de bloqueo"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__restrict_mode_hash_table
@@ -10938,7 +10943,7 @@ msgstr "Condiciones de pago"
 #: model:ir.model.fields,field_description:account.field_account_move__payment_term_details
 #: model:ir.model.fields,field_description:account.field_account_payment__payment_term_details
 msgid "Payment Term Details"
-msgstr ""
+msgstr "Detalles de condiciones de pago"
 
 #. module: account
 #: model:ir.actions.act_window,name:account.action_payment_term_form
@@ -11016,6 +11021,8 @@ msgstr "Plazo de pago: 30 días"
 #: model_terms:account.payment.term,note:account.account_payment_term_30days_early_discount
 msgid "Payment terms: 30 Days, 2% Early Payment Discount under 7 days"
 msgstr ""
+"Condiciones de pago: 30 días, 2 % de descuento por pago anticipado antes de "
+"7 días"
 
 #. module: account
 #: model_terms:account.payment.term,note:account.account_payment_term_30_days_end_month_the_10
@@ -11456,7 +11463,7 @@ msgstr "Imprime cheques para pagar a tus proveedores"
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement__problem_description
 msgid "Problem Description"
-msgstr ""
+msgstr "Descripción del problema"
 
 #. module: account
 #: model:ir.model,name:account.model_product_template
@@ -12014,7 +12021,7 @@ msgstr "Importe residual"
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_line_tree
 msgid "Residual in Currency"
-msgstr ""
+msgstr "Residual en moneda"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__activity_user_id
@@ -12912,7 +12919,7 @@ msgstr "Mostrar cuenta bancaria del partner"
 #: model:ir.model.fields,field_description:account.field_account_move__show_payment_term_details
 #: model:ir.model.fields,field_description:account.field_account_payment__show_payment_term_details
 msgid "Show Payment Term Details"
-msgstr ""
+msgstr "Mostrar detalles de condiciones de pago"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__show_reset_to_draft_button
@@ -15446,7 +15453,6 @@ msgstr "Actividades de hoy"
 #: code:addons/account/static/src/components/tax_totals/tax_totals.xml:0
 #: code:addons/account/static/src/xml/legacy_tax_totals.xml:0
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__amount_total
-#: model:ir.model.fields,field_description:account.field_account_invoice_report__price_total
 #: model:ir.model.fields,field_description:account.field_account_move__amount_total
 #: model:ir.model.fields,field_description:account.field_account_move_line__price_total
 #: model:ir.model.fields,field_description:account.field_account_payment__amount_total
@@ -15547,6 +15553,7 @@ msgid "Total amount you have to pay to this vendor."
 msgstr "Importe total a pagar a este proveedor."
 
 #. module: account
+#: model:ir.model.fields,field_description:account.field_account_invoice_report__price_total
 #: model_terms:ir.ui.view,arch_db:account.view_invoice_tree
 msgid "Total in Currency"
 msgstr "Total en divisa"

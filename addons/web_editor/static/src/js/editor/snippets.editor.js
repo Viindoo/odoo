@@ -10,6 +10,7 @@ var Widget = require('web.Widget');
 var options = require('web_editor.snippets.options');
 const {ColorPaletteWidget} = require('web_editor.ColorPalette');
 const SmoothScrollOnDrag = require('web/static/src/js/core/smooth_scroll_on_drag.js');
+const {SIZES, MEDIAS_BREAKPOINTS} = require('@web/core/ui/ui_service');
 const {getCSSVariableValue, shouldEditableMediaBeEditable} = require('web_editor.utils');
 const gridUtils = require('@web_editor/js/common/grid_layout_utils');
 const QWeb = core.qweb;
@@ -312,7 +313,10 @@ var SnippetEditor = Widget.extend({
         for (var i in this.styles) {
             await this.styles[i].onBuilt();
         }
+        // TODO In master differentiate device-based visibility.
+        this._toggleVisibilityStatusIgnoreDeviceVisibility = true;
         await this.toggleTargetVisibility(true);
+        this._toggleVisibilityStatusIgnoreDeviceVisibility = false;
     },
     /**
      * Notifies all the associated snippet options that the template which
@@ -889,6 +893,18 @@ var SnippetEditor = Widget.extend({
      * @param {boolean} [show]
      */
     _toggleVisibilityStatus: function (show) {
+        // TODO In master differentiate device-based visibility.
+        if (this._toggleVisibilityStatusIgnoreDeviceVisibility) {
+            if (this.$target[0].matches(".o_snippet_mobile_invisible, .o_snippet_desktop_invisible")) {
+                const mobileViewThreshold = MEDIAS_BREAKPOINTS[SIZES.LG].minWidth;
+                const isMobilePreview = this.$target[0].ownerDocument.defaultView.frameElement.clientWidth < mobileViewThreshold;
+                const isMobileHidden = this.$target[0].classList.contains("o_snippet_mobile_invisible");
+                if (isMobilePreview === isMobileHidden) {
+                    // Preview mode and hidden type are the same.
+                    show = false;
+                }
+            }
+        }
         if (show === undefined) {
             show = !this.isTargetVisible();
         }
@@ -1185,7 +1201,7 @@ var SnippetEditor = Widget.extend({
             this.$dropZones = this.$dropZones.not('[data-oe-sanitize][data-oe-sanitize!="allow_form"] .oe_drop_zone');
         }
         this.$dropZones.droppable({
-            over: function () {
+            over: function (ev) {
                 if (self.dropped) {
                     self.$target.detach();
                 }
@@ -1287,6 +1303,9 @@ var SnippetEditor = Widget.extend({
                     self.dragState.backgroundGridEl = backgroundGridEl;
                     self.onDragMove = self._onDragMove.bind(self);
                     self.$body[0].addEventListener('mousemove', self.onDragMove, false);
+                    // Triggering first move right away without waiting for a
+                    // mousemove event.
+                    self._dragMove(ev.pageX, ev.pageY);
                 }
             },
             out: function () {
@@ -1358,8 +1377,9 @@ var SnippetEditor = Widget.extend({
             // Defining the column grid area with its position.
             const gridProp = gridUtils._getGridProperties(rowEl);
 
-            const top = parseFloat(this.$target[0].style.top);
-            const left = parseFloat(this.$target[0].style.left);
+            const style = window.getComputedStyle(this.$target[0]);
+            const top = parseFloat(style.top);
+            const left = parseFloat(style.left);
 
             const rowStart = Math.round(top / (gridProp.rowSize + gridProp.rowGap)) + 1;
             const columnStart = Math.round(left / (gridProp.columnSize + gridProp.columnGap)) + 1;
@@ -1666,6 +1686,18 @@ var SnippetEditor = Widget.extend({
      * @param {Event} ev
      */
     _onDragMove(ev) {
+        this._dragMove(ev.pageX, ev.pageY);
+    },
+    /**
+     * Helper method for drag move.
+     * Kept in handler section to ease future forward porting because its
+     * content returns into _onDragMove in a future version.
+     *
+     * @private
+     * @param {Number} pageX
+     * @param {Number} pageY
+     */
+    _dragMove(pageX, pageY) {
         const columnEl = this.$target[0];
         const rowEl = columnEl.parentNode;
 
@@ -1680,9 +1712,9 @@ var SnippetEditor = Widget.extend({
         const columnMiddle = columnWidth / 2;
 
         // Placing the column where the mouse is.
-        const top = ev.pageY - rowElTop;
+        const top = pageY - rowElTop;
         const bottom = top + columnHeight;
-        let left = ev.pageX - rowElLeft - columnMiddle;
+        let left = pageX - rowElLeft - columnMiddle;
 
         // Horizontal overflow.
         left = confine(left, 0, rowEl.clientWidth - columnWidth);
@@ -2391,7 +2423,7 @@ var SnippetsMenu = Widget.extend({
             $selectorSiblings = $(_.uniq(($selectorSiblings || $()).add($selectorChildren.children()).get()));
         }
 
-        var noDropZonesSelector = '[data-invisible="1"], .o_we_no_overlay, :not(:visible), :not(:o_editable)';
+        var noDropZonesSelector = '[data-invisible="1"], .o_we_no_overlay, :not(:visible)';
         if ($selectorSiblings) {
             $selectorSiblings.not(`.oe_drop_zone, .oe_drop_clone, ${noDropZonesSelector}`).each(function () {
                 var data;
@@ -2824,6 +2856,13 @@ var SnippetsMenu = Widget.extend({
     _computeSelectorFunctions: function (selector, exclude, target, noCheck, isChildren, excludeParent) {
         var self = this;
 
+        // TODO in master: FOR_DROP should be a param of the function.
+        const forDropID = 'FOR_DROP';
+        const forDrop = exclude && exclude.startsWith(forDropID);
+        if (forDrop) {
+            exclude = exclude.substring(forDropID.length);
+        }
+
         // The `:not(.o_editable_media)` part is handled outside of the selector
         // (see filterFunc).
         // Note: the `:not([contenteditable="true"])` part was there for that
@@ -2841,9 +2880,22 @@ var SnippetsMenu = Widget.extend({
             if ($(this).is(exclude)) {
                 return false;
             }
-            // `o_editable_media` bypasses the `o_not_editable` class.
-            if (this.classList.contains('o_editable_media')) {
+            if (noCheck) {
+                // When noCheck is true, we only check the exclude.
+                return true;
+            }
+            // `o_editable_media` bypasses the `o_not_editable` class except for
+            // drag & drop.
+            if (!forDrop && this.classList.contains('o_editable_media')) {
                 return shouldEditableMediaBeEditable(this);
+            }
+            if (forDrop && !isChildren) {
+                // it's a drop-in.
+                return !$(this)
+                    .is('.o_not_editable :not([contenteditable="true"]), .o_not_editable');
+            }
+            if (isChildren) {
+                return !$(this).is('.o_not_editable *');
             }
             return !$(this)
                 .is('.o_not_editable:not(.s_social_media) :not([contenteditable="true"])');
@@ -2967,8 +3019,8 @@ var SnippetsMenu = Widget.extend({
                 'base_target': target,
                 'selector': self._computeSelectorFunctions(selector, exclude, target, noCheck),
                 '$el': $style,
-                'drop-near': $style.data('drop-near') && self._computeSelectorFunctions($style.data('drop-near'), '', false, noCheck, true, excludeParent),
-                'drop-in': $style.data('drop-in') && self._computeSelectorFunctions($style.data('drop-in'), '', false, noCheck),
+                'drop-near': $style.data('drop-near') && self._computeSelectorFunctions($style.data('drop-near'), 'FOR_DROP', false, noCheck, true, excludeParent),
+                'drop-in': $style.data('drop-in') && self._computeSelectorFunctions($style.data('drop-in'), 'FOR_DROP', false, noCheck),
                 'data': _.extend({string: $style.attr('string')}, $style.data()),
             };
             self.templateOptions.push(option);
@@ -3118,7 +3170,7 @@ var SnippetsMenu = Widget.extend({
         }
 
         var def;
-        if (!$snippet[0].classList.contains('o_no_parent_editor')) {
+        if (this._allowParentsEditors($snippet)) {
             var $parent = globalSelector.closest($snippet.parent());
             if ($parent.length) {
                 def = this._createSnippetEditor($parent);
@@ -3673,6 +3725,13 @@ var SnippetsMenu = Widget.extend({
             tab: this.tabs.OPTIONS,
             forceEmptyTab: true,
         });
+    },
+    /**
+     * @private
+     */
+    _allowParentsEditors($snippet) {
+        return !this.options.enableTranslation
+            && !$snippet[0].classList.contains("o_no_parent_editor");
     },
 
     //--------------------------------------------------------------------------
@@ -4443,9 +4502,17 @@ var SnippetsMenu = Widget.extend({
                 gridUtils._reloadLazyImages(gridItemEl);
             }
 
+            // TODO In future version use tool method to determine isMobilePreview.
+            const mobileViewThreshold = MEDIAS_BREAKPOINTS[SIZES.LG].minWidth;
+            const isMobilePreview = this.$body[0].ownerDocument.defaultView.frameElement.clientWidth < mobileViewThreshold;
             for (const invisibleOverrideEl of this.getEditableArea().find('.o_snippet_mobile_invisible, .o_snippet_desktop_invisible')) {
+                const isMobileHidden = invisibleOverrideEl.classList.contains("o_snippet_mobile_invisible");
                 invisibleOverrideEl.classList.remove('o_snippet_override_invisible');
-                invisibleOverrideEl.dataset.invisible = '1';
+                if (isMobilePreview === isMobileHidden) {
+                    invisibleOverrideEl.dataset.invisible = '1';
+                } else {
+                    delete invisibleOverrideEl.dataset.invisible;
+                }
             }
 
             // This is async but using the main editor mutex, currently locked.

@@ -1665,7 +1665,9 @@ const Wysiwyg = Widget.extend({
         if (color && (!ColorpickerWidget.isCSSColor(color) && !weUtils.isColorGradient(color))) {
             color = (eventName === "foreColor" ? 'text-' : 'bg-') + color;
         }
-        const coloredElements = this.odooEditor.execCommand('applyColor', color, eventName === 'foreColor' ? 'color' : 'backgroundColor', this.lastMediaClicked);
+        let coloredElements = this.odooEditor.execCommand('applyColor', color, eventName === 'foreColor' ? 'color' : 'backgroundColor', this.lastMediaClicked);
+        // Some nodes returned by applyColor can be removed of the document by the sanitization in historyStep
+        coloredElements = coloredElements.filter(element => this.odooEditor.document.contains(element));
 
         const coloredTds = coloredElements && coloredElements.length && coloredElements.filter(coloredElement => coloredElement.classList.contains('o_selected_td'));
         if (coloredTds.length) {
@@ -2646,6 +2648,9 @@ const Wysiwyg = Widget.extend({
         return records[0];
     },
     _isLastDocumentStale() {
+        if (!this._serverLastStepId) {
+            return false;
+        }
         return !this.odooEditor.historyGetBranchIds().includes(this._serverLastStepId);
     },
     /**
