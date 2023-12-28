@@ -27,12 +27,14 @@ msgid ""
 "<i class=\"fa fa-arrow-right\"/>\n"
 "                        Connect your Gmail account"
 msgstr ""
+"<i class=\"fa fa-arrow-right\"/>\n"
+"                        Kết nối tới tài khoản Gmail của bạn"
 
 #. module: google_gmail
 #: model_terms:ir.ui.view,arch_db:google_gmail.fetchmail_server_view_form
 #: model_terms:ir.ui.view,arch_db:google_gmail.ir_mail_server_view_form
 msgid "<i class=\"fa fa-cog\" title=\"Edit Settings\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-cog\" title=\"Sửa thiết lập\"/>"
 
 #. module: google_gmail
 #: model_terms:ir.ui.view,arch_db:google_gmail.fetchmail_server_view_form
@@ -69,13 +71,13 @@ msgstr ""
 #: code:addons/google_gmail/controllers/main.py:0
 #, python-format
 msgid "An error occur during the authentication process."
-msgstr ""
+msgstr "Có lỗi xảy ra trong quá trình xác thực."
 
 #. module: google_gmail
 #: code:addons/google_gmail/models/google_gmail_mixin.py:0
 #, python-format
 msgid "An error occurred when fetching the access token."
-msgstr ""
+msgstr "Có lỗi xảy ra khi lấy token truy cập"
 
 #. module: google_gmail
 #: model:ir.model.fields,field_description:google_gmail.field_ir_mail_server__smtp_authentication
@@ -101,6 +103,8 @@ msgid ""
 "Connect your Gmail account with the OAuth Authentication process. \n"
 "You will be redirected to the Gmail login page where you will need to accept the permission."
 msgstr ""
+"Kết nối với tài khoản Gmail của bạn trong quá trình Xác thưc Người dùng. \n"
+"Bạn sẽ được điều hướng tới trang đăng nhập Gmail, nơi bạn sẽ cần chấp nhận cho phép truy cập."
 
 #. module: google_gmail
 #: code:addons/google_gmail/models/ir_mail_server.py:0
@@ -109,22 +113,24 @@ msgid ""
 "Connect your Gmail account with the OAuth Authentication process.  \n"
 "By default, only a user with a matching email address will be able to use this server. To extend its use, you should set a \"mail.default.from\" system parameter."
 msgstr ""
+"Kết nối với tài khoản Gmail của bạn trong quá trình Xác thưc Người dùng. \n"
+"Mặc định, chỉ người dùng có địa chỉ email trùng khớp mới có thể sử dụng máy chủ này. Để mở rộng sử dung, bạn cần thiết lập \"mail.default.from\" trong tham số hệ thống."
 
 #. module: google_gmail
 #: model:ir.model.fields,field_description:google_gmail.field_res_config_settings__google_gmail_client_identifier
 msgid "Gmail Client Id"
-msgstr ""
+msgstr "ID khách Gmail"
 
 #. module: google_gmail
 #: model:ir.model.fields,field_description:google_gmail.field_res_config_settings__google_gmail_client_secret
 msgid "Gmail Client Secret"
-msgstr ""
+msgstr "Mã khách bí mật Gmail"
 
 #. module: google_gmail
 #: model:ir.model.fields.selection,name:google_gmail.selection__fetchmail_server__server_type__gmail
 #: model:ir.model.fields.selection,name:google_gmail.selection__ir_mail_server__smtp_authentication__gmail
 msgid "Gmail OAuth Authentication"
-msgstr ""
+msgstr "Xác thực người dùng Gmail"
 
 #. module: google_gmail
 #: model:ir.model,name:google_gmail.model_google_gmail_mixin
@@ -139,7 +145,7 @@ msgstr "ID"
 #. module: google_gmail
 #: model_terms:ir.ui.view,arch_db:google_gmail.res_config_settings_view_form
 msgid "ID of your Google app"
-msgstr ""
+msgstr "ID ứng dụng Google của bạn"
 
 #. module: google_gmail
 #: model:ir.model,name:google_gmail.model_fetchmail_server
@@ -153,6 +159,8 @@ msgid ""
 "Incorrect Connection Security for Gmail mail server %r. Please set it to "
 "\"TLS (STARTTLS)\"."
 msgstr ""
+"Kết nối bảo mật tới máy chủ mail Gmail %r không chính xác. Xin bạn hãy thiết lập kết nối bảo mật "
+"\"TLS (STARTTLS)\"."
 
 #. module: google_gmail
 #: model:ir.model,name:google_gmail.model_ir_mail_server
@@ -163,13 +171,13 @@ msgstr "Máy chủ gửi thư"
 #: code:addons/google_gmail/models/google_gmail_mixin.py:0
 #, python-format
 msgid "Only the administrator can link a Gmail mail server."
-msgstr ""
+msgstr "Chỉ có quản lý hệ thống mơi có thể liên kết máy chủ email Gmal."
 
 #. module: google_gmail
 #: code:addons/google_gmail/models/google_gmail_mixin.py:0
 #, python-format
 msgid "Please configure your Gmail credentials."
-msgstr ""
+msgstr "Xin hãy cấu hình thông tin bảo mật Gmial của ban."
 
 #. module: google_gmail
 #: code:addons/google_gmail/models/ir_mail_server.py:0
@@ -178,6 +186,8 @@ msgid ""
 "Please leave the password field empty for Gmail mail server %r. The OAuth "
 "process does not require it"
 msgstr ""
+"Để chống trường mật khẩu này cho máy chủ mail Gmail %r. Quá trình xác thực "
+"không yêu cầu mật khẩu này."
 
 #. module: google_gmail
 #: model_terms:ir.ui.view,arch_db:google_gmail.ir_mail_server_view_form
@@ -199,7 +209,7 @@ msgstr "Secret"
 #. module: google_gmail
 #: model_terms:ir.ui.view,arch_db:google_gmail.res_config_settings_view_form
 msgid "Secret of your Google app"
-msgstr ""
+msgstr "Mã bí mật ứng dụng Google của bạn"
 
 #. module: google_gmail
 #: model:ir.model.fields,field_description:google_gmail.field_fetchmail_server__server_type
@@ -212,7 +222,8 @@ msgstr "Kiểu máy chủ"
 msgid ""
 "Setup your Gmail API credentials in the general settings to link a Gmail "
 "account."
-msgstr ""
+msgstr "Thiết lập thông tin bảo mật Gmail API trong thiết lập chung để liên "
+"kết tới một tài khoản Gmail."
 
 #. module: google_gmail
 #: model:ir.model.fields,help:google_gmail.field_fetchmail_server__google_gmail_uri
@@ -228,6 +239,8 @@ msgid ""
 "This server %r can only be used for your personal email address. Please fill"
 " the \"from_filter\" field with %r."
 msgstr ""
+"Máy chủ %r chỉ có thể sự dụng địa chỉ email cá nhân. Xin hãy điền "
+"trường \"Bộ lọc từ\" với %r"
 
 #. module: google_gmail
 #: model:ir.model.fields,field_description:google_gmail.field_fetchmail_server__google_gmail_uri
