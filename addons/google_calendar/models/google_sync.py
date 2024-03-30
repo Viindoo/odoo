@@ -179,9 +179,6 @@ class GoogleSync(models.AbstractModel):
             # Migration from 13.4 does not fill write_date. Therefore, we force the update from Google.
             if not odoo_record.write_date or updated >= pytz.utc.localize(odoo_record.write_date):
                 vals = dict(self._odoo_values(gevent, default_reminders), need_sync=False)
-                # don't override existing videocall_location's value with False
-                if 'videocall_location' in odoo_record and 'videocall_location' in vals and not vals['videocall_location']:
-                    vals.pop('videocall_location')
                 odoo_record.with_context(dont_notify=True)._write_from_google(gevent, vals)
                 synced_records |= odoo_record
 
