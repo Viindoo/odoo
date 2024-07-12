@@ -49,7 +49,7 @@ class IrModelField(models.Model):
                     'field_info': {
                         'desc': field.field_description,
                         'name': field.name,
-                        'sequence': self.env[field.model_id.model]._mail_track_get_field_sequence(field.name),
+                        'sequence': self.env[field.model_id.model]._mail_track_get_field_sequence(field),
                         'type': field.ttype,
                     }
                 })

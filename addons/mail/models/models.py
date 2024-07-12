@@ -6,6 +6,7 @@ from lxml.builder import E
 from markupsafe import Markup
 
 from odoo import api, models, tools, _
+from odoo.addons.base.models.ir_model import IrModelFields
 from odoo.addons.mail.tools.alias_error import AliasError
 
 import logging
@@ -173,14 +174,20 @@ class BaseModel(models.AbstractModel):
         fields_track_info.sort(key=lambda item: (item[1], item[0]), reverse=True)
         return fields_track_info
 
-    def _mail_track_get_field_sequence(self, fname):
+    def _mail_track_get_field_sequence(self, field):
         """ Find tracking sequence of a given field, given their name. Current
         parameter 'tracking' should be an integer, but attributes with True
         are still supported; old naming 'track_sequence' also. """
-        sequence = getattr(
-            self._fields[fname], 'tracking',
-            getattr(self._fields[fname], 'track_sequence', 100)
-        )
+        if isinstance(field, IrModelFields):
+            sequence = getattr(
+                field, 'tracking',
+                getattr(field, 'track_sequence', 100)
+            )
+        else:
+            sequence = getattr(
+                self._fields[field], 'tracking',
+                getattr(self._fields[field], 'track_sequence', 100)
+            )
         if sequence is True:
             sequence = 100
         return sequence
