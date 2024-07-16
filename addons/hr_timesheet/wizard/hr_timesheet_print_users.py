@@ -18,40 +18,37 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import datetime
-
 from openerp.osv import fields, osv
 
 class analytical_timesheet_employees(osv.osv_memory):
     _name = 'hr.analytical.timesheet.users'
     _description = 'Print Employees Timesheet'
-    _columns = {
-        'month': fields.selection([(1,'January'), (2,'February'), (3,'March'), (4,'April'),
-            (5,'May'), (6,'June'), (7,'July'), (8,'August'), (9,'September'),
-            (10,'October'), (11,'November'), (12,'December')], 'Month', required=True),
-        'year': fields.integer('Year', required=True),
-        'employee_ids': fields.many2many('hr.employee', 'timesheet_employee_rel', 'timesheet_id', 'employee_id', 'employees', required=True)
-                }
+    _columns = {'month': fields.selection([(1, 'January'),
+               (2, 'February'),
+               (3, 'March'),
+               (4, 'April'),
+               (5, 'May'),
+               (6, 'June'),
+               (7, 'July'),
+               (8, 'August'),
+               (9, 'September'),
+               (10, 'October'),
+               (11, 'November'),
+               (12, 'December')], 'Month', required=True),
+     'year': fields.integer('Year', required=True),
+     'employee_ids': fields.many2many('hr.employee', 'timesheet_employee_rel', 'timesheet_id', 'employee_id', 'employees', required=True)}
+    _defaults = {'month': lambda *a: datetime.date.today().month,
+     'year': lambda *a: datetime.date.today().year}
 
-    _defaults = {
-         'month': lambda *a: datetime.date.today().month,
-         'year': lambda *a: datetime.date.today().year,
-             }
-
-    def print_report(self, cr, uid, ids, context=None):
+    def print_report(self, cr, uid, ids, context = None):
         data = self.read(cr, uid, ids, context=context)[0]
-        datas = {
-             'ids': [],
-             'model': 'hr.employee',
-             'form': data
-                 }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'hr.analytical.timesheet_users',
-            'datas': datas,
-            }
+        datas = {'ids': [],
+         'model': 'hr.employee',
+         'form': data}
+        return {'type': 'ir.actions.report.xml',
+         'report_name': 'hr.analytical.timesheet_users',
+         'datas': datas}
+
 
 analytical_timesheet_employees()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

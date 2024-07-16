@@ -31,7 +31,7 @@
             <field name="name">cancel</field>
             <field name="kind">function</field>
             <field name="flow_stop">True</field>
-            <field name="action">wkf_action_cancel()</field>
+            <field name="action">write({'state':'cancel'})</field>
         </record>
         <record id="act_except_invoice" model="workflow.activity">
             <field name="wkf_id" ref="purchase_order"/>
@@ -147,7 +147,7 @@
         <record id="trans_router_invoice_no_order" model="workflow.transition">
             <field name="act_from" ref="act_router"/>
             <field name="act_to" ref="act_invoice_end"/>
-            <field name="condition">invoice_method&lt;&gt;'order'</field>
+            <field name="condition">invoice_method&lt;&gt;'order' and invoiced</field>
         </record>
         <record id="trans_except_picking_picking_done" model="workflow.transition">
             <field name="act_from" ref="act_except_picking"/>
@@ -200,7 +200,6 @@
         <record id="trans_invoice_end_done" model="workflow.transition">
             <field name="act_from" ref="act_invoice_end"/>
             <field name="act_to" ref="act_done"/>
-            <field name="condition">invoiced</field>
         </record>
 
     <!-- Procurement -->

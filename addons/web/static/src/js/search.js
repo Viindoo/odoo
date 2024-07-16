@@ -331,17 +331,17 @@ instance.web.SearchView = instance.web.Widget.extend(/** @lends instance.web.Sea
         'keydown .oe_searchview_input, .oe_searchview_facet': function (e) {
             switch(e.which) {
             case $.ui.keyCode.LEFT:
-                this.focusPreceding(e.target);
+                this.focusPreceding(this);
                 e.preventDefault();
                 break;
             case $.ui.keyCode.RIGHT:
-                this.focusFollowing(e.target);
+                this.focusFollowing(this);
                 e.preventDefault();
                 break;
             }
         },
         'autocompleteopen': function () {
-            this.$el.autocomplete('widget').css('z-index', 9999);
+            this.$el.autocomplete('widget').css('z-index', 1004);
         },
     },
     /**
@@ -407,7 +407,7 @@ instance.web.SearchView = instance.web.Widget.extend(/** @lends instance.web.Sea
                 context: this.dataset.get_context(),
             });
 
-            this.alive($.when(load_view)).then(function (r) {
+            $.when(load_view).then(function (r) {
                 return self.search_view_loaded(r)
             }).fail(function () {
                 self.ready.reject.apply(null, arguments);
@@ -467,19 +467,17 @@ instance.web.SearchView = instance.web.Widget.extend(/** @lends instance.web.Sea
      */
     setup_global_completion: function () {
         var self = this;
+
         var autocomplete = this.$el.autocomplete({
             source: this.proxy('complete_global_search'),
             select: this.proxy('select_completion'),
+            search: function () { self.$el.autocomplete('close'); },
             focus: function (e) { e.preventDefault(); },
             html: true,
             autoFocus: true,
             minLength: 1,
-            delay: 250,
+            delay: 0,
         }).data('autocomplete');
-
-        this.$el.on('input', function () {
-            this.$el.autocomplete('close');
-        }.bind(this));
 
         // MonkeyPatch autocomplete instance
         _.extend(autocomplete, {
@@ -615,7 +613,7 @@ instance.web.SearchView = instance.web.Widget.extend(/** @lends instance.web.Sea
     make_widgets: function (items, fields, group) {
         if (!group) {
             group = new instance.web.search.Group(
-                this, 'q', {attrs: {string: _t("Filters")}});
+                this, 'q', {attrs: {string: _t("Lọc")}});
         }
         var self = this;
         var filters = [];
@@ -1453,7 +1451,7 @@ instance.web.search.SelectionField = instance.web.search.Field.extend(/** @lends
         var results = _(this.attrs.selection).chain()
             .filter(function (sel) {
                 var value = sel[0], label = sel[1];
-                if (value === undefined || !label) { return false; }
+                if (!value) { return false; }
                 return label.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
             })
             .map(function (sel) {
@@ -1497,19 +1495,7 @@ instance.web.search.DateField = instance.web.search.Field.extend(/** @lends inst
         return instance.web.date_to_str(facetValue.get('value'));
     },
     complete: function (needle) {
-        var d;
-        try {
-            var t = (this.attrs && this.attrs.type === 'datetime') ? 'datetime' : 'date';
-            var v = instance.web.parse_value(needle, {'widget': t});
-            if (t === 'datetime'){
-                d = instance.web.str_to_datetime(v);
-            }
-            else{
-                d = instance.web.str_to_date(v);
-            }
-        } catch (e) {
-            // pass
-        }
+        var d = Date.parse(needle);
         if (!d) { return $.when(null); }
         var date_string = instance.web.format_value(d, this.attrs);
         var label = _.str.sprintf(_.str.escapeHTML(
@@ -1561,7 +1547,7 @@ instance.web.search.ManyToOneField = instance.web.search.CharField.extend({
             context: context
         }).then(function (results) {
             if (_.isEmpty(results)) { return null; }
-            return [{label: self.attrs.string}].concat(
+            return [{label: _.escape(self.attrs.string)}].concat(
                 _(results).map(function (result) {
                     return {
                         label: _.escape(result[1]),
@@ -1591,11 +1577,8 @@ instance.web.search.ManyToOneField = instance.web.search.CharField.extend({
         return facetValue.get('label');
     },
     make_domain: function (name, operator, facetValue) {
-        switch(operator){
-        case this.default_operator:
+        if (operator === this.default_operator) {
             return [[name, '=', facetValue.get('value')]];
-        case 'child_of':
-            return [[name, 'child_of', facetValue.get('value')]];
         }
         return this._super(name, operator, facetValue);
     },
@@ -1677,7 +1660,7 @@ instance.web.search.CustomFilters = instance.web.search.Input.extend({
      */
     facet_for: function (filter) {
         return {
-            category: _t("Custom Filter"),
+            category: _t("Lọc tùy chọn"),
             icon: 'M',
             field: {
                 get_context: function () { return filter.context; },
@@ -1750,10 +1733,7 @@ instance.web.search.CustomFilters = instance.web.search.Input.extend({
         var $name = this.$('input:first');
         var private_filter = !this.$('#oe_searchview_custom_public').prop('checked');
         var set_as_default = this.$('#oe_searchview_custom_default').prop('checked');
-        if (_.isEmpty($name.val())){
-            this.do_warn(_t("Error"), _t("Filter name is required."));
-            return false;
-        }
+
         var search = this.view.build_search_data();
         instance.web.pyeval.eval_domains_and_contexts({
             domains: search.domains,
@@ -1865,14 +1845,9 @@ instance.web.search.Advanced = instance.web.search.Input.extend({
             new instance.web.Model(this.view.model).call('fields_get', {
                     context: this.view.dataset.context
                 }).done(function(data) {
-                    self.fields = {
+                    self.fields = _.extend({
                         id: { string: 'ID', type: 'id' }
-                    };
-                    _.each(data, function(field_def, field_name) {
-                        if (field_def.selectable !== false && field_name != 'id') {
-                            self.fields[field_name] = field_def;
-                        }
-                    });
+                    }, data);
         })).done(function () {
             self.append_proposition();
         });
@@ -2064,12 +2039,12 @@ instance.web.search.ExtendedSearchProposition.Field = instance.web.Widget.extend
 instance.web.search.ExtendedSearchProposition.Char = instance.web.search.ExtendedSearchProposition.Field.extend({
     template: 'SearchView.extended_search.proposition.char',
     operators: [
-        {value: "ilike", text: _lt("contains")},
-        {value: "not ilike", text: _lt("doesn't contain")},
-        {value: "=", text: _lt("is equal to")},
-        {value: "!=", text: _lt("is not equal to")},
-        {value: "∃", text: _lt("is set")},
-        {value: "∄", text: _lt("is not set")}
+        {value: "ilike", text: _lt("Giống")},
+        {value: "not ilike", text: _lt("Không giống")},
+        {value: "=", text: _lt("Bằng")},
+        {value: "!=", text: _lt("Không bằng")},
+        {value: "∃", text: _lt("Được thiết lập")},
+        {value: "∄", text: _lt("Không được thiết lập")}
     ],
     get_value: function() {
         return this.$el.val();
@@ -2078,14 +2053,14 @@ instance.web.search.ExtendedSearchProposition.Char = instance.web.search.Extende
 instance.web.search.ExtendedSearchProposition.DateTime = instance.web.search.ExtendedSearchProposition.Field.extend({
     template: 'SearchView.extended_search.proposition.empty',
     operators: [
-        {value: "=", text: _lt("is equal to")},
-        {value: "!=", text: _lt("is not equal to")},
-        {value: ">", text: _lt("greater than")},
-        {value: "<", text: _lt("less than")},
-        {value: ">=", text: _lt("greater or equal than")},
-        {value: "<=", text: _lt("less or equal than")},
-        {value: "∃", text: _lt("is set")},
-        {value: "∄", text: _lt("is not set")}
+        {value: "=", text: _lt("Bằng")},
+        {value: "!=", text: _lt("Không bằng")},
+        {value: ">", text: _lt("Lơn hơn")},
+        {value: "<", text: _lt("Nhỏ hơn")},
+        {value: ">=", text: _lt("Lớn hơn hoặc bằng")},
+        {value: "<=", text: _lt("Nhỏ hơn hoặc bằng")},
+        {value: "∃", text: _lt("Được thiết lập")},
+        {value: "∄", text: _lt("Không được thiết lập")}
     ],
     /**
      * Date widgets live in view_form which is not yet loaded when this is
@@ -2114,14 +2089,14 @@ instance.web.search.ExtendedSearchProposition.Date = instance.web.search.Extende
 instance.web.search.ExtendedSearchProposition.Integer = instance.web.search.ExtendedSearchProposition.Field.extend({
     template: 'SearchView.extended_search.proposition.integer',
     operators: [
-        {value: "=", text: _lt("is equal to")},
-        {value: "!=", text: _lt("is not equal to")},
-        {value: ">", text: _lt("greater than")},
-        {value: "<", text: _lt("less than")},
-        {value: ">=", text: _lt("greater or equal than")},
-        {value: "<=", text: _lt("less or equal than")},
-        {value: "∃", text: _lt("is set")},
-        {value: "∄", text: _lt("is not set")}
+        {value: "=", text: _lt("Bằng")},
+        {value: "!=", text: _lt("Không Bằng")},
+        {value: ">", text: _lt("Lớn hơn")},
+        {value: "<", text: _lt("Nhỏ hơn")},
+        {value: ">=", text: _lt("Lớn hơn hoặc bằng")},
+        {value: "<=", text: _lt("Nhỏ hơn hoặc bằng")},
+        {value: "∃", text: _lt("Được thiết lập")},
+        {value: "∄", text: _lt("Chưa được thiết lập")}
     ],
     toString: function () {
         return this.$el.val();
@@ -2141,19 +2116,15 @@ instance.web.search.ExtendedSearchProposition.Id = instance.web.search.ExtendedS
 instance.web.search.ExtendedSearchProposition.Float = instance.web.search.ExtendedSearchProposition.Field.extend({
     template: 'SearchView.extended_search.proposition.float',
     operators: [
-        {value: "=", text: _lt("is equal to")},
-        {value: "!=", text: _lt("is not equal to")},
-        {value: ">", text: _lt("greater than")},
-        {value: "<", text: _lt("less than")},
-        {value: ">=", text: _lt("greater or equal than")},
-        {value: "<=", text: _lt("less or equal than")},
-        {value: "∃", text: _lt("is set")},
-        {value: "∄", text: _lt("is not set")}
+        {value: "=", text: _lt("Bằng")},
+        {value: "!=", text: _lt("Không bằng")},
+        {value: ">", text: _lt("Lớn hơn")},
+        {value: "<", text: _lt("Nhỏ hơn")},
+        {value: ">=", text: _lt("Lớn hơn hoặc bằng")},
+        {value: "<=", text: _lt("lNhỏ hơn hoặc bằng")},
+        {value: "∃", text: _lt("Được thiết lập")},
+        {value: "∄", text: _lt("Chưa được thiết lập")}
     ],
-    init: function (parent) {
-        this._super(parent);
-        this.decimal_point = instance.web._t.database.parameters.decimal_point;
-    },
     toString: function () {
         return this.$el.val();
     },
@@ -2169,10 +2140,10 @@ instance.web.search.ExtendedSearchProposition.Float = instance.web.search.Extend
 instance.web.search.ExtendedSearchProposition.Selection = instance.web.search.ExtendedSearchProposition.Field.extend({
     template: 'SearchView.extended_search.proposition.selection',
     operators: [
-        {value: "=", text: _lt("is")},
-        {value: "!=", text: _lt("is not")},
-        {value: "∃", text: _lt("is set")},
-        {value: "∄", text: _lt("is not set")}
+        {value: "=", text: _lt("là")},
+        {value: "!=", text: _lt("không là")},
+        {value: "∃", text: _lt("được thiết lập")},
+        {value: "∄", text: _lt("chưa được thiết lập")}
     ],
     toString: function () {
         var select = this.$el[0];
@@ -2186,8 +2157,8 @@ instance.web.search.ExtendedSearchProposition.Selection = instance.web.search.Ex
 instance.web.search.ExtendedSearchProposition.Boolean = instance.web.search.ExtendedSearchProposition.Field.extend({
     template: 'SearchView.extended_search.proposition.empty',
     operators: [
-        {value: "=", text: _lt("is true")},
-        {value: "!=", text: _lt("is false")}
+        {value: "=", text: _lt("là đúng")},
+        {value: "!=", text: _lt("là sai")}
     ],
     get_label: function (field, operator) {
         return this.format_label(

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    
+#    VNC Developments (India) Pvt. Ltd.
+#    Copyright (C) 2004-TODAY VNC (<http://www.vnc.biz>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -15,41 +15,21 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.     
 #
 ##############################################################################
-
 from openerp.osv import osv, fields
 
 class pos_discount(osv.osv_memory):
     _name = 'pos.discount'
     _description = 'Add a Global Discount'
-    _columns = {
-        'discount': fields.float('Discount (%)', required=True, digits=(16,2)),
-    }
-    _defaults = {
-        'discount': 5,
-    }
+    _columns = {'discount': fields.float('Discount (%)', required=True, digits=(16, 2))}
+    _defaults = {'discount': 5}
 
-#    def view_init(self, cr, uid, fields_list, context=None):
-#        """
-#         Creates view dynamically and adding fields at runtime.
-#         @param self: The object pointer.
-#         @param cr: A database cursor
-#         @param uid: ID of the user currently logged in
-#         @param context: A standard dictionary
-#         @return: New arch of view with new columns.
-#        """
-#        if context is None:
-#            context = {}
-#        super(pos_discount, self).view_init(cr, uid, fields_list, context=context)
-#        record_id = context and context.get('active_id', False) or False
-#        True
-
-    def apply_discount(self, cr, uid, ids, context=None):
+    def apply_discount(self, cr, uid, ids, context = None):
         """
          To give the discount of  product and check the.
-
+        
          @param self: The object pointer.
          @param cr: A database cursor
          @param uid: ID of the user currently logged in
@@ -65,9 +45,9 @@ class pos_discount(osv.osv_memory):
         if isinstance(record_id, (int, long)):
             record_id = [record_id]
         for order in order_ref.browse(cr, uid, record_id, context=context):
-            order_line_ref.write(cr, uid, [x.id for x in order.lines], {'discount':this.discount}, context=context)
+            order_line_ref.write(cr, uid, [ x.id for x in order.lines ], {'discount': this.discount}, context=context)
+
         return {}
 
-pos_discount()
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+pos_discount()

@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -17,27 +18,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class product_product(osv.osv):
     _inherit = 'product.product'
-    _columns = {
-        'manufacturer' : fields.many2one('res.partner', 'Manufacturer'),
-        'manufacturer_pname' : fields.char('Manufacturer Product Name', size=64),
-        'manufacturer_pref' : fields.char('Manufacturer Product Code', size=64),
-        'attribute_ids': fields.one2many('product.manufacturer.attribute', 'product_id', 'Attributes'),
-    }
+    _columns = {'manufacturer': fields.many2one('res.partner', 'Manufacturer'),
+     'manufacturer_pname': fields.char('Manufacturer Product Name', size=64),
+     'manufacturer_pref': fields.char('Manufacturer Product Code', size=64),
+     'attribute_ids': fields.one2many('product.manufacturer.attribute', 'product_id', 'Attributes')}
+
+
 product_product()
 
 class product_attribute(osv.osv):
-    _name = "product.manufacturer.attribute"
-    _description = "Product attributes"
-    _columns = {
-        'name' : fields.char('Attribute', size=64, required=True),
-        'value' : fields.char('Value', size=64),
-        'product_id': fields.many2one('product.product', 'Product', ondelete='cascade'),
-    }
-product_attribute()
+    _name = 'product.manufacturer.attribute'
+    _description = 'Product attributes'
+    _columns = {'name': fields.char('Attribute', size=64, required=True),
+     'value': fields.char('Value', size=64),
+     'product_id': fields.many2one('product.product', 'Product', ondelete='cascade')}
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
+product_attribute()

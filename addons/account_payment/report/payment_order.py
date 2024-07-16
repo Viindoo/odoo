@@ -18,23 +18,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import time
-
 from openerp import pooler
 from openerp.report import report_sxw
 
 class payment_order(report_sxw.rml_parse):
 
-    def __init__(self, cr, uid, name, context=None):
+    def __init__(self, cr, uid, name, context = None):
         super(payment_order, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update( {
-            'time': time,
-            'get_invoice_name': self._get_invoice_name,
-            'get_amount_total_in_currency': self._get_amount_total_in_currency,
-            'get_amount_total': self._get_amount_total,
-            'get_account_name': self._get_account_name,
-        })
+        self.localcontext.update({'time': time,
+         'get_invoice_name': self._get_invoice_name,
+         'get_amount_total_in_currency': self._get_amount_total_in_currency,
+         'get_amount_total': self._get_amount_total,
+         'get_account_name': self._get_account_name})
 
     def _get_invoice_name(self, invoice_id):
         if invoice_id:
@@ -55,6 +51,7 @@ class payment_order(report_sxw.rml_parse):
                 total += line.amount_currency
             else:
                 return False
+
         return total
 
     def _get_amount_total(self, payment):
@@ -63,9 +60,10 @@ class payment_order(report_sxw.rml_parse):
             return False
         for line in payment.line_ids:
             total += line.amount
+
         return total
 
-    def _get_account_name(self,bank_id):
+    def _get_account_name(self, bank_id):
         if bank_id:
             pool = pooler.get_pool(self.cr.dbname)
             value_name = pool.get('res.partner.bank').name_get(self.cr, self.uid, [bank_id])
@@ -73,6 +71,5 @@ class payment_order(report_sxw.rml_parse):
                 return value_name[0][1]
         return False
 
-report_sxw.report_sxw('report.payment.order', 'payment.order', 'addons/account_payment/report/payment_order.rml', parser=payment_order, header="external")
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+report_sxw.report_sxw('report.payment.order', 'payment.order', 'addons/account_payment/report/payment_order.rml', parser=payment_order, header='external')

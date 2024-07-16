@@ -25,13 +25,11 @@ from dateutil.relativedelta import relativedelta
 from operator import itemgetter
 import time
 
-import openerp
 from openerp import SUPERUSER_ID
 from openerp import pooler, tools
-from openerp.osv import fields, osv, expression
+from openerp.osv import fields, osv
 from openerp.tools.translate import _
-from openerp.tools.float_utils import float_round as round
-from openerp.tools.safe_eval import safe_eval as eval
+from openerp.tools.float_utils import float_round
 
 import openerp.addons.decimal_precision as dp
 
@@ -227,36 +225,29 @@ class account_account(osv.osv):
     _description = "Account"
     _parent_store = True
 
-    def _where_calc(self, cr, uid, domain, active_test=True, context=None):
-        """ Convert domains to allow easier filtering:
-                code: force case insensitive and right side matching search
-                journal_id: restrict to the accounts sharing the same account.account.type
-        """
+    def search(self, cr, uid, args, offset=0, limit=None, order=None,
+            context=None, count=False):
+        if context is None:
+            context = {}
         pos = 0
-        while pos < len(domain):
-            if domain[pos][0] == 'code' and domain[pos][1] in ('like', 'ilike') and domain[pos][2]:
-                domain[pos] = ('code', '=like', tools.ustr(domain[pos][2].replace('%', '')) + '%')
-            if domain[pos][0] == 'journal_id':
-                if not domain[pos][2]:
-                    del domain[pos]
+
+        while pos < len(args):
+
+            if args[pos][0] == 'code' and args[pos][1] in ('like', 'ilike') and args[pos][2]:
+                args[pos] = ('code', '=like', tools.ustr(args[pos][2].replace('%', ''))+'%')
+            if args[pos][0] == 'journal_id':
+                if not args[pos][2]:
+                    del args[pos]
                     continue
-                jour = self.pool.get('account.journal').browse(cr, uid, domain[pos][2], context=context)
-                if (not (jour.account_control_ids or jour.type_control_ids)) or not domain[pos][2]:
-                    domain[pos] = ('type', 'not in', ('consolidation', 'view'))
+                jour = self.pool.get('account.journal').browse(cr, uid, args[pos][2], context=context)
+                if (not (jour.account_control_ids or jour.type_control_ids)) or not args[pos][2]:
+                    args[pos] = ('type','not in',('consolidation','view'))
                     continue
                 ids3 = map(lambda x: x.id, jour.type_control_ids)
                 ids1 = super(account_account, self).search(cr, uid, [('user_type', 'in', ids3)])
                 ids1 += map(lambda x: x.id, jour.account_control_ids)
-                domain[pos] = ('id', 'in', ids1)
+                args[pos] = ('id', 'in', ids1)
             pos += 1
-
-        return super(account_account, self)._where_calc(cr, uid, domain, active_test, context)
-
-    def search(self, cr, uid, args, offset=0, limit=None, order=None,
-            context=None, count=False):
-        """ Check presence of key 'consolidate_children' in context to include also the Consolidated Children
-            of found accounts into the result of the search
-        """
 
         if context and context.has_key('consolidate_children'): #add consolidated children of accounts
             ids = super(account_account, self).search(cr, uid, args, offset, limit,
@@ -590,18 +581,15 @@ class account_account(osv.osv):
         except:
             pass
         if name:
-            if operator not in expression.NEGATIVE_TERM_OPERATORS:
-                ids = self.search(cr, user, ['|', ('code', '=like', name+"%"), '|',  ('shortcut', '=', name), ('name', operator, name)]+args, limit=limit)
-                if not ids and len(name.split()) >= 2:
-                    #Separating code and name of account for searching
-                    operand1,operand2 = name.split(' ',1) #name can contain spaces e.g. OpenERP S.A.
-                    ids = self.search(cr, user, [('code', operator, operand1), ('name', operator, operand2)]+ args, limit=limit)
-            else:
-                ids = self.search(cr, user, ['&','!', ('code', '=like', name+"%"), ('name', operator, name)]+args, limit=limit)
-                # as negation want to restric, do if already have results
-                if ids and len(name.split()) >= 2:
-                    operand1,operand2 = name.split(' ',1) #name can contain spaces e.g. OpenERP S.A.
-                    ids = self.search(cr, user, [('code', operator, operand1), ('name', operator, operand2), ('id', 'in', ids)]+ args, limit=limit)
+            ids = self.search(cr, user, [('code', '=like', name+"%")]+args, limit=limit)
+            if not ids:
+                ids = self.search(cr, user, [('shortcut', '=', name)]+ args, limit=limit)
+            if not ids:
+                ids = self.search(cr, user, [('name', operator, name)]+ args, limit=limit)
+            if not ids and len(name.split()) >= 2:
+                #Separating code and name of account for searching
+                operand1,operand2 = name.split(' ',1) #name can contain spaces e.g. OpenERP S.A.
+                ids = self.search(cr, user, [('code', operator, operand1), ('name', operator, operand2)]+ args, limit=limit)
         else:
             ids = self.search(cr, user, args, context=context, limit=limit)
         return self.name_get(cr, user, ids, context=context)
@@ -853,11 +841,16 @@ class account_journal(osv.osv):
     def name_search(self, cr, user, name, args=None, operator='ilike', context=None, limit=100):
         if not args:
             args = []
-        if operator in expression.NEGATIVE_TERM_OPERATORS:
-            domain = [('code', operator, name), ('name', operator, name)]
-        else:
-            domain = ['|', ('code', operator, name), ('name', operator, name)]
-        ids = self.search(cr, user, expression.AND([domain, args]), limit=limit, context=context)
+        if context is None:
+            context = {}
+        ids = []
+        if context.get('journal_type', False):
+            args += [('type','=',context.get('journal_type'))]
+        if name:
+            ids = self.search(cr, user, [('code', 'ilike', name)]+ args, limit=limit, context=context)
+        if not ids:
+            ids = self.search(cr, user, [('name', 'ilike', name)]+ args, limit=limit, context=context)#fix it ilike should be replace with operator
+
         return self.name_get(cr, user, ids, context=context)
 
 account_journal()
@@ -947,11 +940,13 @@ class account_fiscalyear(osv.osv):
     def name_search(self, cr, user, name, args=None, operator='ilike', context=None, limit=80):
         if args is None:
             args = []
-        if operator in expression.NEGATIVE_TERM_OPERATORS:
-            domain = [('code', operator, name), ('name', operator, name)]
-        else:
-            domain = ['|', ('code', operator, name), ('name', operator, name)]
-        ids = self.search(cr, user, expression.AND([domain, args]), limit=limit, context=context)
+        if context is None:
+            context = {}
+        ids = []
+        if name:
+            ids = self.search(cr, user, [('code', 'ilike', name)]+ args, limit=limit)
+        if not ids:
+            ids = self.search(cr, user, [('name', operator, name)]+ args, limit=limit)
         return self.name_get(cr, user, ids, context=context)
 
 account_fiscalyear()
@@ -1046,11 +1041,19 @@ class account_period(osv.osv):
     def name_search(self, cr, user, name, args=None, operator='ilike', context=None, limit=100):
         if args is None:
             args = []
-        if operator in expression.NEGATIVE_TERM_OPERATORS:
-            domain = [('code', operator, name), ('name', operator, name)]
-        else:
-            domain = ['|', ('code', operator, name), ('name', operator, name)]
-        ids = self.search(cr, user, expression.AND([domain, args]), limit=limit, context=context)
+        if context is None:
+            context = {}
+        ids = []
+        if name:
+            ids = self.search(cr, user,
+                              [('code', 'ilike', name)] + args,
+                              limit=limit,
+                              context=context)
+        if not ids:
+            ids = self.search(cr, user,
+                              [('name', operator, name)] + args,
+                              limit=limit,
+                              context=context)
         return self.name_get(cr, user, ids, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -1165,19 +1168,6 @@ class account_move(osv.osv):
     _description = "Account Entry"
     _order = 'id desc'
 
-    def account_assert_balanced(self, cr, uid, context=None):
-        cr.execute("""\
-            SELECT      move_id
-            FROM        account_move_line
-            WHERE       state = 'valid'
-            GROUP BY    move_id
-            HAVING      abs(sum(debit) - sum(credit)) > 0.00001
-            """)
-        assert len(cr.fetchall()) == 0, \
-            "For all Journal Items, the state is valid implies that the sum " \
-            "of credits equals the sum of debits"
-        return True
-
     def account_move_prepare(self, cr, uid, journal_id, date=False, ref='', company_id=False, context=None):
         '''
         Prepares and returns a dictionary of values, ready to be passed to create() based on the parameters received.
@@ -1200,6 +1190,36 @@ class account_move(osv.osv):
             'ref': ref,
             'company_id': company_id,
         }
+
+    def name_search(self, cr, user, name, args=None, operator='ilike', context=None, limit=80):
+        """
+        Returns a list of tupples containing id, name, as internally it is called {def name_get}
+        result format: {[(id, name), (id, name), ...]}
+
+        @param cr: A database cursor
+        @param user: ID of the user currently logged in
+        @param name: name to search
+        @param args: other arguments
+        @param operator: default operator is 'ilike', it can be changed
+        @param context: context arguments, like lang, time zone
+        @param limit: Returns first 'n' ids of complete result, default is 80.
+
+        @return: Returns a list of tuples containing id and name
+        """
+
+        if not args:
+          args = []
+        ids = []
+        if name:
+            ids += self.search(cr, user, [('name','ilike',name)]+args, limit=limit, context=context)
+
+        if not ids and name and type(name) == int:
+            ids += self.search(cr, user, [('id','=',name)]+args, limit=limit, context=context)
+
+        if not ids:
+            ids += self.search(cr, user, args, limit=limit, context=context)
+
+        return self.name_get(cr, user, ids, context=context)
 
     def name_get(self, cursor, user, ids, context=None):
         if isinstance(ids, (int, long)):
@@ -1405,17 +1425,14 @@ class account_move(osv.osv):
                         l[2]['period_id'] = default_period
                 context['period_id'] = default_period
 
-        if vals.get('line_id', False):
+        if 'line_id' in vals:
             c = context.copy()
             c['novalidate'] = True
             c['period_id'] = vals['period_id'] if 'period_id' in vals else self._get_period(cr, uid, context)
             c['journal_id'] = vals['journal_id']
             if 'date' in vals: c['date'] = vals['date']
             result = super(account_move, self).create(cr, uid, vals, c)
-            tmp = self.validate(cr, uid, [result], context)
-            journal = self.pool.get('account.journal').browse(cr, uid, vals['journal_id'], context)
-            if journal.entry_posted and tmp:
-                self.button_validate(cr,uid, [result], context)
+            self.validate(cr, uid, [result], context)
         else:
             result = super(account_move, self).create(cr, uid, vals, context)
         return result
@@ -1436,8 +1453,6 @@ class account_move(osv.osv):
     def unlink(self, cr, uid, ids, context=None, check=True):
         if context is None:
             context = {}
-        if isinstance(ids, (int, long)):
-            ids = [ids]
         toremove = []
         obj_move_line = self.pool.get('account.move.line')
         for move in self.browse(cr, uid, ids, context=context):
@@ -1562,6 +1577,11 @@ class account_move(osv.osv):
         obj_analytic_line = self.pool.get('account.analytic.line')
         obj_move_line = self.pool.get('account.move.line')
         for move in self.browse(cr, uid, ids, context):
+            # Unlink old analytic lines on move_lines
+            for obj_line in move.line_id:
+                for obj in obj_line.analytic_lines:
+                    obj_analytic_line.unlink(cr,uid,obj.id)
+
             journal = move.journal_id
             amount = 0
             line_ids = []
@@ -1580,7 +1600,7 @@ class account_move(osv.osv):
 
                 if line.account_id.currency_id and line.currency_id:
                     if line.account_id.currency_id.id != line.currency_id.id and (line.account_id.currency_id.id != line.account_id.company_id.currency_id.id):
-                        raise osv.except_osv(_('Error'), _("""Couldn't create move with currency different from the secondary currency of the account "%s - %s". Clear the secondary currency field of the account definition if you want to accept all currencies.""") % (line.account_id.code, line.account_id.name))
+                        raise osv.except_osv(_('Error!'), _("""Cannot create move with currency different from ..""") % (line.account_id.code, line.account_id.name))
 
             if abs(amount) < 10 ** -4:
                 # If the move is balanced
@@ -1703,23 +1723,22 @@ class account_move_reconcile(osv.osv):
         if not total:
             self.pool.get('account.move.line').write(cr, uid,
                 map(lambda x: x.id, rec.line_partial_ids),
-                {'reconcile_id': rec.id },
-                context=context
+                {'reconcile_id': rec.id }
             )
         return True
 
-    def name_get(self, cr, uid, ids, context=None):
-        if not ids:
-            return []
-        result = []
-        for r in self.browse(cr, uid, ids, context=context):
-            total = reduce(lambda y,t: (t.debit or 0.0) - (t.credit or 0.0) + y, r.line_partial_ids, 0.0)
-            if total:
-                name = '%s (%.2f)' % (r.name, total)
-                result.append((r.id,name))
-            else:
-                result.append((r.id,r.name))
-        return result
+#     def name_get(self, cr, uid, ids, context=None):
+#         if not ids:
+#             return []
+#         result = []
+#         for r in self.browse(cr, uid, ids, context=context):
+#             total = reduce(lambda y,t: (t.debit or 0.0) - (t.credit or 0.0) + y, r.line_partial_ids, 0.0)
+#             if total:
+#                 name = '%s (%.2f)' % (r.name, total)
+#                 result.append((r.id,name))
+#             else:
+#                 result.append((r.id,r.name))
+#         return result
 
 account_move_reconcile()
 
@@ -1763,7 +1782,7 @@ class account_tax_code(osv.osv):
         res2 = {}
         for record in self.browse(cr, uid, ids, context=context):
             def _rec_get(record):
-                amount = res.get(record.id) or 0.0
+                amount = res.get(record.id, 0.0)
                 for rec in record.child_ids:
                     amount += _rec_get(rec) * rec.sign
                 return amount
@@ -1830,12 +1849,10 @@ class account_tax_code(osv.osv):
     def name_search(self, cr, user, name, args=None, operator='ilike', context=None, limit=80):
         if not args:
             args = []
-        if operator in expression.NEGATIVE_TERM_OPERATORS:
-            domain = [('code', operator, name), ('name', operator, name)]
-        else:
-            domain = ['|', ('code', operator, name), ('name', operator, name)]
-        ids = self.search(cr, user, expression.AND([domain, args]), limit=limit, context=context)
-        return self.name_get(cr, user, ids, context=context)
+        if context is None:
+            context = {}
+        ids = self.search(cr, user, ['|',('name',operator,name),('code',operator,name)] + args, limit=limit, context=context)
+        return self.name_get(cr, user, ids, context)
 
     def name_get(self, cr, uid, ids, context=None):
         if isinstance(ids, (int, long)):
@@ -1928,15 +1945,15 @@ class account_tax(osv.osv):
         #
         'base_code_id': fields.many2one('account.tax.code', 'Account Base Code', help="Use this code for the tax declaration."),
         'tax_code_id': fields.many2one('account.tax.code', 'Account Tax Code', help="Use this code for the tax declaration."),
-        'base_sign': fields.float('Base Code Sign', help="Usually 1 or -1.", digits_compute=get_precision_tax()),
-        'tax_sign': fields.float('Tax Code Sign', help="Usually 1 or -1.", digits_compute=get_precision_tax()),
+        'base_sign': fields.float('Base Code Sign', help="Usually 1 or -1."),
+        'tax_sign': fields.float('Tax Code Sign', help="Usually 1 or -1."),
 
         # Same fields for refund invoices
 
         'ref_base_code_id': fields.many2one('account.tax.code', 'Refund Base Code', help="Use this code for the tax declaration."),
         'ref_tax_code_id': fields.many2one('account.tax.code', 'Refund Tax Code', help="Use this code for the tax declaration."),
-        'ref_base_sign': fields.float('Base Code Sign', help="Usually 1 or -1.", digits_compute=get_precision_tax()),
-        'ref_tax_sign': fields.float('Tax Code Sign', help="Usually 1 or -1.", digits_compute=get_precision_tax()),
+        'ref_base_sign': fields.float('Base Code Sign', help="Usually 1 or -1."),
+        'ref_tax_sign': fields.float('Tax Code Sign', help="Usually 1 or -1."),
         'include_base_amount': fields.boolean('Included in base amount', help="Indicates if the amount of tax must be included in the base amount for the computation of the next taxes"),
         'company_id': fields.many2one('res.company', 'Company', required=True),
         'description': fields.char('Tax Code'),
@@ -1965,11 +1982,15 @@ class account_tax(osv.osv):
         """
         if not args:
             args = []
-        if operator in expression.NEGATIVE_TERM_OPERATORS:
-            domain = [('description', operator, name), ('name', operator, name)]
+        if context is None:
+            context = {}
+        ids = []
+        if name:
+            ids = self.search(cr, user, [('description', '=', name)] + args, limit=limit, context=context)
+            if not ids:
+                ids = self.search(cr, user, [('name', operator, name)] + args, limit=limit, context=context)
         else:
-            domain = ['|', ('description', operator, name), ('name', operator, name)]
-        ids = self.search(cr, user, expression.AND([domain, args]), limit=limit, context=context)
+            ids = self.search(cr, user, args, limit=limit, context=context or {})
         return self.name_get(cr, user, ids, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -1978,17 +1999,15 @@ class account_tax(osv.osv):
         return super(account_tax, self).write(cr, uid, ids, vals, context=context)
 
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):
-        if context is None:
-            context = {}
         journal_pool = self.pool.get('account.journal')
 
-        if context.get('type'):
+        if context and context.has_key('type'):
             if context.get('type') in ('out_invoice','out_refund'):
                 args += [('type_tax_use','in',['sale','all'])]
             elif context.get('type') in ('in_invoice','in_refund'):
                 args += [('type_tax_use','in',['purchase','all'])]
 
-        if context.get('journal_id'):
+        if context and context.has_key('journal_id'):
             journal = journal_pool.browse(cr, uid, context.get('journal_id'))
             if journal.type in ('sale', 'purchase'):
                 args += [('type_tax_use','in',[journal.type,'all'])]
@@ -2034,7 +2053,7 @@ class account_tax(osv.osv):
         for tax in taxes:
             if tax.applicable_type=='code':
                 localdict = {'price_unit':price_unit, 'product':product, 'partner':partner}
-                eval(tax.python_applicable, localdict, mode="exec", nocopy=True)
+                exec tax.python_applicable in localdict
                 if localdict.get('result', False):
                     res.append(tax)
             else:
@@ -2075,7 +2094,7 @@ class account_tax(osv.osv):
                # data['amount'] = quantity
             elif tax.type=='code':
                 localdict = {'price_unit':cur_price_unit, 'product':product, 'partner':partner}
-                eval(tax.python_compute, localdict, mode="exec", nocopy=True)
+                exec tax.python_compute in localdict
                 amount = localdict['result']
                 data['amount'] = amount
             elif tax.type=='balance':
@@ -2089,8 +2108,6 @@ class account_tax(osv.osv):
                 amount = amount2
                 child_tax = self._unit_compute(cr, uid, tax.child_ids, amount, product, partner, quantity)
                 res.extend(child_tax)
-                for child in child_tax:
-                    amount2 += child.get('amount', 0.0)
                 if tax.child_depend:
                     for r in res:
                         for name in ('base','ref_base'):
@@ -2134,7 +2151,7 @@ class account_tax(osv.osv):
         tax_compute_precision = precision
         if taxes and taxes[0].company_id.tax_calculation_rounding_method == 'round_globally':
             tax_compute_precision += 5
-        totalin = totalex = round(price_unit * quantity, precision)
+        totalin = totalex = float_round(price_unit * quantity, precision)
         tin = []
         tex = []
         for tax in taxes:
@@ -2211,7 +2228,7 @@ class account_tax(osv.osv):
 
             elif tax.type=='code':
                 localdict = {'price_unit':cur_price_unit, 'product':product, 'partner':partner}
-                eval(tax.python_compute_inv, localdict, mode="exec", nocopy=True)
+                exec tax.python_compute_inv in localdict
                 amount = localdict['result']
             elif tax.type=='balance':
                 amount = cur_price_unit - reduce(lambda x,y: y.get('amount',0.0)+x, res, 0.0)
@@ -2957,7 +2974,7 @@ class account_fiscal_position_template(osv.osv):
         'chart_template_id': fields.many2one('account.chart.template', 'Chart Template', required=True),
         'account_ids': fields.one2many('account.fiscal.position.account.template', 'position_id', 'Account Mapping'),
         'tax_ids': fields.one2many('account.fiscal.position.tax.template', 'position_id', 'Tax Mapping'),
-        'note': fields.text('Notes'),
+        'note': fields.text('Notes', translate=True),
     }
 
     def generate_fiscal_position(self, cr, uid, chart_temp_id, tax_template_ref, acc_template_ref, company_id, context=None):
@@ -3053,19 +3070,11 @@ class wizard_multi_charts_accounts(osv.osv_memory):
         'complete_tax_set': fields.boolean('Complete Set of Taxes', help='This boolean helps you to choose if you want to propose to the user to encode the sales and purchase rates or use the usual m2o fields. This last choice assumes that the set of tax defined for the chosen template is complete'),
     }
 
-
-    def _get_chart_parent_ids(self, cr, uid, chart_template, context=None):
-        """ Returns the IDs of all ancestor charts, including the chart itself.
-            (inverse of child_of operator)
-        
-            :param browse_record chart_template: the account.chart.template record
-            :return: the IDS of all ancestor charts, including the chart itself.
-        """
-        result = [chart_template.id]
-        while chart_template.parent_id:
-            chart_template = chart_template.parent_id
-            result.append(chart_template.id)
-        return result
+    def onchange_company_id(self, cr, uid, ids, company_id, context=None):
+        currency_id = False
+        if company_id:
+            currency_id = self.pool.get('res.company').browse(cr, uid, company_id, context=context).currency_id.id
+        return {'value': {'currency_id': currency_id}}
 
     def onchange_tax_rate(self, cr, uid, ids, rate=False, context=None):
         return {'value': {'purchase_tax_rate': rate or False}}
@@ -3073,30 +3082,18 @@ class wizard_multi_charts_accounts(osv.osv_memory):
     def onchange_chart_template_id(self, cr, uid, ids, chart_template_id=False, context=None):
         res = {}
         tax_templ_obj = self.pool.get('account.tax.template')
-        ir_values = self.pool.get('ir.values')
         res['value'] = {'complete_tax_set': False, 'sale_tax': False, 'purchase_tax': False}
         if chart_template_id:
             data = self.pool.get('account.chart.template').browse(cr, uid, chart_template_id, context=context)
-            #set currecy_id based on selected COA template using ir.vaalues else current users company's currency
-            value_id = ir_values.search(cr, uid, [('model', '=', 'account.chart.template'), ('res_id', '=', chart_template_id)], limit=1, context=context)
-            if value_id:
-                currency_id = int(ir_values.browse(cr, uid, value_id[0], context=context).value)
-            else:
-                currency_id = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id.currency_id.id
-            res['value'].update({'complete_tax_set': data.complete_tax_set, 'currency_id': currency_id})
+            res['value'].update({'complete_tax_set': data.complete_tax_set})
             if data.complete_tax_set:
             # default tax is given by the lowest sequence. For same sequence we will take the latest created as it will be the case for tax created while isntalling the generic chart of account
-                chart_ids = self._get_chart_parent_ids(cr, uid, data, context=context)
-                base_tax_domain = [("chart_template_id", "in", chart_ids), ('parent_id', '=', False)]
-                sale_tax_domain = base_tax_domain + [('type_tax_use', 'in', ('sale','all'))]
-                purchase_tax_domain = base_tax_domain + [('type_tax_use', 'in', ('purchase','all'))]
-                sale_tax_ids = tax_templ_obj.search(cr, uid, sale_tax_domain, order="sequence, id desc")
-                purchase_tax_ids = tax_templ_obj.search(cr, uid, purchase_tax_domain, order="sequence, id desc")
-                res['value'].update({'sale_tax': sale_tax_ids and sale_tax_ids[0] or False,
-                                     'purchase_tax': purchase_tax_ids and purchase_tax_ids[0] or False})
-                res.setdefault('domain', {})
-                res['domain']['sale_tax'] = repr(sale_tax_domain)
-                res['domain']['purchase_tax'] = repr(purchase_tax_domain)
+                sale_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id"
+                                              , "=", chart_template_id), ('type_tax_use', 'in', ('sale','all'))], order="sequence, id desc")
+                purchase_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id"
+                                              , "=", chart_template_id), ('type_tax_use', 'in', ('purchase','all'))], order="sequence, id desc")
+                res['value'].update({'sale_tax': sale_tax_ids and sale_tax_ids[0] or False, 'purchase_tax': purchase_tax_ids and purchase_tax_ids[0] or False})
+
             if data.code_digits:
                res['value'].update({'code_digits': data.code_digits})
         return res
@@ -3104,8 +3101,6 @@ class wizard_multi_charts_accounts(osv.osv_memory):
     def default_get(self, cr, uid, fields, context=None):
         res = super(wizard_multi_charts_accounts, self).default_get(cr, uid, fields, context=context)
         tax_templ_obj = self.pool.get('account.tax.template')
-        account_chart_template = self.pool['account.chart.template']
-        data_obj = self.pool.get('ir.model.data')
 
         if 'bank_accounts_id' in fields:
             res.update({'bank_accounts_id': [{'acc_name': _('Cash'), 'account_type': 'cash'},{'acc_name': _('Bank'), 'account_type': 'bank'}]})
@@ -3119,28 +3114,17 @@ class wizard_multi_charts_accounts(osv.osv_memory):
                 currency_id = company_obj.on_change_country(cr, uid, company_id, country_id, context=context)['value']['currency_id']
                 res.update({'currency_id': currency_id})
 
-        ids = account_chart_template.search(cr, uid, [('visible', '=', True)], context=context)
+        ids = self.pool.get('account.chart.template').search(cr, uid, [('visible', '=', True)], context=context)
         if ids:
-            #in order to set default chart which was last created set max of ids.
-            chart_id = max(ids)
-            if context.get("default_charts"):
-                data_ids = data_obj.search(cr, uid, [('model', '=', 'account.chart.template'), ('module', '=', context.get("default_charts"))], limit=1, context=context)
-                if data_ids:
-                    chart_id = data_obj.browse(cr, uid, data_ids[0], context=context).res_id
-            chart = account_chart_template.browse(cr, uid, chart_id, context=context)
-            chart_hierarchy_ids = self._get_chart_parent_ids(cr, uid, chart, context=context) 
             if 'chart_template_id' in fields:
-                res.update({'only_one_chart_template': len(ids) == 1,
-                            'chart_template_id': chart_id})
+                res.update({'only_one_chart_template': len(ids) == 1, 'chart_template_id': ids[0]})
             if 'sale_tax' in fields:
-                sale_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id", "in", chart_hierarchy_ids),
-                                                              ('type_tax_use', 'in', ('sale','all'))],
-                                                    order="sequence")
+                sale_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id"
+                                              , "=", ids[0]), ('type_tax_use', 'in', ('sale','all'))], order="sequence")
                 res.update({'sale_tax': sale_tax_ids and sale_tax_ids[0] or False})
             if 'purchase_tax' in fields:
-                purchase_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id", "in", chart_hierarchy_ids),
-                                                                  ('type_tax_use', 'in', ('purchase','all'))],
-                                                        order="sequence")
+                purchase_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id"
+                                          , "=", ids[0]), ('type_tax_use', 'in', ('purchase','all'))], order="sequence")
                 res.update({'purchase_tax': purchase_tax_ids and purchase_tax_ids[0] or False})
         res.update({
             'purchase_tax_rate': 15.0,
@@ -3408,7 +3392,12 @@ class wizard_multi_charts_accounts(osv.osv_memory):
         obj_tax_temp = self.pool.get('account.tax.template')
         chart_template = obj_wizard.chart_template_id
         vals = {}
-        all_parents = self._get_chart_parent_ids(cr, uid, chart_template, context=context)
+        # get the ids of all the parents of the selected account chart template
+        current_chart_template = chart_template
+        all_parents = [current_chart_template.id]
+        while current_chart_template.parent_id:
+            current_chart_template = current_chart_template.parent_id
+            all_parents.append(current_chart_template.id)
         # create tax templates and tax code templates from purchase_tax_rate and sale_tax_rate fields
         if not chart_template.complete_tax_set:
             value = obj_wizard.sale_tax_rate
@@ -3425,8 +3414,6 @@ class wizard_multi_charts_accounts(osv.osv_memory):
         all the provided information to create the accounts, the banks, the journals, the taxes, the tax codes, the
         accounting properties... accordingly for the chosen company.
         '''
-        if uid != SUPERUSER_ID and not self.pool['res.users'].has_group(cr, uid, 'base.group_erp_manager'):
-            raise openerp.exceptions.AccessError(_("Only administrators can change the settings"))
         obj_data = self.pool.get('ir.model.data')
         ir_values_obj = self.pool.get('ir.values')
         obj_wizard = self.browse(cr, uid, ids[0])
@@ -3443,7 +3430,7 @@ class wizard_multi_charts_accounts(osv.osv_memory):
                         self.pool.get(tmp2[0]).write(cr, uid, tmp2[1], {
                             'currency_id': obj_wizard.currency_id.id
                         })
-                except ValueError:
+                except ValueError, e:
                     pass
 
         # If the floats for sale/purchase rates have been filled, create templates from them

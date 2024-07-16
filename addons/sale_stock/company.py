@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,22 +18,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class company(osv.osv):
     _inherit = 'res.company'
-    _columns = {
-        'security_lead': fields.float(
-            'Security Days', required=True,
-            help="Margin of error for dates promised to customers. "\
-                 "Products will be scheduled for procurement and delivery "\
-                 "that many days earlier than the actual promised date, to "\
-                 "cope with unexpected delays in the supply chain."),
-    }
-    _defaults = {
-        'security_lead': 0.0,
-    }
-company()
+    _columns = {'security_lead': fields.float('Security Days', required=True, help='Margin of error for dates promised to customers. Products will be scheduled for procurement and delivery that many days earlier than the actual promised date, to cope with unexpected delays in the supply chain.')}
+    _defaults = {'security_lead': 0.0}
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
+company()

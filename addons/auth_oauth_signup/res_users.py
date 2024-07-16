@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2010-2012 OpenERP SA (<http://openerp.com>).
+#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,46 +18,37 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import logging
 import simplejson
-
 import openerp
 from openerp.addons.auth_signup.res_users import SignupError
 from openerp.osv import osv, fields
-
 _logger = logging.getLogger(__name__)
 
 class res_users(osv.Model):
     _inherit = 'res.users'
 
-    def _generate_signup_values(self, cr, uid, provider, validation, params, context=None):
-        oauth_uid = validation['user_id']
-        email = validation.get('email', 'provider_%s_user_%s' % (provider, oauth_uid))
-        name = validation.get('name', email)
-        return {
-            'name': name,
-            'login': email,
-            'email': email,
-            'oauth_provider_id': provider,
-            'oauth_uid': oauth_uid,
-            'oauth_access_token': params['access_token'],
-            'active': True,
-        }
-
-    def _auth_oauth_signin(self, cr, uid, provider, validation, params, context=None):
-        # overridden to use signup method if regular oauth signin fails
+    def _auth_oauth_signin(self, cr, uid, provider, validation, params, context = None):
         try:
             login = super(res_users, self)._auth_oauth_signin(cr, uid, provider, validation, params, context=context)
-
-        except openerp.exceptions.AccessDenied, access_denied_exception:
+        except openerp.exceptions.AccessDenied as access_denied_exception:
             if context and context.get('no_user_creation'):
                 return None
             state = simplejson.loads(params['state'])
             token = state.get('t')
-            values = self._generate_signup_values(cr, uid, provider, validation, params, context=context)
+            oauth_uid = validation['user_id']
+            email = validation.get('email', 'provider_%s_user_%s' % (provider, oauth_uid))
+            name = validation.get('name', email)
+            values = {'name': name,
+             'login': email,
+             'email': email,
+             'oauth_provider_id': provider,
+             'oauth_uid': oauth_uid,
+             'oauth_access_token': params['access_token'],
+             'active': True}
             try:
-                _, login, _ = self.signup(cr, uid, values, token, context=context)       
+                _, login, _ = self.signup(cr, uid, values, token, context=context)
             except SignupError:
                 raise access_denied_exception
+
         return login

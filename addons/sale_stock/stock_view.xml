@@ -2,16 +2,25 @@
 <openerp>
     <data>
         <record id="stock_picking_inherit_sale" model="ir.ui.view">
-            <field name="name">stock.picking.form</field>
+            <field name="name">stock.picking.inherit.form</field>
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <field name="move_type" position="before">
-                    <field name="sale_id"/>
+                    <field name="sale_id" string="Lệnh xuất hàng"  readonly="1"/>
                 </field>
             </field>
         </record>
-
+		<record id="stock_picking_out_inherit1_sale" model="ir.ui.view">
+            <field name="name">stock.picking.out.inherit.form</field>
+            <field name="model">stock.picking.out</field>
+            <field name="inherit_id" ref="stock.view_picking_out_form"/>
+            <field name="arch" type="xml">
+                <field name="stock_journal_id" position="after">
+                    <field name="sale_id" string="Lệnh xuất hàng" readonly="1"/>
+                </field>
+            </field>
+        </record>
         <record id="stock_move_sale" model="ir.ui.view">
             <field name="name">stock.move.form</field>
             <field name="model">stock.move</field>
@@ -22,7 +31,36 @@
                 </xpath>
             </field>
         </record>
-
+<!-- 		<record id="view_picking_out_search_replace" model="ir.ui.view"> -->
+<!--             <field name="name">stock.picking.out.inherit.select</field> -->
+<!--             <field name="model">stock.picking.out</field> -->
+<!--             <field name="inherit_id" ref="stock.view_picking_out_search"/> -->
+<!--             <field name="arch" type="xml"> -->
+<!--                  <xpath expr="//search"  position="replace"> -->
+<!--                     <search string="Phiếu xuất kho"> -->
+<!--                     <field name="name" string="Phiếu xuất kho" filter_domain="['|',('name','ilike', self),('origin','ilike',self)]"/> -->
+<!--                     <filter icon="terp-check" name="sẵn sàng giao hàng" string="Ready" domain="[('state','=','assigned')]" help="Assigned Delivery Orders"/> -->
+<!--                     <filter icon="terp-camera_test" name="Đang đợi" string="Waiting" domain="[('state','=','confirmed')]" help="Confirmed Delivery Orders"/> -->
+<!--                     <filter icon="terp-dialog-close" name="Hoàn tất" string="Done" domain="[('state','=','done')]" help="Delivery orders already processed"/> -->
+<!--                     <separator/> -->
+<!--                     <filter icon="terp-accessories-archiver-minus" string="Phiếu xuất kho nguồn" domain="[('backorder_id', '!=', False)]" help="Is a Back Order"/> -->
+<!--                     <separator/> -->
+<!--                     <filter icon="terp-dolar" name="to_invoice" string="To Invoice" domain="[('invoice_state','=','2binvoiced')]" help="Delivery orders to invoice"/> -->
+<!--                     <field name="partner_id" filter_domain="[('partner_id','child_of',self)]"/> -->
+<!--                     <field name="stock_journal_id"/> -->
+<!--                     <field name="company_id" groups="base.group_multi_company"/> -->
+<!--                     <group expand="0" string="Group By..."> -->
+<!--                         <filter string="Status" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/> -->
+<!--                         <filter string="Ngày đặt" icon="terp-go-month" domain="[]"  context="{'group_by':'date'}"/> -->
+<!--                         <filter string="Ngày dự kiến" icon="terp-go-month" domain="[]"  context="{'group_by':'min_date'}"/> -->
+<!--                         <filter string="Nhật ký" icon="terp-folder-orange" domain="[]" context="{'group_by':'stock_journal_id'}"/> -->
+<!--                         <filter string="Lệnh xuất hàng" icon="terp-folder-orange" domain="[]" context="{'group_by':'sale_id'}"/> -->
+<!--                         <filter string="Khách hàng" icon="terp-folder-orange" domain="[]" context="{'group_by':'partner_id'}"/> -->
+<!--                     </group> -->
+<!--                 </search> -->
+<!--                 </xpath> -->
+<!--             </field> -->
+<!--         </record> -->
         <!--
         <act_window
             domain="[('sale_id', '=', active_id)]"
@@ -51,11 +89,11 @@
 
         <record id="stock_picking_out_inherit_sale" model="ir.ui.view">
             <field name="name">Outgoing picking Inherited</field>
-            <field name="model">stock.picking.out</field>
+            <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_out_form"/>
             <field name="arch" type="xml">
                 <field name="move_type" position="after">
-                    <field name="sale_id"/>
+                    <field name="sale_id" string="Lệnh xuất hàng"/>
                 </field>
             </field>
         </record>
@@ -63,7 +101,7 @@
         <!--  Add menu: Billing - Deliveries to invoice -->
         <record id="outgoing_picking_list_to_invoice" model="ir.actions.act_window">
             <field name="name">Deliveries to Invoice</field>
-            <field name="res_model">stock.picking.out</field>
+            <field name="res_model">stock.picking</field>
             <field name="type">ir.actions.act_window</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,calendar</field>
@@ -73,5 +111,15 @@
         </record>
         <menuitem action="outgoing_picking_list_to_invoice" id="menu_action_picking_list_to_invoice" parent="base.menu_invoiced" groups="sale_stock.group_invoice_deli_orders" sequence="20"/>
 
+<!--         <record id="view_picking_out_tree_inherit_sale" model="ir.ui.view"> -->
+<!--             <field name="name">Outgoing picking Inherited</field> -->
+<!--             <field name="model">stock.picking.out</field> -->
+<!--             <field name="inherit_id" ref="stock.view_picking_out_tree"/> -->
+<!--             <field name="arch" type="xml"> -->
+<!--                 <field name="partner_id" position="after"> -->
+<!--                     <field name="sale_id" string="Lệnh xuất hàng"/> -->
+<!--                 </field> -->
+<!--             </field> -->
+<!--         </record> -->
     </data>
 </openerp>

@@ -22,9 +22,9 @@ instance.web.ActionManager = instance.web.Widget.extend({
         this._super.apply(this, arguments);
         this.$el.on('click', 'a.oe_breadcrumb_item', this.on_breadcrumb_clicked);
     },
-    dialog_stop: function (reason) {
+    dialog_stop: function () {
         if (this.dialog) {
-            this.dialog.destroy(reason);
+            this.dialog.destroy();
         }
         this.dialog = null;
     },
@@ -333,13 +333,12 @@ instance.web.ActionManager = instance.web.Widget.extend({
         var type = action.type.replace(/\./g,'_');
         var popup = action.target === 'new';
         var inline = action.target === 'inline' || action.target === 'inlineview';
-        var form = _.str.startsWith(action.view_mode, 'form');
         action.flags = _.defaults(action.flags || {}, {
             views_switcher : !popup && !inline,
             search_view : !popup && !inline,
             action_buttons : !popup && !inline,
             sidebar : !popup && !inline,
-            pager : (!popup || !form) && !inline,
+            pager : !popup && !inline,
             display_title : !popup,
             search_disable_custom_filters: action.context && action.context.search_disable_custom_filters
         });
@@ -374,35 +373,14 @@ instance.web.ActionManager = instance.web.Widget.extend({
         }
         var widget = executor.widget();
         if (executor.action.target === 'new') {
-            var pre_dialog = this.dialog;
-            if (pre_dialog){
-                // prevent previous dialog to consider itself closed,
-                // right now, as we're opening a new one (prevents
-                // reload of original form view)
-                pre_dialog.off('closing', null, pre_dialog.on_close);
-            }
             if (this.dialog_widget && !this.dialog_widget.isDestroyed()) {
                 this.dialog_widget.destroy();
             }
-            // explicitly passing a closing action to dialog_stop() prevents
-            // it from reloading the original form view
-            this.dialog_stop(executor.action);
+            this.dialog_stop();
             this.dialog = new instance.web.Dialog(this, {
                 dialogClass: executor.klass,
             });
-
-            // chain on_close triggers with previous dialog, if any
-            this.dialog.on_close = function(){
-                options.on_close.apply(null, arguments);
-                if (pre_dialog && pre_dialog.on_close){
-                    // no parameter passed to on_close as this will
-                    // only be called when the last dialog is truly
-                    // closing, and *should* trigger a reload of the
-                    // underlying form view (see comments above)
-                    pre_dialog.on_close();
-                }
-            };
-            this.dialog.on("closing", null, this.dialog.on_close);
+            this.dialog.on("closing", null, options.on_close);
             this.dialog.dialog_title = executor.action.name;
             if (widget instanceof instance.web.ViewManager) {
                 _.extend(widget.flags, {
@@ -416,10 +394,7 @@ instance.web.ActionManager = instance.web.Widget.extend({
             this.dialog.open();
             return initialized;
         } else  {
-            // explicitly passing a closing action to dialog_stop() prevents
-            // it from reloading the original form view - we're opening a
-            // completely new action anyway
-            this.dialog_stop(executor.action);
+            this.dialog_stop();
             this.inner_action = executor.action;
             this.inner_widget = widget;
             executor.post_process(widget);
@@ -604,6 +579,7 @@ instance.web.ViewManager =  instance.web.Widget.extend({
         var view_promise;
         var form = this.views['form'];
         if (!view || (form && form.controller && !form.controller.can_be_discarded())) {
+            self.trigger('switch_mode', view_type, no_store, view_options);
             return $.Deferred().reject();
         }
         if (!no_store) {
@@ -678,8 +654,8 @@ instance.web.ViewManager =  instance.web.Widget.extend({
         var container = this.$el.find("> .oe_view_manager_body > .oe_view_manager_view_" + view_type);
         var view_promise = controller.appendTo(container);
         this.views[view_type].controller = controller;
+        this.views[view_type].deferred.resolve(view_type);
         return $.when(view_promise).done(function() {
-            self.views[view_type].deferred.resolve(view_type);
             if (self.searchview
                     && self.flags.auto_search
                     && view.controller.searchable !== false) {
@@ -1096,7 +1072,7 @@ instance.web.ViewManagerAction = instance.web.ViewManager.extend({
             );
         } 
 
-        $.when(this.views[this.active_view] ? this.views[this.active_view].deferred : $.when(), defs).done(function() {
+        $.when(defs).done(function() {
             self.views[self.active_view].controller.do_load_state(state, warm);
         });
     },
@@ -1108,8 +1084,8 @@ instance.web.Sidebar = instance.web.Widget.extend({
         this._super(parent);
         var view = this.getParent();
         this.sections = [
-            { 'name' : 'print', 'label' : _t('Print'), },
-            { 'name' : 'other', 'label' : _t('More'), }
+            { 'name' : 'print', 'label' : _t('Chọn để in'), },
+            { 'name' : 'other', 'label' : _t('Mở rộng'), }
         ];
         this.items = {
             'print' : [],
@@ -1210,19 +1186,17 @@ instance.web.Sidebar = instance.web.Widget.extend({
                 instance.web.dialog($("<div />").text(_t("You must choose at least one record.")), { title: _t("Warning"), modal: true });
                 return false;
             }
-            var dataset = self.getParent().dataset;
             var active_ids_context = {
                 active_id: ids[0],
                 active_ids: ids,
-                active_model: dataset.model
+                active_model: self.getParent().dataset.model
             }; 
             var c = instance.web.pyeval.eval('context',
                 new instance.web.CompoundContext(
                     sidebar_eval_context, active_ids_context));
             self.rpc("/web/action/load", {
                 action_id: item.action.id,
-                context: new instance.web.CompoundContext(
-                    dataset.get_context(), active_ids_context).eval()
+                context: c
             }).done(function(result) {
                 result.context = new instance.web.CompoundContext(
                     result.context || {}, active_ids_context)
@@ -1243,7 +1217,7 @@ instance.web.Sidebar = instance.web.Widget.extend({
         this.dataset = dataset;
         this.model_id = model_id;
         if (args && args[0].error) {
-            this.do_warn(_t('Uploading Error'), args[0].error);
+            this.do_warn( instance.web.qweb.render('message_error_uploading'), args[0].error);
         }
         if (!model_id) {
             this.on_attachments_loaded([]);
@@ -1327,7 +1301,7 @@ instance.web.View = instance.web.Widget.extend({
                 "context": this.dataset.get_context(),
             });
         }
-        return this.alive(view_loaded_def).then(function(r) {
+        return view_loaded_def.then(function(r) {
             self.fields_view = r;
             // add css classes that reflect the (absence of) access rights
             self.$el.addClass('oe_view')
@@ -1374,20 +1348,12 @@ instance.web.View = instance.web.Widget.extend({
         var context = new instance.web.CompoundContext(dataset.get_context(), action_data.context || {});
         var handler = function (action) {
             if (action && action.constructor == Object) {
-                // filter out context keys that are specific to the current action.
-                // Wrong default_* and search_default_* values will no give the expected result
-                // Wrong group_by values will simply fail and forbid rendering of the destination view
-                var ncontext = new instance.web.CompoundContext(
-                    _.object(_.reject(_.pairs(dataset.get_context().eval()), function(pair) {
-                      return pair[0].match('^(?:(?:default_|search_default_).+|.+_view_ref|group_by|group_by_no_leaf|active_id|active_ids)$') !== null;
-                    }))
-                );
-                ncontext.add(action_data.context || {});
-                ncontext.add({active_model: dataset.model});
+                var ncontext = new instance.web.CompoundContext(context);
                 if (record_id) {
                     ncontext.add({
                         active_id: record_id,
                         active_ids: [record_id],
+                        active_model: dataset.model
                     });
                 }
                 ncontext.add(action.context || {});
@@ -1588,7 +1554,7 @@ instance.web.json_node_to_xml = function(node, human_readable, indent) {
         cr = human_readable ? '\n' : '';
 
     if (typeof(node) === 'string') {
-        return sindent + node.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        return sindent + node;
     } else if (typeof(node.tag) !== 'string' || !node.children instanceof Array || !node.attrs instanceof Object) {
         throw new Error(
             _.str.sprintf(_t("Node [%s] is not a JSONified XML node"),

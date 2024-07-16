@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
+#    
+#    VNC Developments (India) Pvt. Ltd.
+#    Copyright (C) 2004-TODAY VNC (<http://www.vnc.biz>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -15,25 +15,14 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.     
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
-
 
 class portal(osv.osv):
     """ A portal is simply a group of users with the flag 'is_portal' set to True.
         The flag 'is_portal' makes a user group usable as a portal.
     """
     _inherit = 'res.groups'
-    _columns = {
-        'is_portal': fields.boolean('Portal', help="If checked, this group is usable as a portal."),
-    }
-
-class res_users(osv.Model):
-    _inherit = 'res.users'
-    def _signup_create_user(self, cr, uid, values, context=None):
-    	values['share'] = True
-    	return super(res_users, self)._signup_create_user(cr, uid, values, context=context)
-
+    _columns = {'is_portal': fields.boolean('Portal', help='If checked, this group is usable as a portal.')}

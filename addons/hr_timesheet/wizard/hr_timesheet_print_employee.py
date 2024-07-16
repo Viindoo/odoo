@@ -19,49 +19,47 @@
 #
 ##############################################################################
 import datetime
-
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 
 class analytical_timesheet_employee(osv.osv_memory):
     _name = 'hr.analytical.timesheet.employee'
     _description = 'Print Employee Timesheet & Print My Timesheet'
-    _columns = {
-        'month': fields.selection([(1,'January'), (2,'February'), (3,'March'), (4,'April'),
-            (5,'May'), (6,'June'), (7,'July'), (8,'August'), (9,'September'),
-            (10,'October'), (11,'November'), (12,'December')], 'Month', required=True),
-        'year': fields.integer('Year', required=True),
-        'employee_id': fields.many2one('hr.employee', 'Employee', required=True)
+    _columns = {'month': fields.selection([(1, 'January'),
+               (2, 'February'),
+               (3, 'March'),
+               (4, 'April'),
+               (5, 'May'),
+               (6, 'June'),
+               (7, 'July'),
+               (8, 'August'),
+               (9, 'September'),
+               (10, 'October'),
+               (11, 'November'),
+               (12, 'December')], 'Month', required=True),
+     'year': fields.integer('Year', required=True),
+     'employee_id': fields.many2one('hr.employee', 'Employee', required=True)}
 
-                }
-
-    def _get_user(self, cr, uid, context=None):
-
+    def _get_user(self, cr, uid, context = None):
         emp_obj = self.pool.get('hr.employee')
         emp_id = emp_obj.search(cr, uid, [('user_id', '=', uid)], context=context)
         if not emp_id:
-            raise osv.except_osv(_("Warning!"), _("Please define employee for this user!"))
+            raise osv.except_osv(_('Warning!'), _('Please define employee for this user!'))
         return emp_id and emp_id[0] or False
 
-    _defaults = {
-         'month': lambda *a: datetime.date.today().month,
-         'year': lambda *a: datetime.date.today().year,
-         'employee_id': _get_user
-             }
+    _defaults = {'month': lambda *a: datetime.date.today().month,
+     'year': lambda *a: datetime.date.today().year,
+     'employee_id': _get_user}
 
-    def print_report(self, cr, uid, ids, context=None):
+    def print_report(self, cr, uid, ids, context = None):
         data = self.read(cr, uid, ids, context=context)[0]
         data['employee_id'] = data['employee_id'][0]
-        datas = {
-             'ids': [],
-             'model': 'hr.employee',
-             'form': data
-                 }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'hr.analytical.timesheet',
-            'datas': datas,
-            }
-analytical_timesheet_employee()
+        datas = {'ids': [],
+         'model': 'hr.employee',
+         'form': data}
+        return {'type': 'ir.actions.report.xml',
+         'report_name': 'hr.analytical.timesheet',
+         'datas': datas}
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
+analytical_timesheet_employee()

@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,29 +18,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class res_partner(osv.osv):
     _inherit = 'res.partner'
     _columns = {
-        'property_stock_customer': fields.property(
-          'stock.location',
-          type='many2one',
-          relation='stock.location',
-          string="Customer Location",
-          view_load=True,
-          help="This stock location will be used, instead of the default one, as the destination location for goods you send to this partner"),
+         'property_stock_customer': fields.property('stock.location', type='many2one', relation='stock.location', string='Customer Location', view_load=True, help='This stock location will be used, instead of the default one, as the destination location for goods you send to this partner'),
+         'property_stock_supplier': fields.property('stock.location', type='many2one', relation='stock.location', string='Supplier Location', view_load=True, help='This stock location will be used, instead of the default one, as the source location for goods you receive from the current partner')
+         }
 
-        'property_stock_supplier': fields.property(
-          'stock.location',
-          type='many2one',
-          relation='stock.location',
-          string="Supplier Location",
-          view_load=True,
-          help="This stock location will be used, instead of the default one, as the source location for goods you receive from the current partner"),
-    }
 
 res_partner()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

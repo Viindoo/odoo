@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,38 +18,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
-
 class purchase_order_line(osv.osv):
-    _name='purchase.order.line'
-    _inherit='purchase.order.line'
-    _columns = {
-         'analytics_id':fields.many2one('account.analytic.plan.instance','Analytic Distribution'),
-    }
+    _name = 'purchase.order.line'
+    _inherit = 'purchase.order.line'
+    _columns = {'analytics_id': fields.many2one('account.analytic.plan.instance', 'Analytic Distribution')}
+
 
 purchase_order_line()
 
 class purchase_order(osv.osv):
-    _name='purchase.order'
-    _inherit='purchase.order'
+    _name = 'purchase.order'
+    _inherit = 'purchase.order'
 
-    def _prepare_inv_line(self, cr, uid, account_id, order_line, context=None):
+    def _prepare_inv_line(self, cr, uid, account_id, order_line, context = None):
         res = super(purchase_order, self)._prepare_inv_line(cr, uid, account_id, order_line, context=context)
         res['analytics_id'] = order_line.analytics_id.id
         return res
 
+
 purchase_order()
-
-class stock_picking(osv.osv):
-    _name='stock.picking'
-    _inherit='stock.picking'
-
-    def _prepare_invoice_line(self, cr, uid, group, picking, move_line, invoice_id, invoice_vals, context=None):
-        res = super(stock_picking, self)._prepare_invoice_line(cr, uid, group, picking, move_line, invoice_id, invoice_vals, context=context)
-        if move_line.purchase_line_id and move_line.purchase_line_id.analytics_id:
-            res['analytics_id'] = move_line.purchase_line_id.analytics_id.id
-        return res
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

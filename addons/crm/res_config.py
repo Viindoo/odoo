@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Business Applications
-#    Copyright (C) 2004-2012 OpenERP S.A. (<http://openerp.com>).
+#    OpenERP, Open Source Management Solution
+#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,27 +18,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class crm_configuration(osv.osv_memory):
     _name = 'sale.config.settings'
     _inherit = ['sale.config.settings', 'fetchmail.config.settings']
-
-    _columns = {
-        'fetchmail_lead': fields.boolean("Create leads from incoming mails",
-            fetchmail_model='crm.lead', fetchmail_name='Incoming Leads',
-            help="""Allows you to configure your incoming mail server, and create leads from incoming emails."""),
-        'group_fund_raising': fields.boolean("Manage Fund Raising",
-            implied_group='crm.group_fund_raising',
-            help="""Allows you to trace and manage your activities for fund raising."""),
-        'module_crm_claim':fields.boolean("Manage Customer Claims",
-            help="""Allows you to track your customers/suppliers claims and grievances.
-                    This installs the module crm_claim."""),
-        'module_crm_helpdesk':fields.boolean("Manage Helpdesk and Support",
-            help="""Allows you to communicate with Customer,  process Customer query, and provide better help and support. This installs the module crm_helpdesk."""),
-        
-        
-    }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    _columns = {'fetchmail_lead': fields.boolean('Create leads from incoming mails', fetchmail_model='crm.lead', fetchmail_name='Incoming Leads', help='Allows you to configure your incoming mail server, and create leads from incoming emails.'),
+     'group_fund_raising': fields.boolean('Manage Fund Raising', implied_group='crm.group_fund_raising', help='Allows you to trace and manage your activities for fund raising.'),
+     'module_crm_claim': fields.boolean('Manage Customer Claims', help='Allows you to track your customers/suppliers claims and grievances.\n                    This installs the module crm_claim.'),
+     'module_crm_helpdesk': fields.boolean('Manage Helpdesk and Support', help='Allows you to communicate with Customer,  process Customer query, and provide better help and support. This installs the module crm_helpdesk.')}

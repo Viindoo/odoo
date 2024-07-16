@@ -995,9 +995,7 @@
                             <group>
                                 <field name="name"/>
                                 <field name="ref"/>
-                                <field name="partner_id"
-                                    domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"
-                                    on_change="onchange_partner_id(False,partner_id,account_id,debit,credit,date)"/>
+                                <field name="partner_id" on_change="onchange_partner_id(False,partner_id,account_id,debit,credit,date)"/>
                             </group>
                             <group>
                                 <field name="journal_id"/>
@@ -1070,9 +1068,7 @@
                                 <field name="journal_id" readonly="False"/>
                                 <field name="period_id" readonly="False"/>
                                 <field name="account_id" domain="[('type','&lt;&gt;','view'),('type','&lt;&gt;','consolidation'),('company_id', '=', company_id)]"/>
-                                <field name="partner_id"
-                                    domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"
-                                    on_change="onchange_partner_id(False,partner_id,account_id,debit,credit,date)"/>
+                                <field name="partner_id" on_change="onchange_partner_id(False,partner_id,account_id,debit,credit,date)"/>
                                 <newline/>
                                 <field name="debit"/>
                                 <field name="credit"/>
@@ -1116,9 +1112,7 @@
                     <field name="name"/>
                     <field name="ref"/>
                     <field name="statement_id" invisible="1"/>
-                    <field name="partner_id"
-                        domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"
-                        on_change="onchange_partner_id(move_id, partner_id, account_id, debit, credit, date, journal_id)"/>
+                    <field name="partner_id" on_change="onchange_partner_id(move_id, partner_id, account_id, debit, credit, date, journal_id)"/>
                     <field name="account_id" options='{"no_open":True}' domain="[('journal_id','=',journal_id), ('company_id', '=', company_id)]" on_change="onchange_account_id(account_id, partner_id, context)"/>
                     <field name="account_tax_id" options='{"no_open":True}' invisible="context.get('journal_type', False) not in ['sale','sale_refund','purchase','purchase_refund','general']"/>
                     <field name="analytic_account_id" groups="analytic.group_analytic_accounting" domain="[('type','not in',['view','template'])]" invisible="not context.get('analytic_journal_id',False)"/>
@@ -1295,9 +1289,7 @@
                                     <group col="6" colspan="4">
                                         <field name="name"/>
                                         <field name="ref"/>
-                                        <field name="partner_id"
-                                            domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"
-                                            on_change="onchange_partner_id(False, partner_id, account_id, debit, credit, date, journal_id, context)"/>
+                                        <field name="partner_id" on_change="onchange_partner_id(False, partner_id, account_id, debit, credit, date, journal_id, context)"/>
 
                                         <field name="journal_id"/>
                                         <field name="period_id"/>
@@ -1361,9 +1353,7 @@
                                 <tree colors="blue:state == 'draft';black:state == 'posted'" editable="top" string="Journal Items">
                                     <field name="invoice"/>
                                     <field name="name"/>
-                                    <field name="partner_id"
-                                        domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"
-                                        on_change="onchange_partner_id(False, partner_id, account_id, debit, credit, parent.date, parent.journal_id, context)"/>
+                                    <field name="partner_id" on_change="onchange_partner_id(False, partner_id, account_id, debit, credit, parent.date, parent.journal_id, context)"/>
                                     <field name="account_id" domain="[('journal_id','=',parent.journal_id),('company_id', '=', parent.company_id)]"/>
                                     <field name="date_maturity"/>
                                     <field name="debit" sum="Total Debit"/>
@@ -1450,7 +1440,7 @@
         <act_window
             id="act_account_move_to_account_move_line_open"
             name="Journal Items"
-            context="{'search_default_move_id': active_id, 'default_move_id': active_id}"
+            context="{'search_default_journal_id': active_id, 'default_journal_id': active_id}"
             res_model="account.move.line"
             src_model="account.move"/>
 
@@ -1598,6 +1588,7 @@
 	                        <label for="value_amount" string="Amount To Pay"  attrs="{'invisible':[('value','=','balance')]}"/>
 	                        <div attrs="{'invisible':[('value','=','balance')]}">
 	                            <field name="value_amount" class="oe_inline"/>
+	                            <label string="%%" class="oe_inline" attrs="{'invisible':['!',('value','=','procent')]}" />
 	                        </div>
                         </group>
                         <group string="Due Date Computation">
@@ -2134,7 +2125,7 @@
                             <field name="chart_template_id" widget="selection" on_change="onchange_chart_template_id(chart_template_id)" domain="[('visible','=', True)]"/>
                         </group>
                         <group>
-                            <field name="company_id" widget="selection"/> <!-- we assume that this wizard will be run only by administrators and as this field may cause problem if hidden (because of the default company of the user removed from the selection because already configured), we simply choosed to remove the group "multi company" of it -->
+                            <field name="company_id" widget="selection" on_change="onchange_company_id(company_id)"/> <!-- we assume that this wizard will be run only by administrators and as this field may cause problem if hidden (because of the default company of the user removed from the selection because already configured), we simply choosed to remove the group "multi company" of it -->
                             <field name="currency_id" class="oe_inline"/>
                             <field name="sale_tax" attrs="{'invisible': [('complete_tax_set', '!=', True)]}" domain="[('chart_template_id', '=', chart_template_id),('parent_id','=',False),('type_tax_use','in',('sale','all'))]"/>
                             <label for="sale_tax_rate" string="Sale Tax" attrs="{'invisible': [('complete_tax_set', '=', True)]}"/>
@@ -2278,6 +2269,7 @@
                         <group>
                             <field name="journal_id" on_change="onchange_journal_id(journal_id)" widget="selection" domain="[('type', '=', 'cash')]" />
                             <field name="user_id" readonly="1" string="Responsible"/>
+                            <field name="total_entry_encoding"/>
                             <field name='company_id' widget="selection" groups="base.group_multi_company" />
                         </group>
                         <group>

@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,22 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class event_event(osv.osv):
     _description = 'Portal event'
     _inherit = 'event.event'
-
-    """
-    ``visibility``: defines if the event appears on the portal's event page
-                    - 'public' means the event will appear for everyone (anonymous)
-                    - 'private' means the event won't appear
-    """
-    _columns = {
-        'visibility': fields.selection([('public', 'Public'),('private', 'Private')],
-            string='Visibility', help='Event\'s visibility in the portal\'s contact page'),
-    }
-    _defaults = {
-        'visibility': 'private',
-    }
+    _columns = {'visibility': fields.selection([('public', 'Public'), ('private', 'Private')], string='Visibility', help="Event's visibility in the portal's contact page")}
+    _defaults = {'visibility': 'private'}

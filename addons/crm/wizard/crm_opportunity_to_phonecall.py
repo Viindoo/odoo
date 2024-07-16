@@ -18,10 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
-
 import time
 
 class crm_opportunity2phonecall(osv.osv_memory):
@@ -30,19 +28,17 @@ class crm_opportunity2phonecall(osv.osv_memory):
     _name = 'crm.opportunity2phonecall'
     _description = 'Opportunity to Phonecall'
 
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self, cr, uid, fields, context = None):
         opp_obj = self.pool.get('crm.lead')
         categ_id = False
         data_obj = self.pool.get('ir.model.data')
-        try:
-            res_id = data_obj._get_id(cr, uid, 'crm', 'categ_phone2')
+        res_id = data_obj._get_id(cr, uid, 'crm', 'categ_phone2')
+        if res_id:
             categ_id = data_obj.browse(cr, uid, res_id, context=context).res_id
-        except ValueError:
-            pass
-
         record_ids = context and context.get('active_ids', []) or []
         res = {}
-        res.update({'action': 'log', 'date': time.strftime('%Y-%m-%d %H:%M:%S')})
+        res.update({'action': 'log',
+         'date': time.strftime('%Y-%m-%d %H:%M:%S')})
         for opp in opp_obj.browse(cr, uid, record_ids, context=context):
             if 'name' in fields:
                 res.update({'name': opp.name})
@@ -57,10 +53,11 @@ class crm_opportunity2phonecall(osv.osv_memory):
             if 'contact_name' in fields:
                 res.update({'contact_name': opp.partner_id and opp.partner_id.name or False})
             if 'phone' in fields:
-                res.update({'phone': opp.phone or (opp.partner_id and opp.partner_id.phone or False)})
+                res.update({'phone': opp.phone or opp.partner_id and opp.partner_id.phone or False})
+
         return res
 
-    def action_schedule(self, cr, uid, ids, context=None):
+    def action_schedule(self, cr, uid, ids, context = None):
         value = {}
         if context is None:
             context = {}
@@ -68,13 +65,8 @@ class crm_opportunity2phonecall(osv.osv_memory):
         opportunity_ids = context and context.get('active_ids') or []
         opportunity = self.pool.get('crm.lead')
         data = self.browse(cr, uid, ids, context=context)[0]
-        call_ids = opportunity.schedule_phonecall(cr, uid, opportunity_ids, data.date, data.name, \
-                data.note, data.phone, data.contact_name, data.user_id and data.user_id.id or False, \
-                data.section_id and data.section_id.id or False, \
-                data.categ_id and data.categ_id.id or False, \
-                action=data.action, context=context)
+        call_ids = opportunity.schedule_phonecall(cr, uid, opportunity_ids, data.date, data.name, data.note, data.phone, data.contact_name, data.user_id and data.user_id.id or False, data.section_id and data.section_id.id or False, data.categ_id and data.categ_id.id or False, action=data.action, context=context)
         return {'type': 'ir.actions.act_window_close'}
 
-crm_opportunity2phonecall()
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+crm_opportunity2phonecall()

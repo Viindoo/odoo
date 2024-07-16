@@ -18,20 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import osv
 
 class event_confirm(osv.osv_memory):
     """
     Confirm Event
     """
-    _name = "event.confirm"
-    _description = "Event Confirmation"
+    _name = 'event.confirm'
+    _description = 'Event Confirmation'
 
-    def confirm(self, cr, uid, ids, context=None):
+    def confirm(self, cr, uid, ids, context = None):
         self.pool.get('event.event').do_confirm(cr, uid, context.get('event_ids', []), context=context)
         return {'type': 'ir.actions.act_window_close'}
 
-event_confirm()
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+event_confirm()

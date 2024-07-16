@@ -150,9 +150,6 @@ function openerp_pos_db(instance, module){
             if(product.ean13){
                 str += '|' + product.ean13;
             }
-            if(product.default_code){
-                str += '|' + product.default_code;
-            }
             var packagings = this.packagings_by_product_id[product.id] || [];
             for(var i = 0; i < packagings.length; i++){
                 str += '|' + packagings[i].ean;
@@ -169,9 +166,6 @@ function openerp_pos_db(instance, module){
                 var product = products[i];
                 var search_string = this._product_search_string(product);
                 var categ_id = product.pos_categ_id ? product.pos_categ_id[0] : this.root_category_id;
-                if (product.variants){
-                    product.name = product.name+" ("+product.variants+")";
-                }
                 if(!stored_categories[categ_id]){
                     stored_categories[categ_id] = [];
                 }

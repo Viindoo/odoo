@@ -3,15 +3,13 @@ openerp.document = function (instance) {
     instance.web.Sidebar.include({
         init : function(){
             this._super.apply(this, arguments);
-            if (this.getParent().view_type == "form"){
-                this.sections.splice(1, 0, { 'name' : 'files', 'label' : _t('Attachment(s)'), });
-                this.items['files'] = [];
-            }
+            this.sections.splice(1, 0, { 'name' : 'files', 'label' : _t('Attachment(s)'), });
+            this.items['files'] = [];
         },
         on_attachments_loaded: function(attachments) {
             //to display number in name if more then one attachment which has same name.
             var self = this;
-            _.chain(attachments)
+            _.chain(attachments.reverse())
                  .groupBy(function(attachment) { return attachment.name})
                  .each(function(attachment){
                      if(attachment.length > 1)

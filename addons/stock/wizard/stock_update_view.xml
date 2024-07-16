@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	 <record id="view_stock_update_tree" model="ir.ui.view">
+            <field name="name">stock.update.tree</field>
+            <field name="model">stock.update</field>
+            <field name="arch" type="xml">
+                <tree string="Cập nhật phiếu xuất kho" version="7.0">
+                    
+                        <field name="phieu_id" />
+                        <field name="bang_kiem_soat"/>
+                        <field name="ngay_capnhat" />
+                  		<field name="daidien_muahang" readonly="1" />
+                        <field name="date_done" readonly="1"/>
+                        <field name="user_id" readonly="1"/>
+                        <field name="loai_vanchuyen" readonly="1" />
+                 </tree>
+            </field>
+        </record>    
+        <record id="view_stock_update_form" model="ir.ui.view">
+            <field name="name">stock.update.from</field>
+            <field name="model">stock.update</field>
+            <field name="arch" type="xml">
+                <form string="Cập nhật phiếu xuất kho" version="7.0">
+                    <group >
+	                    <group>
+	                         <field name="bang_kiem_soat"/>
+	                         <field name="ngay_capnhat"  />
+	                         <field name="date_done"/>
+	                         <field name="daidien_muahang"  />
+	                         <field name="loai_vanchuyen" />
+	                    </group>
+	                    <group>
+	                    	  <field name="phieu_id" readonly="1"/>
+	                          <field name="user_id" readonly="1"/>
+	                          <field name="partner_id" readonly="1"/>
+		                    
+                   		 </group>
+                      
+                      </group>
+                        <field name="line_ids" create="0">
+                        		<tree string="Chi tiết sản phẩm"  editable="bottom"  >		
+					                	<field name="no" readonly="1"/> 	  
+					                	 <field name="product_id" readonly="1"/> 
+					                    <field name="product_qty"  sum="total" readonly="1" />  
+					                    <field name="product_uom"  readonly="1"/> 					                   
+					                    <field name="location_id"  />    
+					                     <field name="location_dest_id" readonly="1" />  		                 
+					                </tree>
+					                 <form string="Chi tiết vận chuyển"  vertion="7.0"> 		
+					                	<sheet>
+						                	
+							                 <group>
+								                 <group>
+								                     
+								                     <field name="no" readonly="1"/> 	  
+								                	 <field name="product_id" readonly="1"/> 
+								                    <field name="product_qty"  sum="total" readonly="1" />                       
+								                  </group>
+								                   <group>
+								                      <field name="product_uom"  readonly="1"/> 					                   
+									                    <field name="location_id"  />    
+									                     <field name="location_dest_id" readonly="1"/> 
+								                   </group>
+							                 </group>	
+		                 					      	               
+	                					 </sheet> 
+	              
+					                </form>
+                        </field>
+                   
+                    <footer>
+                        <div>
+                            <button name="action_correct_delivery" string="Cập nhật" type="object" class="oe_highlight"/> or
+                            <button special="cancel" string="Hủy" class="oe_link"/>
+                        </div>
+                    </footer>
+                 </form>
+            </field>
+        </record>   
+	<record id="action_stock_update" model="ir.actions.act_window">
+               <field name="name">Cập nhật phiếu xuất kho</field>
+               <field name="type">ir.actions.act_window</field>
+               <field name="res_model">stock.update</field>
+               <field name="view_type">form</field>
+               <field name="view_mode">form</field>
+                    <field name="view_id" ref="view_stock_update_form"/>
+               <field name="context">{'record_id' : active_id}</field>
+               <field name="target">new</field>
+        </record>
+          <record id="view_stock_update_form2" model="ir.ui.view">
+            <field name="name">stock.update.from2</field>
+            <field name="model">stock.update</field>
+            <field name="arch" type="xml">
+                <form string="Cập nhật phiếu xuất kho" version="7.0">
+                    <group >
+                        <field name="phieu_id" readonly="1" />
+                        <field name="bang_kiem_soat" readonly="1"/>
+                         <field name="ngay_capnhat" readonly="1"/>
+                         <field name="daidien_muahang" readonly="1" />
+                         <field name="loai_vanchuyen" readonly="1" />
+                        <field name="date_done" readonly="1"/>
+                         <field name="user_id" readonly="1"/>
+                      </group>
+                        <field name="line_ids" readonly="1">
+                        		<tree string="Chi tiết sản phẩm"  editable="bottom"  >		
+					                	<field name="no" readonly="1"/> 	  
+					                	 <field name="product_id" readonly="1"/> 
+					                    <field name="product_qty"  sum="total" readonly="1" />  
+					                    <field name="product_uom"  readonly="1"/> 					                   
+					                    <field name="location_id"  readonly="1" />    
+					                     <field name="location_dest_id" readonly="1" />  		                 
+					                </tree>
+					                 <form string="Chi tiết vận chuyển"  vertion="7.0"> 		
+					                	<sheet>
+						                	
+							                 <group>
+								                 <group>
+								                     
+								                     <field name="no" readonly="1"/> 	  
+								                	 <field name="product_id" readonly="1"/> 
+								                    <field name="product_qty"  sum="total" readonly="1" />                       
+								                  </group>
+								                   <group>
+								                      <field name="product_uom"  readonly="1"/> 					                   
+									                    <field name="location_id" readonly="1" />    
+									                     <field name="location_dest_id" readonly="1"/> 
+								                   </group>
+							                 </group>	
+		                 					      	               
+	                					 </sheet> 
+	              
+					                </form>
+                        </field>                   
+                   
+                 </form>
+            </field>
+        </record>   
+        <record id="action_stock_update_lichsu" model="ir.actions.act_window">
+               <field name="name">Cập nhật phiếu xuất kho</field>
+               <field name="type">ir.actions.act_window</field>
+               <field name="res_model">stock.update</field>
+               <field name="view_type">form</field>               
+               <field name="view_mode">tree,form</field>
+                 <field name="view_id" ref="view_stock_update_form2"/>
+               
+        </record>
+         <record id="view_stock_update_tree2" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_stock_update_tree"/>
+            <field name="act_window_id" ref="action_stock_update_lichsu"/>
+        </record>
+        <record id="action_stock_update_lichsu_form2" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_stock_update_form2"/>
+            <field name="act_window_id" ref="action_stock_update_lichsu"/>
+        </record>
+        <menuitem  id="menu_lichsu" name="Lịch sử cập nhật" parent="stock.menu_stock_root" sequence="2" groups="stock.group_stock_user_edit" /> 	
+	  <menuitem action="action_stock_update_lichsu" id="menu_action_action_stock_update_lichsu" name="Lịch sử sửa kho" parent="menu_lichsu" sequence="1" groups="stock.group_stock_user_edit" /> 	
+	  
+    </data>
+</openerp>

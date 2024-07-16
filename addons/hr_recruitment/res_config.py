@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Business Applications
-#    Copyright (C) 2004-2012 OpenERP S.A. (<http://openerp.com>).
+#    OpenERP, Open Source Management Solution
+#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,20 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class hr_applicant_settings(osv.osv_memory):
     _name = 'hr.config.settings'
     _inherit = ['hr.config.settings', 'fetchmail.config.settings']
-
-    _columns = {
-        'module_document_ftp': fields.boolean('Allow the automatic indexation of resumes',
-            help="""Manage your CV's and motivation letter related to all applicants.
-                This installs the module document_ftp. This will install the knowledge management  module in order to allow you to search using specific keywords through  the content of all documents (PDF, .DOCx...)"""),
-        'fetchmail_applicants': fields.boolean('Create applicants from an incoming email account',
-            fetchmail_model='hr.applicant', fetchmail_name='Incoming HR Applications',   
-            help ="""Allow applicants to send their job application to an email address (jobs@mycompany.com),
-                and create automatically application documents in the system."""),
-    }
-
+    _columns = {'module_document_ftp': fields.boolean('Allow the automatic indexation of resumes', help="Manage your CV's and motivation letter related to all applicants.\n                This installs the module document_ftp. This will install the knowledge management  module in order to allow you to search using specific keywords through  the content of all documents (PDF, .DOCx...)"),
+     'fetchmail_applicants': fields.boolean('Create applicants from an incoming email account', fetchmail_model='hr.applicant', fetchmail_name='Incoming HR Applications', help='Allow applicants to send their job application to an email address (jobs@mycompany.com),\n                and create automatically application documents in the system.')}

@@ -1,25 +1,23 @@
-############################################################################
-#   Copyright (C) 2005 by Reithinger GmbH
-#   mreithinger@web.de
+# -*- coding: utf-8 -*-
+##############################################################################
 #
-#   This file is part of faces.
-#                                                                         
-#   faces is free software; you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation; either version 2 of the License, or
-#   (at your option) any later version.
+#    OpenERP, Open Source Management Solution
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
-#   faces is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU General Public License for more details.
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
 #
-#   You should have received a copy of the GNU General Public License
-#   along with this program; if not, write to the
-#   Free Software Foundation, Inc.,
-#   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-############################################################################
-
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+##############################################################################
 import gettext
 import os.path
 import locale
@@ -27,30 +25,31 @@ import sys
 
 def _get_translation():
     try:
-        return gettext.translation("faces")
+        return gettext.translation('faces')
     except:
         try:
             if sys.frozen:
                 path = os.path.dirname(sys.argv[0])
-                path = os.path.join(path, "resources", "faces", "locale")
+                path = os.path.join(path, 'resources', 'faces', 'locale')
             else:
                 path = os.path.split(__file__)[0]
-                path = os.path.join(path, "locale")
-
-            return gettext.translation("faces", path)
-        except Exception, e:
+                path = os.path.join(path, 'locale')
+            return gettext.translation('faces', path)
+        except Exception as e:
             return None
+
+    return None
+
 
 def get_gettext():
     trans = _get_translation()
-    if trans: return trans.ugettext
+    if trans:
+        return trans.ugettext
     return lambda msg: msg
-        
+
 
 def get_encoding():
     trans = _get_translation()
-    if trans: return trans.charset()
+    if trans:
+        return trans.charset()
     return locale.getpreferredencoding()
-    
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -24,21 +24,14 @@ from openerp.osv import fields, osv
 class project_compute_phases(osv.osv_memory):
     _name = 'project.compute.phases'
     _description = 'Project Compute Phases'
-    _columns = {
-        'target_project': fields.selection([
-            ('all', 'Compute All My Projects'),
-            ('one', 'Compute a Single Project'),
-            ], 'Action', required=True),
-        'project_id': fields.many2one('project.project', 'Project')
-    }
-    _defaults = {
-        'target_project': 'one'
-    }
+    _columns = {'target_project': fields.selection([('all', 'Compute All My Projects'), ('one', 'Compute a Single Project')], 'Action', required=True),
+     'project_id': fields.many2one('project.project', 'Project')}
+    _defaults = {'target_project': 'one'}
 
-    def check_selection(self, cr, uid, ids, context=None):
+    def check_selection(self, cr, uid, ids, context = None):
         return self.compute_date(cr, uid, ids, context=context)
 
-    def compute_date(self, cr, uid, ids, context=None):
+    def compute_date(self, cr, uid, ids, context = None):
         """
         Compute the phases for scheduling.
         """
@@ -46,17 +39,14 @@ class project_compute_phases(osv.osv_memory):
         data = self.read(cr, uid, ids, [], context=context)[0]
         if not data['project_id'] and data['target_project'] == 'one':
             raise osv.except_osv(_('Error!'), _('Please specify a project to schedule.'))
-
         if data['target_project'] == 'one':
             project_ids = [data['project_id'][0]]
         else:
-            project_ids = project_pool.search(cr, uid, [('user_id','=',uid)], context=context)
-
-        if project_ids:
-            project_pool.schedule_phases(cr, uid, project_ids, context=context)
+            project_ids = project_pool.search(cr, uid, [('user_id', '=', uid)], context=context)
+        project_pool.schedule_phases(cr, uid, project_ids, context=context)
         return self._open_phases_list(cr, uid, data, context=context)
 
-    def _open_phases_list(self, cr, uid, data, context=None):
+    def _open_phases_list(self, cr, uid, data, context = None):
         """
         Return the scheduled phases list.
         """
@@ -69,9 +59,10 @@ class project_compute_phases(osv.osv_memory):
         result = act_obj.read(cr, uid, [id], context=context)[0]
         result['target'] = 'current'
         project_id = data.get('project_id') and data.get('project_id')[0] or False
-        result['context'] = {"search_default_project_id":project_id, "default_project_id":project_id, "search_default_current": 1}
+        result['context'] = {'search_default_project_id': project_id,
+         'default_project_id': project_id,
+         'search_default_current': 1}
         return result
 
-project_compute_phases()
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+project_compute_phases()

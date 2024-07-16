@@ -18,34 +18,57 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import time
-
 from openerp import netsvc, pooler
 from openerp.report import report_sxw
 from openerp.report.interface import report_rml
 from openerp.report.interface import toxml
 from openerp.tools import to_xml, ustr
 from openerp.tools.translate import _
-
 one_day = relativedelta(days=1)
-month2name = [0, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+month2name = [0,
+ 'January',
+ 'February',
+ 'March',
+ 'April',
+ 'May',
+ 'June',
+ 'July',
+ 'August',
+ 'September',
+ 'October',
+ 'November',
+ 'December']
 
 def hour2str(h):
     hours = int(h)
     minutes = int(round((h - hours) * 60, 0))
     return '%02dh%02d' % (hours, minutes)
 
+
 def lengthmonth(year, month):
-    if month == 2 and ((year % 4 == 0) and ((year % 100 != 0) or (year % 400 == 0))):
+    if month == 2 and year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
         return 29
-    return [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month]
+    return [0,
+     31,
+     28,
+     31,
+     30,
+     31,
+     30,
+     31,
+     31,
+     30,
+     31,
+     30,
+     31][month]
+
 
 class report_custom(report_rml):
 
-    def create_xml(self, cr, uid, ids, datas, context=None):
+    def create_xml(self, cr, uid, ids, datas, context = None):
         obj_emp = pooler.get_pool(cr.dbname).get('hr.employee')
         if context is None:
             context = {}
@@ -56,140 +79,117 @@ class report_custom(report_rml):
             for emp in obj_emp.read(cr, uid, emp_ids, ['name']):
                 stop, days_xml = False, []
                 total_wh = 0.0
-                user_repr = '''
-                <user>
-                  <name>%s</name>
-                  %%s
-                </user>
-                ''' % (ustr(toxml(emp['name'])))
+                user_repr = '\n                <user>\n                  <name>%s</name>\n                  %%s\n                </user>\n                ' % ustr(toxml(emp['name']))
                 today, tomor = month, month + one_day
                 while today.month == month.month:
-                    #### Work hour calculation
-                    sql = '''
-                    select action, att.name
-                    from hr_employee as emp inner join hr_attendance as att
-                         on emp.id = att.employee_id
-                    where att.name between %s and %s and emp.id = %s
-                    order by att.name
-                    '''
+                    sql = '\n                    select action, att.name\n                    from hr_employee as emp inner join hr_attendance as att\n                         on emp.id = att.employee_id\n                    where att.name between %s and %s and emp.id = %s\n                    order by att.name\n                    '
                     cr.execute(sql, (today.strftime('%Y-%m-%d %H:%M:%S'), tomor.strftime('%Y-%m-%d %H:%M:%S'), emp['id']))
                     attendences = cr.dictfetchall()
                     wh = 0.0
-                    # Fake sign ins/outs at week ends, to take attendances across week ends into account
                     if attendences and attendences[0]['action'] == 'sign_out':
-                        attendences.insert(0, {'name': today.strftime('%Y-%m-%d %H:%M:%S'), 'action':'sign_in'})
+                        attendences.insert(0, {'name': today.strftime('%Y-%m-%d %H:%M:%S'),
+                         'action': 'sign_in'})
                     if attendences and attendences[-1]['action'] == 'sign_in':
-                        attendences.append({'name': tomor.strftime('%Y-%m-%d %H:%M:%S'), 'action':'sign_out'})
-                    # sum up the attendances' durations
+                        attendences.append({'name': tomor.strftime('%Y-%m-%d %H:%M:%S'),
+                         'action': 'sign_out'})
                     ldt = None
                     for att in attendences:
                         dt = datetime.strptime(att['name'], '%Y-%m-%d %H:%M:%S')
                         if ldt and att['action'] == 'sign_out':
                             if dt.date() > ldt.date():
                                 dt = ldt
-                            wh += (float((dt - ldt).seconds)/60/60)
+                            wh += float((dt - ldt).seconds) / 60 / 60
                         else:
                             ldt = dt
-                    # Week xml representation
+
                     total_wh += wh
                     wh = hour2str(wh)
-                    today_xml = '<day num="%s"><wh>%s</wh></day>' % ((today - month).days+1, (wh))
-                    dy=(today - month).days+1
+                    today_xml = '<day num="%s"><wh>%s</wh></day>' % ((today - month).days + 1, wh)
+                    dy = (today - month).days + 1
                     days_xml.append(today_xml)
                     today, tomor = tomor, tomor + one_day
+
                 total_wh = hour2str(total_wh)
-                today_xml = '<day num="Total"><wh>%s</wh></day>' % (total_wh)
+                today_xml = '<day num="Total"><wh>%s</wh></day>' % total_wh
                 days_xml.append(today_xml)
                 user_xml.append(user_repr % '\n'.join(days_xml))
 
         rpt_obj = pooler.get_pool(cr.dbname).get('hr.employee')
-        rml_obj=report_sxw.rml_parse(cr, uid, rpt_obj._name,context)
-        header_xml = '''
-        <header>
-        <date>%s</date>
-        <company>%s</company>
-        </header>
-        ''' % (str(rml_obj.formatLang(time.strftime("%Y-%m-%d"),date=True))+' ' + str(time.strftime("%H:%M")),to_xml(pooler.get_pool(cr.dbname).get('res.users').browse(cr,uid,uid).company_id.name))
-
+        rml_obj = report_sxw.rml_parse(cr, uid, rpt_obj._name, context)
+        header_xml = '\n        <header>\n        <date>%s</date>\n        <company>%s</company>\n        </header>\n        ' % (str(rml_obj.formatLang(time.strftime('%Y-%m-%d'), date=True)) + ' ' + str(time.strftime('%H:%M')), to_xml(pooler.get_pool(cr.dbname).get('res.users').browse(cr, uid, uid).company_id.name))
         first_date = str(month)
         som = datetime.strptime(first_date, '%Y-%m-%d %H:%M:%S')
-        eom = som + timedelta(int(dy)-1)
-        day_diff=eom-som
-        date_xml=[]
-        cell=1
+        eom = som + timedelta(int(dy) - 1)
+        day_diff = eom - som
+        date_xml = []
+        cell = 1
         date_xml.append('<days>')
-        if day_diff.days>=30:
-            date_xml += ['<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som.replace(day=x).strftime('%a')),x-som.day+1) for x in range(som.day, lengthmonth(som.year, som.month)+1)]
+        if day_diff.days >= 30:
+            date_xml += [ '<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som.replace(day=x).strftime('%a')), x - som.day + 1) for x in range(som.day, lengthmonth(som.year, som.month) + 1) ]
+        elif day_diff.days >= lengthmonth(som.year, som.month) - som.day:
+            date_xml += [ '<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som.replace(day=x).strftime('%a')), x - som.day + 1) for x in range(som.day, lengthmonth(som.year, som.month) + 1) ]
         else:
-            if day_diff.days>=(lengthmonth(som.year, som.month)-som.day):
-                date_xml += ['<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som.replace(day=x).strftime('%a')),x-som.day+1) for x in range(som.day, lengthmonth(som.year, som.month)+1)]
+            date_xml += [ '<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som.replace(day=x).strftime('%a')), x - som.day + 1) for x in range(som.day, eom.day + 1) ]
+        cell = x - som.day + 1
+        day_diff1 = day_diff.days - cell + 1
+        width_dict = {}
+        month_dict = {}
+        i = 1
+        j = 1
+        year = som.year
+        month = som.month
+        month_dict[j] = som.strftime('%B')
+        width_dict[j] = cell
+        while day_diff1 > 0:
+            if month + i <= 12:
+                if day_diff1 > lengthmonth(year, i + month):
+                    som1 = datetime.date(year, month + i, 1)
+                    date_xml += [ '<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som1.replace(day=x).strftime('%a')), cell + x) for x in range(1, lengthmonth(year, i + month) + 1) ]
+                    i = i + 1
+                    j = j + 1
+                    month_dict[j] = som1.strftime('%B')
+                    cell = cell + x
+                    width_dict[j] = x
+                else:
+                    som1 = datetime.date(year, month + i, 1)
+                    date_xml += [ '<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som1.replace(day=x).strftime('%a')), cell + x) for x in range(1, eom.day + 1) ]
+                    i = i + 1
+                    j = j + 1
+                    month_dict[j] = som1.strftime('%B')
+                    cell = cell + x
+                    width_dict[j] = x
+                day_diff1 = day_diff1 - x
             else:
-                date_xml += ['<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som.replace(day=x).strftime('%a')),x-som.day+1) for x in range(som.day, eom.day+1)]
-        cell=x-som.day+1
-        day_diff1=day_diff.days-cell+1
-        width_dict={}
-        month_dict={}
-        i=1
-        j=1
-        year=som.year
-        month=som.month
-        month_dict[j]=som.strftime('%B')
-        width_dict[j]=cell
+                years = year + 1
+                year = years
+                month = 0
+                i = 1
+                if day_diff1 >= 30:
+                    som1 = datetime.date(years, i, 1)
+                    date_xml += [ '<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som1.replace(day=x).strftime('%a')), cell + x) for x in range(1, lengthmonth(years, i) + 1) ]
+                    i = i + 1
+                    j = j + 1
+                    month_dict[j] = som1.strftime('%B')
+                    cell = cell + x
+                    width_dict[j] = x
+                else:
+                    som1 = datetime.date(years, i, 1)
+                    i = i + 1
+                    j = j + 1
+                    month_dict[j] = som1.strftime('%B')
+                    date_xml += [ '<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som1.replace(day=x).strftime('%a')), cell + x) for x in range(1, eom.day + 1) ]
+                    cell = cell + x
+                    width_dict[j] = x
+                day_diff1 = day_diff1 - x
 
-        while day_diff1>0:
-            if month+i<=12:
-                if day_diff1 > lengthmonth(year,i+month): # Not on 30 else you have problems when entering 01-01-2009 for example
-                    som1=datetime.date(year,month+i,1)
-                    date_xml += ['<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som1.replace(day=x).strftime('%a')),cell+x) for x in range(1, lengthmonth(year,i+month)+1)]
-                    i=i+1
-                    j=j+1
-                    month_dict[j]=som1.strftime('%B')
-                    cell=cell+x
-                    width_dict[j]=x
-                else:
-                    som1=datetime.date(year,month+i,1)
-                    date_xml += ['<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som1.replace(day=x).strftime('%a')),cell+x) for x in range(1, eom.day+1)]
-                    i=i+1
-                    j=j+1
-                    month_dict[j]=som1.strftime('%B')
-                    cell=cell+x
-                    width_dict[j]=x
-                day_diff1=day_diff1-x
-            else:
-                years=year+1
-                year=years
-                month=0
-                i=1
-                if day_diff1>=30:
-                    som1=datetime.date(years,i,1)
-                    date_xml += ['<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som1.replace(day=x).strftime('%a')),cell+x) for x in range(1, lengthmonth(years,i)+1)]
-                    i=i+1
-                    j=j+1
-                    month_dict[j]=som1.strftime('%B')
-                    cell=cell+x
-                    width_dict[j]=x
-                else:
-                    som1=datetime.date(years,i,1)
-                    i=i+1
-                    j=j+1
-                    month_dict[j]=som1.strftime('%B')
-                    date_xml += ['<dayy number="%d" name="%s" cell="%d"/>' % (x, _(som1.replace(day=x).strftime('%a')),cell+x) for x in range(1, eom.day+1)]
-                    cell=cell+x
-                    width_dict[j]=x
-                day_diff1=day_diff1-x
         date_xml += ['<dayy name="Total" cell="Total"/>']
         date_xml.append('</days>')
-        date_xml.append('<cols>3.5cm%s,1.2cm</cols>\n' % (',0.74cm' * (int(dy))))
-        xml = '''<?xml version="1.0" encoding="UTF-8" ?>
-        <report>
-        %s
-        <title>%s</title>
-        %s
-        %s
-        </report>
-        ''' % (header_xml,_('Attendances by Month'),'\n'.join(user_xml),date_xml)
+        date_xml.append('<cols>3.5cm%s,1.2cm</cols>\n' % (',0.74cm' * int(dy)))
+        xml = '<?xml version="1.0" encoding="UTF-8" ?>\n        <report>\n        %s\n        <title>%s</title>\n        %s\n        %s\n        </report>\n        ' % (header_xml,
+         _('Attendances by Month'),
+         '\n'.join(user_xml),
+         date_xml)
         return xml
 
-report_custom('report.hr.attendance.bymonth', 'hr.employee', '', 'addons/hr_attendance/report/bymonth.xsl')
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+report_custom('report.hr.attendance.bymonth', 'hr.employee', '', 'addons/hr_attendance/report/bymonth.xsl')

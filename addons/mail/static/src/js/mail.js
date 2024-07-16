@@ -6,7 +6,6 @@ openerp.mail = function (session) {
 
     openerp_mail_followers(session, mail);        // import mail_followers.js
     openerp_FieldMany2ManyTagsEmail(session);      // import manyy2many_tags_email.js
-    openerp_announcement(session);
 
     /**
      * ------------------------------------------------------------
@@ -259,7 +258,7 @@ openerp.mail = function (session) {
         format_data: function () {
             //formating and add some fields for render
             this.date = this.date ? session.web.str_to_datetime(this.date) : false;
-            if (this.date && new Date().getTime()-this.date.getTime() < 7*24*60*60*1000) {
+            if (this.date && new Date().getTime()-this.date.getTime() < 1000) {
                 this.timerelative = $.timeago(this.date);
             } 
             if (this.type == 'email' && (!this.author_id || !this.author_id[0])) {
@@ -408,16 +407,6 @@ openerp.mail = function (session) {
             this.is_log = false;
             this.recipients = [];
             this.recipient_ids = [];
-            session.web.bus.on('clear_uncommitted_changes', this, function(e) {
-                if (this.show_composer && !e.isDefaultPrevented()){
-                    if (!confirm(_t("You are currently composing a message, your message will be discarded.\n\nAre you sure you want to leave this page ?"))) {
-                        e.preventDefault();
-                    }
-                    else{
-                        this.on_cancel();
-                    }
-                }
-            });
         },
 
         start: function () {
@@ -582,9 +571,7 @@ openerp.mail = function (session) {
                     context: context,
                 };
 
-                self.do_action(action, {
-                    'on_close': function(){ !self.parent_thread.options.view_inbox && self.parent_thread.message_fetch() }
-                });
+                self.do_action(action);
                 self.on_cancel();
             });
 
@@ -664,7 +651,7 @@ openerp.mail = function (session) {
                             'default_name': parsed_email[0],
                             'default_email': parsed_email[1],
                         }, {
-                            title: _t("Please complete partner's informations"),
+                            title: _t("Vui lòng hoàn tất thông tin khách hàng"),
                         }
                     );
                     pop.on('closed', self, function () {
@@ -712,8 +699,8 @@ openerp.mail = function (session) {
             if (self.flag_post) {
                 return;
             }
+            self.flag_post = true;
             if (this.do_check_attachment_upload() && (this.attachment_ids.length || this.$('textarea').val().match(/\S+/))) {
-                self.flag_post = true;
                 if (this.is_log) {
                     this.do_send_message_post([], this.is_log);
                 }
@@ -840,9 +827,7 @@ openerp.mail = function (session) {
                 // go to the parented message
                 var message = this.parent_thread.parent_message;
                 var parent_message = message.parent_id ? message.parent_thread.parent_message : message;
-                if(parent_message){
-                    var messages = [parent_message].concat(parent_message.get_childs());
-                }
+                var messages = [parent_message].concat(parent_message.get_childs());
             } else if (this.options.emails_from_on_composer) {
                 // get all wall messages if is not a mail.Wall
                 _.each(this.options.root_thread.messages, function (msg) {messages.push(msg); messages.concat(msg.get_childs());});
@@ -990,8 +975,8 @@ openerp.mail = function (session) {
         expender: function () {
             this.$('.oe_msg_body:first').expander({
                 slicePoint: this.options.truncate_limit,
-                expandText: _t('read more'),
-                userCollapseText: _t('read less'),
+                expandText: _t('đọc thêm'),
+                userCollapseText: _t('đọc ít hơn'),
                 detailClass: 'oe_msg_tail',
                 moreClass: 'oe_mail_expand',
                 lessClass: 'oe_mail_reduce',
@@ -1041,7 +1026,7 @@ openerp.mail = function (session) {
          */
         on_message_delete: function (event) {
             event.stopPropagation();
-            if (! confirm(_t("Do you really want to delete this message?"))) { return false; }
+            if (! confirm(_t("Bạn thực sự muốn xóa thông điệp này?"))) { return false; }
             
             this.animated_destroy(150);
             // delete this message and his childs
@@ -1211,7 +1196,7 @@ openerp.mail = function (session) {
         init: function (parent, datasets, options) {
             var self = this;
             this._super(parent, options);
-            this.MailWidget = parent instanceof mail.Widget ? parent : false;
+            this.MailWidget = parent.__proto__ == mail.Widget.prototype ? parent : false;
             this.domain = options.domain || [];
             this.context = _.extend(options.context || {});
 
@@ -1428,7 +1413,7 @@ openerp.mail = function (session) {
         message_fetch: function (replace_domain, replace_context, ids, callback) {
             return this.ds_message.call('message_read', [
                     // ids force to read
-                    ids === false ? undefined : ids, 
+                    ids == false ? undefined : ids, 
                     // domain + additional
                     (replace_domain ? replace_domain : this.domain), 
                     // ids allready loaded
@@ -1802,7 +1787,7 @@ openerp.mail = function (session) {
                 this.node.params.readonly = this.node.attrs.readonly;
             }
 
-            this.domain = (this.node.params && this.node.params.domain) || (this.field && this.field.domain) || [];
+            this.domain = this.node.params && this.node.params.domain || [];
 
             if (!this.ParentViewManager.is_action_enabled('edit')) {
                 this.node.params.show_link = false;

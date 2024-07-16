@@ -16,12 +16,12 @@
     <t t-if="widget.options.action_buttons !== false">
         <t t-if="widget.is_action_enabled('create')">
             <button type="button" class="oe_kanban_button_new oe_highlight">
-                <t t-esc="widget.options.create_text || _t('Create')"/>
+                <t t-esc="widget.options.create_text || _t('Tạo mới')"/>
             </button>
             <span class="oe_alternative" style="display: none">
-                <span class="oe_fade">or</span>
+                <span class="oe_fade">hoặc</span>
                 <div class="oe_bounce_container">
-                    <a href="#" class="oe_bold oe_kanban_add_column">Add a new column</a>
+                    <a href="#" class="oe_bold oe_kanban_add_column">Thêm một cột</a>
                 </div>
             </span>
         </t>
@@ -44,8 +44,8 @@
                     <ul class="oe_dropdown_menu oe_kanban_group_dropdown">
                         <li><a data-action="toggle_fold" href="#">Fold</a></li>
                         <t t-if="widget.view.grouped_by_m2o and widget.value">
-                            <li><a data-action="edit" href="#">Edit</a></li>
-                            <li><a data-action="delete" href="#">Delete</a></li>
+                            <li><a data-action="edit" href="#">Sửa</a></li>
+                            <li><a data-action="delete" href="#">Xóa</a></li>
                         </t>
                     </ul>
                 </div>
@@ -77,7 +77,7 @@
         <div class="oe_kanban_group_list_header"/>
         <div class="oe_kanban_column_cards"/>
         <div class="oe_kanban_show_more">
-            <button class="oe_button">Show more... (<span class="oe_kanban_remaining"></span> remaining)</button>
+            <button class="oe_button">Xem thêm... (<span class="oe_kanban_remaining"></span> còn lại)</button>
         </div>
     </td>
 </t>
@@ -95,8 +95,8 @@
     <input/>
     <t t-if="widget._buttons">
         <div class="oe_kanban_quick_create_buttons">
-            <button class="oe_kanban_quick_create_add">Add</button>
-            or <a href="#" class="oe_kanban_quick_create_close">Cancel</a>
+            <button class="oe_kanban_quick_create_add">Thêm</button>
+            or <a href="#" class="oe_kanban_quick_create_close">Hủy</a>
         </div>
     </t>
 </div>

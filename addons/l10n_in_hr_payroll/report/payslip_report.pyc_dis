@@ -1,0 +1,41 @@
+# Embedded file name: /opt/lamthao/server/openerp/addons/l10n_in_hr_payroll/report/payslip_report.py
+from openerp import tools
+from openerp.osv import fields, osv
+
+class payslip_report(osv.osv):
+    _name = 'payslip.report'
+    _description = 'Payslip Analysis'
+    _auto = False
+    _columns = {'name': fields.char('Name', size=32, readonly=True),
+     'date_from': fields.date('Date From', readonly=True),
+     'date_to': fields.date('Date To', readonly=True),
+     'year': fields.char('Year', size=4, readonly=True),
+     'month': fields.selection([('01', 'January'),
+               ('02', 'February'),
+               ('03', 'March'),
+               ('04', 'April'),
+               ('05', 'May'),
+               ('06', 'June'),
+               ('07', 'July'),
+               ('08', 'August'),
+               ('09', 'September'),
+               ('10', 'October'),
+               ('11', 'November'),
+               ('12', 'December')], 'Month', readonly=True),
+     'day': fields.char('Day', size=128, readonly=True),
+     'state': fields.selection([('draft', 'Draft'), ('done', 'Done'), ('cancel', 'Rejected')], 'Status', readonly=True),
+     'employee_id': fields.many2one('hr.employee', 'Employee', readonly=True),
+     'nbr': fields.integer('# Payslip lines', readonly=True),
+     'number': fields.char('Number', size=16, readonly=True),
+     'struct_id': fields.many2one('hr.payroll.structure', 'Structure', readonly=True),
+     'company_id': fields.many2one('res.company', 'Company', readonly=True),
+     'paid': fields.boolean('Made Payment Order ? ', readonly=True),
+     'total': fields.float('Total', readonly=True),
+     'category_id': fields.many2one('hr.salary.rule.category', 'Category', readonly=True)}
+
+    def init(self, cr):
+        tools.drop_view_if_exists(cr, 'payslip_report')
+        cr.execute("\n            create or replace view payslip_report as (\n                select\n                    min(l.id) as id,\n                    l.name,\n                    p.struct_id,\n                    p.state,\n                    p.date_from,\n                    p.date_to,\n                    p.number,\n                    p.company_id,\n                    p.paid,\n                    l.category_id,\n                    l.employee_id,\n                    sum(l.total) as total,\n                    to_char(p.date_from, 'YYYY') as year,\n                    to_char(p.date_from, 'MM') as month,\n                    to_char(p.date_from, 'YYYY-MM-DD') as day,\n                    to_char(p.date_to, 'YYYY') as to_year,\n                    to_char(p.date_to, 'MM') as to_month,\n                    to_char(p.date_to, 'YYYY-MM-DD') as to_day,\n                    1 AS nbr\n                from\n                    hr_payslip as p\n                    left join hr_payslip_line as l on (p.id=l.slip_id)\n                where \n                    l.employee_id IS NOT NULL\n                group by\n                    p.number,l.name,p.date_from,p.date_to,p.state,p.company_id,p.paid,\n                    l.employee_id,p.struct_id,l.category_id\n            )\n        ")
+
+
+payslip_report()

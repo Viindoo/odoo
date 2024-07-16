@@ -23,13 +23,10 @@ from openerp.osv import fields, osv
 class account_analytic_chart(osv.osv_memory):
     _name = 'account.analytic.chart'
     _description = 'Account Analytic Chart'
+    _columns = {'from_date': fields.date('From'),
+     'to_date': fields.date('To')}
 
-    _columns = {
-        'from_date': fields.date('From'),
-        'to_date': fields.date('To'),
-    }
-
-    def analytic_account_chart_open_window(self, cr, uid, ids, context=None):
+    def analytic_account_chart_open_window(self, cr, uid, ids, context = None):
         mod_obj = self.pool.get('ir.model.data')
         act_obj = self.pool.get('ir.actions.act_window')
         result_context = {}
@@ -46,5 +43,5 @@ class account_analytic_chart(osv.osv_memory):
         result['context'] = str(result_context)
         return result
 
+
 account_analytic_chart()
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

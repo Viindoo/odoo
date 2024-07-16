@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,26 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from openerp.osv import fields,osv
+from openerp.osv import fields, osv
 
 class res_partner(osv.osv):
-
     """ Inherits partner and adds Tasks information in the partner form """
     _inherit = 'res.partner'
-    _columns = {
-        'task_ids': fields.one2many('project.task', 'partner_id', 'Tasks'),
-    }
+    _columns = {'task_ids': fields.one2many('project.task', 'partner_id', 'Tasks')}
 
-    def copy(self, cr, uid, record_id, default=None, context=None):
+    def copy(self, cr, uid, record_id, default = None, context = None):
         if default is None:
             default = {}
-
         default['task_ids'] = []
-        return super(res_partner, self).copy(
-                cr, uid, record_id, default=default, context=context)
+        return super(res_partner, self).copy(cr, uid, record_id, default=default, context=context)
+
 
 res_partner()
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

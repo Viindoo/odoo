@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,20 +18,17 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import time
 from openerp.osv import fields, osv
 from openerp.osv.orm import browse_record, browse_null
 from openerp.tools.translate import _
 
 class purchase_requisition_partner(osv.osv_memory):
-    _name = "purchase.requisition.partner"
-    _description = "Purchase Requisition Partner"
-    _columns = {
-        'partner_id': fields.many2one('res.partner', 'Supplier', required=True,domain=[('supplier', '=', True)]),
-    }
+    _name = 'purchase.requisition.partner'
+    _description = 'Purchase Requisition Partner'
+    _columns = {'partner_id': fields.many2one('res.partner', 'Supplier', required=True, domain=[('supplier', '=', True)])}
 
-    def view_init(self, cr, uid, fields_list, context=None):
+    def view_init(self, cr, uid, fields_list, context = None):
         if context is None:
             context = {}
         res = super(purchase_requisition_partner, self).view_init(cr, uid, fields_list, context=context)
@@ -41,13 +38,11 @@ class purchase_requisition_partner(osv.osv_memory):
             raise osv.except_osv(_('Error!'), _('No Product in Tender.'))
         return res
 
-    def create_order(self, cr, uid, ids, context=None):
+    def create_order(self, cr, uid, ids, context = None):
         active_ids = context and context.get('active_ids', [])
-        data =  self.browse(cr, uid, ids, context=context)[0]
+        data = self.browse(cr, uid, ids, context=context)[0]
         self.pool.get('purchase.requisition').make_purchase_order(cr, uid, active_ids, data.partner_id.id, context=context)
         return {'type': 'ir.actions.act_window_close'}
 
+
 purchase_requisition_partner()
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

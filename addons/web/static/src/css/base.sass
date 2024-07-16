@@ -55,7 +55,7 @@ $sheet-padding: 16px
     background-image: -webkit-radial-gradient(circle, $gradient)
     background-image: -moz-radial-gradient($gradient)
     background-image: -ms-radial-gradient($gradient)
-    background-image: radial-gradient(circle, $gradient)
+    background-image: radial-gradient($gradient)
 
 @mixin radius($radius: 5px)
     -moz-border-radius: $radius
@@ -190,17 +190,6 @@ $sheet-padding: 16px
         vertical-align: middle
     td
         vertical-align: top
-    .oe_title
-        width: 50%
-        float: left    
-    .oe_title:after
-        content: "."
-        display: block
-        height: 0
-        clear: both
-        visibility: hidden    
-    .oe_form_group
-        clear: both
     .zebra tbody tr:nth-child(odd) td
         background-color: #f0f0fa
         @include vertical-gradient(#f0f0fa, #eeeef6)
@@ -288,15 +277,14 @@ $sheet-padding: 16px
         .ui-dialog-titlebar, .ui-dialog-content, .ui-dialog-buttonpane
             padding: 16px
         .ui-dialog-titlebar
-            border-top: none
-            border-left: none
-            border-right: none
             border-bottom: 1px solid #cacaca
             @include radius(2px 2px 0 0)
             @include vertical-gradient(#FCFCFC, #DEDEDE)
             .ui-dialog-title
                 margin: 0
                 padding: 0
+        .ui-widget-header
+            border: none
         .ui-dialog-content
             background: white
         .ui-dialog-buttonpane
@@ -424,6 +412,15 @@ $sheet-padding: 16px
             @include box-shadow(none)
             &:hover
                 background: #ED6F6A
+    .oe_title
+        width: 50%
+        float: left
+    .oe_title:after
+        content: "."
+        display: block
+        height: 0
+        clear: both
+        visibility: hidden
     .oe_button_box
         width: 270px
         text-align: right
@@ -564,9 +561,6 @@ $sheet-padding: 16px
         text-decoration: none
         background-color: #eee
         border-color: #eee #eee #ddd
-    .ui-tabs .oe_notebook.ui-tabs-nav li.ui-tabs-active
-        border-bottom: none
-        padding-bottom: 1px
     .oe_notebook > li.ui-state-active > a, .oe_notebook > li.ui-state-active > a:hover
         background-color: #ffffff
         border: 1px solid #ddd
@@ -617,13 +611,17 @@ $sheet-padding: 16px
                 display: block
                 color: #4c4c4c
                 text-decoration: none
+                width: 200px
+                text-overflow: ellipsis
+                overflow: hidden
                 &:hover
                     text-decoration: none
     .oe_dropdown_arrow:after
         width: 0
         height: 0
         display: inline-block
-        content: ""
+        content: "&darr"
+        text-indent: -99999px
         vertical-align: top
         margin-top: 8px
         //margin-left set at 3px to avoid a strange overflow
@@ -1152,7 +1150,7 @@ $sheet-padding: 16px
         .oe_view_manager_body
             display: table-row
             height: inherit
-        .oe_view_manager_view_kanban:not(:empty)
+        .oe_view_manager_view_kanban
             height: inherit
 
         table.oe_view_manager_header
@@ -1407,6 +1405,7 @@ $sheet-padding: 16px
                     background: $tag-bg-light
                     @include radius(0 3px 3px 0)
                 .oe_facet_category, .oe_facet_value
+                    height: 18px
                     padding: 0 4px
                 .oe_facet_category
                     color: white
@@ -1710,7 +1709,6 @@ $sheet-padding: 16px
     // FormView.header {{{
     .oe_form header
         position: relative
-        overflow: hidden
         border-bottom: 1px solid #cacaca
         padding-left: 2px
         @include vertical-gradient(#fcfcfc, #dedede)
@@ -1879,7 +1877,6 @@ $sheet-padding: 16px
             width: 100%
             display: inline-block
             padding: 2px 2px 2px 0px
-            vertical-align: top
             input
                 margin: 0px
         input[type="text"], input[type="password"], input[type="file"], select
@@ -2217,7 +2214,7 @@ $sheet-padding: 16px
     .oe_list_editable .oe_list_content td.oe_list_field_cell
         padding: 4px 6px 3px
     .oe_list.oe_list_editable.oe_editing
-        .oe_edition .oe_list_field_cell
+        .oe_edition .oe_list_field_cell:not(.oe_readonly)
             *
                 visibility: hidden
             color: transparent
@@ -2229,11 +2226,6 @@ $sheet-padding: 16px
         .oe_input_icon
             margin-top: 5px
         .oe_form_field
-            &.oe_list_field_handle
-                color: transparent
-            &.oe_readonly
-                padding: 4px 6px 3px
-                text-align: left
             min-width: 0
             max-width: none
             input, textarea
@@ -2244,19 +2236,12 @@ $sheet-padding: 16px
             input, textarea, select
                 min-width: 0
             &.oe_form_field_float,&.oe_form_view_integer
-                &.oe_readonly
-                    padding: 6px 0px 0px
-                    text-align: right
-                span
-                    padding: 0px 6px
                 input
-                    width: 100% !important
                     text-align: right
+                    width: 100% !important
             &.oe_form_field_datetime,&.oe_form_field_date
                 input.oe_datepicker_master
                     width: 100% !important
-            &.oe_form_field_reference
-                display: table
     .oe_list_group_name
         white-space: nowrap
     // }}}
@@ -2470,7 +2455,6 @@ $sheet-padding: 16px
         float: left
     .oe_debug_view_log
         font-size: 95%
-        line-height: 1.2em
     .oe_debug_view_log label
         display: block
         width: 49%

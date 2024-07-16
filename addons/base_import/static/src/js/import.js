@@ -51,12 +51,7 @@ openerp.base_import = function (instance) {
                         type: 'ir.actions.client',
                         tag: 'import',
                         params: {
-                            model: self.dataset.model,
-                            // self.dataset.get_context() could be a compound?
-                            // not sure. action's context should be evaluated
-                            // so safer bet. Odd that timezone & al in it
-                            // though
-                            context: self.getParent().action.context,
+                            model: self.dataset.model
                         }
                     }, {
                         on_reverse_breadcrumb: function () {
@@ -132,7 +127,6 @@ openerp.base_import = function (instance) {
             var self = this;
             this._super.apply(this, arguments);
             this.res_model = action.params.model;
-            this.parent_context = action.params.context || {};
             // import object id
             this.id = null;
             this.Import = new instance.web.Model('base_import.import');
@@ -359,12 +353,11 @@ openerp.base_import = function (instance) {
         },
 
         //- import itself
-        call_import: function (kwargs) {
+        call_import: function (options) {
             var fields = this.$('.oe_import_fields input.oe_import_match_field').map(function (index, el) {
                 return $(el).select2('val') || false;
             }).get();
-            kwargs.context = this.parent_context;
-            return this.Import.call('do', [this.id, fields, this.import_options()], kwargs)
+            return this.Import.call('do', [this.id, fields, this.import_options()], options)
                 .then(undefined, function (error, event) {
                     // In case of unexpected exception, convert
                     // "JSON-RPC error" to an import failure, and
@@ -482,13 +475,5 @@ openerp.base_import = function (instance) {
             { name: 'import_succeeded', from: 'importing', to: 'imported'},
             { name: 'import_failed', from: 'importing', to: 'results' }
         ]
-    });
-
-    $.extend($.fn.select2.defaults, {
-        formatNoMatches: function () { return _t("No matches found"); },
-        formatLoadMore: function (pageNumber) { return _t("Loading more results..."); },
-        formatSearching: function () { return _t("Searching..."); }
-    });
-
+    })
 };
-

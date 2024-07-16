@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Business Applications
-#    Copyright (C) 2004-2012 OpenERP S.A. (<http://openerp.com>).
+#    OpenERP, Open Source Management Solution
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,15 +18,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class project_issue_settings(osv.osv_memory):
     _name = 'project.config.settings'
     _inherit = ['project.config.settings', 'fetchmail.config.settings']
-
-    _columns = {
-        'fetchmail_issue': fields.boolean("Create issues from an incoming email account ", 
-            fetchmail_model='project.issue', fetchmail_name='Incoming Issues',
-            help="""Allows you to configure your incoming mail server, and create issues from incoming emails."""),
-    }
+    _columns = {'fetchmail_issue': fields.boolean('Create issues from an incoming email account ', fetchmail_model='project.issue', fetchmail_name='Incoming Issues', help='Allows you to configure your incoming mail server, and create issues from incoming emails.')}

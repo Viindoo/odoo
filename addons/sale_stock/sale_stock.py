@@ -116,31 +116,32 @@ class sale_order(osv.osv):
     
     _columns = {
           'state': fields.selection([
-            ('draft', 'Draft Quotation'),
-            ('sent', 'Quotation Sent'),
+            ('draft', 'LXH dự thảo'),
+            ('sent', 'Chờ lập KHVC'),
             ('cancel', 'Cancelled'),
-            ('waiting_date', 'Waiting Schedule'),
-            ('progress', 'Sales Order'),
+            ('waiting_date', 'Đang lập KHVC'),
+            ('khvc_done', 'Đã lập KHVC'),
+            ('progress', 'Lệnh xuất hàng'),
             ('manual', 'Sale to Invoice'),
             ('shipping_except', 'Shipping Exception'),
             ('invoice_except', 'Invoice Exception'),
+             ('wait_ship', 'Đang giao hàng'),
             ('done', 'Done'),
-            ], 'Status', readonly=True, track_visibility='onchange',
-            help="Gives the status of the quotation or sales order.\
+            ], 'Status', readonly=True,help="Gives the status of the quotation or sales order.\
               \nThe exception status is automatically set when a cancel operation occurs \
               in the invoice validation (Invoice Exception) or in the picking list process (Shipping Exception).\nThe 'Waiting Schedule' status is set when the invoice is confirmed\
                but waiting for the scheduler to run on the order date.", select=True),
-        'incoterm': fields.many2one('stock.incoterms', 'Incoterm', help="International Commercial Terms are a series of predefined commercial terms used in international transactions."),
+        'incoterm': fields.many2one('stock.incoterms', 'Incoterm', readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', True)]},help="International Commercial Terms are a series of predefined commercial terms used in international transactions."),
         'picking_policy': fields.selection([('direct', 'Deliver each product when available'), ('one', 'Deliver all products at once')],
-            'Shipping Policy', required=True, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+            'Shipping Policy', required=True, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', True)]},
             help="""Pick 'Deliver each product when available' if you allow partial delivery."""),
         'order_policy': fields.selection([
                 ('manual', 'On Demand'),
                 ('picking', 'On Delivery Order'),
                 ('prepaid', 'Before Delivery'),
-            ], 'Create Invoice', required=True, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+            ], 'Create Invoice', required=True, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', True)]},
             help="""On demand: A draft invoice can be created from the sales order when needed. \nOn delivery order: A draft invoice can be created from the delivery order when the products have been delivered. \nBefore delivery: A draft invoice is created from the sales order and must be paid before the products can be delivered."""),
-        'picking_ids': fields.one2many('stock.picking.out', 'sale_id', 'Related Picking', readonly=True, help="This is a list of delivery orders that has been generated for this sales order."),
+        'picking_ids': fields.one2many('stock.picking.out', 'sale_id', 'Related Picking', readonly=True, help="This is a list of delivery orders that has been generated for this sales order.", states={'draft': [('readonly', False)]}),
         'shipped': fields.boolean('Delivered', readonly=True, help="It indicates that the sales order has been delivered. This field is updated only after the scheduler(s) have been launched."),
         'picked_rate': fields.function(_picked_rate, string='Picked', type='float'),
         'invoice_quantity': fields.selection([('order', 'Ordered Quantities'), ('procurement', 'Shipped Quantities')], 'Invoice on', 
@@ -149,7 +150,7 @@ class sale_order(osv.osv):
     }
     _defaults = {
              'picking_policy': 'direct',
-             'order_policy': 'manual',
+             'order_policy': 'picking',
              'invoice_quantity': 'order',
          }
 
@@ -195,7 +196,7 @@ class sale_order(osv.osv):
             if order.order_policy == 'picking':
                 picking_obj.write(cr, uid, map(lambda x: x.id, order.picking_ids), {'invoice_state': 'invoiced'})
         return res
-
+    
     def action_cancel(self, cr, uid, ids, context=None):
         wf_service = netsvc.LocalService("workflow")
         if context is None:
@@ -291,6 +292,8 @@ class sale_order(osv.osv):
             return canceled
 
     def _prepare_order_line_procurement(self, cr, uid, order, line, move_id, date_planned, context=None):
+        
+        
         return {
             'name': line.name,
             'origin': order.name,
@@ -307,11 +310,123 @@ class sale_order(osv.osv):
             'move_id': move_id,
             'company_id': order.company_id.id,
             'note': line.name,
+            'property_ids': [(6, 0, [x.id for x in line.property_ids])],
+            
+            
         }
 
     def _prepare_order_line_move(self, cr, uid, order, line, picking_id, date_planned, context=None):
-        location_id = order.shop_id.warehouse_id.lot_stock_id.id
-        output_id = order.shop_id.warehouse_id.lot_output_id.id
+        location_id = False #order.shop_id.warehouse_id.lot_stock_id.id
+        output_id = False #order.shop_id.warehouse_id.lot_output_id.id
+        #kho_xuat_id=order.kho_xuat_id.id
+        loai_lenh_xuat=order.loai_lenh_xuat
+        kho_dai_ly=False
+        kho_khach_hang=False
+        type_kho=order.type_kho
+        kho_xuat_lamthao=order.kho_xuat_id.name       
+        # lay dia chi mac dinh la cac khach hang
+        query_kh="""select * from stock_location where name='Các khách hàng' or name='Customers' """
+        cr.execute(query_kh)
+        for item_kh in cr.dictfetchall():
+            kho_khach_hang=item_kh['id']
+               
+        output_id=kho_khach_hang
+        gui_kho=order.gui_kho
+        if loai_lenh_xuat=='vat':
+            output_id=kho_khach_hang
+        else:
+            if gui_kho=='kho_ngoai' or gui_kho=='kho_ngoai_tt':
+                den_diem_vt=line.dia_chi_giao
+                
+                if den_diem_vt:
+                    #neu khong tick chon kho -->loi
+                    lakho=den_diem_vt.kho
+                    if lakho==False:
+                        raise osv.except_osv(_("Thông báo!"), _("Không thể xuất kho với địa chỉ giao hàng '%s' không phải là kho")%(den_diem_vt.name))
+                    den_diem_id=den_diem_vt.id
+                    queryvt="""select * from stock_location where partner_id_diadiem= """+str(den_diem_id)
+                    cr.execute(queryvt)
+                    for vt in cr.dictfetchall():
+                        output_id=vt['id']
+            else:
+                den_diem_vt=line.dia_chi_giao
+                if den_diem_vt:
+                    den_diem_id=den_diem_vt.vi_tri_lienket
+                    if den_diem_id:
+                        output_id=den_diem_id.id                    
+                        
+        if output_id==False:
+            output_id=kho_khach_hang
+        
+        #-----------  XET TRUONG HOP KHO NGUON ---- #
+        # NEU LOAI HINH LA KHO CONG TY
+        if type_kho=="kho_congty":
+            kho_xuat_congty=order.kho_xuat_id
+            if kho_xuat_congty:
+                kho_xuat_congty_id=kho_xuat_congty.id
+                kho_xuat_congty_name=kho_xuat_congty.ref
+                if kho_xuat_congty_name=='kho_lam_thao': # neu kho xuat la kho lam thao
+                    # nguon = dia chia trong san pham
+                    location_id=line.product_id.vi_tri.id
+                else:   
+                    # neu khac kho cong ty lam thao                 
+                    la_kho1=kho_xuat_congty.kho
+                    la_dd1=kho_xuat_congty.is_diadiem                    
+                    tmp_kho1=False
+                    if la_dd1:
+                        query_diadiem1="""select id from stock_location where partner_id_diadiem= """+str(kho_xuat_congty.id)
+                        cr.execute(query_diadiem1)
+                        for kho_diadiem1 in cr.dictfetchall():
+                            location_id=kho_diadiem1['id']
+                            tmp_kho1=location_id
+                    if la_kho1:
+                        query_kho1="""select lot_input_id from stock_warehouse where partner_id= """+str(kho_xuat_congty.id)
+                        cr.execute(query_kho1)
+                        for kho_vt1 in cr.dictfetchall():
+                            location_id=kho_vt1['lot_input_id']
+                            tmp_kho1=kho_vt1['lot_input_id']
+                    location_id=tmp_kho1 # lay theo kho xuat
+            else:
+                # neu kho xuat khong chon --> nguon la lam thao
+                location_id=25
+        else:
+            kho_xuat_congty=order.kho_xuat_id
+            if kho_xuat_congty: # neu kho xuat khac rong-->kho xuat
+                la_kho1=kho_xuat_congty.kho
+                la_dd1=kho_xuat_congty.is_diadiem                    
+                tmp_kho1=False
+                if la_dd1:
+                    query_diadiem1="""select id from stock_location where partner_id_diadiem= """+str(kho_xuat_congty.id)
+                    cr.execute(query_diadiem1)
+                    for kho_diadiem1 in cr.dictfetchall():
+                        location_id=kho_diadiem1['id']
+                        tmp_kho1=location_id
+                if la_kho1:
+                    query_kho1="""select lot_input_id from stock_warehouse where partner_id= """+str(kho_xuat_congty.id)
+                    cr.execute(query_kho1)
+                    for kho_vt1 in cr.dictfetchall():
+                        location_id=kho_vt1['lot_input_id']
+                        tmp_kho1=kho_vt1['lot_input_id']
+                location_id=tmp_kho1 # lay theo kho xuat
+                 
+            else:
+                #neu kho xuat rong
+                nhan_hang_khac=line.dia_chi_giao
+                if nhan_hang_khac: # neu dia chi nhan hang la kho --> lay dia chi
+                    nhan_hang_khac_id=nhan_hang_khac.id
+                    nhan_hang_kho=nhan_hang_khac.kho
+                    #nhan_hang_is_diadiem=nhan_hang_khac.is_diadiem
+                    if nhan_hang_kho:
+                        queryvt_khac="""select * from stock_location where partner_id_diadiem= """+str(nhan_hang_khac_id)
+                        cr.execute(queryvt_khac)
+                        for vt in cr.dictfetchall():
+                            location_id=vt['id']
+                    else:
+                        location_id= kho_khach_hang
+        if location_id==False:
+            location_id=kho_khach_hang           
+        #----------       END ----------------------"
+        
         return {
             'name': line.name,
             'picking_id': picking_id,
@@ -332,13 +447,51 @@ class sale_order(osv.osv):
             'state': 'draft',
             #'state': 'waiting',
             'company_id': order.company_id.id,
-            'price_unit': line.product_id.standard_price or 0.0
+            'price_unit': line.product_id.standard_price or 0.0,
+            'doitac_giaohang':line.dia_chi_giao.id,
+           
+            
         }
 
+#     def _prepare_order_picking(self, cr, uid, order, context=None):
+#         loai_kho=False
+#         loai_lenh_xuat=order.loai_lenh_xuat
+#         if loai_lenh_xuat=='vat':
+#             loai_kho='thongthuong'
+#         else:
+#             loai_kho='noibo'
+#         type_kho=order.type_kho   
+#         seq_obj_name =  'stock.picking.' +loai_kho
+#         pick_name =  self.pool.get('sequence.custormize.pickingout').get_name(cr, uid, seq_obj_name, 'stock_picking',loai_kho)
+#         #pick_name = self.pool.get('ir.sequence').get(cr, uid, 'stock.picking.out')
+#         return {
+#             'name': pick_name,
+#             'origin': order.name,
+#             'date': self.date_to_datetime(cr, uid, order.date_order, context),
+#             'type': 'out',
+#             'state': 'auto',
+#             'move_type': order.picking_policy,
+#             'sale_id': order.id,
+#             'partner_id': order.partner_shipping_id.id,
+#             'note': order.note,
+#             'invoice_state': (order.order_policy=='picking' and '2binvoiced') or 'none',
+#             'company_id': order.company_id.id,
+#             'khoxuat_id':order.kho_xuat_id.id,
+#             'loai_xuatkho':loai_kho,
+#             'type_kho':type_kho,
+#             'donvi_vanchuyen':order.partner_id.id,
+#         }
     def _prepare_order_picking(self, cr, uid, order, context=None):
         pick_name = self.pool.get('ir.sequence').get(cr, uid, 'stock.picking.out')
+        loai_kho=False
+        loai_lenh_xuat=order.loai_lenh_xuat
+        if loai_lenh_xuat=='vat':
+            loai_kho='thongthuong'
+        else:
+            loai_kho='noibo'
+        type_kho=order.type_kho 
         return {
-            'name': pick_name,
+             'name': pick_name,
             'origin': order.name,
             'date': self.date_to_datetime(cr, uid, order.date_order, context),
             'type': 'out',
@@ -349,9 +502,16 @@ class sale_order(osv.osv):
             'note': order.note,
             'invoice_state': (order.order_policy=='picking' and '2binvoiced') or 'none',
             'company_id': order.company_id.id,
+            'khoxuat_id':order.kho_xuat_id.id,
+            'loai_xuatkho':loai_kho,
+            'type_kho':type_kho,
+            'donvi_vanchuyen':order.partner_id.id,
+            'nguoi_lap_phieu':order.user_id.id
         }
 
+
     def ship_recreate(self, cr, uid, order, line, move_id, proc_id):
+        # FIXME: deals with potentially cancelled shipments, seems broken (specially if shipment has production lot)
         """
         Define ship_recreate for process after shipping exception
         param order: sales order to which the order lines belong
@@ -360,25 +520,16 @@ class sale_order(osv.osv):
         param proc_id: the ID of procurement
         """
         move_obj = self.pool.get('stock.move')
-        proc_obj = self.pool.get('procurement.order')
-        if move_id and order.state == 'shipping_except':
-            current_move = move_obj.browse(cr, uid, move_id)
-            moves = []
-            for picking in order.picking_ids:
-                if picking.id != current_move.picking_id.id and picking.state != 'cancel':
-                    moves.extend(move for move in picking.move_lines if move.state != 'cancel' and move.sale_line_id.id == line.id)
-            if moves:
-                product_qty = current_move.product_qty
-                product_uos_qty = current_move.product_uos_qty
-                for move in moves:
-                    product_qty -= move.product_qty
-                    product_uos_qty -= move.product_uos_qty
-                if product_qty > 0 or product_uos_qty > 0:
-                    move_obj.write(cr, uid, [move_id], {'product_qty': product_qty, 'product_uos_qty': product_uos_qty})
-                    proc_obj.write(cr, uid, [proc_id], {'product_qty': product_qty, 'product_uos_qty': product_uos_qty})
-                else:
-                    current_move.unlink()
-                    proc_obj.unlink(cr, uid, [proc_id])
+        if order.state == 'shipping_except':
+            for pick in order.picking_ids:
+                for move in pick.move_lines:
+                    if move.state == 'cancel':
+                        mov_ids = move_obj.search(cr, uid, [('state', '=', 'cancel'),('sale_line_id', '=', line.id),('picking_id', '=', pick.id)])
+                        if mov_ids:
+                            for mov in move_obj.browse(cr, uid, mov_ids):
+                                # FIXME: the following seems broken: what if move_id doesn't exist? What if there are several mov_ids? Shouldn't that be a sum?
+                                move_obj.write(cr, uid, [move_id], {'product_qty': mov.product_qty, 'product_uos_qty': mov.product_uos_qty})
+                                self.pool.get('procurement.order').write(cr, uid, [proc_id], {'product_qty': mov.product_qty, 'product_uos_qty': mov.product_uos_qty})
         return True
 
     def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
@@ -601,14 +752,6 @@ class sale_order_line(osv.osv):
             res['value'].update({'product_packaging': False})
             return res
 
-        # set product uom in context to get virtual stock in current uom
-        if res.get('value', {}).get('product_uom'):
-            # use the uom changed by super call
-            context.update({'uom': res['value']['product_uom']})
-        elif uom:
-            # fallback on selected
-            context.update({'uom': uom})
-
         #update of result obtained in super function
         product_obj = product_obj.browse(cr, uid, product, context=context)
         res['value']['delay'] = (product_obj.sale_delay or 0.0)
@@ -617,7 +760,7 @@ class sale_order_line(osv.osv):
         #check if product is available, and if not: raise an error
         uom2 = False
         if uom:
-            uom2 = product_uom_obj.browse(cr, uid, uom, context=context)
+            uom2 = product_uom_obj.browse(cr, uid, uom)
             if product_obj.uom_id.category_id.id != uom2.category_id.id:
                 uom = False
         if not uom2:
@@ -627,13 +770,13 @@ class sale_order_line(osv.osv):
         res_packing = self.product_packaging_change(cr, uid, ids, pricelist, product, qty, uom, partner_id, packaging, context=context)
         res['value'].update(res_packing.get('value', {}))
         warning_msgs = res_packing.get('warning') and res_packing['warning']['message'] or ''
-        compare_qty = float_compare(product_obj.virtual_available, qty, precision_rounding=uom2.rounding)
+        compare_qty = float_compare(product_obj.virtual_available * uom2.factor, qty * product_obj.uom_id.factor, precision_rounding=product_obj.uom_id.rounding)
         if (product_obj.type=='product') and int(compare_qty) == -1 \
-           and (product_obj.procure_method=='make_to_stock'):
+          and (product_obj.procure_method=='make_to_stock'):
             warn_msg = _('You plan to sell %.2f %s but you only have %.2f %s available !\nThe real stock is %.2f %s. (without reservations)') % \
-                    (qty, uom2.name,
-                     max(0,product_obj.virtual_available), uom2.name,
-                     max(0,product_obj.qty_available), uom2.name)
+                    (qty, uom2 and uom2.name or product_obj.uom_id.name,
+                     max(0,product_obj.virtual_available), product_obj.uom_id.name,
+                     max(0,product_obj.qty_available), product_obj.uom_id.name)
             warning_msgs += _("Not enough stock ! : ") + warn_msg + "\n\n"
 
         #update of warning messages

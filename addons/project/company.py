@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,20 +18,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 
 class res_company(osv.osv):
     _inherit = 'res.company'
-    _columns = {
-        'project_time_mode_id': fields.many2one('product.uom', 'Project Time Unit',
-            help='This will set the unit of measure used in projects and tasks.\n' \
-"If you use the timesheet linked to projects (project_timesheet module), don't " \
-"forget to setup the right unit of measure in your employees.",
-        ),
-    }
+    _columns = {'project_time_mode_id': fields.many2one('product.uom', 'Project Time Unit', help="This will set the unit of measure used in projects and tasks.\nIf you use the timesheet linked to projects (project_timesheet module), don't forget to setup the right unit of measure in your employees.")}
+
+
 res_company()
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,32 +18,23 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class purchase_config_settings(osv.osv_memory):
     _inherit = 'purchase.config.settings'
-    _columns = {
-        'limit_amount': fields.integer('limit to require a second approval',required=True,
-            help="Amount after which validation of purchase is required."),
-    }
+    _columns = {'limit_amount': fields.integer('limit to require a second approval', required=True, help='Amount after which validation of purchase is required.')}
+    _defaults = {'limit_amount': 5000}
 
-    _defaults = {
-        'limit_amount': 5000,
-    }
-
-    def get_default_limit_amount(self, cr, uid, fields, context=None):
+    def get_default_limit_amount(self, cr, uid, fields, context = None):
         ir_model_data = self.pool.get('ir.model.data')
         transition = ir_model_data.get_object(cr, uid, 'purchase_double_validation', 'trans_confirmed_double_lt')
         field, value = transition.condition.split('<', 1)
         return {'limit_amount': int(value)}
 
-    def set_limit_amount(self, cr, uid, ids, context=None):
+    def set_limit_amount(self, cr, uid, ids, context = None):
         ir_model_data = self.pool.get('ir.model.data')
         config = self.browse(cr, uid, ids[0], context)
         waiting = ir_model_data.get_object(cr, uid, 'purchase_double_validation', 'trans_confirmed_double_gt')
         waiting.write({'condition': 'amount_total >= %s' % config.limit_amount})
         confirm = ir_model_data.get_object(cr, uid, 'purchase_double_validation', 'trans_confirmed_double_lt')
         confirm.write({'condition': 'amount_total < %s' % config.limit_amount})
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

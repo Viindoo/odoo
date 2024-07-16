@@ -26,13 +26,12 @@ Re-implement openerp's file import system:
     'author': 'OpenERP SA',
     'depends': ['web'],
     'installable': True,
-    'auto_install': True,
+    'auto_install': False,
     'data': [
         'security/ir.model.access.csv',
     ],
     'css': [
         'static/lib/select2/select2.css',
-        # TODO for trunk: add select2-bootstrap.css style (to download)
         'static/src/css/import.css',
     ],
     'js': [

@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -17,24 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
-from openerp import netsvc
 
 class sale_make_invoice(osv.osv_memory):
-    _name = "sale.make.invoice"
-    _description = "Sales Make Invoice"
-    _columns = {
-        'grouped': fields.boolean('Group the invoices', help='Check the box to group the invoices for the same customers'),
-        'invoice_date': fields.date('Invoice Date'),
-    }
-    _defaults = {
-        'grouped': False,
-        'invoice_date': fields.date.context_today,
-    }
+    _name = 'sale.make.invoice'
+    _description = 'Sales Make Invoice'
+    _columns = {'grouped': fields.boolean('Group the invoices', help='Check the box to group the invoices for the same customers'),
+     'invoice_date': fields.date('Invoice Date')}
+    _defaults = {'grouped': False,
+     'invoice_date': fields.date.context_today}
 
-    def view_init(self, cr, uid, fields_list, context=None):
+    def view_init(self, cr, uid, fields_list, context = None):
         if context is None:
             context = {}
         record_id = context and context.get('active_id', False)
@@ -43,34 +38,28 @@ class sale_make_invoice(osv.osv_memory):
             raise osv.except_osv(_('Warning!'), _('You cannot create invoice when sales order is not confirmed.'))
         return False
 
-    def make_invoices(self, cr, uid, ids, context=None):
+    def make_invoices(self, cr, uid, ids, context = None):
         order_obj = self.pool.get('sale.order')
         mod_obj = self.pool.get('ir.model.data')
         act_obj = self.pool.get('ir.actions.act_window')
-        wf_service = netsvc.LocalService("workflow")
         newinv = []
         if context is None:
             context = {}
         data = self.read(cr, uid, ids)[0]
-        for sale_order in order_obj.browse(cr, uid, context.get(('active_ids'), []), context=context):
+        for sale_order in order_obj.browse(cr, uid, context.get('active_ids', []), context=context):
             if sale_order.state != 'manual':
-                raise osv.except_osv(_('Warning!'), _("You shouldn't manually invoice the following sale order %s") % (sale_order.name))
+                raise osv.except_osv(_('Warning!'), _("You shouldn't manually invoice the following sale order %s") % sale_order.name)
 
-        order_obj.action_invoice_create(cr, uid, context.get(('active_ids'), []), data['grouped'], date_invoice=data['invoice_date'])
-        orders = order_obj.browse(cr, uid, context.get(('active_ids'), []), context=context)
-        for o in orders:
+        order_obj.action_invoice_create(cr, uid, context.get('active_ids', []), data['grouped'], date_invoice=data['invoice_date'])
+        for o in order_obj.browse(cr, uid, context.get('active_ids', []), context=context):
             for i in o.invoice_ids:
                 newinv.append(i.id)
-        # Dummy call to workflow, will not create another invoice but bind the new invoice to the subflow
-        for id in [o.id for o in orders if o.order_policy == 'manual']:
-            wf_service.trg_validate(uid, 'sale.order', id, 'manual_invoice', cr)
+
         result = mod_obj.get_object_reference(cr, uid, 'account', 'action_invoice_tree1')
         id = result and result[1] or False
         result = act_obj.read(cr, uid, [id], context=context)[0]
-        result['domain'] = "[('id','in', [" + ','.join(map(str, newinv)) + "])]"
-
+        result['domain'] = "[('id','in', [" + ','.join(map(str, newinv)) + '])]'
         return result
 
-sale_make_invoice()
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+sale_make_invoice()

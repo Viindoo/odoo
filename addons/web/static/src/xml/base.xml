@@ -7,7 +7,7 @@
 </t>
 <t t-name="Loading">
     <div class="oe_loading">
-        Loading...
+        Đang tải...
     </div>
 </t>
 <t t-name="Notification">
@@ -66,20 +66,19 @@
             <div class="oe_login_logo"><img src='/web/static/src/img/logo2.png'/></div>
             <form action="" method="post">
                 <div class="oe_login_dbpane" >
-                    Database:
+                    CSDL:
                     <input name="db" t-att-value="widget.selected_db || ''"/>
                 </div>
                 <ul>
-                    <li>Username</li>
+                    <li>Tên đăng nhập</li>
                     <li><input name="login" type="text" value="" autofocus="autofocus"/></li>
-                    <li>Password</li>
+                    <li>Mật khẩu</li>
                     <li><input name="password" type="password" value=""/></li>
-                    <li><button name="submit">Log in</button></li>
+                    <li><button name="submit">Đăng nhập</button></li>
                 </ul>
             </form>
             <div class="oe_login_footer">
-                <a href="#" class="oe_login_manage_db">Manage Databases</a> |
-                <a href="http://www.openerp.com" target="_blank">Powered by <span>OpenERP</span></a>
+                <a href="https://solar.binhdinhjsc.vn" target="_blank">Xây dựng bởi <span>Bình Định</span></a>
             </div>
         </div>
     </div>
@@ -106,7 +105,7 @@
                     <div class="oe_view_manager_header" style="padding: 8px;">
                         <div class="oe_header_row">
                             <h2 class="oe_view_title">
-                                <span class="oe_view_title_text oe_breadcrumb_title">Create a New Database</span>
+                                <span class="oe_view_title_text oe_breadcrumb_title">Tạo một CSDL</span>
                             </h2>
                         </div>
                     </div>
@@ -123,28 +122,28 @@
                 </p>
                 <table class="db_option_table" style="margin: 10px">
                     <tr>
-                        <td><label for="super_admin_pwd">Master password:</label></td>
+                        <td><label for="super_admin_pwd">Mật khẩu quản trị:</label></td>
                         <td>
                             <input type="password" name="super_admin_pwd" class="required" value="admin"/>
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="db_name">Select a database name:</label></td>
+                        <td><label for="db_name">Chọn CSDL:</label></td>
                         <td>
                             <input type="text" name="db_name" class="required" matches="^[a-zA-Z0-9][a-zA-Z0-9_-]+$" autofocus="true" placeholder="e.g. mycompany"/> 
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="demo_data">Load demonstration data:</label></td>
+                        <td><label for="demo_data">Tải dữ liệu định sẵn:</label></td>
                         <td class="oe_form_group_cell">
                             <span class="oe_form_field oe_form_field_boolean oe_grey" >
                                 <input type="checkbox" name="demo_data" />
-                                Check this box to evaluate OpenERP.
+                                Đánh dấu vào ô này để tải dữ liệu định sẵn.
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="db_lang">Default language:</label></td>
+                        <td><label for="db_lang">Ngôn ngữ mặc định:</label></td>
                         <td class="oe_form_field oe_form_field_selection">
                             <select name="db_lang" t-if="widget.lang_list" class="oe_inline">
                                 <t t-foreach="widget.lang_list" t-as="lang">
@@ -156,16 +155,16 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="create_admin_pwd">Choose a password:</label></td>
+                        <td><label for="create_admin_pwd">Nhập mật khẩu:</label></td>
                         <td><input type="password" name="create_admin_pwd" class="required" /></td>
                     </tr>
                     <tr>
-                        <td><label for="create_confirm_pwd">Confirm password:</label></td>
+                        <td><label for="create_confirm_pwd">Xác nhận mật khẩu:</label></td>
                         <td><input type="password" name="create_confirm_pwd" class="required" equalTo="input[name=create_admin_pwd]"/></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><button type="submit" class="oe_button oe_highlight db_create">Create Database</button></td>
+                        <td><button type="submit" class="oe_button oe_highlight db_create">Tạo mới CSDL</button></td>
                     </tr>
                 </table>
             </form>
@@ -174,23 +173,23 @@
                     <div class="oe_view_manager_header" style="padding: 8px;">
                         <div class="oe_header_row">
                             <h2 class="oe_view_title">
-                                <span class="oe_view_title_text oe_breadcrumb_title">Duplicate Database</span>
+                                <span class="oe_view_title_text oe_breadcrumb_title">Sao chép CSDL</span>
                             </h2>
-                            <button type="submit" class="oe_button oe_highlight db_duplicate">Duplicate</button>
+                            <button type="submit" class="oe_button oe_highlight db_duplicate">Sao chép</button>
                         </div>
                     </div>
                 </div>
                 <table align="center" class="db_option_table">
                     <tr>
-                        <td><label for="super_admin_pwd">Master password:</label></td>
+                        <td><label for="super_admin_pwd">Mật khẩu quản trị:</label></td>
                         <td><input type="password" name="super_admin_pwd" class="required" value="admin" /></td>
                     </tr>
                     <tr>
-                        <td><label for="db_original_name">Original database name:</label></td>
+                        <td><label for="db_original_name">Tên CSDL ban đầu:</label></td>
                         <td><input type="text" name="db_original_name" class="required" matches="^[a-zA-Z][a-zA-Z0-9_-]+$" autofocus="true"/></td>
                     </tr>
                     <tr>
-                        <td><label for="db_name">New database name:</label></td>
+                        <td><label for="db_name">Tên CSDL mới:</label></td>
                         <td><input type="text" name="db_name" class="required" matches="^[a-zA-Z][a-zA-Z0-9_-]+$" /></td>
                     </tr>
                 </table>
@@ -208,7 +207,7 @@
                 </div>
                 <table align="center" class="db_option_table">
                     <tr>
-                        <td><label for="drop_db">Database:</label></td>
+                        <td><label for="drop_db">Cơ sở dữ liệu:</label></td>
                         <td class="oe_form_field oe_form_field_selection">
                             <select t-if="widget.db_list" name="drop_db" autofocus="autofocus">
                                 <t t-foreach="widget.db_list" t-as="db">
@@ -221,7 +220,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="drop_password">Master Password:</label></td>
+                        <td><label for="drop_password">Mật khẩu quản trị:</label></td>
                         <td><input type="password" name="drop_pwd" class="required" /></td>
                     </tr>
                 </table>
@@ -240,7 +239,7 @@
                 <input type="hidden" name="token" />
                 <table align="center" class="db_option_table">
                     <tr>
-                        <td><label for="backup_db">Database:</label></td>
+                        <td><label for="backup_db">Cơ sở dữ liệu:</label></td>
                         <td class="oe_form_field oe_form_field_selection ">
                             <select t-if="widget.db_list" name="backup_db" autofocus="autofocus">
                                 <t t-foreach="widget.db_list" t-as="db">
@@ -253,7 +252,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="backup_pwd">Master Password:</label></td>
+                        <td><label for="backup_pwd">Mật khẩu quản trị:</label></td>
                         <td><input type="password" name="backup_pwd" class="required" /></td>
                     </tr>
                 </table>
@@ -263,23 +262,23 @@
                     <div class="oe_view_manager_header" style="padding: 8px;">
                         <div class="oe_header_row">
                             <h2 class="oe_view_title">
-                                <span class="oe_view_title_text oe_breadcrumb_title">Restore Database</span>
+                                <span class="oe_view_title_text oe_breadcrumb_title">Phục hồi CSDL</span>
                             </h2>
-                            <button type="submit" class="oe_button oe_highlight db_restore">Restore</button>
+                            <button type="submit" class="oe_button oe_highlight db_restore">Phục hồi</button>
                         </div>
                     </div>
                 </div>
                 <table align="center" class="db_option_table">
                     <tr>
-                        <td><label for="restore_db">File:</label></td>
+                        <td><label for="restore_db">Tập tin:</label></td>
                         <td><input type="file" name="db_file" class="required" autofocus="autofocus"/></td>
                     </tr>
                     <tr>
-                        <td><label for="restore_pwd">Master Password:</label></td>
+                        <td><label for="restore_pwd">Mật khẩu quản trị:</label></td>
                         <td><input type="password" name="restore_pwd" class="required"/></td>
                     </tr>
                     <tr>
-                        <td><label for="new_db">New database name:</label></td>
+                        <td><label for="new_db">Tên CSDL mới:</label></td>
                         <td><input type="text" name="new_db" class="required"/></td>
                     </tr>
                 </table>
@@ -289,23 +288,23 @@
                     <div class="oe_view_manager_header" style="padding: 8px;">
                         <div class="oe_header_row">
                             <h2 class="oe_view_title">
-                                <span class="oe_view_title_text oe_breadcrumb_title">Change Master Password</span>
+                                <span class="oe_view_title_text oe_breadcrumb_title">Đổi mật khẩu quản trị</span>
                             </h2>
-                            <button type="submit" class="oe_button oe_highlight db-change-password">Change Password</button>
+                            <button type="submit" class="oe_button oe_highlight db-change-password">Đổi mật khẩu</button>
                         </div>
                     </div>
                 </div>
                 <table align="center" class="db_option_table">
                     <tr>
-                        <td><label for="old_pwd">Master password:</label></td>
+                        <td><label for="old_pwd">Mật khẩu quản trị:</label></td>
                         <td><input type="password" name="old_pwd" class="required" minlength="1" autofocus="autofocus"/></td>
                     </tr>
                     <tr>
-                        <td><label for="new_pwd">New master password:</label></td>
+                        <td><label for="new_pwd">Mật khẩu quản trị mới:</label></td>
                         <td><input type="password" name="new_pwd" class="required" minlength="1"/></td>
                     </tr>
                     <tr>
-                        <td><label for="confirm_pwd">Confirm new master password:</label></td>
+                        <td><label for="confirm_pwd">Xác nhận mật khẩu quản trị:</label></td>
                         <td><input type="password" name="confirm_pwd" class="required" equalTo="input[name=new_pwd]" minlength="1"/> </td>
                     </tr>
                 </table>
@@ -319,14 +318,14 @@
     </span>
 </t>
 <t t-name="DatabaseManager.menu">
-    <div class="oe_secondary_menu_section">Database Management</div>
+    <div class="oe_secondary_menu_section">Quản trị CSDL</div>
     <ul class="oe_secondary_submenu">
-        <li><a href="#db_create">Create</a></li>
-        <li><a href="#db_duplicate">Duplicate</a></li>
-        <li><a href="#db_drop">Drop</a></li>
-        <li><a href="#db_backup">Backup</a></li>
-        <li><a href="#db_restore">Restore</a></li>
-        <li><a href="#db_change_password">Password</a></li>
+        <li><a href="#db_create">Tạo mới</a></li>
+        <li><a href="#db_duplicate">Sao chép</a></li>
+        <li><a href="#db_drop">Xóa</a></li>
+        <li><a href="#db_backup">Sao lưu</a></li>
+        <li><a href="#db_restore">Phục hồi</a></li>
+        <li><a href="#db_change_password">Mật khẩu</a></li>
     </ul>
 </t>
 
@@ -335,25 +334,25 @@
       <div class="oe_form">
         <table align="center">
             <tr>
-                <td class="oe_form_group_cell oe_form_group_cell_label"><label for="old_pwd" class="oe_form_label">Old Password:</label></td>
+                <td class="oe_form_group_cell oe_form_group_cell_label"><label for="old_pwd" class="oe_form_label">Mật khẩu cũ:</label></td>
                 <td class="oe_form_group_cell"><input type="password" name="old_pwd"
                            minlength="1" autofocus="autofocus"/></td>
             </tr>
             <tr>
-            <td class="oe_form_group_cell oe_form_group_cell_label"><label for="new_password" class="oe_form_label">New Password:</label></td>
+            <td class="oe_form_group_cell oe_form_group_cell_label"><label for="new_password" class="oe_form_label">Mật khẩu mới:</label></td>
             <td class="oe_form_group_cell"><input type="password" name="new_password"
                        minlength="1"/></td>
             </tr>
             <tr>
-                <td class="oe_form_group_cell oe_form_group_cell_label"><label for="confirm_pwd" class="oe_form_label">Confirm New Password:</label></td>
+                <td class="oe_form_group_cell oe_form_group_cell_label"><label for="confirm_pwd" class="oe_form_label">Xác nhận mật khẩu mới:</label></td>
                 <td class="oe_form_group_cell"><input type="password" name="confirm_pwd"
                              minlength="1"/></td>
             </tr>
             <tr>
                 <td colspan="2" align="right">
-                    <button class='oe_button oe_form_button'>Change Password</button>
-                    <span class="oe_fade oe_form_button"> or </span>
-                    <button type="button" class="oe_button oe_form_button_cancel oe_form_button oe_link" href="javascript:void(0)"><span>Cancel</span></button>
+                    <button class='oe_button oe_form_button'>Đổi mật khẩu</button>
+                    <span class="oe_fade oe_form_button"> hoặc </span>
+                    <button type="button" class="oe_button oe_form_button_cancel oe_form_button oe_link" href="javascript:void(0)"><span>Hủy</span></button>
                 </td>
             </tr>
         </table>
@@ -368,7 +367,7 @@
         </li>
         <li class="oe_menu_more_container" style="display: none;">
             <span class="oe_topbar_item oe_menu_more_link oe_dropdown_toggle oe_dropdown_arrow">
-                More
+                Mở rộng
                 <ul class="oe_menu_more oe_dropdown_menu"/>
             </span>
         </li>
@@ -421,11 +420,11 @@
         <img class="oe_topbar_avatar" t-att-data-default-src="_s + '/web/static/src/img/user_menu_avatar.png'"/>
         <span class="oe_topbar_name"/>
         <ul class="oe_dropdown_menu">
-            <li><a href="#" data-menu="settings">Preferences</a></li>
-            <li><a href="#" data-menu="account">My OpenERP.com account</a></li>
-            <li><a href="#" data-menu="about">About OpenERP</a></li>
-            <li><a href="#" data-menu="help">Help</a></li>
-            <li><a href="#" data-menu="logout">Log out</a></li>
+            <li><a href="#" data-menu="settings">Các tùy chọn</a></li>
+            <li><a href="#" data-menu="account">Tài khoản OpenERP.com</a></li>
+            <li><a href="#" data-menu="about">Về OpenERP</a></li>
+            <li><a href="#" data-menu="help">Trợ giúp</a></li>
+            <li><a href="#" data-menu="logout">Đăng xuất</a></li>
         </ul>
     </span>
 </t>
@@ -438,9 +437,9 @@
 
       <div class="oe_bottom">
         <p>Copyright © 2004-TODAY OpenERP SA. All Rights Reserved.<br />
-            OpenERP is a trademark of the <a target="_blank" href="http://openerp.com/" style="text-decoration: underline;">OpenERP SA Company</a>.</p>
-        <p>Licenced under the terms of <a target="_blank" href="http://www.gnu.org/licenses/agpl.html" style="text-decoration: underline;">GNU Affero General Public License</a></p>
-        <p>For more information visit <a target="_blank" href="http://openerp.com/" style="text-decoration: underline;">OpenERP.com</a></p>
+            OpenERP is a trademark of the <a target="_blank" href="https://solar.binhdinhjsc.vn/" style="text-decoration: underline;">Binhdinhjsc</a>.</p>
+        <p>Licenced under the terms of <a target="_blank" href="https://solar.binhdinhjsc.vn/contactus" style="text-decoration: underline;">Liên hệ</a></p>
+        <p>For more information visit <a target="_blank" href="https://solar.binhdinhjsc.vn/" style="text-decoration: underline;">solar.binhdinhjsc.vn</a></p>
       </div>
     </div>
 
@@ -461,11 +460,11 @@
                 <t t-set="debug" t-value="__debug__ ? '&amp;debug' : ''"/>
                 <a class="oe_logo" t-attf-href="/?ts=#{Date.now()}#{debug}">
                     <span class="oe_logo_edit">Edit Company data</span>
-                    <img />
+                    <img t-att-src='widget.session.url("/web/binary/company_logo")'/>
                 </a>
                 <div class="oe_secondary_menus_container"/>
                 <div class="oe_footer">
-                    Powered by <a href="http://www.openerp.com" target="_blank"><span>OpenERP</span></a>
+                    Binhdinhjsc <a href="https://solar.binhdinhjsc.vn" target="_blank"><span>Hỗ trợ sửa lỗi</span></a>
                 </div>
             </td>
             <td class="oe_application">
@@ -794,10 +793,10 @@
 <t t-extend="ListView.buttons">
     <t t-jquery="button.oe_list_add" t-operation="after">
         <button class="oe_button oe_list_save oe_highlight"
-                type="button">Save</button>
+                type="button">Lưu</button>
         <span class="oe_alternative">
-            <span class="oe_fade">or</span>
-            <a href="#" class="oe_bold oe_list_discard">Discard</a>
+            <span class="oe_fade">hoặc</span>
+            <a href="#" class="oe_bold oe_list_discard">Không lưu</a>
         </span>
     </t>
 </t>
@@ -829,15 +828,15 @@
         <span class="oe_form_buttons_view">
             <!-- required for the bounce effect on button -->
             <div t-if="widget.is_action_enabled('edit')" style="display: inline-block;">
-                <button type="button" class="oe_button oe_form_button_edit" accesskey="E">Edit</button>
+                <button type="button" class="oe_button oe_form_button_edit" accesskey="E">Sửa</button>
             </div>
             <button t-if="widget.is_action_enabled('create')"
-                type="button" class="oe_button oe_form_button_create" accesskey="C">Create</button>
+                type="button" class="oe_button oe_form_button_create" accesskey="C">Tạo mới</button>
         </span>
         <span class="oe_form_buttons_edit">
-            <button type="button" class="oe_button oe_form_button_save oe_highlight" accesskey="S">Save</button>
-            <span class="oe_fade">or</span>
-            <a href="#" class="oe_bold oe_form_button_cancel" accesskey="D">Discard</a>
+            <button type="button" class="oe_button oe_form_button_save oe_highlight" accesskey="S">Lưu</button>
+            <span class="oe_fade">hoặc</span>
+            <a href="#" class="oe_bold oe_form_button_cancel" accesskey="D">Không lưu</a>
         </span>
     </t>
 </div>
@@ -1202,18 +1201,16 @@
 </t>
 <t t-name="FieldBinaryImage">
     <span class="oe_form_field oe_form_field_image" t-att-style="widget.node.attrs.style">
-        <t t-if="!widget.get('effective_readonly')">
-            <div class="oe_form_field_image_controls oe_edit_only">
-                <t t-call="HiddenInputFile">
-                    <t t-set="fileupload_id" t-value="widget.fileupload_id"/>
-                    Edit 
-                </t>
-                <div class="oe_form_binary_progress" style="display: none">
-                    <img t-att-src='_s + "/web/static/src/img/throbber.gif"' width="16" height="16"/>
-                    <b>Uploading ...</b>
-                </div>
+        <div class="oe_form_field_image_controls oe_edit_only">
+            <t t-call="HiddenInputFile">
+                <t t-set="fileupload_id" t-value="widget.fileupload_id"/>
+                Sửa đổi 
+            </t>
+            <div class="oe_form_binary_progress" style="display: none">
+                <img t-att-src='_s + "/web/static/src/img/throbber.gif"' width="16" height="16"/>
+                <b>Đang cập nhật ...</b>
             </div>
-        </t>
+        </div>
     </span>
 </t>
 <t t-name="FieldBinaryImage-img">
@@ -1242,7 +1239,7 @@
                     <td>
                         <t t-call="HiddenInputFile">
                             <t t-set="fileupload_id" t-value="widget.fileupload_id"/>
-                            <t t-set="fileupload_style" t-translation="off">overflow-x: hidden</t>
+                            <t t-set="fileupload_style" t-translation="off">width: 83px;</t>
                             <button class="oe_button oe_field_button" type="button">
                                 <img t-att-src='_s + "/web/static/src/img/icons/STOCK_DIRECTORY.png"'/>
                                 <span>Select</span>
@@ -1268,7 +1265,7 @@
             </td>
             <td class="oe_form_binary_progress" style="display: none" nowrap="true">
                 <img t-att-src='_s + "/web/static/src/img/throbber.gif"' width="16" height="16"/>
-                <b>Uploading ...</b>
+                <b>Đang cập nhật ...</b>
             </td>
         </tr>
         </table>
@@ -1402,29 +1399,28 @@
 </t>
 <t t-name="SelectCreatePopup.search.buttons">
     <t t-if="! widget.options.disable_multiple_selection">
-        <button type="button" class="oe_button oe_selectcreatepopup-search-select oe_highlight" disabled="disabled">Select</button>
+        <button type="button" class="oe_button oe_selectcreatepopup-search-select oe_highlight" disabled="disabled">Chọn</button>
     </t>
-    <t t-if="!widget.options.no_create">
-    <button type="button" class="oe_button oe_selectcreatepopup-search-create">Create</button>
-    or </t><a class="oe_button oe_selectcreatepopup-search-close oe_bold oe_form_button_cancel" href="javascript:void(0)">Cancel</a>
+    <button type="button" class="oe_button oe_selectcreatepopup-search-create">Tạo mới</button>
+    or <a class="oe_button oe_selectcreatepopup-search-close oe_bold oe_form_button_cancel" href="javascript:void(0)">Hủy bỏ</a>
 </t>
 <t t-name="AbstractFormPopup.buttons">
     <t t-if="! readonly">
         <t t-if="! multi_select">
-            <button type="button" class="oe_button oe_abstractformpopup-form-save oe_highlight">Save</button>
+            <button type="button" class="oe_button oe_abstractformpopup-form-save oe_highlight">Lưu</button>
         </t>
         <t t-if="multi_select">
-            <button type="button" class="oe_button oe_abstractformpopup-form-save oe_highlight">Save &amp; Close</button>
-            <button type="button" class="oe_button oe_abstractformpopup-form-save-new oe_highlight">Save &amp; New</button>
+            <button type="button" class="oe_button oe_abstractformpopup-form-save oe_highlight">Lưu &amp; Đóng</button>
+            <button type="button" class="oe_button oe_abstractformpopup-form-save-new oe_highlight">Lưu &amp; Tạo mới</button>
         </t>
         or
     </t>
     <a class="oe_button oe_abstractformpopup-form-close oe_bold oe_form_button_cancel" href="javascript:void(0)">
         <t t-if="! readonly">
-            Discard
+            Không lưu
         </t>
         <t t-if="readonly">
-            Close
+            Đóng
         </t>
     </a>
 </t>
@@ -1436,7 +1432,7 @@
 </t>
 <t t-name="One2Many.formview" t-extend="FormView">
     <t t-jquery=".oe_form_buttons" t-operation="inner">
-        <button type="button" class="oe_button oe_form_button_create">Add</button>
+        <button type="button" class="oe_button oe_form_button_create">Thêm</button>
     </t>
 </t>
 <t t-name="One2Many.listview" t-extend="ListView">
@@ -1455,10 +1451,10 @@
 <div t-name="SearchView" class="oe_searchview">
     <div class="oe_searchview_facets"/>
     <div class="oe_searchview_clear"/>
-    <div class="oe_searchview_unfold_drawer" title="Advanced Search..."/>
+    <div class="oe_searchview_unfold_drawer" title="Tìm kiếm nâng cao..."/>
     <div class="oe_searchview_drawer"/>
     <button type="button" class="oe_searchview_search"
-            title="Search Again">Search</button>
+            title="Search Again">Tìm kiếm</button>
 </div>
 
 <div t-name="SearchView.InputView"
@@ -1481,7 +1477,7 @@
     <t t-esc="widget.model.get('label')"/>
 </span>
 <t t-name="SearchView.managed-filters">
-    <option class="oe_search_filters_title" value="">Filters</option>
+    <option class="oe_search_filters_title" value="">Chọn lọc</option>
     <optgroup label="-- Filters --">
         <t t-foreach="filters" t-as="filter">
             <option t-attf-value="get:#{filter_index}"
@@ -1492,14 +1488,14 @@
         </t>
     </optgroup>
     <optgroup label="-- Actions --">
-        <option value="advanced_filter">Add Advanced Filter</option>
-        <option value="save_filter">Save Filter</option>
-        <option value="manage_filters">Manage Filters</option>
+        <option value="advanced_filter">Thêm chọn lọc nâng cao</option>
+        <option value="save_filter">Lưu chọn lọc</option>
+        <option value="manage_filters">Quản lý chọn lọc</option>
     </optgroup>
 </t>
 <t t-name="SearchView.managed-filters.add">
     <div>
-        <p>Filter Name:</p>
+        <p>Tên chọn lọc:</p>
         <input type="text"/>
         <p>(Any existing filter with the same name will be replaced)</p>
     </div>
@@ -1619,37 +1615,37 @@
 </div>
 <div t-name="SearchView.CustomFilters" class="oe_searchview_custom oe_searchview_section">
     <div>
-        <h3><span class="oe_i">M</span> Custom Filters</h3>
+        <h3><span class="oe_i">M</span> Tùy chọn chế độ lọc</h3>
         <ul class="oe_searchview_custom_list"/>
         <div class="oe_searchview_custom">
-            <h4>Save current filter</h4>
-            <form class="oe_form">
-                <p class="oe_form_required"><input id="oe_searchview_custom_input" placeholder="Filter name"/></p>
+            <h4>Lưu chế độ lọc hiện tại</h4>
+            <form>
+                <p><input id="oe_searchview_custom_input" placeholder="Filter name"/></p>
                 <p>
                     <input id="oe_searchview_custom_public" type="checkbox"/>
-                    <label for="oe_searchview_custom_public">Share with all users</label>
+                    <label for="oe_searchview_custom_public">Chia sẽ cho các người dùng</label>
                     <input id="oe_searchview_custom_default" type="checkbox"/>
-                    <label for="oe_searchview_custom_default">Use by default</label>
+                    <label for="oe_searchview_custom_default">Sử dụng mặc định</label>
                 </p>
-                <button>Save</button>
+                <button>Lưu</button>
             </form>
         </div>
     </div>
 </div>
 
 <div t-name="SearchView.advanced" class="oe_searchview_advanced">
-    <h4>Advanced Search</h4>
+    <h4>Tìm kiếm nâng cao</h4>
     <form>
         <ul>
 
         </ul>
-        <button class="oe_add_condition button" type="button">Add a condition</button><br/>
-        <button class="oe_apply" type="submit">Apply</button>
+        <button class="oe_add_condition button" type="button">Thêm một điều kiện</button><br/>
+        <button class="oe_apply" type="submit">Áp dụng</button>
     </form>
 </div>
 <t t-name="SearchView.extended_search.proposition">
     <li>
-        <span class="searchview_extended_prop_or">or</span>
+        <span class="searchview_extended_prop_or">hoặc</span>
         <select class="searchview_extended_prop_field">
             <t t-foreach="widget.attrs.fields" t-as="field">
                 <option t-att="{'selected': field === widget.attrs.selected ? 'selected' : null}"
@@ -1673,11 +1669,7 @@
     <input type="number" class="field_integer" value = "0" step="1"/>
 </t>
 <t t-name="SearchView.extended_search.proposition.float">
-    <input class="field_float"
-        t-att-type="widget.decimal_point === '.' ? 'number' : 'text'"
-        t-attf-title="Number using #{widget.decimal_point  || '.' } as decimal separator."
-        t-attf-pattern="[0-9]+([\\#{widget.decimal_point || '.' }][0-9]+)?"
-        t-attf-value="0#{widget.decimal_point || '.' }0" step="0.01"/>
+    <input type="number" class="field_float" value = "0.0" step="0.01"/>
 </t>
 <t t-name="SearchView.extended_search.proposition.selection">
     <select>
@@ -1719,7 +1711,7 @@
         <th/>
         <th>
             Fields to export
-            <a style="color: blue; text-decoration: none;" href="#" id="export_new_list">Save fields list</a>
+            <a style="color: blue; text-decoration: none;" href="#" id="export_new_list">Lưu danh sách trường</a>
             <div id="savenewlist"></div>
             <div id="ExistsExportList"></div>
         </th>
@@ -1776,9 +1768,9 @@
 </tr>
 <t t-name="ExportNewList">
     <tr>
-        <th><label>Save as:</label></th>
+        <th><label>Lưu vào:</label></th>
         <td><input size="10" type="text" id="savelist_name"/></td>
-        <td><button class="oe_button oe_export_button_export" id="add_export_list">Ok</button></td>
+        <td><button class="oe_button oe_export_button_export" id="add_export_list">Đồng ý</button></td>
     </tr>
 </t>
 <t t-name="Exists.ExportList">
@@ -1790,7 +1782,7 @@
             <option t-att-value="export.id"><t t-esc="export.name"/></option>
         </t>
     </select>
-    <button class="oe_button oe_export_button_export" id="delete_export_list" type="button">Delete</button>
+    <button class="oe_button oe_export_button_export" id="delete_export_list" type="button">Xóa</button>
 </t>
 
 <t t-name="ImportView">

@@ -18,39 +18,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import time
-
 from openerp.osv import osv, fields
 
 class account_analytic_cost_ledger(osv.osv_memory):
     _name = 'account.analytic.cost.ledger'
     _description = 'Account Analytic Cost Ledger'
+    _columns = {'date1': fields.date('Start of period', required=True),
+     'date2': fields.date('End of period', required=True)}
+    _defaults = {'date1': lambda *a: time.strftime('%Y-01-01'),
+     'date2': lambda *a: time.strftime('%Y-%m-%d')}
 
-    _columns = {
-        'date1': fields.date('Start of period', required=True),
-        'date2': fields.date('End of period', required=True),
-    }
-
-    _defaults = {
-        'date1': lambda *a: time.strftime('%Y-01-01'),
-        'date2': lambda *a: time.strftime('%Y-%m-%d')
-    }
-
-    def check_report(self, cr, uid, ids, context=None):
+    def check_report(self, cr, uid, ids, context = None):
         if context is None:
             context = {}
         data = self.read(cr, uid, ids)[0]
-        datas = {
-             'ids': context.get('active_ids',[]),
-             'model': 'account.analytic.account',
-             'form': data
-                 }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'account.analytic.account.cost_ledger',
-            'datas': datas,
-            }
+        datas = {'ids': context.get('active_ids', []),
+         'model': 'account.analytic.account',
+         'form': data}
+        return {'type': 'ir.actions.report.xml',
+         'report_name': 'account.analytic.account.cost_ledger',
+         'datas': datas}
+
 
 account_analytic_cost_ledger()
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

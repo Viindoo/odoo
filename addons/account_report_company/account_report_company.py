@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Business Applications
-#    Copyright (c) 2013 S.A. <http://openerp.com>
+#    OpenERP, Open Source Management Solution
+#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,41 +18,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import osv, fields
 
 class res_partner(osv.Model):
     _inherit = 'res.partner'
     _order = 'display_name'
 
-    def _display_name_compute(self, cr, uid, ids, name, args, context=None):
+    def _display_name_compute(self, cr, uid, ids, name, args, context = None):
         context = dict(context or {})
         context.pop('show_address', None)
         return dict(self.name_get(cr, uid, ids, context=context))
 
-    _display_name_store_triggers = {
-        'res.partner': (lambda self,cr,uid,ids,context=None: self.search(cr, uid, [('id','child_of',ids)], context=dict(active_test=False)),
-                        ['parent_id', 'is_company', 'name'], 10)
-    }
-
-    # indirection to avoid passing a copy of the overridable method when declaring the function field
+    _display_name_store_triggers = {'res.partner': (lambda self, cr, uid, ids, context = None: self.search(cr, uid, [('id', 'child_of', ids)]), ['parent_id', 'is_company', 'name'], 10)}
     _display_name = lambda self, *args, **kwargs: self._display_name_compute(*args, **kwargs)
-
-    _columns = {
-        # extra field to allow ORDER BY to match visible names
-        'display_name': fields.function(_display_name, type='char', string='Name', store=_display_name_store_triggers, select=1),
-    }
-
-    def _get_display_name(self, unaccent):
-        # use stored display name for better performances
-        return unaccent('res_partner.display_name')
+    _columns = {'display_name': fields.function(_display_name, type='char', string='Name', store=_display_name_store_triggers)}
 
 
 class account_invoice(osv.Model):
     _inherit = 'account.invoice'
-
-    _columns = {
-        'commercial_partner_id': fields.related('partner_id', 'commercial_partner_id', string='Commercial Entity', type='many2one',
-                                                relation='res.partner', store=True, readonly=True,
-                                                help="The commercial entity that will be used on Journal Entries for this invoice")
-    }
+    _columns = {'commercial_partner_id': fields.related('partner_id', 'commercial_partner_id', string='Commercial Entity', type='many2one', relation='res.partner', store=True, readonly=True, help='The commercial entity that will be used on Journal Entries for this invoice')}

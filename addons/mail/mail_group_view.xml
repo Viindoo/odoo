@@ -13,7 +13,7 @@
             }</field>
             <field name="help" type="html">
                 <p>
-                    No message in this group.
+                    Không có thông điệp nào cho nhóm này.
                 </p>
             </field>
         </record>
@@ -66,12 +66,12 @@
             <field name="model">mail.group</field>
             <field name="priority" eval="10"/>
             <field name="arch" type="xml">
-                <form string="Group Form" version="7.0">
+                <form string="Nhóm" version="7.0">
                     <sheet class="openerp_mail_group_sheet">
                         <field name="image" widget='image' class="oe_avatar oe_left" options='{"preview_image": "image_medium"}'/>
                         <div class="oe_title">
                             <div class="oe_edit_only">
-                                <label for="name" string="Group Name"/>
+                                <label for="name" string="Tên nhóm"/>
                             </div>
                             <h1><field name="name" readonly="0"/></h1>
                             <div name="alias_box" colspan="4" attrs="{'invisible': [('alias_domain', '=', False)]}">
@@ -105,7 +105,7 @@
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
-                        <field name="message_ids" widget="mail_thread" options='{"thread_level": 1}' placeholder="Send a message to the group"/>
+                        <field name="message_ids" widget="mail_thread" options='{"thread_level": 1}' placeholder="Gửi một thông điệp đến nhóm"/>
                     </div>
                 </form>
             </field>
@@ -117,8 +117,8 @@
             <field name="model">mail.group</field>
             <field name="priority" eval="10"/>
             <field name="arch" type="xml">
-                <tree string="Groups">
-                    <field name="name" string="Group Name"/>
+                <tree string="Các nhóm">
+                    <field name="name" string="Tên nhóm"/>
                 </tree>
             </field>
         </record>
@@ -129,7 +129,7 @@
             <field name="model">mail.group</field>
             <field name="priority" eval="10"/>
             <field name="arch" type="xml">
-                <search string="Search Groups">
+                <search string="Tìm nhóm">
                     <field name="name" string="Group"/>
                 </search>
             </field>
@@ -137,7 +137,7 @@
 
         <!-- group record !-->
         <record id="action_view_groups" model="ir.actions.act_window">
-            <field name="name">Join a group</field>
+            <field name="name">Tham gia một nhóm</field>
             <field name="res_model">mail.group</field>
             <field name="view_type">form</field>
             <field name="view_mode">kanban,tree,form</field>
@@ -145,7 +145,7 @@
         </record>
 
         <!-- left-side menu: Groups !-->
-        <menuitem id="mail_group_root" parent="mail_feeds_main" sequence="12" name="My Groups"/>
+        <menuitem id="mail_group_root" parent="mail_feeds_main" sequence="12" name="Các nhóm của tôi"/>
         <menuitem id="mail_allgroups" parent="mail_group_root" sequence="100" action="action_view_groups"/>
     </data>
 </openerp>

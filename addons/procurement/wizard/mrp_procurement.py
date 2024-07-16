@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,7 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import threading
 from openerp.osv import fields, osv
 
@@ -26,15 +25,16 @@ class procurement_compute(osv.osv_memory):
     _name = 'procurement.order.compute'
     _description = 'Compute Procurement'
 
-    def _procure_calculation_procure(self, cr, uid, ids, context=None):
+    def _procure_calculation_procure(self, cr, uid, ids, context = None):
         try:
             proc_obj = self.pool.get('procurement.order')
             proc_obj._procure_confirm(cr, uid, use_new_cursor=cr.dbname, context=context)
         finally:
             pass
+
         return {}
 
-    def procure_calculation(self, cr, uid, ids, context=None):
+    def procure_calculation(self, cr, uid, ids, context = None):
         """
          @param self: The object pointer.
          @param cr: A database cursor
@@ -42,11 +42,12 @@ class procurement_compute(osv.osv_memory):
          @param ids: List of IDs selected
          @param context: A standard dictionary
         """
-        threaded_calculation = threading.Thread(target=self._procure_calculation_procure, args=(cr, uid, ids, context))
+        threaded_calculation = threading.Thread(target=self._procure_calculation_procure, args=(cr,
+         uid,
+         ids,
+         context))
         threaded_calculation.start()
         return {}
 
+
 procurement_compute()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

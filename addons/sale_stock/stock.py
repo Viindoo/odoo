@@ -36,7 +36,7 @@ class stock_move(osv.osv):
 class stock_picking(osv.osv):
     _inherit = 'stock.picking'
     _columns = {
-        'sale_id': fields.many2one('sale.order', 'Sales Order', ondelete='set null', select=True),
+        'sale_id': fields.many2one('sale.order', 'Lệnh xuất hàng', ondelete='set null', select=True, states={'done': [('readonly', True)]}),
     }
     _defaults = {
         'sale_id': False
@@ -44,7 +44,10 @@ class stock_picking(osv.osv):
 
     def get_currency_id(self, cursor, user, picking):
         if picking.sale_id:
-            return picking.sale_id.pricelist_id.currency_id.id
+            try:
+                return picking.sale_id.pricelist_id.currency_id.id
+            except:
+                return 24
         else:
             return super(stock_picking, self).get_currency_id(cursor, user, picking)
 
@@ -60,15 +63,6 @@ class stock_picking(osv.osv):
         if picking.note or (picking.sale_id and picking.sale_id.note):
             return picking.note or picking.sale_id.note
         return super(stock_picking, self)._get_comment_invoice(cursor, user, picking)
-
-    def _prepare_invoice_group(self, cr, uid, picking, partner, invoice, context=None):
-        """ Inherit the original function of the 'stock' module in order to override name field
-            to pass the customer reference form the sales order
-        """
-        invoice_vals = super(stock_picking, self)._prepare_invoice_group(cr, uid, picking, partner, invoice, context)
-        if picking.sale_id:
-            invoice_vals['name'] = (invoice.name or '') + ', ' + (picking.sale_id.client_order_ref or '')
-        return invoice_vals
 
     def _prepare_invoice(self, cr, uid, picking, partner, inv_type, journal_id, context=None):
         """ Inherit the original function of the 'stock' module in order to override some
@@ -123,23 +117,11 @@ class stock_picking(osv.osv):
 
     def _invoice_hook(self, cursor, user, picking, invoice_id):
         sale_obj = self.pool.get('sale.order')
-        order_line_obj = self.pool.get('sale.order.line')
-        invoice_obj = self.pool.get('account.invoice')
-        invoice_line_obj = self.pool.get('account.invoice.line')
         if picking.sale_id:
-            sale_obj.write(cursor, user, [picking.sale_id.id], {
+            sale_obj.write(cursor, 1, [picking.sale_id.id], {
                 'invoice_ids': [(4, invoice_id)],
-            })
-            for sale_line in picking.sale_id.order_line:
-                if sale_line.product_id.type == 'service' and not sale_line.invoiced:
-                    vals = order_line_obj._prepare_order_line_invoice_line(cursor, user, sale_line, False)
-                    vals['invoice_id'] = invoice_id
-                    invoice_line_id = invoice_line_obj.create(cursor, user, vals)
-                    order_line_obj.write(cursor, user, [sale_line.id], {
-                        'invoice_lines': [(6, 0, [invoice_line_id])],
-                    })
-                    invoice_obj.button_compute(cursor, user, [invoice_id])
-        return super(stock_picking, self)._invoice_hook(cursor, user, picking, invoice_id)
+                })
+        return super(stock_picking, self)._invoice_hook(cursor, 1, picking, invoice_id)
 
 # Redefinition of the new field in order to update the model stock.picking.out in the orm
 # FIXME: this is a temporary workaround because of a framework bug (ref: lp996816). It should be removed as soon as
@@ -147,7 +129,13 @@ class stock_picking(osv.osv):
 class stock_picking_out(osv.osv):
     _inherit = 'stock.picking.out'
     _columns = {
-        'sale_id': fields.many2one('sale.order', 'Sale Order',
-            ondelete='set null', select=True),
+        'sale_id': fields.many2one('sale.order', 'Lệnh xuất hàng',
+            ondelete='set null', select=True, states={'done': [('readonly', True)]}),
+    }
+class stock_picking_in(osv.osv):
+    _inherit = 'stock.picking.in'
+    _columns = {
+        'sale_id': fields.many2one('sale.order', 'Lệnh xuất hàng',
+            ondelete='set null', select=True, states={'done': [('readonly', True)]}),
     }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

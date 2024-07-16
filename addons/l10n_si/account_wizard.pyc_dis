@@ -1,0 +1,11 @@
+# Embedded file name: /opt/lamthao/server/openerp/addons/l10n_si/account_wizard.py
+import tools
+from osv import osv
+import addons
+
+class AccountWizard_cd(osv.osv_memory):
+    _inherit = 'wizard.multi.charts.accounts'
+    _defaults = {'code_digits': 6}
+
+
+AccountWizard_cd()

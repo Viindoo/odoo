@@ -101,6 +101,7 @@
         <record id="trans_draft_cancel" model="workflow.transition">
             <field name="act_from" ref="act_draft"/>
             <field name="act_to" ref="act_cancel"/>
+             <field name="condition">allow_cancel()</field>
             <field name="signal">button_cancel</field>
         </record>
 

@@ -31,7 +31,7 @@
         </record>
 
         <record id="action_mail_to_me_feeds" model="ir.actions.client">
-            <field name="name">To: me</field>
+            <field name="name">Đến: Tôi</field>
             <field name="tag">mail.wall</field>
             <field name="res_model">mail.message</field>
             <field name="context">{
@@ -58,7 +58,7 @@
         </record>
 
         <record id="action_mail_star_feeds" model="ir.actions.client">
-            <field name="name">To-do</field>
+            <field name="name">Việc phải làm</field>
             <field name="tag">mail.wall</field>
             <field name="res_model">mail.message</field>
             <field name="context">{
@@ -85,7 +85,7 @@
         </record>
 
         <record id="action_mail_archives_feeds" model="ir.actions.client">
-            <field name="name">Archives</field>
+            <field name="name">Lưu trữ</field>
             <field name="tag">mail.wall</field>
             <field name="context">{
               'default_model': 'res.users',
@@ -114,13 +114,13 @@
         <!-- MENU -->
 
         <!-- Top menu item -->
-        <menuitem name="Messaging"
+        <menuitem name="Thông điệp"
           id="mail.mail_feeds_main"
           groups="base.group_user"
           sequence="10"/>
 
         <!-- Left-side menu: Feeds -->
-        <menuitem id="mail.mail_feeds" name="Messaging" parent="mail.mail_feeds_main" groups="base.group_user" sequence="10"/>
+        <menuitem id="mail.mail_feeds" name="Thông điệp" parent="mail.mail_feeds_main" groups="base.group_user" sequence="10"/>
         <menuitem id="mail_my_stuff" name="Organizer" parent="mail.mail_feeds_main"/>
 
         <record id="mail_inboxfeeds" model="ir.ui.menu">
@@ -130,19 +130,19 @@
           <field name="parent_id" ref="mail.mail_feeds"/>
         </record>
         <record id="mail_tomefeeds" model="ir.ui.menu">
-          <field name="name">To: me</field>
+          <field name="name">Đến: tôi</field>
           <field name="sequence" eval="11"/>
           <field name="action" ref="action_mail_to_me_feeds"/>
           <field name="parent_id" ref="mail.mail_feeds"/>
         </record>
         <record id="mail_starfeeds" model="ir.ui.menu">
-          <field name="name">To-do</field>
+          <field name="name">Việc phải làm</field>
           <field name="sequence" eval="14"/>
           <field name="action" ref="action_mail_star_feeds"/>
           <field name="parent_id" ref="mail.mail_feeds"/>
         </record>
         <record id="mail_archivesfeeds" model="ir.ui.menu">
-          <field name="name">Archives</field>
+          <field name="name">Lưu trữ</field>
           <field name="sequence" eval="16"/>
           <field name="action" ref="action_mail_archives_feeds"/>
           <field name="parent_id" ref="mail.mail_feeds"/>

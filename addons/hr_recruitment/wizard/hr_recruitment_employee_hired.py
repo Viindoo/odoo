@@ -2,13 +2,12 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>). All Rights Reserved
-#    $Id$
+#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,30 +25,29 @@ class hired_employee(osv.osv_memory):
     _name = 'hired.employee'
     _description = 'Create Employee'
 
-    def case_close(self, cr, uid, ids, context=None):
+    def case_close(self, cr, uid, ids, context = None):
         """
         @param self: The object pointer
         @param cr: the current row, from the database cursor,
-        @param uid: the current user’s ID for security checks,
+        @param uid: the current user\xe2\x80\x99s ID for security checks,
         @param ids: List of case's Ids
         @param *args: Give Tuple Value
         """
         if context is None:
             context = {}
-        self.pool.get('hr.applicant').case_close(cr, uid,context.get('active_ids',[]))
+        self.pool.get('hr.applicant').case_close(cr, uid, context.get('active_ids', []))
         return {}
 
-    def case_close_with_emp(self, cr, uid, ids, context=None):
+    def case_close_with_emp(self, cr, uid, ids, context = None):
         """
         @param self: The object pointer
         @param cr: the current row, from the database cursor,
-        @param uid: the current user’s ID for security checks,
+        @param uid: the current user\xe2\x80\x99s ID for security checks,
         @param ids: List of case's Ids
         """
         if context is None:
             context = {}
-        return self.pool.get('hr.applicant').case_close_with_emp(cr, uid,context.get('active_ids', []))
+        return self.pool.get('hr.applicant').case_close_with_emp(cr, uid, context.get('active_ids', []))
+
 
 hired_employee()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -49,7 +49,7 @@ This module also uses analytic accounting and is compatible with the invoice on 
     'depends': ['hr', 'account_voucher', 'account_accountant'],
     'data': [
         'security/ir.model.access.csv',
-        'hr_expense_data.xml',
+        #'hr_expense_data.xml',
         'hr_expense_sequence.xml',
         'hr_expense_workflow.xml',
         'hr_expense_view.xml',
@@ -58,7 +58,7 @@ This module also uses analytic accounting and is compatible with the invoice on 
         'security/ir_rule.xml',
         'report/hr_expense_report_view.xml',
         'board_hr_expense_view.xml',
-        'hr_expense_installer_view.xml',
+        #'hr_expense_installer_view.xml',
     ],
     'demo': ['hr_expense_demo.xml'],
     'test': [

@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 ##############################################################################
 #
-# Copyright (c) 2010 Camptocamp SA (http://www.camptocamp.com) 
-# All Right Reserved
-#
-# Author : Nicolas Bessi (Camptocamp)
+# Copyright (c) 2008-2013 Alistek Ltd (http://www.alistek.com) All Rights Reserved.
+#                    General contacts <info@alistek.com>
 #
 # WARNING: This program as such is intended to be used by professional
 # programmers who take the whole responsability of assessing all potential
@@ -15,8 +13,11 @@
 #
 # This program is Free Software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
+# as published by the Free Software Foundation; either version 3
 # of the License, or (at your option) any later version.
+#
+# This module is GPLv3 or newer and incompatible
+# with OpenERP SA "AGPL + Private Use License"!
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,60 +26,49 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 ##############################################################################
-
 from openerp import pooler
 
 class WebKitHelper(object):
     """Set of usefull report helper"""
+
     def __init__(self, cursor, uid, report_id, context):
-        "constructor"
+        """constructor"""
         self.cursor = cursor
         self.uid = uid
         self.pool = pooler.get_pool(self.cursor.dbname)
         self.report_id = report_id
-        
-    def embed_image(self, type, img, width=0, height=0) :
-        "Transform a DB image into an embedded HTML image"
 
-        if width :
-            width = 'width="%spx"'%(width)
-        else :
+    def embed_image(self, type, img, width = 0, height = 0):
+        """Transform a DB image into an embedded HTML image"""
+        if width:
+            width = 'width="%spx"' % width
+        else:
             width = ' '
-        if height :
-            height = 'height="%spx"'%(height)
-        else :
+        if height:
+            height = 'height="%spx"' % height
+        else:
             height = ' '
-        toreturn = '<img %s %s src="data:image/%s;base64,%s" />'%(
-            width,
-            height,
-            type, 
-            str(img))
+        toreturn = '<img %s %s src="data:image/%s;base64,%s" />' % (width,
+         height,
+         type,
+         str(img))
         return toreturn
-            
-            
+
     def get_logo_by_name(self, name):
         """Return logo by name"""
         header_obj = self.pool.get('ir.header_img')
-        header_img_id = header_obj.search(
-                                            self.cursor, 
-                                            self.uid, 
-                                            [('name','=',name)]
-                                        )
-        if not header_img_id :
+        header_img_id = header_obj.search(self.cursor, self.uid, [('name', '=', name)])
+        if not header_img_id:
             return u''
         if isinstance(header_img_id, list):
             header_img_id = header_img_id[0]
-
         head = header_obj.browse(self.cursor, self.uid, header_img_id)
         return (head.img, head.type)
-            
-    def embed_logo_by_name(self, name, width=0, height=0):
+
+    def embed_logo_by_name(self, name, width = 0, height = 0):
         """Return HTML embedded logo by name"""
         img, type = self.get_logo_by_name(name)
         return self.embed_image(type, img, width, height)
-        
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

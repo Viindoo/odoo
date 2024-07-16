@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,23 +18,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from openerp.osv import osv,fields
+from openerp.osv import osv, fields
 
 class company(osv.osv):
     _inherit = 'res.company'
-    _columns = {
-        'po_lead': fields.float(
-            'Purchase Lead Time', required=True,
-            help="Margin of error for supplier lead times. When the system"\
-                 "generates Purchase Orders for procuring products,"\
-                 "they will be scheduled that many days earlier "\
-                 "to cope with unexpected supplier delays."),
-    }
-    _defaults = {
-        'po_lead': lambda *a: 1.0,
-    }
+    _columns = {'po_lead': fields.float('Purchase Lead Time', required=True, help='Margin of error for supplier lead times. When the systemgenerates Purchase Orders for procuring products,they will be scheduled that many days earlier to cope with unexpected supplier delays.')}
+    _defaults = {'po_lead': lambda *a: 1.0}
+
+
 company()
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

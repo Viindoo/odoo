@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #    
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    VNC Developments (India) Pvt. Ltd.
+#    Copyright (C) 2004-TODAY VNC (<http://www.vnc.biz>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,17 +18,15 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.     
 #
 ##############################################################################
-
 from openerp import pooler
 import time
 from openerp.report import report_sxw
 
 class code_barcode(report_sxw.rml_parse):
+
     def __init__(self, cr, uid, name, context):
         super(code_barcode, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update({
-            'time': time,
-        })
-report_sxw.report_sxw('report.mrp.code.barcode', 'mrp_operations.operation.code', 'addons/mrp_operations/report/mrp_code_barcode.rml',parser=code_barcode,header=False)
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+        self.localcontext.update({'time': time})
 
+
+report_sxw.report_sxw('report.mrp.code.barcode', 'mrp_operations.operation.code', 'addons/mrp_operations/report/mrp_code_barcode.rml', parser=code_barcode, header=False)

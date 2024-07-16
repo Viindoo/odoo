@@ -18,41 +18,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class crm_contact_us(osv.TransientModel):
     """ Add employees list to the portal's contact page """
     _inherit = 'portal_crm.crm_contact_us'
     _description = 'Contact form for the portal'
-    _columns = {
-        'employee_ids' : fields.many2many('hr.employee', string='Employees', readonly=True),
-    }
+    _columns = {'employee_ids': fields.many2many('hr.employee', string='Employees', readonly=True)}
 
-    """ Little trick to display employees in our wizard view """
-    def _get_employee(self, cr, uid, context=None):
+    def _get_employee(self, cr, uid, context = None):
         """ Employees flagged as 'private' won't appear on the contact page """
         r = self.pool.get('hr.employee').search(cr, uid, [('visibility', '!=', 'private')], context=context)
         return r
 
-    _defaults = {
-        'employee_ids' : _get_employee,
-    }
+    _defaults = {'employee_ids': _get_employee}
+
 
 class hr_employee(osv.osv):
     _description = 'Portal employee'
     _inherit = 'hr.employee'
-
-    """
-    ``visibility``: defines if the employee appears on the portal's contact page
-                    - 'public' means the employee will appear for everyone (anonymous)
-                    - 'private' means the employee won't appear
-    """
-    _columns = {
-        'visibility': fields.selection([('public', 'Public'),('private', 'Private')],
-            string='Visibility', help='Employee\'s visibility in the portal\'s contact page'),
-        'public_info': fields.text('Public Info'),
-    }
-    _defaults = {
-        'visibility': 'private',
-    }
+    _columns = {'visibility': fields.selection([('public', 'Public'), ('private', 'Private')], string='Visibility', help="Employee's visibility in the portal's contact page"),
+     'public_info': fields.text('Public Info')}
+    _defaults = {'visibility': 'private'}

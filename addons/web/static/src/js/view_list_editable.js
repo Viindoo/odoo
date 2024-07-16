@@ -50,10 +50,8 @@ openerp.web.list_editable = function (instance) {
             });
             this.on('edit:after', this, function () {
                 self.$el.add(self.$buttons).addClass('oe_editing');
-                self.$('.ui-sortable').sortable('disable');
             });
             this.on('save:after cancel:after', this, function () {
-                self.$('.ui-sortable').sortable('enable');
                 self.$el.add(self.$buttons).removeClass('oe_editing');
             });
         },
@@ -123,7 +121,6 @@ openerp.web.list_editable = function (instance) {
          * as an editable row at the top or bottom of the list)
          */
         do_add_record: function () {
-            var self = this;
             if (this.editable()) {
                 this.$el.find('table:first').show();
                 this.$el.find('.oe_view_nocontent').remove();
@@ -223,18 +220,15 @@ openerp.web.list_editable = function (instance) {
             var item = false;
             if (record) {
                 item = record.attributes;
-                this.dataset.select_id(record.get('id'));
             } else {
                 record = this.make_empty_record(false);
                 this.records.add(record, {
                     at: this.prepends_on_create() ? 0 : null});
             }
-            return this.ensure_saved().then(function(){
-                return $.when.apply(null, self.editor.form.render_value_defs);
-            }).then(function () {
+
+            return this.ensure_saved().then(function () {
                 var $recordRow = self.groups.get_row_for(record);
                 var cells = self.get_cells_for($recordRow);
-                var fields = {};
                 self.fields_for_resize.splice(0, self.fields_for_resize.length);
                 return self.with_event('edit', {
                     record: record.attributes,
@@ -248,16 +242,10 @@ openerp.web.list_editable = function (instance) {
 
                         // FIXME: need better way to get the field back from bubbling (delegated) DOM events somehow
                         field.$el.attr('data-fieldname', field_name);
-                        fields[field_name] = field;
                         self.fields_for_resize.push({field: field, cell: cell});
                     }, options).then(function () {
                         $recordRow.addClass('oe_edition');
                         self.resize_fields();
-                        var focus_field = options && options.focus_field ? options.focus_field : undefined;
-                        if (!focus_field){
-                            focus_field = _.find(self.editor.form.fields_order, function(field){ return fields[field] && fields[field].$el.is(':visible:has(input)'); });
-                        }
-                        if (focus_field  && fields[focus_field]) fields[focus_field].$el.find('input').select();
                         return record.attributes;
                     });
                 }).fail(function () {
@@ -284,7 +272,9 @@ openerp.web.list_editable = function (instance) {
             if (!this.editor.is_editing()) { return; }
             for(var i=0, len=this.fields_for_resize.length; i<len; ++i) {
                 var item = this.fields_for_resize[i];
-                this.resize_field(item.field, item.cell);
+                if (!item.field.get('invisible')) {
+                    this.resize_field(item.field, item.cell);
+                }
             }
         },
         /**
@@ -303,11 +293,6 @@ openerp.web.list_editable = function (instance) {
                 at: 'left top',
                 of: $cell
             });
-            if (field.get('effective_readonly')) {
-                field.$el.addClass('oe_readonly');
-            }
-            if(field.widget == "handle")
-                field.$el.addClass('oe_list_field_handle');
         },
         /**
          * @return {jQuery.Deferred}
@@ -430,8 +415,7 @@ openerp.web.list_editable = function (instance) {
             var self = this;
             var on_write_callback = self.fields_view.arch.attrs.on_write;
             if (!on_write_callback) { return $.when(); }
-            var context = new instance.web.CompoundContext(self.dataset.get_context(), {'on_write_domain': self.dataset.domain}).eval();
-            return this.dataset.call(on_write_callback, [source_record.get('id'), context])
+            return this.dataset.call(on_write_callback, [source_record.get('id')])
                 .then(function (ids) {
                     return $.when.apply(
                         null, _(ids).map(
@@ -454,20 +438,20 @@ openerp.web.list_editable = function (instance) {
         setup_events: function () {
             var self = this;
             _.each(this.editor.form.fields, function(field, field_name) {
-                field.on("change:effective_readonly", self, function(){
-                    var item = _(self.fields_for_resize).find(function (item) {
-                        return item.field === field;
-                    });
-                    if (item) {
-                        setTimeout(function() {
-                            self.resize_field(item.field, item.cell);
-                        }, 0);
+                var setting = false;
+                var set_invisible = function() {
+                    if (!setting && field.get("effective_readonly")) {
+                        setting = true;
+                        field.set({invisible: true});
+                        setting = false;
                     }
-                     
-                });
+                };
+                field.on("change:effective_readonly", self, set_invisible);
+                field.on("change:invisible", self, set_invisible);
+                set_invisible();
             });
 
-            this.editor.$el.on('keyup keypress keydown', function (e) {
+            this.editor.$el.on('keyup keydown', function (e) {
                 if (!self.editor.is_editing()) { return true; }
                 var key = _($.ui.keyCode).chain()
                     .map(function (v, k) { return {name: k, code: v}; })
@@ -493,7 +477,6 @@ openerp.web.list_editable = function (instance) {
             next_record = next_record || 'succ';
             var self = this;
             return this.save_edition().then(function (saveInfo) {
-                if (!saveInfo) { return null; }
                 if (saveInfo.created) {
                     return self.start_edition();
                 }
@@ -502,7 +485,7 @@ openerp.web.list_editable = function (instance) {
                 return self.start_edition(record, options);
             });
         },
-        keypress_ENTER: function () {
+        keyup_ENTER: function () {
             return this._next();
         },
         keydown_ESCAPE: function (e) {
@@ -652,7 +635,7 @@ openerp.web.list_editable = function (instance) {
             var form = this.editor.form;
             var last_field = _(form.fields_order).chain()
                 .map(function (name) { return form.fields[name]; })
-                .filter(function (field) { return field.$el.is(':visible') && !field.get('effective_readonly'); })
+                .filter(function (field) { return field.$el.is(':visible'); })
                 .last()
                 .value();
             // tabbed from last field in form
@@ -749,6 +732,31 @@ openerp.web.list_editable = function (instance) {
             throw new Error("is_editing's state filter must be either `new` or" +
                             " `edit` if provided");
         },
+        _focus_setup: function (focus_field) {
+            var form = this.form;
+
+            var field;
+            // If a field to focus was specified
+            if (focus_field
+                    // Is actually in the form
+                    && (field = form.fields[focus_field])
+                    // And is visible
+                    && field.$el.is(':visible')) {
+                // focus it
+                field.focus();
+                return;
+            }
+
+            _(form.fields_order).detect(function (name) {
+                // look for first visible field in fields_order, focus it
+                var field = form.fields[name];
+                if (!field.$el.is(':visible')) {
+                    return false;
+                }
+                // Stop as soon as a field got focused
+                return field.focus() !== false;
+            });
+        },
         edit: function (record, configureField, options) {
             // TODO: specify sequence of edit calls
             var self = this;
@@ -763,6 +771,7 @@ openerp.web.list_editable = function (instance) {
                 _(form.fields).each(function (field, name) {
                     configureField(name, field);
                 });
+                self._focus_setup(options && options.focus_field);
                 return form;
             });
         },

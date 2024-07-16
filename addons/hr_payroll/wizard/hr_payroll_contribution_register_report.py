@@ -18,38 +18,26 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import time
 from datetime import datetime
 from dateutil import relativedelta
-
 from openerp.osv import fields, osv
 
 class payslip_lines_contribution_register(osv.osv_memory):
     _name = 'payslip.lines.contribution.register'
     _description = 'PaySlip Lines by Contribution Registers'
-    _columns = {
-        'date_from': fields.date('Date From', required=True),
-        'date_to': fields.date('Date To', required=True),
-    }
+    _columns = {'date_from': fields.date('Date From', required=True),
+     'date_to': fields.date('Date To', required=True)}
+    _defaults = {'date_from': lambda *a: time.strftime('%Y-%m-01'),
+     'date_to': lambda *a: str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10]}
 
-    _defaults = {
-        'date_from': lambda *a: time.strftime('%Y-%m-01'),
-        'date_to': lambda *a: str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10],
-    }
+    def print_report(self, cr, uid, ids, context = None):
+        datas = {'ids': context.get('active_ids', []),
+         'model': 'hr.contribution.register',
+         'form': self.read(cr, uid, ids, [], context=context)[0]}
+        return {'type': 'ir.actions.report.xml',
+         'report_name': 'contribution.register.lines',
+         'datas': datas}
 
-    def print_report(self, cr, uid, ids, context=None):
-        datas = {
-             'ids': context.get('active_ids', []),
-             'model': 'hr.contribution.register',
-             'form': self.read(cr, uid, ids, [], context=context)[0]
-        }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'contribution.register.lines',
-            'datas': datas,
-        }
 
 payslip_lines_contribution_register()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

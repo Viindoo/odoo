@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    
+#    VNC Developments (India) Pvt. Ltd.
+#    Copyright (C) 2004-TODAY VNC (<http://www.vnc.biz>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -15,22 +15,17 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.     
 #
 ##############################################################################
-
 from openerp.osv import osv, fields
-
 
 class pos_sales_user_today(osv.osv_memory):
     _name = 'pos.sales.user.today'
     _description = 'Sales User Today'
+    _columns = {'user_id': fields.many2many('res.users', 'sale_user_rel_today', 'user_id', 'uid', 'Salesperson')}
 
-    _columns = {
-       'user_id': fields.many2many('res.users', 'sale_user_rel_today', 'user_id', 'uid', 'Salesperson'),
-    }
-
-    def print_report(self, cr, uid, ids, context=None):
+    def print_report(self, cr, uid, ids, context = None):
         """
          To get the date and print the report
          @param self: The object pointer.
@@ -41,18 +36,13 @@ class pos_sales_user_today(osv.osv_memory):
         """
         if context is None:
             context = {}
-
         datas = {'ids': context.get('active_ids', [])}
         res = self.read(cr, uid, ids, ['user_id'], context=context)
         res = res and res[0] or {}
         datas['form'] = res
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'pos.sales.user.today',
-            'datas': datas,
-       }
+        return {'type': 'ir.actions.report.xml',
+         'report_name': 'pos.sales.user.today',
+         'datas': datas}
+
 
 pos_sales_user_today()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

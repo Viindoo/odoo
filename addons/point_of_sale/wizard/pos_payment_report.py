@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    
+#    VNC Developments (India) Pvt. Ltd.
+#    Copyright (C) 2004-TODAY VNC (<http://www.vnc.biz>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -15,17 +15,16 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.     
 #
 ##############################################################################
-
 from openerp.osv import osv
 
 class pos_payment_report(osv.osv_memory):
     _name = 'pos.payment.report'
     _description = 'Payment Report'
 
-    def print_report(self, cr, uid, ids, context=None):
+    def print_report(self, cr, uid, ids, context = None):
         """
          To get the date and print the report
          @param self: The object pointer.
@@ -37,13 +36,9 @@ class pos_payment_report(osv.osv_memory):
         if context is None:
             context = {}
         datas = {'ids': context.get('active_ids', [])}
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'pos.payment.report',
-            'datas': datas,
-       }
+        return {'type': 'ir.actions.report.xml',
+         'report_name': 'pos.payment.report',
+         'datas': datas}
+
 
 pos_payment_report()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

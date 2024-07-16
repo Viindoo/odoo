@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Business Applications
-#    Copyright (c) 2013 OpenERP S.A. <http://openerp.com>
+#    OpenERP, Open Source Management Solution
+#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -22,15 +22,13 @@ from openerp.osv import osv, fields
 
 class account_invoice_report(osv.Model):
     _inherit = 'account.invoice.report'
-    _columns = {
-        'commercial_partner_id': fields.many2one('res.partner', 'Partner Company', help="Commercial Entity"),
-    }
+    _columns = {'commercial_partner_id': fields.many2one('res.partner', 'Partner Company', help='Commercial Entity')}
 
     def _select(self):
-        return  super(account_invoice_report, self)._select() + ", sub.commercial_partner_id as commercial_partner_id"
+        return super(account_invoice_report, self)._select() + ', sub.commercial_partner_id as commercial_partner_id'
 
     def _sub_select(self):
-        return  super(account_invoice_report, self)._sub_select() + ", ai.commercial_partner_id as commercial_partner_id"
+        return super(account_invoice_report, self)._sub_select() + ', ai.commercial_partner_id as commercial_partner_id'
 
     def _group_by(self):
-        return super(account_invoice_report, self)._group_by() + ", ai.commercial_partner_id"
+        return super(account_invoice_report, self)._group_by() + ', ai.commercial_partner_id'

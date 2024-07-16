@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
-#    
+#
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -15,21 +15,19 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.     
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import time
 from openerp.report import report_sxw
 from openerp.osv import osv
 from openerp import pooler
 
 class order(report_sxw.rml_parse):
+
     def __init__(self, cr, uid, name, context):
         super(order, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({'time': time})
 
-report_sxw.report_sxw('report.purchase.order','purchase.order','addons/purchase/report/order.rml',parser=order)
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-
+report_sxw.report_sxw('report.purchase.order', 'purchase.order', 'addons/purchase/report/order.rml', parser=order)

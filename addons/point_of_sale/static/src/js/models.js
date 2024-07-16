@@ -51,7 +51,6 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
                 'pos_config':       null,
                 'units':            null,
                 'units_by_id':      null,
-                'pricelist':        null,
 
                 'selectedOrder':    null,
             });
@@ -102,6 +101,10 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
                     return self.fetch('res.partner',['contact_address'],[['id','=',companies[0].partner_id[0]]]);
                 }).then(function(company_partners){
                     self.get('company').contact_address = company_partners[0].contact_address;
+
+                    return self.fetch('res.currency',['symbol','position','rounding','accuracy'],[['id','=',self.get('company').currency_id[0]]]);
+                }).then(function(currencies){
+                    self.set('currency',currencies[0]);
 
                     return self.fetch('product.uom', null, null);
                 }).then(function(units){
@@ -157,14 +160,6 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
                 }).then(function(shops){
                     self.set('shop',shops[0]);
 
-                    return self.fetch('product.pricelist',['currency_id'],[['id','=',self.get('shop').pricelist_id[0]]]);
-                }).then(function(pricelists){
-                    self.set('pricelist',pricelists[0]);
-
-                    return self.fetch('res.currency',['symbol','position','rounding','accuracy'],[['id','=',self.get('pricelist').currency_id[0]]]);
-                }).then(function(currencies){
-                    self.set('currency',currencies[0]);
-
                     return self.fetch('product.packaging',['ean','product_id']);
                 }).then(function(packagings){
                     self.db.add_packagings(packagings);
@@ -175,7 +170,7 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
 
                     return self.fetch(
                         'product.product', 
-                        ['name', 'list_price','price','pos_categ_id', 'taxes_id', 'ean13', 'default_code', 'variants',
+                        ['name', 'list_price','price','pos_categ_id', 'taxes_id', 'ean13', 
                          'to_weight', 'uom_id', 'uos_id', 'uos_coeff', 'mes_type', 'description_sale', 'description'],
                         [['sale_ok','=',true],['available_in_pos','=',true]],
                         {pricelist: self.get('shop').pricelist_id[0]} // context for price
@@ -494,7 +489,7 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
         get_all_prices: function(){
             var self = this;
             var currency_rounding = this.pos.get('currency').rounding;
-            var base = round_pr(round_pr(this.get_quantity() * this.get_unit_price(), currency_rounding) * (1.0 - (this.get_discount() / 100.0)), currency_rounding);
+            var base = round_pr(this.get_quantity() * this.get_unit_price() * (1.0 - (this.get_discount() / 100.0)), currency_rounding);
             var totalTax = base;
             var totalNoTax = base;
             

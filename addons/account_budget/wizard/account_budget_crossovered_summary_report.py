@@ -19,7 +19,6 @@
 #
 ##############################################################################
 import time
-
 from openerp.osv import fields, osv
 
 class account_budget_crossvered_summary_report(osv.osv_memory):
@@ -28,32 +27,22 @@ class account_budget_crossvered_summary_report(osv.osv_memory):
     """
     _name = 'account.budget.crossvered.summary.report'
     _description = 'Account Budget  crossvered summary report'
-    _columns = {
-        'date_from': fields.date('Start of period', required=True),
-        'date_to': fields.date('End of period', required=True),
-    }
-    _defaults= {
-        'date_from': lambda *a: time.strftime('%Y-01-01'),
-        'date_to': lambda *a: time.strftime('%Y-%m-%d'),
-    }
+    _columns = {'date_from': fields.date('Start of period', required=True),
+     'date_to': fields.date('End of period', required=True)}
+    _defaults = {'date_from': lambda *a: time.strftime('%Y-01-01'),
+     'date_to': lambda *a: time.strftime('%Y-%m-%d')}
 
-    def check_report(self, cr, uid, ids, context=None):
+    def check_report(self, cr, uid, ids, context = None):
         if context is None:
             context = {}
         data = self.read(cr, uid, ids, context=context)[0]
-        datas = {
-             'ids': context.get('active_ids',[]),
-             'model': 'crossovered.budge',
-             'form': data
-        }
+        datas = {'ids': context.get('active_ids', []),
+         'model': 'crossovered.budge',
+         'form': data}
         datas['form']['report'] = 'analytic-one'
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'crossovered.budget.report',
-            'datas': datas,
-        }
+        return {'type': 'ir.actions.report.xml',
+         'report_name': 'crossovered.budget.report',
+         'datas': datas}
+
 
 account_budget_crossvered_summary_report()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

@@ -25,7 +25,7 @@
              </field>
          </record>
 
-        <menuitem action="sale.action_shop_form" id="menu_action_shop_form" parent="base.menu_base_config" sequence="35" groups="stock.group_locations"/>
+        <menuitem action="sale.action_shop_form" id="menu_action_shop_form" parent="base.menu_base_config" sequence="35" groups="base.nhom_quan_ly_danh_muc"/>
 
         <record id="view_order_form_inherit" model="ir.ui.view">
             <field name="name">sale.order.form.sale.stock</field>
@@ -33,34 +33,34 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <data>
-                   <xpath expr="//button[@name='invoice_corrected']" position="after">
-                       <button name="ship_recreate" states="shipping_except" string="Recreate Delivery Order"/>
-                       <button name="ship_corrected" states="shipping_except" string="Ignore Exception"/>
-                   </xpath>
-                   <xpath expr="//button[@name='action_view_invoice']" position="after">
-                       <field name="picking_ids" invisible="1"/>
-                       <button name="action_view_delivery" string="View Delivery Order" type="object" class="oe_highlight"
-                           attrs="{'invisible': ['|','|','|',('picking_ids','=',False),('picking_ids','=',[]), ('state', 'not in', ('progress','manual')),('shipped','=',True)]}" groups="base.group_user"/>
-                   </xpath>
-                    <xpath expr="//button[@name='action_cancel']" position="after">
-                        <button name="ship_cancel" states="shipping_except" string="Cancel Order"/>
-                    </xpath>
-                    <field name="state" position="attributes">
-                        <attribute name="statusbar_colors" t-translate="off">{"shipping_except":"red","invoice_except":"red","waiting_date":"blue"}</attribute>
+<!--                    <xpath expr="//button[@name='invoice_corrected']" position="after"> -->
+<!--                        <button name="ship_recreate" states="shipping_except" string="Recreate Delivery Order"/> -->
+<!--                        <button name="ship_corrected" states="shipping_except" string="Ignore Exception"/> -->
+<!--                    </xpath> -->
+<!--                    <xpath expr="//button[@name='action_view_invoice']" position="after"> -->
+<!--                        <field name="picking_ids" invisible="1"/> -->
+<!--                        <button name="action_view_delivery" string="View Delivery Order" type="object" class="oe_highlight" -->
+<!--                            attrs="{'invisible': ['|','|','|',('picking_ids','=',False),('picking_ids','=',[]), ('state', 'not in', ('progress','manual')),('shipped','=',True)]}" groups="base.group_user"/> -->
+<!--                    </xpath> -->
+<!--                     <xpath expr="//button[@name='action_cancel']" position="after"> -->
+<!--                         <button name="ship_cancel" states="shipping_except" string="Cancel Order"/> -->
+<!--                     </xpath> -->
+                    <field name="state" position="replace">
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" statusbar_colors='{"shipping_except":"red","invoice_except":"red","waiting_date":"blue"}'/>
                     </field>
                    <field name="shop_id" position="replace">
-                        <field name="shop_id" on_change="onchange_shop_id(shop_id)" widget="selection" groups="stock.group_locations"/>
+                        <field name="shop_id" on_change="onchange_shop_id(shop_id)" widget="selection" groups="stock.group_locations" invisible="1"/>
                    </field>
                    <field name="product_id" position="replace">
                        <field name="product_id"
                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}"
                        groups="base.group_user" 
-                       on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,False,product_uos_qty,False,name,parent.partner_id, False, True, parent.date_order, product_packaging, parent.fiscal_position, False, context)"/>
+                       on_change="product_id_change(pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, True, parent.date_order, product_packaging, parent.fiscal_position, False, context)"/>
                    </field>
                    <field name="product_uom_qty" position="replace">
                        <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}"
                              name="product_uom_qty" class="oe_inline"
-                           on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order, product_packaging, parent.fiscal_position, True, context)"/>
+                           on_change="product_id_change(pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order, product_packaging, parent.fiscal_position, True, context)"/>
                    </field>
 
                    <field name='invoiced' position="after">
@@ -75,10 +75,10 @@
                    </xpath>
                    <xpath expr="//page[@string='Order Lines']/field[@name='order_line']/form[@string='Sales Order Lines']/group/group/field[@name='address_allotment_id']" position="after">
                        <field name="property_ids" widget="many2many_tags"
-                            groups="sale.group_mrp_properties"/>
+                            groups="sale.group_mrp_properties" invisible="1"/>
                    </xpath>
                    <xpath expr="//page[@string='Order Lines']/field[@name='order_line']/form[@string='Sales Order Lines']/group/group/field[@name='tax_id']" position="before">
-                       <field name="product_packaging" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}" on_change="product_packaging_change(parent.pricelist_id, product_id, product_uom_qty, product_uom, parent.partner_id, product_packaging, True, context)" domain="[('product_id','=',product_id)]" groups="product.group_stock_packaging"  />
+                       <field name="product_packaging" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}" on_change="product_packaging_change(parent.pricelist_id, product_id, product_uom_qty, product_uom, parent.partner_id, product_packaging, True, context)" domain="[('product_id','=',product_id)]" groups="product.group_stock_packaging"  />
                    </xpath>
                    <xpath expr="//page[@string='Order Lines']/field[@name='order_line']/form[@string='Sales Order Lines']/div/field[@name='invoice_lines']" position="after">
                        <label for="move_ids"/>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <!--
+    Sequence types for pickings
+    -->
+
+      
+        <record id="seq_type_noibo" model="ir.sequence.type">
+            <field name="name">Picking OUT NOI BO</field>
+            <field name="code">stock.picking.noibo</field>
+        </record>
+        
+        <record id="seq_type_picking_thongthuong" model="ir.sequence.type">
+            <field name="name">Picking OUT THONG THUONG</field>
+            <field name="code">stock.picking.thongthuong</field>
+        </record>
+
+        <!--
+            Sequences for pickings
+        -->
+
+        <record id="seq_noibo" model="ir.sequence">
+            <field name="name">Picking IN</field>
+            <field name="code">stock.picking.noibo</field>
+            <field name="prefix">XKNB</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_thongthuong" model="ir.sequence">
+            <field name="name">Picking IN</field>
+            <field name="code">stock.picking.thongthuong</field>
+            <field name="prefix">PXK</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+   
+    </data>
+</openerp>

@@ -18,22 +18,20 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import time
 from openerp.report import report_sxw
 from openerp.tools import amount_to_text_en
 
 class report_voucher(report_sxw.rml_parse):
+
     def __init__(self, cr, uid, name, context):
         super(report_voucher, self).__init__(cr, uid, name, context)
-        self.localcontext.update({
-            'time': time,
-            'convert':self.convert,
-            'get_title': self.get_title,
-            'debit':self.debit,
-            'credit':self.credit,
-            'get_ref': self._get_ref
-        })
+        self.localcontext.update({'time': time,
+         'convert': self.convert,
+         'get_title': self.get_title,
+         'debit': self.debit,
+         'credit': self.credit,
+         'get_ref': self._get_ref})
 
     def convert(self, amount, cur):
         amt_en = amount_to_text_en.amount_to_text(amount, 'en', cur)
@@ -42,19 +40,21 @@ class report_voucher(report_sxw.rml_parse):
     def get_title(self, type):
         title = ''
         if type:
-            title = type[0].swapcase() + type[1:] + " Voucher"
+            title = type[0].swapcase() + type[1:] + ' Voucher'
         return title
 
     def debit(self, move_ids):
         debit = 0.0
         for move in move_ids:
             debit += move.debit
+
         return debit
 
     def credit(self, move_ids):
         credit = 0.0
         for move in move_ids:
             credit += move.credit
+
         return credit
 
     def _get_ref(self, voucher_id, move_ids):
@@ -65,11 +65,6 @@ class report_voucher(report_sxw.rml_parse):
             return voucher.name
         else:
             return
-report_sxw.report_sxw(
-    'report.voucher.cash_receipt.drcr',
-    'account.voucher',
-    'addons/account_voucher/report/account_voucher.rml',
-    parser=report_voucher,header="external"
-)
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
+report_sxw.report_sxw('report.voucher.cash_receipt.drcr', 'account.voucher', 'addons/account_voucher/report/account_voucher.rml', parser=report_voucher, header='external')

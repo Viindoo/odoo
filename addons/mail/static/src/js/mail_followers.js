@@ -150,11 +150,11 @@ openerp_mail_followers = function(session, mail) {
         _format_followers: function(count){
             var str = '';
             if(count <= 0){
-                str = _t('No followers');
+                str = _t('Không ai theo dõi');
             }else if(count === 1){
-                str = _t('One follower');
+                str = _t('Một người theo dõi');
             }else{
-                str = ''+count+' '+_t('followers');
+                str = ''+count+' '+_t('Theo dõi');
             }
             return str;
         },

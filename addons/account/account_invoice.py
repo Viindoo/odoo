@@ -11,7 +11,6 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
@@ -23,12 +22,12 @@ import time
 from lxml import etree
 import openerp.addons.decimal_precision as dp
 import openerp.exceptions
-
-from openerp import netsvc, SUPERUSER_ID
+import logging
+from openerp import netsvc
 from openerp import pooler
 from openerp.osv import fields, osv, orm
-from openerp.tools import float_compare
 from openerp.tools.translate import _
+_logger = logging.getLogger(__name__)
 
 class account_invoice(osv.osv):
     def _amount_all(self, cr, uid, ids, name, args, context=None):
@@ -37,13 +36,37 @@ class account_invoice(osv.osv):
             res[invoice.id] = {
                 'amount_untaxed': 0.0,
                 'amount_tax': 0.0,
-                'amount_total': 0.0
+                'amount_total': 0.0,
+                'phi_baove_moitruong': 0.0,
+                'tien_hang': 0.0,
+                'chiet_khau': 0.0
             }
+            
             for line in invoice.invoice_line:
                 res[invoice.id]['amount_untaxed'] += line.price_subtotal
+                string_code= line.product_id.categ_id.code
+                tax_line_amount=0
+                for line_tax in line.invoice_line_tax_id:
+                    tax_line_amount=line_tax.amount
+                if string_code:
+                    code=string_code[:2]
+                    if code!='CP':     
+                        tien=line.price_subtotal+line.price_subtotal*tax_line_amount                  
+                        res[invoice.id]['tien_hang'] += tien
+                    else:
+                        chietkhau= (line.price_subtotal + line.price_subtotal*tax_line_amount)
+                        res[invoice.id]['chiet_khau'] +=chietkhau
+                else:
+                    res[invoice.id]['tien_hang'] += (line.price_subtotal+line.price_subtotal*tax_line_amount)
             for line in invoice.tax_line:
-                res[invoice.id]['amount_tax'] += line.amount
-            res[invoice.id]['amount_total'] = res[invoice.id]['amount_tax'] + res[invoice.id]['amount_untaxed']
+                res[invoice.id]['amount_tax'] += round(line.amount,0)
+            res[invoice.id]['phi_baove_moitruong'] = round(res[invoice.id]['amount_untaxed'],0)*0.1
+            if invoice.co_phi_baove:
+                res[invoice.id]['amount_total'] = round(res[invoice.id]['amount_tax'] ,0)+ res[invoice.id]['amount_untaxed']+res[invoice.id]['phi_baove_moitruong']
+                
+            else:
+                res[invoice.id]['amount_total'] = round(res[invoice.id]['amount_tax'],0) + res[invoice.id]['amount_untaxed']
+           
         return res
 
     def _get_journal(self, cr, uid, context=None):
@@ -102,7 +125,7 @@ class account_invoice(osv.osv):
         ctx = context.copy()
         result = {}
         currency_obj = self.pool.get('res.currency')
-        for invoice in self.browse(cr, SUPERUSER_ID, ids, context=context):
+        for invoice in self.browse(cr, uid, ids, context=context):
             nb_inv_in_partial_rec = max_invoice_id = 0
             result[invoice.id] = 0.0
             if invoice.move_id:
@@ -118,7 +141,7 @@ class account_invoice(osv.osv):
                             #we check if the invoice is partially reconciled and if there are other invoices
                             #involved in this partial reconciliation (and we sum these invoices)
                             for line in aml.reconcile_partial_id.line_partial_ids:
-                                if line.invoice and invoice.type == line.invoice.type:
+                                if line.invoice:
                                     nb_inv_in_partial_rec += 1
                                     #store the max invoice id as for this invoice we will make a balance instead of a simple division
                                     max_invoice_id = max(max_invoice_id, line.invoice.id)
@@ -134,7 +157,7 @@ class account_invoice(osv.osv):
                     result[invoice.id] = new_value
 
             #prevent the residual amount on the invoice to be less than 0
-            result[invoice.id] = max(result[invoice.id], 0.0)            
+            result[invoice.id] = round(max(result[invoice.id], 0.0),4)          
         return result
 
     # Give Journal Items related to the payment reconciled to this invoice
@@ -178,8 +201,6 @@ class account_invoice(osv.osv):
             lines = []
             if invoice.move_id:
                 for m in invoice.move_id.line_id:
-                    if m.account_id != invoice.account_id:
-                        continue
                     temp_lines = []
                     if m.reconcile_id:
                         temp_lines = map(lambda x: x.id, m.reconcile_id.line_id)
@@ -232,7 +253,8 @@ class account_invoice(osv.osv):
         },
     }
     _columns = {
-        'name': fields.char('Description', size=64, select=True, readonly=True, states={'draft':[('readonly',False)]}),
+        'co_phi_baove':fields.boolean( 'Phí bảo vệ môi trường',readonly=True, states={'draft':[('readonly',False)]}),
+        'name': fields.char('Số hóa đơn', size=64, select=True, readonly=True, states={'draft':[('readonly',False)]}),
         'origin': fields.char('Source Document', size=64, help="Reference of the document that produced this invoice.", readonly=True, states={'draft':[('readonly',False)]}),
         'supplier_invoice_number': fields.char('Supplier Invoice Number', size=64, help="The reference of this invoice as provided by the supplier.", readonly=True, states={'draft':[('readonly',False)]}),
         'type': fields.selection([
@@ -274,35 +296,56 @@ class account_invoice(osv.osv):
                 "The payment term may compute several due dates, for example 50% now, 50% in one month."),
         'period_id': fields.many2one('account.period', 'Force Period', domain=[('state','<>','done')], help="Keep empty to use the period of the validation(invoice) date.", readonly=True, states={'draft':[('readonly',False)]}),
 
-        'account_id': fields.many2one('account.account', 'Account', required=True, readonly=True, states={'draft':[('readonly',False)]}, help="The partner account used for this invoice."),
+        'account_id': fields.many2one('account.account', 'Account',  readonly=True, states={'draft':[('readonly',False)]}, help="The partner account used for this invoice."),
         'invoice_line': fields.one2many('account.invoice.line', 'invoice_id', 'Invoice Lines', readonly=True, states={'draft':[('readonly',False)]}),
         'tax_line': fields.one2many('account.invoice.tax', 'invoice_id', 'Tax Lines', readonly=True, states={'draft':[('readonly',False)]}),
+        'phibaove_line': fields.one2many('account.invoice.phibaove', 'invoice_id', 'Tax Lines', readonly=True, states={'draft':[('readonly',False)]}),
 
         'move_id': fields.many2one('account.move', 'Journal Entry', readonly=True, select=1, ondelete='restrict', help="Link to the automatically generated Journal Items."),
         'amount_untaxed': fields.function(_amount_all, digits_compute=dp.get_precision('Account'), string='Subtotal', track_visibility='always',
             store={
-                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line'], 20),
+                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line','co_phi_baove'], 20),
                 'account.invoice.tax': (_get_invoice_tax, None, 20),
                 'account.invoice.line': (_get_invoice_line, ['price_unit','invoice_line_tax_id','quantity','discount','invoice_id'], 20),
             },
             multi='all'),
-        'amount_tax': fields.function(_amount_all, digits_compute=dp.get_precision('Account'), string='Tax',
+        'amount_tax': fields.function(_amount_all,   digits=(12,0), string='Tax',
             store={
-                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line'], 20),
+                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line','co_phi_baove'], 20),
                 'account.invoice.tax': (_get_invoice_tax, None, 20),
                 'account.invoice.line': (_get_invoice_line, ['price_unit','invoice_line_tax_id','quantity','discount','invoice_id'], 20),
             },
             multi='all'),
         'amount_total': fields.function(_amount_all, digits_compute=dp.get_precision('Account'), string='Total',
             store={
-                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line'], 20),
+                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line','co_phi_baove'], 20),
+                'account.invoice.tax': (_get_invoice_tax, None, 20),
+                'account.invoice.line': (_get_invoice_line, ['price_unit','invoice_line_tax_id','quantity','discount','invoice_id'], 20),
+            },
+            multi='all'),
+          'phi_baove_moitruong': fields.function(_amount_all, digits_compute=dp.get_precision('Account'), string='Phí bảo vệ môi trường',
+            store={
+                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line','co_phi_baove'], 20),
+                'account.invoice.tax': (_get_invoice_tax, None, 20),
+                'account.invoice.line': (_get_invoice_line, ['price_unit','invoice_line_tax_id','quantity','discount','invoice_id'], 20),
+            },
+            multi='all'),
+        'tien_hang': fields.function(_amount_all, digits_compute=dp.get_precision('Account'), string='Tiền hàng',
+            store={
+                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line','co_phi_baove'], 20),
+                'account.invoice.tax': (_get_invoice_tax, None, 20),
+                'account.invoice.line': (_get_invoice_line, ['price_unit','invoice_line_tax_id','quantity','discount','invoice_id'], 20),
+            },
+            multi='all'),
+        'chiet_khau': fields.function(_amount_all, digits_compute=dp.get_precision('Account'), string='Chiết khấu',
+            store={
+                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line','co_phi_baove'], 20),
                 'account.invoice.tax': (_get_invoice_tax, None, 20),
                 'account.invoice.line': (_get_invoice_line, ['price_unit','invoice_line_tax_id','quantity','discount','invoice_id'], 20),
             },
             multi='all'),
         'currency_id': fields.many2one('res.currency', 'Currency', required=True, readonly=True, states={'draft':[('readonly',False)]}, track_visibility='always'),
-        'journal_id': fields.many2one('account.journal', 'Journal', required=True, readonly=True, states={'draft':[('readonly',False)]},
-                                      domain="[('type', 'in', {'out_invoice': ['sale'], 'out_refund': ['sale_refund'], 'in_refund': ['purchase_refund'], 'in_invoice': ['purchase']}.get(type, [])), ('company_id', '=', company_id)]"),
+        'journal_id': fields.many2one('account.journal', 'Journal',  readonly=True, states={'draft':[('readonly',False)]}),
         'company_id': fields.many2one('res.company', 'Company', required=True, change_default=True, readonly=True, states={'draft':[('readonly',False)]}),
         'check_total': fields.float('Verification Total', digits_compute=dp.get_precision('Account'), readonly=True, states={'draft':[('readonly',False)]}),
         'reconciled': fields.function(_reconciled, string='Paid/Reconciled', type='boolean',
@@ -323,10 +366,16 @@ class account_invoice(osv.osv):
                 'account.move.reconcile': (_get_invoice_from_reconcile, None, 50),
             },
             help="Remaining amount due."),
-        'payment_ids': fields.function(_compute_lines, relation='account.move.line', type="many2many", string='Payments', groups='base.group_user'),
+        'payment_ids': fields.function(_compute_lines, relation='account.move.line', type="many2many", string='Payments'),
         'move_name': fields.char('Journal Entry', size=64, readonly=True, states={'draft':[('readonly',False)]}),
         'user_id': fields.many2one('res.users', 'Salesperson', readonly=True, track_visibility='onchange', states={'draft':[('readonly',False)]}),
-        'fiscal_position': fields.many2one('account.fiscal.position', 'Fiscal Position', readonly=True, states={'draft':[('readonly',False)]})
+        'fiscal_position': fields.many2one('account.fiscal.position', 'Fiscal Position', readonly=True, states={'draft':[('readonly',False)]}),
+         'so_hoa_don': fields.char('Số hóa đơn', size=500, select=True, readonly=True, states={'draft':[('readonly',False)]}),
+         'loai_hoadon': fields.selection([
+            ('thongthuong', 'Thông thường'),  
+            ('noibo', 'Nội bộ'),      
+           ], 'Loại hóa đơn',readonly=True), 
+    'check':fields.boolean('Đã cập nhật phí BVMT',readonly=True, states={'draft':[('readonly',False)]}),
     }
     _defaults = {
         'type': _get_type,
@@ -355,22 +404,13 @@ class account_invoice(osv.osv):
         if context.get('active_model', '') in ['res.partner'] and context.get('active_ids', False) and context['active_ids']:
             partner = self.pool.get(context['active_model']).read(cr, uid, context['active_ids'], ['supplier','customer'])[0]
             if not view_type:
-                try:
-                    view_id = self.pool['ir.model.data'].get_object_reference(cr, uid, 'account', 'invoice_tree')[1]
-                except ValueError:
-                    view_id = self.pool.get('ir.ui.view').search(cr, uid, [('name', '=', 'account.invoice.tree')], limit=1)
+                view_id = self.pool.get('ir.ui.view').search(cr, uid, [('name', '=', 'account.invoice.tree')])
                 view_type = 'tree'
             if view_type == 'form':
                 if partner['supplier'] and not partner['customer']:
-                    try:
-                        view_id = self.pool['ir.model.data'].get_object_reference(cr, uid, 'account', 'invoice_supplier_form')[1]
-                    except ValueError:
-                        view_id = self.pool.get('ir.ui.view').search(cr,uid,[('name', '=', 'account.invoice.supplier.form')], limit=1)
+                    view_id = self.pool.get('ir.ui.view').search(cr,uid,[('name', '=', 'account.invoice.supplier.form')])
                 elif partner['customer'] and not partner['supplier']:
-                    try:
-                        view_id = self.pool['ir.model.data'].get_object_reference(cr, uid, 'account', 'invoice_form')[1]
-                    except ValueError:
-                        view_id = self.pool.get('ir.ui.view').search(cr,uid,[('name', '=', 'account.invoice.form')], limit=1)
+                    view_id = self.pool.get('ir.ui.view').search(cr,uid,[('name', '=', 'account.invoice.form')])
         if view_id and isinstance(view_id, (list, tuple)):
             view_id = view_id[0]
         res = super(account_invoice,self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type, context=context, toolbar=toolbar, submenu=submenu)
@@ -576,7 +616,7 @@ class account_invoice(osv.osv):
         if isinstance(ids, (int, long)):
             ids = [ids]
         if not date_invoice:
-            date_invoice = fields.date.context_today(self, cr, uid)
+            date_invoice = time.strftime('%Y-%m-%d')
         if not payment_term_id:
             inv = self.browse(cr, uid, ids[0])
             #To make sure the invoice due date should contain due date which is entered by user when there is no payment term defined
@@ -587,7 +627,7 @@ class account_invoice(osv.osv):
             pterm_list.sort()
             res = {'value':{'date_due': pterm_list[-1]}}
         else:
-             raise osv.except_osv(_('Insufficient Data!'), _('The payment term of supplier does not have a payment term line.'))
+            raise osv.except_osv(_('Insufficient Data!'), _('The payment term of supplier does not have a payment term line.'))
         return res
 
     def onchange_invoice_line(self, cr, uid, ids, lines):
@@ -746,17 +786,30 @@ class account_invoice(osv.osv):
     def button_reset_taxes(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
+        check=False
         ctx = context.copy()
         ait_obj = self.pool.get('account.invoice.tax')
+        phibaove_obj = self.pool.get('account.invoice.phibaove')
         for id in ids:
+       
             cr.execute("DELETE FROM account_invoice_tax WHERE invoice_id=%s AND manual is False", (id,))
             partner = self.browse(cr, uid, id, context=ctx).partner_id
+            
             if partner.lang:
                 ctx.update({'lang': partner.lang})
             for taxe in ait_obj.compute(cr, uid, id, context=ctx).values():
                 ait_obj.create(cr, uid, taxe)
+            co_phi_baove=self.browse(cr, uid, id, context=ctx).co_phi_baove
+            if co_phi_baove:
+                cr.execute("DELETE FROM account_invoice_phibaove WHERE invoice_id=%s AND manual is False", (id,))
+                partner = self.browse(cr, uid, id, context=ctx).partner_id
+                if partner.lang:
+                    ctx.update({'lang': partner.lang})
+                for phibv in phibaove_obj.compute(cr, uid, id, context=ctx).values():
+                    phibaove_obj.create(cr, uid, phibv)
+                check=True
         # Update the stored value (fields.function), so we write to trigger recompute
-        self.pool.get('account.invoice').write(cr, uid, ids, {'invoice_line':[]}, context=ctx)
+        self.pool.get('account.invoice').write(cr, uid, ids, {'invoice_line':[],'check':check}, context=ctx)
         return True
 
     def button_compute(self, cr, uid, ids, context=None, set_total=False):
@@ -806,6 +859,11 @@ class account_invoice(osv.osv):
 
     def action_date_assign(self, cr, uid, ids, *args):
         for inv in self.browse(cr, uid, ids):
+            co_phi_baove=inv.co_phi_baove 
+            if co_phi_baove:
+                check= inv.check
+                if check==False:
+                    raise osv.except_osv(_('Lỗi!'), _('Phí bảo vệ môi trường chưa được cập nhật vào tài khoản. Hãy nhấn vào link cập nhật trước khi xác nhận hóa đơn này.'))
             res = self.onchange_payment_term_date_invoice(cr, uid, inv.id, inv.payment_term.id, inv.date_invoice)
             if res and res['value']:
                 self.write(cr, uid, [inv.id], res['value'])
@@ -831,13 +889,12 @@ class account_invoice(osv.osv):
             for tax in inv.tax_line:
                 if tax.manual:
                     continue
-                key = (tax.tax_code_id.id, tax.base_code_id.id, tax.account_id.id)
+                key = (tax.tax_code_id.id, tax.base_code_id.id, tax.account_id.id, tax.account_analytic_id.id)
                 tax_key.append(key)
                 if not key in compute_taxes:
                     raise osv.except_osv(_('Warning!'), _('Global taxes defined, but they are not in invoice lines !'))
                 base = compute_taxes[key]['base']
-                precision = self.pool.get('decimal.precision').precision_get(cr, uid, 'Account')
-                if float_compare(abs(base - tax.base), company_currency.rounding, precision_digits=precision) == 1:
+                if abs(base - tax.base) > company_currency.rounding:
                     raise osv.except_osv(_('Warning!'), _('Tax base different!\nClick on compute to update the tax base.'))
             for key in compute_taxes:
                 if not key in tax_key:
@@ -851,7 +908,7 @@ class account_invoice(osv.osv):
         cur_obj = self.pool.get('res.currency')
         for i in invoice_move_lines:
             if inv.currency_id.id != company_currency:
-                context.update({'date': inv.date_invoice or fields.date.context_today(self, cr, uid, context=context)})
+                context.update({'date': inv.date_invoice or time.strftime('%Y-%m-%d')})
                 i['currency_id'] = inv.currency_id.id
                 i['amount_currency'] = i['price']
                 i['price'] = cur_obj.compute(cr, uid, inv.currency_id.id,
@@ -905,6 +962,7 @@ class account_invoice(osv.osv):
     def action_move_create(self, cr, uid, ids, context=None):
         """Creates invoice related analytics and financial move lines"""
         ait_obj = self.pool.get('account.invoice.tax')
+        phibaove_obj = self.pool.get('account.invoice.phibaove')
         cur_obj = self.pool.get('res.currency')
         period_obj = self.pool.get('account.period')
         payment_term_obj = self.pool.get('account.payment.term')
@@ -923,8 +981,7 @@ class account_invoice(osv.osv):
             ctx = context.copy()
             ctx.update({'lang': inv.partner_id.lang})
             if not inv.date_invoice:
-                self.write(cr, uid, [inv.id], {'date_invoice': fields.date.context_today(self, cr, uid, context=context)}, context=ctx)
-                inv.refresh()
+                self.write(cr, uid, [inv.id], {'date_invoice': fields.date.context_today(self,cr,uid,context=context)}, context=ctx)
             company_currency = self.pool['res.company'].browse(cr, uid, inv.company_id.id).currency_id.id
             # create the analytical lines
             # one move line per invoice line
@@ -934,7 +991,9 @@ class account_invoice(osv.osv):
             self.check_tax_lines(cr, uid, inv, compute_taxes, ait_obj)
 
             # I disabled the check_total feature
-            if self.pool['res.users'].has_group(cr, uid, 'account.group_supplier_inv_check_total'):
+            group_check_total_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'account', 'group_supplier_inv_check_total')[1]
+            group_check_total = self.pool.get('res.groups').browse(cr, uid, group_check_total_id, context=context)
+            if group_check_total and uid in [x.id for x in group_check_total.users]:
                 if (inv.type in ('in_invoice', 'in_refund') and abs(inv.check_total - inv.amount_total) >= (inv.currency_id.rounding/2.0)):
                     raise osv.except_osv(_('Bad Total!'), _('Please verify the price of the invoice!\nThe encoded total does not match the computed total.'))
 
@@ -951,6 +1010,23 @@ class account_invoice(osv.osv):
 
             # one move line per tax line
             iml += ait_obj.move_line_get(cr, uid, inv.id)
+
+            entry_type = ''
+            if inv.type in ('in_invoice', 'in_refund'):
+                ref = inv.reference
+                entry_type = 'journal_pur_voucher'
+                if inv.type == 'in_refund':
+                    entry_type = 'cont_voucher'
+            else:
+                ref = self._convert_ref(cr, uid, inv.number)
+                entry_type = 'journal_sale_vou'
+                if inv.type == 'out_refund':
+                    entry_type = 'cont_voucher'
+
+            diff_currency_p = inv.currency_id.id <> company_currency
+            # mot dong cho phi bao ve moi truong
+            
+            iml += phibaove_obj.move_line_get(cr, uid, inv.id)
 
             entry_type = ''
             if inv.type in ('in_invoice', 'in_refund'):
@@ -1018,9 +1094,11 @@ class account_invoice(osv.osv):
                     'ref': ref
             })
 
+            date = inv.date_invoice or time.strftime('%Y-%m-%d')
+
             part = self.pool.get("res.partner")._find_accounting_partner(inv.partner_id)
 
-            line = map(lambda x:(0,0,self.line_get_convert(cr, uid, x, part.id, inv.date_invoice, context=ctx)),iml)
+            line = map(lambda x:(0,0,self.line_get_convert(cr, uid, x, part.id, date, context=ctx)),iml)
 
             line = self.group_lines(cr, uid, iml, line, inv)
 
@@ -1036,7 +1114,7 @@ class account_invoice(osv.osv):
                 'ref': inv.reference and inv.reference or inv.name,
                 'line_id': line,
                 'journal_id': journal_id,
-                'date': inv.date_invoice,
+                'date': date,
                 'narration': inv.comment,
                 'company_id': inv.company_id.id,
             }
@@ -1052,9 +1130,7 @@ class account_invoice(osv.osv):
                     i[2]['period_id'] = period_id
 
             ctx.update(invoice=inv)
-            ctx_copy = ctx.copy()
-            ctx_copy.pop('lang', None)
-            move_id = move_obj.create(cr, uid, move, context=ctx_copy)
+            move_id = move_obj.create(cr, uid, move, context=ctx)
             new_move_name = move_obj.browse(cr, uid, move_id, context=ctx).name
             # make the invoice point to that move
             self.write(cr, uid, [inv.id], {'move_id': move_id,'period_id':period_id, 'move_name':new_move_name}, context=ctx)
@@ -1066,6 +1142,40 @@ class account_invoice(osv.osv):
 
     def invoice_validate(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state':'open'}, context=context)
+        
+        for data in self.browse(cr, uid, ids, context):
+            if data.lenh_xuat_hang_id:
+                tien=0
+                ck=0
+                account_name=data.so_hoa_don
+                if account_name==None or account_name==False or account_name=='':
+                    raise osv.except_osv(_("Thông báo!"), _("Vui lòng nhập số hóa đơn trước khi xác nhận ."))
+                if account_name==False:
+                    account_name='Hóa đơn'
+                tien_hang=data.tien_hang
+                chiet_khau=data.chiet_khau
+                if tien_hang!=0:
+                    tien=- tien_hang
+                if chiet_khau!=0:
+                    ck=- chiet_khau
+                hop_dong_id=data.lenh_xuat_hang_id.hopdong_id.id
+                ngay_batdau=data.date_invoice
+                # ngay_ketthuc=data.lenh_xuat_hang_id.ngay_kethuc
+                if hop_dong_id:
+                    dambao=False
+                    from datetime import datetime  
+                    tn=datetime.strptime(ngay_batdau,'%Y-%m-%d') 
+                    today =time.strftime('%Y-%m-%d')
+                    td=datetime.strptime(today,'%Y-%m-%d') 
+                    if tn>= td: 
+                        dambao=True
+                    if tien!=0:
+                        hinhthuc_id1=self.pool.get('icsc.hinhthuc').create(cr, uid, {'name':account_name,'amount':tien,'sale':data.lenh_xuat_hang_id.id}, context)
+                        self.pool.get('icsc.hopdong.banhang.hinhthuc').create(cr, uid, {'name':hinhthuc_id1,'amount':tien,'hop_dong_id':hop_dong_id,'ngay_batdau':ngay_batdau,'dam_bao':dambao}, context)
+                    if ck!=0:
+                        hinhthuc_id2=self.pool.get('icsc.hinhthuc').create(cr, uid, {'name':account_name,'amount':ck,'sale':data.lenh_xuat_hang_id.id}, context)
+                   
+                        self.pool.get('icsc.hopdong.banhang.hinhthuc').create(cr, uid, {'name':hinhthuc_id2,'amount':ck,'hop_dong_id':hop_dong_id,'ngay_batdau':ngay_batdau,'dam_bao':dambao}, context)
         return True
 
     def line_get_convert(self, cr, uid, x, part, date, context=None):
@@ -1127,6 +1237,24 @@ class account_invoice(osv.osv):
     def action_cancel(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
+        for hd in self.browse(cr, uid, ids, context):
+            so_hoa_don=hd.so_hoa_don
+            if  hd.so_hoa_don is False:
+                so_hoa_don=hd.so_hoa_don
+            else:
+                so_hoa_don=str(hd.so_hoa_don.encode("utf-8"))
+            _logger.info('HHHHHHHHHHHHHHHHHHHHHHHHHH %s', so_hoa_don)
+            from datetime import datetime  
+            if so_hoa_don:
+                query="""select bhht.id from icsc_hopdong_banhang_hinhthuc bhht
+                        left join icsc_hinhthuc ht on ht.id=bhht.name
+                        where ht.name= '"""+so_hoa_don+"""'"""
+                cr.execute(query)
+                for item in cr.dictfetchall():
+                    bh_ht_id=item['id']
+                    today =time.strftime('%Y-%m-%d')
+                    ngay_kethuc=datetime.strptime(today,'%Y-%m-%d')
+                    self.pool.get('icsc.hopdong.banhang.hinhthuc').write(cr, uid, [bh_ht_id],{'ngay_kethuc':ngay_kethuc}, context)                    
         account_move_obj = self.pool.get('account.move')
         invoices = self.read(cr, uid, ids, ['move_id', 'payment_ids'])
         move_ids = [] # ones that we will need to remove
@@ -1176,7 +1304,7 @@ class account_invoice(osv.osv):
                 'out_refund': _('Refund'),
                 'in_refund': _('Supplier Refund'),
                 }
-        return [(r['id'], '%s %s' % (r['number'] or types[r['type']], r['name'] or '')) for r in self.read(cr, uid, ids, ['type', 'number', 'name'], context, load='_classic_write')]
+        return [(r['id'], '[%s] %s' % (r['so_hoa_don'] or r['number'] or types[r['type']], r['name'] or '')) for r in self.read(cr, uid, ids, [ 'so_hoa_don','type','number', 'name'], context, load='_classic_write')]
 
     def name_search(self, cr, user, name, args=None, operator='ilike', context=None, limit=100):
         if not args:
@@ -1185,9 +1313,9 @@ class account_invoice(osv.osv):
             context = {}
         ids = []
         if name:
-            ids = self.search(cr, user, [('number','=',name)] + args, limit=limit, context=context)
+            ids = self.search(cr, user, [('number',operator,name)] + args, limit=limit, context=context)
         if not ids:
-            ids = self.search(cr, user, [('name',operator,name)] + args, limit=limit, context=context)
+            ids = self.search(cr, user, [('so_hoa_don',operator,name)] + args, limit=limit, context=context)
         return self.name_get(cr, user, ids, context)
 
     def _refund_cleanup_lines(self, cr, uid, lines, context=None):
@@ -1254,7 +1382,7 @@ class account_invoice(osv.osv):
             refund_journal_ids = obj_journal.search(cr, uid, [('type','=','sale_refund')], context=context)
 
         if not date:
-            date = fields.date.context_today(self, cr, uid, context=context)
+            date = time.strftime('%Y-%m-%d')
         invoice_data.update({
             'type': type_dict[invoice['type']],
             'date_invoice': date,
@@ -1422,18 +1550,18 @@ class account_invoice_line(osv.osv):
     _description = "Invoice Line"
     _order = "invoice_id,sequence,id"
     _columns = {
-        'name': fields.text('Description', required=True),
+        'name': fields.text('Description'),
         'origin': fields.char('Source Document', size=256, help="Reference of the document that produced this invoice."),
         'sequence': fields.integer('Sequence', help="Gives the sequence of this line when displaying the invoice."),
         'invoice_id': fields.many2one('account.invoice', 'Invoice Reference', ondelete='cascade', select=True),
         'uos_id': fields.many2one('product.uom', 'Unit of Measure', ondelete='set null', select=True),
         'product_id': fields.many2one('product.product', 'Product', ondelete='set null', select=True),
-        'account_id': fields.many2one('account.account', 'Account', required=True, domain=[('type','<>','view'), ('type', '<>', 'closed')], help="The income or expense account related to the selected product."),
+        'account_id': fields.many2one('account.account', 'Account',  domain=[('type','<>','view'), ('type', '<>', 'closed')], help="The income or expense account related to the selected product."),
         'price_unit': fields.float('Unit Price', required=True, digits_compute= dp.get_precision('Product Price')),
         'price_subtotal': fields.function(_amount_line, string='Amount', type="float",
-            digits_compute= dp.get_precision('Account'), store=True),
+            digits=(12,0), store=True),
         'quantity': fields.float('Quantity', digits_compute= dp.get_precision('Product Unit of Measure'), required=True),
-        'discount': fields.float('Discount (%)', digits_compute= dp.get_precision('Discount')),
+        'discount': fields.float('Discount (%)',   digits=(12,0)),
         'invoice_line_tax_id': fields.many2many('account.tax', 'account_invoice_line_tax', 'invoice_line_id', 'tax_id', 'Taxes', domain=[('parent_id','=',False)]),
         'account_analytic_id':  fields.many2one('account.analytic.account', 'Analytic Account'),
         'company_id': fields.related('invoice_id','company_id',type='many2one',relation='res.company',string='Company', store=True, readonly=True),
@@ -1484,11 +1612,10 @@ class account_invoice_line(osv.osv):
             raise osv.except_osv(_('No Partner Defined!'),_("You must first select a partner!") )
         if not product:
             if type in ('in_invoice', 'in_refund'):
-                return {'value': {}, 'domain':{'uos_id':[]}}
+                return {'value': {}, 'domain':{'product_uom':[]}}
             else:
-                return {'value': {'price_unit': 0.0}, 'domain':{'uos_id':[]}}
+                return {'value': {'price_unit': 0.0}, 'domain':{'product_uom':[]}}
         part = self.pool.get('res.partner').browse(cr, uid, partner_id, context=context)
-        product_uom_obj = self.pool.get('product.uom')
         fpos_obj = self.pool.get('account.fiscal.position')
         fpos = fposition_id and fpos_obj.browse(cr, uid, fposition_id, context=context) or False
 
@@ -1521,12 +1648,7 @@ class account_invoice_line(osv.osv):
             result.update({'price_unit': res.list_price, 'invoice_line_tax_id': tax_id})
         result['name'] = res.partner_ref
 
-        result['uos_id'] = res.uom_id.id
-        if uom_id:
-            uom = product_uom_obj.browse(cr, uid, uom_id)
-            if res.uom_id.category_id.id == uom.category_id.id:
-                result['uos_id'] = uom_id
-
+        result['uos_id'] = uom_id or res.uom_id.id
         if res.description:
             result['name'] += '\n'+res.description
 
@@ -1584,7 +1706,8 @@ class account_invoice_line(osv.osv):
         company_currency = self.pool['res.company'].browse(cr, uid, inv.company_id.id).currency_id.id
         for line in inv.invoice_line:
             mres = self.move_line_get_item(cr, uid, line, context)
-            mres['invl_id'] = line.id
+            if not mres:
+                continue
             res.append(mres)
             tax_code_found= False
             for tax in tax_obj.compute_all(cr, uid, line.invoice_line_tax_id,
@@ -1616,7 +1739,7 @@ class account_invoice_line(osv.osv):
     def move_line_get_item(self, cr, uid, line, context=None):
         return {
             'type':'src',
-            'name': line.name.split('\n')[0][:64],
+            'name':line.name or line.product_id.name, # line.name.split('\n')[0][:64],
             'price_unit':line.price_unit,
             'quantity':line.quantity,
             'price':line.price_subtotal,
@@ -1697,20 +1820,21 @@ class account_invoice_tax(osv.osv):
         if company_id:
             company_currency = company_obj.read(cr, uid, [company_id], ['currency_id'])[0]['currency_id'][0]
         if currency_id and company_currency:
-            base = cur_obj.compute(cr, uid, currency_id, company_currency, base*factor, context={'date': date_invoice or fields.date.context_today(self, cr, uid)}, round=False)
+            base = cur_obj.compute(cr, uid, currency_id, company_currency, base*factor, context={'date': date_invoice or time.strftime('%Y-%m-%d')}, round=False)
         return {'value': {'base_amount':base}}
 
     def amount_change(self, cr, uid, ids, amount, currency_id=False, company_id=False, date_invoice=False):
         cur_obj = self.pool.get('res.currency')
         company_obj = self.pool.get('res.company')
         company_currency = False
+        factor = 1
+        if ids:
+            factor = self.read(cr, uid, ids[0], ['factor_tax'])['factor_tax']
         if company_id:
             company_currency = company_obj.read(cr, uid, [company_id], ['currency_id'])[0]['currency_id'][0]
         if currency_id and company_currency:
-            amount = cur_obj.compute(cr, uid, currency_id, company_currency, amount, context={'date': date_invoice or fields.date.context_today(self, cr, uid)}, round=False)
-        tax_rec = self.browse(cr, uid, ids)
-        tax_sign = (tax_rec[0].tax_amount / tax_rec[0].amount) if tax_rec and tax_rec[0].amount else 1
-        return {'value': {'tax_amount': amount * tax_sign}}
+            amount = cur_obj.compute(cr, uid, currency_id, company_currency, amount*factor, context={'date': date_invoice or time.strftime('%Y-%m-%d')}, round=False)
+        return {'value': {'tax_amount': amount}}
 
     _order = 'sequence'
     _defaults = {
@@ -1738,27 +1862,19 @@ class account_invoice_tax(osv.osv):
                 if inv.type in ('out_invoice','in_invoice'):
                     val['base_code_id'] = tax['base_code_id']
                     val['tax_code_id'] = tax['tax_code_id']
-                    val['base_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['base'] * tax['base_sign'], context={'date': inv.date_invoice or fields.date.context_today(self, cr, uid, context=context)}, round=False)
-                    val['tax_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['amount'] * tax['tax_sign'], context={'date': inv.date_invoice or fields.date.context_today(self, cr, uid, context=context)}, round=False)
+                    val['base_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['base'] * tax['base_sign'], context={'date': inv.date_invoice or time.strftime('%Y-%m-%d')}, round=False)
+                    val['tax_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['amount'] * tax['tax_sign'], context={'date': inv.date_invoice or time.strftime('%Y-%m-%d')}, round=False)
                     val['account_id'] = tax['account_collected_id'] or line.account_id.id
                     val['account_analytic_id'] = tax['account_analytic_collected_id']
                 else:
                     val['base_code_id'] = tax['ref_base_code_id']
                     val['tax_code_id'] = tax['ref_tax_code_id']
-                    val['base_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['base'] * tax['ref_base_sign'], context={'date': inv.date_invoice or fields.date.context_today(self, cr, uid, context=context)}, round=False)
-                    val['tax_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['amount'] * tax['ref_tax_sign'], context={'date': inv.date_invoice or fields.date.context_today(self, cr, uid, context=context)}, round=False)
+                    val['base_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['base'] * tax['ref_base_sign'], context={'date': inv.date_invoice or time.strftime('%Y-%m-%d')}, round=False)
+                    val['tax_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['amount'] * tax['ref_tax_sign'], context={'date': inv.date_invoice or time.strftime('%Y-%m-%d')}, round=False)
                     val['account_id'] = tax['account_paid_id'] or line.account_id.id
                     val['account_analytic_id'] = tax['account_analytic_paid_id']
 
-                # If the taxes generate moves on the same financial account as the invoice line
-                # and no default analytic account is defined at the tax level, propagate the
-                # analytic account from the invoice line to the tax line. This is necessary
-                # in situations were (part of) the taxes cannot be reclaimed,
-                # to ensure the tax move is allocated to the proper analytic account.
-                if not val.get('account_analytic_id') and line.account_analytic_id and val['account_id'] == line.account_id.id:
-                    val['account_analytic_id'] = line.account_analytic_id.id
-
-                key = (val['tax_code_id'], val['base_code_id'], val['account_id'])
+                key = (val['tax_code_id'], val['base_code_id'], val['account_id'], val['account_analytic_id'])
                 if not key in tax_grouped:
                     tax_grouped[key] = val
                 else:
@@ -1795,7 +1911,145 @@ class account_invoice_tax(osv.osv):
             })
         return res
 
+class account_invoice_phibaove(osv.osv):
+    _name = "account.invoice.phibaove"
+    _description = "Tài khoản phí bảo vệ"
 
+    def _count_factor(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for invoice_tax in self.browse(cr, uid, ids, context=context):
+            res[invoice_tax.id] = {
+                'factor_base': 1.0,
+                'factor_tax': 1.0,
+            }
+            if invoice_tax.amount <> 0.0:
+                factor_tax = invoice_tax.tax_amount / invoice_tax.amount
+                res[invoice_tax.id]['factor_tax'] = factor_tax
+
+            if invoice_tax.base <> 0.0:
+                factor_base = invoice_tax.base_amount / invoice_tax.base
+                res[invoice_tax.id]['factor_base'] = factor_base
+
+        return res
+
+    _columns = {
+        'invoice_id': fields.many2one('account.invoice', 'Invoice Line', ondelete='cascade', select=True),
+        'name': fields.char('Mô tả', size=64, required=True),
+        'account_id': fields.many2one('account.account', 'Tài khoản', required=True, domain=[('type','<>','view'),('type','<>','income'), ('type', '<>', 'closed')]),
+        'account_analytic_id': fields.many2one('account.analytic.account', 'Analytic account'),
+        'base': fields.float('Gốc', digits_compute=dp.get_precision('Account')),
+        'amount': fields.float('Phí bảo vệ', digits_compute=dp.get_precision('Account')),
+        'manual': fields.boolean('Manual'),
+        'sequence': fields.integer('Sequence', help="Gives the sequence order when displaying a list of invoice tax."),
+        'base_code_id': fields.many2one('account.tax.code', 'Base Code', help="The account basis of the tax declaration."),
+        'base_amount': fields.float('Base Code Amount', digits_compute=dp.get_precision('Account')),
+        'tax_code_id': fields.many2one('account.tax.code', 'Tax Code', help="The tax basis of the tax declaration."),
+        'tax_amount': fields.float('Tax Code Amount', digits_compute=dp.get_precision('Account')),
+        'company_id': fields.related('account_id', 'company_id', type='many2one', relation='res.company', string='Company', store=True, readonly=True),
+        'factor_base': fields.function(_count_factor, string='Multipication factor for Base code', type='float', multi="all"),
+        'factor_tax': fields.function(_count_factor, string='Multipication factor Tax code', type='float', multi="all")
+    }
+
+    def base_change(self, cr, uid, ids, base, currency_id=False, company_id=False, date_invoice=False):
+        cur_obj = self.pool.get('res.currency')
+        company_obj = self.pool.get('res.company')
+        company_currency = False
+        factor = 1
+        if ids:
+            factor = self.read(cr, uid, ids[0], ['factor_base'])['factor_base']
+        if company_id:
+            company_currency = company_obj.read(cr, uid, [company_id], ['currency_id'])[0]['currency_id'][0]
+        if currency_id and company_currency:
+            base = cur_obj.compute(cr, uid, currency_id, company_currency, base*factor, context={'date': date_invoice or time.strftime('%Y-%m-%d')}, round=False)
+        return {'value': {'base_amount':base}}
+
+    def amount_change(self, cr, uid, ids, amount, currency_id=False, company_id=False, date_invoice=False):
+        cur_obj = self.pool.get('res.currency')
+        company_obj = self.pool.get('res.company')
+        company_currency = False
+        factor = 1
+        if ids:
+            factor = self.read(cr, uid, ids[0], ['factor_tax'])['factor_tax']
+        if company_id:
+            company_currency = company_obj.read(cr, uid, [company_id], ['currency_id'])[0]['currency_id'][0]
+        if currency_id and company_currency:
+            amount = cur_obj.compute(cr, uid, currency_id, company_currency, amount*factor, context={'date': date_invoice or time.strftime('%Y-%m-%d')}, round=False)
+        return {'value': {'tax_amount': amount}}
+
+    _order = 'sequence'
+    _defaults = {
+        'manual': 1,
+        'base_amount': 0.0,
+        'tax_amount': 0.0,
+    }
+    def compute(self, cr, uid, invoice_id, context=None):
+        tax_grouped = {}
+        tax_obj = self.pool.get('account.tax')
+        cur_obj = self.pool.get('res.currency')
+        inv = self.pool.get('account.invoice').browse(cr, uid, invoice_id, context=context)
+        cur = inv.currency_id
+        company_currency = self.pool['res.company'].browse(cr, uid, inv.company_id.id).currency_id.id
+        for line in inv.invoice_line:
+            for tax in tax_obj.compute_all(cr, uid, line.invoice_line_tax_id, (line.price_unit* (1-(line.discount or 0.0)/100.0)), line.quantity, line.product_id, inv.partner_id)['taxes']:
+                val={}
+                val['invoice_id'] = inv.id
+                val['name'] = 'Thuế bảo vệ môi trường 5%'            
+                val['manual'] = False
+                val['sequence'] = tax['sequence']
+                val['base'] = cur_obj.round(cr, uid, cur, tax['price_unit'] * line['quantity'])
+                val['amount'] =0.05 * val['base']
+                if inv.type in ('out_invoice','in_invoice'):
+                    val['base_code_id'] = tax['base_code_id']
+                    val['tax_code_id'] = tax['tax_code_id']
+                    val['base_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['base'] * tax['base_sign'], context={'date': inv.date_invoice or time.strftime('%Y-%m-%d')}, round=False)
+                    val['tax_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['amount'] * tax['tax_sign'], context={'date': inv.date_invoice or time.strftime('%Y-%m-%d')}, round=False)
+                    val['account_id'] = 231
+                    val['account_analytic_id'] = tax['account_analytic_collected_id']
+                else:
+                    val['base_code_id'] = tax['ref_base_code_id']
+                    val['tax_code_id'] = tax['ref_tax_code_id']
+                    val['base_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['base'] * tax['ref_base_sign'], context={'date': inv.date_invoice or time.strftime('%Y-%m-%d')}, round=False)
+                    val['tax_amount'] = cur_obj.compute(cr, uid, inv.currency_id.id, company_currency, val['amount'] * tax['ref_tax_sign'], context={'date': inv.date_invoice or time.strftime('%Y-%m-%d')}, round=False)
+                    val['account_id'] = tax['account_paid_id'] or line.account_id.id
+                    val['account_analytic_id'] = tax['account_analytic_paid_id']
+
+                key = (val['tax_code_id'], val['base_code_id'], val['account_id'], val['account_analytic_id'])
+                if not key in tax_grouped:
+                    tax_grouped[key] = val
+                else:
+                    tax_grouped[key]['amount'] += val['amount']
+                    tax_grouped[key]['base'] += val['base']
+                    tax_grouped[key]['base_amount'] += val['base_amount']
+                    tax_grouped[key]['tax_amount'] += val['tax_amount']
+
+        for t in tax_grouped.values():
+            t['base'] = cur_obj.round(cr, uid, cur, t['base'])
+            t['amount'] = cur_obj.round(cr, uid, cur, t['amount'])
+            t['base_amount'] = cur_obj.round(cr, uid, cur, t['base_amount'])
+            t['tax_amount'] = cur_obj.round(cr, uid, cur, t['tax_amount'])
+        return tax_grouped
+
+    def move_line_get(self, cr, uid, invoice_id):
+        res = []
+        cr.execute('SELECT * FROM account_invoice_phibaove WHERE invoice_id=%s', (invoice_id,))
+        for t in cr.dictfetchall():
+            if not t['amount'] \
+                    and not t['tax_code_id'] \
+                    and not t['tax_amount']:
+                continue
+            res.append({
+                'type':'tax',
+                'name':t['name'],
+                'price_unit': t['amount'],
+                'quantity': 1,
+                'price': t['amount'] or 0.0,
+                'account_id': t['account_id'],
+                'tax_code_id': t['tax_code_id'],
+                'tax_amount': t['tax_amount'],
+                'account_analytic_id': t['account_analytic_id'],
+            })
+        return res
+account_invoice_phibaove()
 class res_partner(osv.osv):
     """ Inherits partner and adds invoice information in the partner form """
     _inherit = 'res.partner'
@@ -1815,10 +2069,10 @@ class res_partner(osv.osv):
             partner = partner.parent_id
         return partner
 
-    def copy_data(self, cr, uid, id, default=None, context=None):
+    def copy(self, cr, uid, id, default=None, context=None):
         default = default or {}
         default.update({'invoice_ids' : []})
-        return super(res_partner, self).copy_data(cr, uid, id, default=default, context=context)
+        return super(res_partner, self).copy(cr, uid, id, default, context)
 
 
 class mail_compose_message(osv.Model):

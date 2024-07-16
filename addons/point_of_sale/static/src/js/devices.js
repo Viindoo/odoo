@@ -437,13 +437,10 @@ function openerp_pos_devices(instance,module){ //module is instance.point_of_sal
 
             // The barcode readers acts as a keyboard, we catch all keyup events and try to find a 
             // barcode sequence in the typed keys, then act accordingly.
-            this.handler = function(e){
-                if(e.which === 13){ //ignore returns
-                    e.preventDefault();
-                    return;
-                }
+            $('body').delegate('','keypress', function (e){
+                //console.log('keyup:'+String.fromCharCode(e.keyCode)+' '+e.keyCode,e);
                 //We only care about numbers
-                if (e.which >= 48 && e.which < 58){
+                if (e.keyCode >= 48 && e.keyCode < 58){
 
                     // The barcode reader sends keystrokes with a specific interval.
                     // We look if the typed keys fit in the interval. 
@@ -456,7 +453,7 @@ function openerp_pos_devices(instance,module){ //module is instance.point_of_sal
                             timeStamp = new Date().getTime();
                         }
                     }
-                    codeNumbers.push(e.which - 48);
+                    codeNumbers.push(e.keyCode - 48);
                     lastTimeStamp = new Date().getTime();
                     if (codeNumbers.length === 13) {
                         //We have found what seems to be a valid codebar
@@ -467,13 +464,12 @@ function openerp_pos_devices(instance,module){ //module is instance.point_of_sal
                     // NaN
                     codeNumbers = [];
                 }
-            };
-            $('body').on('keypress', this.handler);
+            });
         },
 
         // stops catching keyboard events 
         disconnect: function(){
-            $('body').off('keypress', this.handler)
+            $('body').undelegate('', 'keyup')
         },
     });
 

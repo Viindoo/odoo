@@ -19,7 +19,6 @@
 #
 ##############################################################################
 import time
-
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 
@@ -27,37 +26,35 @@ class hr_timesheet_current_open(osv.osv_memory):
     _name = 'hr.timesheet.current.open'
     _description = 'hr.timesheet.current.open'
 
-    def open_timesheet(self, cr, uid, ids, context=None):
+    def open_timesheet(self, cr, uid, ids, context = None):
         ts = self.pool.get('hr_timesheet_sheet.sheet')
         if context is None:
             context = {}
         view_type = 'form,tree'
-
-        user_ids = self.pool.get('hr.employee').search(cr, uid, [('user_id','=',uid)], context=context)
+        user_ids = self.pool.get('hr.employee').search(cr, uid, [('user_id', '=', uid)], context=context)
         if not len(user_ids):
             raise osv.except_osv(_('Error!'), _('Please create an employee and associate it with this user.'))
-        ids = ts.search(cr, uid, [('user_id','=',uid),('state','in',('draft','new')),('date_from','<=',time.strftime('%Y-%m-%d')), ('date_to','>=',time.strftime('%Y-%m-%d'))], context=context)
-
+        ids = ts.search(cr, uid, [('user_id', '=', uid),
+         ('state', 'in', ('draft', 'new')),
+         ('date_from', '<=', time.strftime('%Y-%m-%d')),
+         ('date_to', '>=', time.strftime('%Y-%m-%d'))], context=context)
         if len(ids) > 1:
             view_type = 'tree,form'
-            domain = "[('id','in',["+','.join(map(str, ids))+"]),('user_id', '=', uid)]"
-        elif len(ids)==1:
+            domain = "[('id','in',[" + ','.join(map(str, ids)) + "]),('user_id', '=', uid)]"
+        elif len(ids) == 1:
             domain = "[('user_id', '=', uid)]"
         else:
             domain = "[('user_id', '=', uid)]"
-        value = {
-            'domain': domain,
-            'name': _('Open Timesheet'),
-            'view_type': 'form',
-            'view_mode': view_type,
-            'res_model': 'hr_timesheet_sheet.sheet',
-            'view_id': False,
-            'type': 'ir.actions.act_window'
-        }
+        value = {'domain': domain,
+         'name': _('Open Timesheet'),
+         'view_type': 'form',
+         'view_mode': view_type,
+         'res_model': 'hr_timesheet_sheet.sheet',
+         'view_id': False,
+         'type': 'ir.actions.act_window'}
         if len(ids) == 1:
             value['res_id'] = ids[0]
         return value
 
-hr_timesheet_current_open()
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+hr_timesheet_current_open()

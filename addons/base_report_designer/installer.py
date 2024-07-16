@@ -18,7 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields
 from openerp.osv import osv
 import base64
@@ -29,35 +28,17 @@ class base_report_designer_installer(osv.osv_memory):
     _name = 'base_report_designer.installer'
     _inherit = 'res.config.installer'
 
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self, cr, uid, fields, context = None):
         data = super(base_report_designer_installer, self).default_get(cr, uid, fields, context=context)
-        plugin_file = open(addons.get_module_resource('base_report_designer','plugin', 'openerp_report_designer.zip'),'rb')
+        plugin_file = open(addons.get_module_resource('base_report_designer', 'plugin', 'openerp_report_designer.zip'), 'rb')
         data['plugin_file'] = base64.encodestring(plugin_file.read())
         return data
 
-    _columns = {
-        'name':fields.char('File name', size=34),
-        'plugin_file':fields.binary('OpenObject Report Designer Plug-in', readonly=True, help="OpenObject Report Designer plug-in file. Save as this file and install this plug-in in OpenOffice."),
-        'description':fields.text('Description', readonly=True)
-    }
+    _columns = {'name': fields.char('File name', size=34),
+     'plugin_file': fields.binary('OpenObject Report Designer Plug-in', readonly=True, help='OpenObject Report Designer plug-in file. Save as this file and install this plug-in in OpenOffice.'),
+     'description': fields.text('Description', readonly=True)}
+    _defaults = {'name': 'openerp_report_designer.zip',
+     'description': '\n        * Save the OpenERP Report Designer plug-\xc2\xadin.\n        * Follow these steps to install plug-\xc2\xadin.\n            1. Open Extension Manager window from Menu Bar of Openoffice writer, Open Tools > Extension Menu.\n            2. Click on "Add" button.\n            3. Select path where the openerp_report_designer.zip is located.\n            4. On the completion of adding package you will get your package under \'Extension Manager\' and the status of your package become \'Enabled\'.\n            5. Restart openoffice writer.\n        * Follow the steps to configure OpenERP Report Designer plug-\xc2\xadin in Openoffice writer.\n            1. Connect OpenERP Server from Menu bar , OpenERP Report Designer > Server parameter.\n            2. Select Server url, database and provide user name and password\n            3. Click "Connect".\n            4. if your connection success, A message appears like \'You can start creating your report in current document.\'.\n        '}
 
-    _defaults = {
-        'name' : 'openerp_report_designer.zip',
-        'description' : """
-        * Save the OpenERP Report Designer plug-­in.
-        * Follow these steps to install plug-­in.
-            1. Open Extension Manager window from Menu Bar of Openoffice writer, Open Tools > Extension Menu.
-            2. Click on "Add" button.
-            3. Select path where the openerp_report_designer.zip is located.
-            4. On the completion of adding package you will get your package under 'Extension Manager' and the status of your package become 'Enabled'.
-            5. Restart openoffice writer.
-        * Follow the steps to configure OpenERP Report Designer plug-­in in Openoffice writer.
-            1. Connect OpenERP Server from Menu bar , OpenERP Report Designer > Server parameter.
-            2. Select Server url, database and provide user name and password
-            3. Click "Connect".
-            4. if your connection success, A message appears like 'You can start creating your report in current document.'.
-        """
-    }
+
 base_report_designer_installer()
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

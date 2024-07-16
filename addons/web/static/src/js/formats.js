@@ -137,12 +137,11 @@ instance.web.format_value = function (value, descriptor, value_if_empty) {
     //noinspection FallthroughInSwitchStatementJS
     switch (value) {
         case '':
-            if (descriptor.type === 'char' || descriptor.type === 'text') {
+            if (descriptor.type === 'char') {
                 return '';
             }
             console.warn('Field', descriptor, 'had an empty string as value, treating as false...');
         case false:
-        case undefined:
         case Infinity:
         case -Infinity:
             return value_if_empty === undefined ?  '' : value_if_empty;
@@ -228,12 +227,14 @@ instance.web.parse_value = function (value, descriptor, value_if_empty) {
                 value = value.replace(instance.web._t.database.parameters.thousands_sep, "");
             } while(tmp !== value);
             tmp = Number(value);
-            // do not accept not numbers or float values
-            if (isNaN(tmp) || tmp % 1)
+            if (isNaN(tmp))
                 throw new Error(_.str.sprintf(_t("'%s' is not a correct integer"), value));
             return tmp;
         case 'float':
-            var tmp;
+            var tmp = Number(value);
+            if (!isNaN(tmp))
+                return tmp;
+
             var tmp2 = value;
             do {
                 tmp = tmp2;
@@ -263,29 +264,12 @@ instance.web.parse_value = function (value, descriptor, value_if_empty) {
                     value, (date_pattern + ' ' + time_pattern));
             if (datetime !== null)
                 return instance.web.datetime_to_str(datetime);
-            datetime = Date.parseExact(value, (date_pattern));
-            if (datetime !== null)
-                return instance.web.datetime_to_str(datetime);
-            var leading_zero_value = value.toString().replace(/\d+/g, function(m){
-                return m.length === 1 ? "0" + m : m ;
-            });
-            datetime = Date.parseExact(leading_zero_value, (date_pattern + ' ' + time_pattern));
-            if (datetime !== null)
-                return instance.web.datetime_to_str(datetime);
-            datetime = Date.parseExact(leading_zero_value, (date_pattern));
-            if (datetime !== null)
-                return instance.web.datetime_to_str(datetime);
             datetime = Date.parse(value);
             if (datetime !== null)
                 return instance.web.datetime_to_str(datetime);
             throw new Error(_.str.sprintf(_t("'%s' is not a correct datetime"), value));
         case 'date':
             var date = Date.parseExact(value, date_pattern);
-            if (date !== null)
-                return instance.web.date_to_str(date);
-            date = Date.parseExact(value.toString().replace(/\d+/g, function(m){
-                return m.length === 1 ? "0" + m : m ;
-            }), date_pattern);
             if (date !== null)
                 return instance.web.date_to_str(date);
             date = Date.parse(value);

@@ -1,0 +1,875 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>  
+  	<!--1.01-->
+  	<record id="view_icsc_baocao_hangngay_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.hangngay.tree</field>
+	    <field name="model">icsc.baocao.hangngay</field>
+	      <field name="arch" type="xml">
+	        <tree string=" BÁO CÁO HÀNG NGÀY VỀ LỆNH XUẤT HÀNG" editable="top">			         
+	          <field name="partner_id"/>
+	          <field name="nhom_kh"/>
+	          <field name="dv_thuchien"/>
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_hangngay" model="ir.actions.act_window">
+          <field name="name">1.11 BC LXH hằng ngày</field>
+          <field name="res_model">icsc.baocao.hangngay</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record> 
+    <!--1.102-->
+     <record id="view_icsc_baocao_banhang" model="ir.ui.view">
+		    <field name="name">icsc.baocao.banhang.tree</field>
+		    <field name="model">icsc.baocao.banhang</field>
+		      <field name="arch" type="xml">
+		        <tree string="Báo cáo bán hàng" editable="top">			         
+		          <field name="nhom_kh"/>
+		          <field name="partner_id"/>
+		          <field name="categ_id"/>
+		          <field name="dv_thuchien"/>
+		          <field name="ngay_bd"/>
+		          <field name="ngay_kt"/>
+		        </tree>
+		    </field>
+	</record>
+    <record id="action_icsc_baocao_banhang" model="ir.actions.act_window">
+          <field name="name">1.12 BC bán hàng</field>
+          <field name="res_model">icsc.baocao.banhang</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 1.103 -->
+    <record id="view_icsc_baocao_hoadon_ban_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.hoadon.banhang.tree</field>
+	    <field name="model">icsc.baocao.hoadon.banhang</field>
+	      <field name="arch" type="xml">
+	        <tree string="Bảng kê hóa đơn bán hàng" editable="top">			         
+	          <field name="categ_id"/>
+	          <field name="product_id"/>
+	          <field name="nhom_kh"/>
+	          <field name="partner_id"/>
+	          <field name="dv_thuchien" widget="selection"/>
+	          <field name="loai_xuat_hang"/>
+	          <field name="type_kho"/>
+	          <field name="tungay"/>
+	          <field name="denngay"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_hoadon_ban" model="ir.actions.act_window">
+          <field name="name">1.13 Bảng kê hoá đơn bán hàng</field>
+          <field name="res_model">icsc.baocao.hoadon.banhang</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+  	<!--1.2-->
+  	<record id="view_icsc_baocao_lenh_tonghop_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.lenh.tonghop.tree</field>
+	    <field name="model">icsc.baocao.lenh.tonghop</field>
+	      <field name="arch" type="xml">
+	        <tree string="TỔNG HỢP XUẤT/TỒN LỆNH CỦA CÁC ĐƠN VỊ" editable="top">			         
+	          <field name="partner_id"/>
+	          <field name="nhom_kh"/>
+	          <field name="dv_thuchien"/>
+	          <field name="kho_gui"/>
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+	        </tree>
+	    </field>
+  	</record>
+    <record id="action_icsc_baocao_lenh_tonghop" model="ir.actions.act_window">
+          <field name="name">1.2 BC xuất tồn lệnh đơn vị</field>
+          <field name="res_model">icsc.baocao.lenh.tonghop</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+  	<!--1.3-->
+  	<record id="view_icsc_baocao_tonlenh_mathang_khachhang" model="ir.ui.view">
+	    <field name="name">icsc.baocao.tonlenh.mathang.khachhang.tree</field>
+	    <field name="model">icsc.baocao.tonlenh.mathang.khachhang</field>
+	      <field name="arch" type="xml">
+	        <tree string=" TỔNG HỢP TỒN LỆNH CHI TIẾT THEO MẶT HÀNG-KHÁCH HÀNG" editable="top">			         
+	          <field name="partner_id"/>
+	          <field name="nhom_kh"/>
+	          <field name="dv_thuchien"/>
+	          <field name="kho_gui"/>
+	          <field name="date"/>
+	        </tree>
+	    </field>
+  	</record>
+    <record id="action_icsc_baocao_tonlenh_mathang_khachhang" model="ir.actions.act_window">
+          <field name="name">1.3 BC tồn lệnh chi tiết MH-KH</field>
+          <field name="res_model">icsc.baocao.tonlenh.mathang.khachhang</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    <!--1.4 -->
+    <record id="view_icsc_baocao_sokelenh_guikho" model="ir.ui.view">
+	    <field name="name">icsc.baocao.sokelenh.guikho.tree</field>
+	    <field name="model">icsc.baocao.sokelenh.guikho</field>
+	      <field name="arch" type="xml">
+	        <tree string="SỐ KÊ LỆNH GỬI KHO THEO HỢP ĐỒNG" editable="top">			         
+		      <field name="hopdong"/>
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_sokelenh_guikho" model="ir.actions.act_window">
+          <field name="name">1.4 BC sổ kê lệnh theo HĐ</field>
+          <field name="res_model">icsc.baocao.sokelenh.guikho</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+     </record> 
+     <!-- 1.51 -->
+     <record id="view_icsc_baocao_tonghop_phatsinh_khachhang" model="ir.ui.view">
+	    <field name="name">icsc.baocao.tonghop.phatsinh.khachhang.tree</field>
+	    <field name="model">icsc.baocao.tonghop.phatsinh.khachhang</field>
+	      <field name="arch" type="xml">
+	        <tree string="TỔNG HỢP PHÁT SINH THEO KHÁCH HÀNG - SẢN PHẨM" editable="top">			         
+	          <field name="partner_id"/>
+		      <field name="nhom_kh"/>
+		      <field name="categ_id"/>
+		      <field name="lenh_xuat"/>
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_tonghop_phatsinh_khachhang" model="ir.actions.act_window">
+          <field name="name">1.51 TH phát sinh theo khách hàng</field>
+          <field name="res_model">icsc.baocao.tonghop.phatsinh.khachhang</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+     </record>
+     <!-- 1.52 -->
+     <record id="view_icsc_baocao_tonghop_phatsinh_sanpham" model="ir.ui.view">
+		    <field name="name">icsc.baocao.tonghop.phatsinh.sanpham.tree</field>
+		    <field name="model">icsc.baocao.tonghop.phatsinh.sanpham</field>
+		      <field name="arch" type="xml">
+		        <tree string="Báo cáo bán hàng" editable="top">			         
+		          <field name="categ_id"/>
+		          <field name="ngay_bd"/>
+		          <field name="ngay_kt"/>
+		        </tree>
+		    </field>
+	</record>
+    <record id="action_icsc_baocao_tonghop_phatsinh_sanpham" model="ir.actions.act_window">
+          <field name="name">1.52 TH phát sinh theo sản phẩm</field>
+          <field name="res_model">icsc.baocao.tonghop.phatsinh.sanpham</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+     </record>
+     <!--1.6-->
+     <record id="view_report_icsc_baocao_hopdong_banhang_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.hopdong.banhang.tree</field>
+	    <field name="model">icsc.baocao.hopdong.banhang</field>
+	      <field name="arch" type="xml">
+	        <tree string="Tổng hợp thông tin khách hàng ký hợp đồng" editable="top">			         
+	          <field name="loai_hop_dong"/>
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+	        </tree>
+	    </field>
+	 </record>
+     <record id="action_icsc_baocao_hopdong_ban" model="ir.actions.act_window">
+            <field name="name">1.6 TH hợp đồng bán hàng</field>
+            <field name="res_model">icsc.baocao.hopdong.banhang</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+     </record>
+     <!--1.701-->
+     <record id="view_icsc_baocao_ketqua_tieuthu_tree" model="ir.ui.view">
+		    <field name="name">icsc.baocao.ketqua.tieuthu.tree</field>
+		    <field name="model">icsc.baocao.ketqua.tieuthu</field>
+		      <field name="arch" type="xml">
+		        <tree string="KẾT QUẢ TIÊU THỤ KHO" editable="top">			         
+		          <field name="categ_id"/>
+		          <field name="dv_thuchien"/>
+		          <field name="ngay_bd"/>
+		          <field name="ngay_kt"/>
+				  <field name="gio_bc"/>
+		        </tree>
+		    </field>
+	</record>
+    <record id="action_icsc_baocao_ketqua_tieuthu" model="ir.actions.act_window">
+          <field name="name">1.71 BC kết quả tiêu thụ</field>
+          <field name="res_model">icsc.baocao.ketqua.tieuthu</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+     </record> 
+     <!--1.702-->
+     <record id="view_icsc_baocao_danhgia_tieuthu" model="ir.ui.view">
+		    <field name="name">icsc.baocao.danhgia.tieuthu.tree</field>
+		    <field name="model">icsc.baocao.danhgia.tieuthu</field>
+		      <field name="arch" type="xml">
+		        <tree string="ĐÁNH GIÁ KẾT QUẢ TIÊU THỤ KHO" editable="top">			         
+		          <field name="partner_id"/>
+		          <field name="dv_thuchien"/>
+		          <field name="tinh"/>
+		          <field name="loai_hd" invisible="1"/>
+		          <field name="ngay_bd"/>
+		          <field name="ngay_kt"/>
+		        </tree>
+		    </field>
+	</record>
+    <record id="action_icsc_baocao_danhgia_tieuthu" model="ir.actions.act_window">
+          <field name="name">1.72 Đánh giá kết quả tiêu thụ</field>
+          <field name="res_model">icsc.baocao.danhgia.tieuthu</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+     </record>
+     <!-- 1.8 -->
+     <record id="view_icsc_baocao_pxk_kiemvcnoibo_tree" model="ir.ui.view">
+		    <field name="name">icsc.baocao.pxk.kiemvcnoibo.tree</field>
+		    <field name="model">icsc.baocao.pxk.kiemvcnoibo</field>
+		      <field name="arch" type="xml">
+		        <tree string="Bảng kê phiếu xuất kho kiêm vận chuyển nội bộ" editable="top">			         
+		          <field name="categ"/>
+		          <field name="dv_thuchien" widget="selection"/>
+		          <field name="partner_id"/>
+				  <field name="tinh"/>				  
+		          <field name="lenh_xuat"/>
+		          <field name="loai_xuat_hang"/>
+		          <field name="ngay_bd_phieu"/>
+		          <field name="ngay_kt_phieu"/>
+
+		        </tree>
+		    </field>
+	</record>
+	<record id="action_icsc_baocao_pxk_kiemvcnoibo" model="ir.actions.act_window">
+          <field name="name">1.8 Thống kê PXK kiêm VCNB</field>
+          <field name="res_model">icsc.baocao.pxk.kiemvcnoibo</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record> 
+    <!-- 1.9 -->
+    <record id="view_icsc_baocao_luongtieuthu_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.luongtieuthu.tree</field>
+	    <field name="model">icsc.baocao.luongtieuthu</field>
+   		<field name="arch" type="xml">
+        	<tree string="SẢN LƯỢNG TIÊU THỤ KHÁCH HÀNG" editable="top">
+          		<field name="state"/>
+          		<field name="district"/>
+          		<field name="thang"/>
+          		<field name="thang2"/>
+          		<field name="nam"/>
+       		</tree>
+    	</field>
+	</record>
+	<record id="action_icsc_baocao_luongtieuthu" model="ir.actions.act_window">
+           <field name="name">1.9 BC sản lượng tiêu thụ</field>
+           <field name="res_model">icsc.baocao.luongtieuthu</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+    </record>  
+    <!-- 2.0 -->
+    <record id="view_icsc_baocao_kehoach_phanbon_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.kehoach.phanbon.tree</field>
+	    <field name="model">icsc.baocao.kehoach.phanbon</field>
+	      <field name="arch" type="xml">
+	        <tree string="Kế hoạch vận chuyển phân bón" editable="top">			         
+	          <field name="donvi_vc"/>
+	          <field name="donvi_nh"/>
+	          <field name="ngay"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+  	</record>
+    <record id="action_icsc_baocao_kehoach_vanchuyen" model="ir.actions.act_window">
+          <field name="name">2.0 Kế hoạch vận chuyển</field>
+          <field name="res_model">icsc.baocao.kehoach.phanbon</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record> 
+    <!-- 2.11 -->
+    <record id="view_icsc_baocao_kehoach_phanbon_canam_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.kehoach.phanbon.canam.tree</field>
+	    <field name="model">icsc.baocao.kehoach.phanbon.canam</field>
+	      <field name="arch" type="xml">
+	        <tree string="Thống kê kết quả vận chuyển phân bón" editable="top">			         
+	          <field name="denngay"/>			         
+	          <field name="donvi_vc"/>
+			  <field name="donvi_nh"/>
+	          <field name="loai_khvc"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_kehoach_phanbon_canam" model="ir.actions.act_window">
+           <field name="name">2.11 TK kết quả vận chuyển</field>
+           <field name="res_model">icsc.baocao.kehoach.phanbon.canam</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+    </record> 
+    <!-- 2.12 -->
+    <record id="view_icsc_baocao_ketquavc_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.ketquavc.tree</field>
+	    <field name="model">icsc.baocao.ketquavc</field>
+	      <field name="arch" type="xml">
+	        <tree string="Thống kê kết quả vận chuyển - ĐVNH" editable="top">			         
+	          <field name="donvi_vc"/>
+	          <field name="donvi_nh"/>
+	          <field name="name"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+    </record>
+	<record id="action_icsc_baocao_ketquavc" model="ir.actions.act_window">
+          <field name="name">2.12 Kết quả VC - ĐVNH</field>
+          <field name="res_model">icsc.baocao.ketquavc</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.21 -->
+    <record id="view_icsc_baocao_hopdong_vanchuyen_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.hopdong.vanchuyen.tree</field>
+	    <field name="model">icsc.baocao.hopdong.vanchuyen</field>
+	      <field name="arch" type="xml">
+	        <tree string="Hợp đồng vận chuyển" editable="top">
+		        <field name="donvi_vc" />
+		        <field name="ngay_bd_hd" />
+		        <field name="ngay_kt_hd" />
+				<field name="gio_bc"/>
+	        </tree>
+	      </field>
+    </record>
+    <record id="action_icsc_baocao_hopdong_vanchuyen" model="ir.actions.act_window">
+        <field name="name">2.21 Hợp đồng vận chuyển</field>
+        <field name="res_model">icsc.baocao.hopdong.vanchuyen</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.22 -->
+    <record id="view_icsc_baocao_hopdong_cuocvanchuyen" model="ir.ui.view">
+	    <field name="name">icsc.baocao.hopdong.cuocvanchuyen.tree</field>
+	    <field name="model">icsc.baocao.hopdong.cuocvanchuyen</field>
+	      <field name="arch" type="xml">
+	        <tree string="Thông báo thay đổi đơn giá cước" editable="top">
+		        <field name="donvi_vc" />
+		        <field name="ngay" />
+				<field name="gio_bc"/>
+	        </tree>
+	      </field>
+    </record>
+    <record id="action_icsc_baocao_hopdong_cuocvanchuyen" model="ir.actions.act_window">
+        <field name="name">2.22 TB thay đổi đơn giá cước</field>
+        <field name="res_model">icsc.baocao.hopdong.cuocvanchuyen</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.31 -->
+    <record id="view_icsc_baocao_phieu_vanchuyen_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.phieu.vanchuyen.tree</field>
+	    <field name="model">icsc.baocao.phieu.vanchuyen</field>
+	      <field name="arch" type="xml">
+	        <tree string="Phiếu vận chuyển" editable="top">
+	          <field name="loai_phieu"/>
+	          <field name="loai_khvc"/>
+	          <field name="kho_xuat"/>
+	          <field name="donvi_vc"/>
+	          <field name="donvi_nh"/>
+	          <field name="dv_thuchien"/>
+	          <field name="ngay_bd_phieu"/>
+	          <field name="ngay_kt_phieu"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_phieu_vanchuyen" model="ir.actions.act_window">
+          <field name="name">2.31 Thống kê phiếu vận chuyển</field>
+          <field name="res_model">icsc.baocao.phieu.vanchuyen</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+		  <field name="gio_bc"/>
+    </record>
+    <!-- 2.32 -->
+    <record id="view_icsc_baocao_phieu_vanchuyen_thuybo" model="ir.ui.view">
+	    <field name="name">icsc.baocao.phieu.vanchuyen.thuybo.tree</field>
+	    <field name="model">icsc.baocao.phieu.vanchuyen.thuybo</field>
+	      <field name="arch" type="xml">
+	        <tree string="Phiếu vận chuyển" editable="top">
+	          <field name="loai_khvc"/>
+	          <field name="donvi_vc"/>
+	          <field name="donvi_nh"/>
+	          <field name="state_id"/>
+	          <field name="diachi_giao"/>
+	          <field name="dv_thuchien"/>
+	          <field name="ngay_bd_phieu"/>
+	          <field name="ngay_kt_phieu"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_phieu_vanchuyen_thuybo" model="ir.actions.act_window">
+          <field name="name">2.32 TH vận chuyển thủy-bộ</field>
+          <field name="res_model">icsc.baocao.phieu.vanchuyen.thuybo</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.4 -->
+    <record id="view_icsc_baocao_kho_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.kho.tree</field>
+	    <field name="model">icsc.baocao.kho</field>
+	      <field name="arch" type="xml">
+	        <tree string="Báo cáo tồn lệnh-kế hoạch" editable="top">
+	          <field name="donvi_vc"/>
+	          <field name="chang_khvc"/>
+	          <field name="loai_khvc"/>
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+			  <field name="gio_bc"/>
+	       </tree>
+	    </field>
+    </record>
+	<record id="action_icsc_baocao_kho" model="ir.actions.act_window">
+           <field name="name">2.4 BC tồn lệnh-kế hoạch</field>
+           <field name="res_model">icsc.baocao.kho</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+    </record>   
+    <!-- 2.5 -->
+    <record id="view_icsc_baocao_tonghop_vanchuyen_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.tonghop.vanchuyen.tree</field>
+	    <field name="model">icsc.baocao.tonghop.vanchuyen</field>
+	      <field name="arch" type="xml">
+	        <tree string="Báo cáo khối lượng VC" editable="top">			         
+	          <field name="donvi_vc"/>
+	          <field name="donvi_nh"/>
+	          <field name="loai_khvc"/>
+	          <field name="ngay_bd_phieu"/>
+	          <field name="ngay_kt_phieu"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_tonghop_vanchuyen" model="ir.actions.act_window">
+           <field name="name">2.51 Báo cáo khối lượng VC</field>
+           <field name="res_model">icsc.baocao.tonghop.vanchuyen</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+    </record> 
+    <!-- 2.52 -->
+    <record id="view_icsc_baocao_khoiluong_giaonhan_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.khoiluong.giaonhan.tree</field>
+	    <field name="model">icsc.baocao.khoiluong.giaonhan</field>
+	      <field name="arch" type="xml">
+	        <tree string="TH khối lượng giao nhận-vận chuyển" editable="top">
+	           <field name="dv_vanchuyen"/>
+	           <field name="ngay_bd_phieu"/>
+	           <field name="ngay_kt_phieu"/>
+			   <field name="lan_bc"/>
+			   <field name="gio_bc"/>
+	        </tree>
+	    </field>
+    </record>
+	<record id="action_icsc_baocao_khoiluong_giaonhan" model="ir.actions.act_window">
+          <field name="name">2.52 TH khối lượng GN-VC</field>
+          <field name="res_model">icsc.baocao.khoiluong.giaonhan</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.53 -->
+    <record id="view_icsc_baocao_khoiluong_tiencuoc_giaonhan" model="ir.ui.view">
+	    <field name="name">icsc.baocao.khoiluong.tiencuoc.giaonhan.tree</field>
+	    <field name="model">icsc.baocao.khoiluong.tiencuoc.giaonhan</field>
+	      <field name="arch" type="xml">
+	        <tree string="TH khối lượng giao nhận-vận chuyển" editable="top">
+	           <field name="dv_vanchuyen"/>
+	           <field name="name"/>
+	           <field name="date"/>
+			   <field name="gio_bc"/>
+	        </tree>
+	    </field>
+    </record>
+	<record id="action_icsc_baocao_khoiluong_tiencuoc_giaonhan" model="ir.actions.act_window">
+          <field name="name">2.53 TH khối lượng tiền cước vc</field>
+          <field name="res_model">icsc.baocao.khoiluong.tiencuoc.giaonhan</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.6 -->
+    <record id="view_icsc_baocao_denghithanhtoan_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.denghithanhtoan.tree</field>
+	    <field name="model">icsc.baocao.denghithanhtoan</field>
+	      <field name="arch" type="xml">
+	        <tree string="Thống kê đề nghị thanh toán" editable="top">			         
+	          <field name="donvi_vc"/>
+	          <field name="donvi_nh"/>
+	          <field name="ngay_bd_phieu"/>
+	          <field name="ngay_kt_phieu"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+    </record>
+	<record id="action_icsc_baocao_denghithanhtoan" model="ir.actions.act_window">
+          <field name="name">2.6 TK đề nghị thanh toán</field>
+          <field name="res_model">icsc.baocao.denghithanhtoan</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.702 -->
+    <record id="view_icsc_thanhtoan_vanchuyen_tree" model="ir.ui.view">
+	    <field name="name">icsc.thanhtoan.vanchuyen.tree</field>
+	    <field name="model">icsc.thanhtoan.vanchuyen</field>
+	      <field name="arch" type="xml">
+	        <tree string="Thanh toán cước vận chuyển thuê ngoài" editable="top">			         
+	          <field name="dv_vanchuyen"/>
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+
+	        </tree>
+	    </field>
+	</record>
+	<record id="view_icsc_thanhtoan_vanchuyen_form" model="ir.ui.view">
+	    <field name="name">icsc.thanhtoan.vanchuyen.form</field>
+	    <field name="model">icsc.thanhtoan.vanchuyen</field>
+	      <field name="arch" type="xml">
+	        <form string="Thanh toán cước vận chuyển thuê ngoài"  version="7.0">	
+	        	 <header>   
+	                   <button name="action_load_data" string="Tải dữ liệu" type="object"  class="oe_highlight" />                     
+               	 </header>	
+		         <sheet>
+		         	<group>
+			         	<group>
+			         		  <field name="dv_vanchuyen"/>
+					          <field name="ngay_bd"/>
+					          <field name="ngay_kt"/>
+							  </group>
+			         	<group>
+			         	</group>		         	
+		         	</group>
+		         	 <notebook>			               
+			                 <page name="chitiet_ids" string="I - KẾT QUẢ THỰC HIỆN VẬN CHUYỂN">
+			                    <field name="chitiet_ids" >	
+			                   	   <tree string="Kết quả"  editable="top">	
+					                     <field name="category_id" /> 	
+					                     <field name="so_phieu_ps"/>
+					                     <field name="so_phieu_tt"/> 
+					                     <field name="so_phieu_ton"/>              	                  		                 
+					                </tree>
+					                <form string="Thông tin bảng giá"  vertion="7.0"> 	
+					                  	 <field name="category_id" /> 	
+					                     <field name="so_phieu_ps"/>
+					                     <field name="so_phieu_tt"/>
+					                     <field name="so_phieu_ton"/>
+					                </form>	
+			                     </field>
+			                 </page>
+			       </notebook>			         
+		         </sheet>	        
+	        </form>
+	    </field>
+	</record>
+    <record id="action_icsc_thanhtoan_vanchuyen" model="ir.actions.act_window">
+         <field name="name">2.702 Thanh toán cước VC thuê ngoài</field>
+         <field name="res_model">icsc.thanhtoan.vanchuyen</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.701 -->
+    
+    <record id="view_icsc_tongtien_thanhtoan_vanchuyen_tree" model="ir.ui.view">
+	    <field name="name">icsc.tongtien.thanhtoan.vanchuyen.tree</field>
+	    <field name="model">icsc.tongtien.thanhtoan.vanchuyen</field>
+	      <field name="arch" type="xml">
+	        <tree string="Tổng tiền cước phải trả" editable="top">			         
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_tongtien_thanhtoan_vanchuyen" model="ir.actions.act_window">
+         <field name="name">2.701 Tổng tiền cước phải trả</field>
+         <field name="res_model">icsc.tongtien.thanhtoan.vanchuyen</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.8 -->
+    <record id="view_icsc_baocao_guihang_duongsat_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.guihang.duongsat.tree</field>
+	    <field name="model">icsc.baocao.guihang.duongsat</field>
+	      <field name="arch" type="xml">
+	        <tree string="Bảng kê gửi hàng đường sắt" editable="top">
+	          <field name="donvi_vc"/>
+	          <field name="donvi_nh"/>
+	          <field name="ngay_bd_phieu"/>
+	          <field name="ngay_kt_phieu"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+    </record>
+   	<record id="action_icsc_guihang_duongsat" model="ir.actions.act_window">
+         <field name="name">2.8 BK gửi hàng đường sắt</field>
+         <field name="res_model">icsc.baocao.guihang.duongsat</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 2.9 -->
+    <record id="view_icsc_baocao_uyquyen_gioithieu_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.uyquyen.gioithieu.tree</field>
+	    <field name="model">icsc.baocao.uyquyen.gioithieu</field>
+	      <field name="arch" type="xml">
+	        <tree string="DANH SÁCH NGƯỜI GIỚI THIỆU/ỦY QUYỀN" editable="top">
+	          <field name="nam"/>
+	          <field name="donvi_vc"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+    </record>
+	<record id="action_icsc_baocao_uyquyen_gioithieu" model="ir.actions.act_window">
+	      <field name="name">2.9 Giấy ủy quyền vận chuyển</field>
+	      <field name="res_model">icsc.baocao.uyquyen.gioithieu</field>
+	      <field name="view_type">form</field>
+	      <field name="view_mode">tree,form</field>
+	</record>
+	   
+  	<!-- 3.1 -->
+	<record id="view_icsc_baocao_tonghop_kho_tree" model="ir.ui.view">
+	   <field name="name">icsc.baocao.tonghop.kho.tree</field>
+	   <field name="model">icsc.baocao.tonghop.kho</field>
+	     <field name="arch" type="xml">
+	       <tree string="BCTH Nhập xuất tồn" editable="top">
+	         <field name="loai_kho"/>
+	         <field name="vi_tri"/>
+	         <field name="partner_id"/>
+	         <field name="categ_id"/>
+	         <field name="state_id"/>
+	         <field name="ngay_bd"/>
+	         <field name="ngay_kt"/>
+	      </tree>
+	   </field>
+	</record>
+	<record id="action_icsc_baocao_tonghop_kho" model="ir.actions.act_window">
+	      <field name="name">3.1 BC Nhập xuất tồn kho</field>
+	      <field name="res_model">icsc.baocao.tonghop.kho</field>
+	      <field name="view_type">form</field>
+	      <field name="view_mode">tree,form</field>
+	</record>  
+	<!-- 3.2 -->
+	<record id="view_icsc_baocao_tonghop_phatsinh" model="ir.ui.view">
+	   <field name="name">icsc.baocao.tonghop.phatsinh.tree</field>
+	   <field name="model">icsc.baocao.tonghop.phatsinh</field>
+	     <field name="arch" type="xml">
+	       <tree string="Tổng hợp phát sinh" editable="top">
+	         <field name="loai_kho"/>
+	         <field name="partner_id"/>
+	         <field name="ngay_bd"/>
+	         <field name="ngay_kt"/>
+	      </tree>
+	   </field>
+	</record>
+	<record id="action_icsc_baocao_tonghop_phatsinh" model="ir.actions.act_window">
+	      <field name="name">3.2 BC Tổng hợp phát sinh</field>
+	      <field name="res_model">icsc.baocao.tonghop.phatsinh</field>
+	      <field name="view_type">form</field>
+	      <field name="view_mode">tree,form</field>
+	</record>  
+	<!-- 3.3 -->
+	<record id="view_icsc_baocao_xuatkho_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.xuatkho.tree</field>
+	    <field name="model">icsc.baocao.xuatkho</field>
+	      <field name="arch" type="xml">
+	        <tree string="Danh sách mã số quả lý KH" editable="top">
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+	       </tree>
+	    </field>
+    </record>
+	<record id="action_icsc_baocao_xuatkho" model="ir.actions.act_window">
+           <field name="name">3.3 Danh sách mã quản lý KH</field>
+           <field name="res_model">icsc.baocao.xuatkho</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+    </record> 
+    <!-- 3.4 -->
+	<record id="view_icsc_baocao_xuatkho2_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.xuatkho2.tree</field>
+	    <field name="model">icsc.baocao.xuatkho2</field>
+	      <field name="arch" type="xml">
+	        <tree string="Báo cáo phiếu xuất kho" editable="top">
+				<field name="loai_kho"/>
+				<field name="thang" widget="selection"/>
+				<field name="nam"/>
+	       </tree>
+	    </field>
+    </record>
+	<record id="action_icsc_baocao_xuatkho2" model="ir.actions.act_window">
+           <field name="name">3.4 Báo cáo phiếu xuất kho</field>
+           <field name="res_model">icsc.baocao.xuatkho2</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+    </record>
+    <!-- 3.5 -->
+    <record id="view_icsc_baocao_bangke_phieu_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.bangke.phieu.tree</field>
+	    <field name="model">icsc.baocao.bangke.phieu</field>
+	      <field name="arch" type="xml">
+	        <tree string="Báo cáo bảng kê PXK, HĐ, PVC" editable="top">
+	          <field name="dv_thuchien"/>
+	          <field name="ngay_bd"/>
+	          <field name="ngay_kt"/>
+			  <field name="gio_bc"/>
+	       </tree>
+	    </field>
+    </record>
+	<record id="action_icsc_baocao_phatsinh_hanggui" model="ir.actions.act_window">
+           <field name="name">3.5 Bảng kê PXK, HĐ, PVC</field>
+           <field name="res_model">icsc.baocao.bangke.phieu</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+    </record>  
+    <!-- 3.6 -->
+    <record id="view_icsc_baocao_bienban_kiemke" model="ir.ui.view">
+	    <field name="name">icsc.baocao.bienban.kiemke.tree</field>
+	    <field name="model">icsc.baocao.bienban.kiemke</field>
+	      <field name="arch" type="xml">
+	        <tree string="Biên bản kiểm kê" editable="top">			         
+	          <field name="thang" widget="selection"/>
+	          <field name="nam"/>
+	          <field name="loai_kho"/>
+		      <field name="vi_tri"/>
+		      <field name="partner_id"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_bienban_kiemke" model="ir.actions.act_window">
+          <field name="name">3.6 Biên bản kiểm kê</field>
+          <field name="res_model">icsc.baocao.bienban.kiemke</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+     </record>
+	<!-- Ke toan -->
+	 <record id="view_report_phieuthu_tienthu_tree" model="ir.ui.view">
+	    <field name="name">icsc.baocao.phieuthu.tienthu.tree</field>
+	    <field name="model">icsc.baocao.phieuthu.tienthu</field>
+	      <field name="arch" type="xml">
+	        <tree string="Báo cáo phiếu thu" editable="top" version="7.0">
+	          <field name="ngay_batdau"/>
+	          <field name="ngay_kethuc"/>
+	          <field name="ngan_hang"/>
+	          <field name="bo_phan"/>
+	       </tree>
+	    </field>
+	 </record>
+     <record id="action_report_phieuthu_tienthu" model="ir.actions.act_window">
+          <field name="name">Báo cáo phiếu thu</field>
+          <field name="res_model">icsc.baocao.phieuthu.tienthu</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+     </record>
+     
+     <!--  -->
+     
+     <record id="view_icsc_baocao_thongke_khoiluong" model="ir.ui.view">
+	    <field name="name">icsc.baocao.thongke.khioiluong.tree</field>
+	    <field name="model">icsc.baocao.thongke.khioiluong</field>
+	      <field name="arch" type="xml">
+	        <tree string="Phiếu vận chuyển" editable="top">
+	          <field name="loai_khvc"/>
+	          <field name="donvi_vc"/>
+	          <field name="donvi_nh"/>
+	          <field name="state_id"/>
+	          <field name="diachi_giao"/>
+	          <field name="dv_thuchien"/>
+	          <field name="ngay_bd_phieu"/>
+	          <field name="ngay_kt_phieu"/>
+			  <field name="gio_bc"/>
+			  
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_thongke_khoiluong" model="ir.actions.act_window">
+          <field name="name">2.101 TH vận chuyển thủy-bộ</field>
+          <field name="res_model">icsc.baocao.thongke.khioiluong</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    
+    <!-- 2.11 -->
+     
+     <record id="view_icsc_baocao_kl_kvkn" model="ir.ui.view">
+	    <field name="name">icsc.baocao.kl.kvkn.tree</field>
+	    <field name="model">icsc.baocao.kl.kvkn</field>
+	      <field name="arch" type="xml">
+	        <tree string="Phiếu vận chuyển" editable="top">
+	          <field name="loai_khvc"/>
+	          <field name="ngay_bd_phieu"/>
+	          <field name="ngay_kt_phieu"/>
+	          <field name="donvi_vc"/>
+	          <field name="donvi_nh"/>
+	          <field name="dv_thuchien"/>
+	          <field name="diachi_giao"/>
+	          <field name="tramkiemsoat"/>
+			  <field name="gio_bc"/>
+	        </tree>
+	    </field>
+	</record>
+    <record id="action_icsc_baocao_kl_kvkn" model="ir.actions.act_window">
+          <field name="name">2.11 KV kho nhập + TKS</field>
+          <field name="res_model">icsc.baocao.kl.kvkn</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+    
+    <!-- menu ban hang-->
+	<menuitem id="menu_tonghop_banhang" name="1.1 BC Bán hàng" parent="base.next_id_64" sequence="1" groups="base.group_sale_salesman,base.group_sale_manager"/>
+	<menuitem action="action_icsc_baocao_hangngay" id="menu_action_icsc_baocao_hangngay" parent="menu_tonghop_banhang" sequence="1" groups="base.group_sale_salesman,base.group_sale_manager"/>
+	<menuitem action="action_icsc_baocao_banhang" id="menu_action_icsc_baocao_banhang" parent="menu_tonghop_banhang" sequence="2" groups="base.group_sale_salesman,base.group_sale_manager"/>
+	<menuitem action="action_icsc_baocao_hoadon_ban" id="menu_action_icsc_baocao_hoadon_ban" parent="menu_tonghop_banhang" sequence="3" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="action_icsc_baocao_lenh_tonghop" id="menu_action_icsc_baocao_lenh_tonghop" parent="base.next_id_64" sequence="2" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="action_icsc_baocao_tonlenh_mathang_khachhang" id="menu_action_icsc_baocao_tonlenh_mathang_khachhang" parent="base.next_id_64" sequence="3" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="action_icsc_baocao_sokelenh_guikho" id="menu_action_icsc_baocao_sokelenh_guikho" parent="base.next_id_64" sequence="4" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem id="menu_tonghop_phatsinh" name="1.5 BC tổng hợp phát sinh" parent="base.next_id_64" sequence="5" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="action_icsc_baocao_tonghop_phatsinh_khachhang" id="menu_action_icsc_baocao_tonghop_phatsinh_khachhang" parent="menu_tonghop_phatsinh" sequence="1" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="action_icsc_baocao_tonghop_phatsinh_sanpham" id="menu_action_icsc_baocao_tonghop_phatsinh_sanpham" parent="menu_tonghop_phatsinh" sequence="2" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="action_icsc_baocao_hopdong_ban" id="menu_action_icsc_baocao_hopdong_ban" parent="base.next_id_64" sequence="6" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem id="menu_ketqua_tieuthu" name="1.7 BC kết quả tiêu thụ" parent="base.next_id_64" sequence="7" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="action_icsc_baocao_ketqua_tieuthu" id="menu_action_icsc_baocao_ketqua_tieuthu" parent="menu_ketqua_tieuthu" sequence="1" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="action_icsc_baocao_danhgia_tieuthu" id="menu_action_icsc_baocao_danhgia_tieuthu" parent="menu_ketqua_tieuthu" sequence="2" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem id="menu_action_icsc_baocao_pxk_kiemvcnoibo" action="action_icsc_baocao_pxk_kiemvcnoibo" parent ="base.next_id_64" sequence="8" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    <menuitem action="action_icsc_baocao_luongtieuthu" id="menu_action_icsc_baocao_luongtieuthu" parent="base.next_id_64" sequence="9" groups="base.group_sale_salesman,base.group_sale_manager"/>
+    
+    <!-- Menu bao cao van chuyen -->
+    <menuitem id="base.next_id_vc" name="Vân chuyển" parent="base.menu_reporting" sequence="2" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_kehoach_vanchuyen" parent ="base.next_id_vc" action="action_icsc_baocao_kehoach_vanchuyen" sequence="0" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_tk_ketqua_vanchuyen" name="2.1 TK kết quả vân chuyển" parent="base.next_id_vc" sequence="1" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_kehoach_phanbon_canam" action="action_icsc_baocao_kehoach_phanbon_canam" parent ="menu_tk_ketqua_vanchuyen" sequence="0" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_ketquavc" action="action_icsc_baocao_ketquavc" parent ="menu_tk_ketqua_vanchuyen" sequence="1" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_hopdong_vanchuyen" name="2.2 Hợp đồng vận chuyển" parent="base.next_id_vc" sequence="2" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_hopdong_vanchuyen" parent ="menu_hopdong_vanchuyen" action="action_icsc_baocao_hopdong_vanchuyen" sequence="0" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_hopdong_cuocvanchuyen" parent ="menu_hopdong_vanchuyen" action="action_icsc_baocao_hopdong_cuocvanchuyen" sequence="1" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_vanchuyen_thuybo" name="2.3 TH phiếu vân chuyển" parent="base.next_id_vc" sequence="3" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_phieu_vanchuyen" parent ="menu_vanchuyen_thuybo" action="action_icsc_baocao_phieu_vanchuyen" sequence="0" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_phieu_vanchuyen_thuybo" parent ="menu_vanchuyen_thuybo" action="action_icsc_baocao_phieu_vanchuyen_thuybo" sequence="1" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem action="action_icsc_baocao_kho" id="menu_action_icsc_baocao_kho" parent="base.next_id_vc" sequence="4" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_vanchuyen_khoiluong" name="2.5 TH khối lượng vận chuyển" parent="base.next_id_vc" sequence="5" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_tonghop_vanchuyen" parent ="menu_vanchuyen_khoiluong" action="action_icsc_baocao_tonghop_vanchuyen" sequence="0" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_khoiluong_giaonhan" parent ="menu_vanchuyen_khoiluong" action="action_icsc_baocao_khoiluong_giaonhan" sequence="1" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_khoiluong_tiencuoc_giaonhan" parent ="menu_vanchuyen_khoiluong" action="action_icsc_baocao_khoiluong_tiencuoc_giaonhan" sequence="2" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_denghithanhtoan" parent ="base.next_id_vc" action="action_icsc_baocao_denghithanhtoan" sequence="6" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_thanhtoan_vanchuyen" name="2.7 Thanh toán cước VC" parent ="base.next_id_vc" sequence="7" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_thanhtoan_vanchuyen_chitiet" parent ="menu_action_icsc_thanhtoan_vanchuyen" action="action_icsc_thanhtoan_vanchuyen" sequence="2" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_tongtien_thanhtoan_vanchuyen" parent ="menu_action_icsc_thanhtoan_vanchuyen" action="action_icsc_tongtien_thanhtoan_vanchuyen" sequence="1" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_guihang_duongsat" parent ="base.next_id_vc" action="action_icsc_guihang_duongsat" sequence="8" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_uyquyen_gioithieu" parent ="base.next_id_vc" action="action_icsc_baocao_uyquyen_gioithieu" sequence="9" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_thongke" name="2.10 TK khối lượng theo địa chỉ giao" parent ="base.next_id_vc" sequence="10" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_thongke_khoiluong" parent ="menu_action_icsc_thongke" action="action_icsc_baocao_thongke_khoiluong" sequence="9" groups="base.nhom_baocao_vanchuyen"/>
+    <menuitem id="menu_action_icsc_baocao_kl_kvkn" action="action_icsc_baocao_kl_kvkn" parent ="base.next_id_vc" sequence="11" groups="base.nhom_baocao_vanchuyen"/>
+    <!-- Menu bao cao kho -->
+    <menuitem action="action_icsc_baocao_tonghop_kho" id="menu_action_icsc_baocao_tonghop_kho" parent="stock.next_id_61" sequence="0" groups ="base.nhom_baocao_khohang"/>
+    <menuitem action="action_icsc_baocao_tonghop_phatsinh" id="menu_action_icsc_baocao_tonghop_phatsinh" parent="stock.next_id_61" sequence="1" groups ="base.nhom_baocao_khohang"/>
+    <menuitem action="action_icsc_baocao_xuatkho" id="menu_action_icsc_baocao_xuatkho" parent="stock.next_id_61" sequence="2" groups ="base.nhom_baocao_khohang"/>
+    <menuitem action="action_icsc_baocao_xuatkho2" id="menu_action_icsc_baocao_xuatkho2" parent="stock.next_id_61" sequence="3" groups ="base.nhom_baocao_khohang"/>
+    <menuitem action="action_icsc_baocao_phatsinh_hanggui" id="menu_action_icsc_baocao_phatsinh_hanggui" parent="stock.next_id_61" sequence="4" groups ="base.nhom_baocao_khohang"/>
+    <menuitem action="action_icsc_baocao_bienban_kiemke" id="menu_action_icsc_baocao_bienban_kiemke" parent="stock.next_id_61" sequence="5" groups ="base.nhom_baocao_khohang"/>
+    <!-- Menu bao cao ke taon -->
+    <menuitem action="action_report_phieuthu_tienthu" name="Báo cáo phiếu thu" id="menu_report_phieuthu_tienthu" parent="account.menu_finance_reporting" sequence="0"/>
+	
+</data>
+</openerp>

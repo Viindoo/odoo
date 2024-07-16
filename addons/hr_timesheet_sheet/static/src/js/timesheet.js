@@ -7,19 +7,14 @@ openerp.hr_timesheet_sheet = function(instance) {
         events: {
             "click .oe_timesheet_weekly_account a": "go_to",
         },
-        ignore_fields: function() {
-            return ['line_id'];
-        },
         init: function() {
             this._super.apply(this, arguments);
-            var self = this;
             this.set({
                 sheets: [],
                 date_to: false,
                 date_from: false,
             });
             this.updating = false;
-            this.defs = [];
             this.field_manager.on("field_changed:timesheet_ids", this, this.query_sheets);
             this.field_manager.on("field_changed:date_from", this, function() {
                 this.set({"date_from": instance.web.str_to_date(this.field_manager.get_field_value("date_from"))});
@@ -34,14 +29,6 @@ openerp.hr_timesheet_sheet = function(instance) {
             this.res_o2m_drop = new instance.web.DropMisordered();
             this.render_drop = new instance.web.DropMisordered();
             this.description_line = _t("/");
-            // Original save function is overwritten in order to wait all running deferreds to be done before actually applying the save.
-            this.view.original_save = _.bind(this.view.save, this.view);
-            this.view.save = function(prepend_on_create){
-                self.prepend_on_create = prepend_on_create;
-                return $.when.apply($, self.defs).then(function(){
-                    return self.view.original_save(self.prepend_on_create);
-                });
-            };
         },
         go_to: function(event) {
             var id = JSON.parse($(event.target).data("id"));
@@ -205,11 +192,11 @@ openerp.hr_timesheet_sheet = function(instance) {
                                 account.days[day_count].lines[0].unit_amount += num - self.sum_box(account, day_count);
                                 var product = (account.days[day_count].lines[0].product_id instanceof Array) ? account.days[day_count].lines[0].product_id[0] : account.days[day_count].lines[0].product_id
                                 var journal = (account.days[day_count].lines[0].journal_id instanceof Array) ? account.days[day_count].lines[0].journal_id[0] : account.days[day_count].lines[0].journal_id
-                                self.defs.push(new instance.web.Model("hr.analytic.timesheet").call("on_change_unit_amount", [[], product, account.days[day_count].lines[0].unit_amount, false, false, journal]).then(function(res) {
+                                new instance.web.Model("hr.analytic.timesheet").call("on_change_unit_amount", [[], product, account.days[day_count].lines[0].unit_amount, false, false, journal]).then(function(res) {
                                     account.days[day_count].lines[0]['amount'] = res.value.amount || 0;
                                     self.display_totals();
                                     self.sync();
-                                }));
+                                });
                                 if(!isNaN($(this).val())){
                                     $(this).val(self.sum_box(account, day_count, true));
                                 }
@@ -259,9 +246,7 @@ openerp.hr_timesheet_sheet = function(instance) {
                     return;
                 }
                 var ops = self.generate_o2m_value();
-                new instance.web.Model("hr.analytic.timesheet").call("multi_on_change_account_id", [[], [id],
-                    new instance.web.CompoundContext({'user_id': self.get('user_id')})]).then(function(res) {
-                    res = res[id];
+                new instance.web.Model("hr.analytic.timesheet").call("on_change_account_id", [[], id]).then(function(res) {
                     var def = _.extend({}, self.default_get, res.value, {
                         name: self.description_line,
                         unit_amount: 0,
@@ -328,8 +313,11 @@ openerp.hr_timesheet_sheet = function(instance) {
         generate_o2m_value: function() {
             var self = this;
             var ops = [];
-            var ignored_fields = self.ignore_fields();
+            
             _.each(self.accounts, function(account) {
+                var auth_keys = _.extend(_.clone(account.account_defaults), {
+                    name: true, amount:true, unit_amount: true, date: true, account_id:true,
+                });
                 _.each(account.days, function(day) {
                     _.each(day.lines, function(line) {
                         if (line.unit_amount !== 0) {
@@ -340,8 +328,12 @@ openerp.hr_timesheet_sheet = function(instance) {
                                     tmp[k] = v[0];
                                 }
                             });
-                            // we remove line_id as the reference to the _inherits field will no longer exists
-                            tmp = _.omit(tmp, ignored_fields);
+                            // we have to remove some keys, because analytic lines are shitty
+                            _.each(_.keys(tmp), function(key) {
+                                if (auth_keys[key] === undefined) {
+                                    tmp[key] = undefined;
+                                }
+                            });
                             ops.push(tmp);
                         }
                     });

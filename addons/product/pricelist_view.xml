@@ -5,23 +5,41 @@
         <menuitem id="base.menu_sale_config_sales" name="Sales"
             parent="base.menu_base_config" sequence="0"/>
         <menuitem id="menu_product_pricelist_main" name="Pricelists" 
-            parent="base.menu_base_config" groups="product.group_sale_pricelist" sequence="70"/>
+            parent="base.menu_base_config" groups="base.nhom_quan_ly_danh_muc,base.nhom_quan_ly_nguoidung_banhang,base.nhom_quan_ly_trambanhang_lxh_haiduong,base.nhom_quan_ly_banhang_banggia,base.nhom_quan_ly_lenhxuathang" sequence="70"/>
 
         <record id="product_pricelist_version_form_view" model="ir.ui.view">
             <field name="name">product.pricelist.version.form</field>
             <field name="model">product.pricelist.version</field>
             <field name="arch" type="xml">
-                <form string="Pricelist Version" version="7.0">
-                    <group col="4">
-                        <field name="name"/>
-                        <field name="active"/>
-                        <field colspan="4" name="pricelist_id"/>
-                        <field name="date_start"/>
-                        <field name="date_end"/>
-                        <field name="company_id" groups="base.group_multi_company" widget="selection"/>
-                    </group>
-                    <field name="items_id"/>
-                </form>
+                 <form string="Pricelist Version" version="7.0">
+		                           <sheet>
+		                             <label for="ten_chung" class="oe_edit_only" string="Tên cụ thể"/>
+			                            <h3>
+			                                <field name="ten_chung" />
+			                            </h3>
+			                         <label for="name" class="oe_edit_only" string="Tên chung"/>
+			                            <h2>
+			                                <field name="name"/>
+			                            </h2>
+			                          <group >
+			                          
+				                          <group>
+				                             <field name="pricelist_id"/>
+				                             <field name="quyetdinh_id" on_change="onchange_quyetdinh(quyetdinh_id)"/>
+				                             <field name="date_start"/>
+				                          </group>
+				                          <group>
+				                             <field name="active"/>
+				                             <field name="date_end"/>
+				                          </group>
+			                        </group>
+		                            <field name="items_id"/>
+		                           </sheet>
+		                        <div class="oe_chatter">
+			                    <field name="message_follower_ids" widget="mail_followers"/>
+			                    <field name="message_ids" widget="mail_thread"/>
+                               </div>
+		                        </form>
             </field>
         </record>
         <record id="product_pricelist_version_tree_view" model="ir.ui.view">
@@ -30,6 +48,7 @@
             <field name="arch" type="xml">
                 <tree string="Pricelist Version">
                     <field name="name"/>
+                    <field name="quyetdinh_id" />
                     <field name="pricelist_id"/>
                     <field name="date_start"/>
                     <field name="date_end"/>
@@ -56,20 +75,22 @@
         </record>
         <menuitem
             action="product_pricelist_action" id="menu_product_pricelist_action"
-            parent="product.menu_product_pricelist_main" sequence="2"/>
+            parent="product.menu_product_pricelist_main" sequence="2"  groups="base.nhom_quan_ly_danh_muc,base.nhom_quan_ly_trambanhang_lxh_haiduong,base.nhom_quan_ly_banhang_banggia"/>
 
         <record id="product_pricelist_item_tree_view" model="ir.ui.view">
             <field name="name">product.pricelist.item.tree</field>
             <field name="model">product.pricelist.item</field>
             <field name="arch" type="xml">
                 <tree string="Products Listprices Items">
-                    <field name="sequence"/>
-                    <field colspan="4" name="name"/>
-                    <field name="product_id"/>
-                    <field name="product_tmpl_id" groups="product.group_product_variant"/>
-                    <field name="categ_id"/>
-                    <field name="min_quantity"/>
-                    <field name="base"/>
+                    <field name="sequence" invisible="1"/>
+                    <field colspan="4" name="name" invisible="1"/>
+                    <field name="product_id" />
+                    <field name="product_tmpl_id" groups="product.group_product_variant" invisible="1"/>
+                    <field name="categ_id" invisible="1"/>
+                    <field name="min_quantity" invisible="1"/>
+                    <field name="base" invisible="1"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
                 </tree>
             </field>
         </record>
@@ -79,18 +100,20 @@
             <field name="model">product.pricelist.item</field>
             <field name="arch" type="xml">
                 <form string="Products Listprices Items" version="7.0">
-                    <label for="name" class="oe_edit_only"/>
-                    <h1><field colspan="4" name="name"/></h1>
+                    <label for="name" class="oe_edit_only" invisible="1"/>
+                    <h1><field colspan="4" name="name" invisible="1" /></h1>
 
                     <group col="4">
-                        <field name="product_id" on_change="product_id_change(product_id)"/>
-                        <field name="product_tmpl_id" groups="product.group_product_variant"/>
-                        <field name="categ_id"/>
+                        <field name="product_id" on_change="product_id_change(product_id)" />
+                        <field name="product_tmpl_id" groups="product.group_product_variant" />
+                        <field name="categ_id" invisible="1"/>
                         <field name="company_id" groups="base.group_multi_company" widget="selection"/>
-                        <field name="min_quantity"/>
-                        <field name="sequence"/>
+                        <field name="min_quantity" invisible="1" />
+                        <field name="sequence" invisible="1" />
+                        <field name="date_start"/>
+                    	<field name="date_end"/>
                     </group>
-                    <group col="4" string="Price Computation">
+                    <group col="4" string="Tính Giá">
                         <field name="base"/>
                         <field name="base_pricelist_id" attrs="{'invisible':[('base', '!=', -1)],'required': [('base','=', -1)], 'readonly': [('base','!=', -1)]}"/>
                     </group>
@@ -103,8 +126,8 @@
                         <field name="price_surcharge" nolabel="1"/>
                         <newline/>
                         <field name="price_round" string="Rounding Method"/>
-                        <field name="price_min_margin" string="Min. Margin"/>
-                        <field name="price_max_margin" string="Max. Margin"/>
+                        <field name="price_min_margin" string="Lợi nhuận tối thiểu" invisible="1" />
+                        <field name="price_max_margin" string="Lợi nhuận tối đa" invisible="1" />
                     </group>
 
                 </form>
@@ -119,7 +142,14 @@
                     <field name="name" string="Products Price"/>
                     <field name="type"/>
                     <field name="active" />
+                     <field name="nhom_banggia"/>
                     <field name="currency_id" groups="base.group_multi_currency"/>
+                 <group expand="0" string="Nhóm theo...">
+                        <filter string="Nhóm bảng giá" icon="terp-personal" domain="[]" context="{'group_by':'nhom_banggia'}"/>
+                    	<filter string="Loại bảng giá" icon="terp-personal" domain="[]" context="{'group_by':'type'}"/>
+                   		<filter string="Loại tiền tệ" icon="terp-personal" domain="[]" context="{'group_by':'currency_id'}"/>
+                      <filter string="Tên bảng giá" icon="terp-personal" domain="[]" context="{'group_by':'name'}"/>
+                    </group>
                 </search>
             </field>
         </record>
@@ -130,7 +160,9 @@
             <field name="model">product.pricelist</field>
             <field name="arch" type="xml">
                 <tree string="Products Price List">
+                   <field name="code"/>
                     <field name="name"/>
+                     <field name="nhom_banggia"/>
                     <field name="type"/>
                     <field name="currency_id" groups="base.group_multi_currency"/>
                     <field name="active" />
@@ -142,33 +174,74 @@
             <field name="model">product.pricelist</field>
             <field name="arch" type="xml">
                 <form string="Products Price List" version="7.0">
-                    <label for="name" class="oe_edit_only"/>
+                  <sheet>
+                    <label for="code" class="oe_edit_only" string="Mã bảng giá"/>
                     <h1>
-                        <field name="name"/>
-                    </h1>
-                    <group col="4">
-                        <field name="active"/>
-                        <field name="type"/>
-                        <field name="currency_id" groups="base.group_multi_currency"/>
-                        <field name="company_id" groups="base.group_multi_company" widget="selection"/>
-                    </group>
-                    <field name="version_id">
-                        <form string="Pricelist Version" version="7.0">
-                            <group col="4">
-                                <field name="name"/>
-                                <field name="active"/>
-                                <field name="date_start"/>
-                                <field name="date_end"/>
-                            </group>
-                            <field name="items_id"/>
-                        </form>
-                        <tree string="Pricelist Version">
-                            <field name="name"/>
-                            <field name="active"/>
-                            <field name="date_start"/>
-                            <field name="date_end"/>
-                        </tree>
-                    </field>
+                        <field name="code"/>
+                    </h1>  
+                   
+                   <label for="name" class="oe_edit_only"/>
+                   <h1>
+                      <field name="name"/>
+                   </h1>   
+                    
+                     
+                    <label for="ghi_chu" class="oe_edit_only"/>              
+                   <field name="ghi_chu" placehold="Ghi chú về vận chuyển"/>
+                   <notebook>
+	                   <page name="infp" string="Thông tin bảng giá">
+		                    <group col="4">
+		                        <field name="nhom_banggia"/>
+		                       
+		                        <field name="type"/>
+		                        <field name="currency_id" groups="base.group_multi_currency"/>
+		                        <field name="company_id" groups="base.group_multi_company" widget="selection"/>
+		                   		 <field name="active"/>
+		                   	 </group>
+		                    <field name="version_id">
+		                        <form string="Pricelist Version" version="7.0">
+		                           <sheet>
+		                             <label for="ten_chung" class="oe_edit_only"/>
+			                            <h3>
+			                                <field name="ten_chung" />
+			                            </h3>
+			                         <label for="name" class="oe_edit_only" string="Tên cụ thể"/>
+			                            <h2>
+			                                <field name="name"/>
+			                            </h2>
+			                          <group >
+			                          
+				                          <group>
+				                             <field name="quyetdinh_id" on_change="onchange_quyetdinh(quyetdinh_id)"/>
+				                             <field name="date_start"/>
+				                          </group>
+				                          <group>
+				                             <field name="active"/>
+				                             <field name="date_end"/>
+				                          </group>
+			                        </group>
+		                            <field name="items_id"/>
+		                           </sheet>
+		                            
+		                        </form>
+		                        <tree string="Pricelist Version">
+		                          <field name="ten_chung" />
+		                            <field name="name" invisible="1"/>
+		                             <field name="quyetdinh_id"/>
+		                            <field name="active"/>
+		                            <field name="date_start"/>
+		                            <field name="date_end"/>
+		                        </tree>
+		                    </field>
+	                   </page>
+	                   <page name="vungban" string="Vùng bán áp dụng">
+	                   </page>
+                   </notebook>
+                   </sheet>
+                 <div class="oe_chatter">
+                   <field name="message_follower_ids" widget="mail_followers"/>
+                   <field name="message_ids" widget="mail_thread"/>
+                </div>
                 </form>
             </field>
         </record>
@@ -219,19 +292,25 @@
         </record>
         <menuitem
             action="product_pricelist_action2" id="menu_product_pricelist_action2"
-            parent="product.menu_product_pricelist_main" sequence="1" groups="product.group_sale_pricelist"/>
+            parent="product.menu_product_pricelist_main" sequence="1"  groups="base.nhom_quan_ly_danh_muc,base.nhom_quan_ly_nguoidung_banhang,base.nhom_quan_ly_trambanhang_lxh_haiduong,base.nhom_quan_ly_banhang_banggia,base.nhom_quan_ly_lenhxuathang" />
 
         <record id="product_price_type_view" model="ir.ui.view">
             <field name="name">product.price.type.form</field>
             <field name="model">product.price.type</field>
             <field name="arch" type="xml">
                 <form string="Products Price Type" version="7.0">
+                <sheet>
                     <group col="4">
                         <field name="name"/>
                         <field name="active"/>
                         <field name="field"/>
                         <field name="currency_id" groups="base.group_multi_currency"/>
                     </group>
+                  </sheet>
+                  <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
                 </form>
             </field>
         </record>
@@ -246,7 +325,135 @@
 
         <menuitem
             action="product_price_type_action" id="menu_product_price_type"
-            parent="product.menu_product_pricelist_main" sequence="4" groups="base.group_no_one"/>
+            parent="product.menu_product_pricelist_main" sequence="4"  groups="base.nhom_quan_ly_danh_muc,base.nhom_quan_ly_banhang_banggia"/>
 
+
+  <!--quyet dinh gia cuoc ban hang -->
+           	<record id="product_pricelist_quyetdinhtree_view" model="ir.ui.view">
+	            <field name="name">product.pricelist.quyetdinh.tree</field>
+	            <field name="model">product.pricelist.quyetdinh</field>
+	            <field name="priority">4</field>
+	            <field name="arch" type="xml">
+	                <tree string="Quyết định"   >		
+	                	<field name="name" /> 
+	                	<field name="ngay_banhanh" /> 
+	                	<field name="ngay_hieuluc" /> 
+	                	<field name="ngay_kethuc" /> 	
+	                	<field name="check" /> 	                 
+	                                    	                  		                 
+	                   
+	                </tree>
+	             </field>
+	          </record>
+			        
+	     	<record id="product_pricelist_quyetdinh_view" model="ir.ui.view">
+	            <field name="name">product.pricelist.quyetdinh.form</field>
+	            <field name="model">product.pricelist.quyetdinh</field>
+	            <field name="arch" type="xml">
+	                <form string="Quyết định" version="7.0">
+	                 
+	                    <sheet>
+		                    <group>
+			                    <group>
+				                    <field name="name" /> 
+				                    <field name="ngay_hieuluc" /> 
+				                    <field name="check" /> 	
+			                    </group>
+			                    <group>
+			                    	<field name="ngay_banhanh" /> 
+			                    	<field name="ngay_kethuc" /> 
+			                    </group>
+		                    </group>
+		                    <separator string="Chi tiết giảm giá"/>
+		                     <field name="chitiet_giamgia" >
+			                     <tree string="Giảm giá"  editable="top">
+			                        <field name="nhom_banggia" /> 
+				                    <field name="ghi_chu" /> 
+				                   	
+			                     </tree>
+			                     <form string="Giảm giá" version="7.0">
+			                     <sheet>
+			                      <group>
+				                       <group>
+				                         <field name="nhom_banggia" /> 
+				                       </group>
+				                        <group>
+				                       </group>
+			                      </group>
+			                     <separator string="Ghi chú về giảm giá"/> 
+				                    <field name="ghi_chu" /> 
+			                     </sheet>
+			                        
+				                   	
+			                     </form>
+		                     </field> 
+		                    
+	                    </sheet>                
+	                    <div class="oe_chatter"><field name="message_ids" widget="mail_thread"/></div>
+	                </form>
+   				 </field>
+			 </record>         
+        
+         <record id="action_product_pricelist_quyetdinh" model="ir.actions.act_window">
+            <field name="name">Quyết định</field>
+            <field name="res_model">product.pricelist.quyetdinh</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>          
+           
+        </record>
+        <menuitem action="action_product_pricelist_quyetdinh" id="menu_action_product_pricelist_quyetdinh" sequence="6" parent="product.menu_product_pricelist_main"  groups="base.nhom_quan_ly_danh_muc,base.nhom_quan_ly_banhang_banggia"/> 
+  
+    <!--nhom gia cuoc ban hang -->
+           	<record id="product_pricelist_nhomtree_view" model="ir.ui.view">
+	            <field name="name">product.pricelist.nhom.tree</field>
+	            <field name="model">product.pricelist.nhom</field>
+	            <field name="priority">4</field>
+	            <field name="arch" type="xml">
+	                <tree string="Nhóm bảng giá"  editable="top"  >		
+	                	<field name="name" /> 
+	                	<field name="ghi_chu" /> 
+	                	                 
+	                                    	                  		                 
+	                   
+	                </tree>
+	             </field>
+	          </record>
+			        
+	     	<record id="product_pricelist_nhom_view" model="ir.ui.view">
+	            <field name="name">product.pricelist.nhom.form</field>
+	            <field name="model">product.pricelist.nhom</field>
+	            <field name="arch" type="xml">
+	                <form string="Nhóm bảng giá" version="7.0">
+	                 
+	                    <sheet>
+		                    <group>
+			                    <group>
+				                    <field name="name" /> 
+				                 
+			                    </group>
+			                    <group>
+			                    	
+			                    </group>
+		                    </group>
+		                    <separator string="Ghi chú"/>
+		                    <field name="ghi_chu" placehold="Chi chú..." /> 
+	                    </sheet>                
+	                    <div class="oe_chatter"><field name="message_ids" widget="mail_thread"/></div>
+	                </form>
+   				 </field>
+			 </record>         
+        
+         <record id="action_product_pricelist_nhom" model="ir.actions.act_window">
+            <field name="name">Nhóm bảng giá bán</field>
+            <field name="res_model">product.pricelist.nhom</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>          
+           
+        </record>
+        <menuitem action="action_product_pricelist_nhom" id="menu_action_product_pricelist_nhom" sequence="5" parent="product.menu_product_pricelist_main"  groups="base.nhom_quan_ly_danh_muc,base.nhom_quan_ly_banhang_banggia"/> 
+  
+  
+  
+  
     </data>
 </openerp>

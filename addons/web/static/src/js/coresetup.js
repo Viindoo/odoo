@@ -125,12 +125,7 @@ instance.web.Session = instance.web.JsonRPC.extend( /** @lends instance.web.Sess
         for(var i=0; i<cookies.length; ++i) {
             var cookie = cookies[i].replace(/^\s*/, '');
             if(cookie.indexOf(nameEQ) === 0) {
-                try {
-                    return JSON.parse(decodeURIComponent(cookie.substring(nameEQ.length)));
-                } catch (err) {
-                    // wrong cookie, delete it
-                    this.set_cookie(name, '', -1);
-                }
+                return JSON.parse(decodeURIComponent(cookie.substring(nameEQ.length)));
             }
         }
         return null;

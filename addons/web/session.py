@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+#----------------------------------------------------------
+# OpenERP Web HTTP layer
+#----------------------------------------------------------
 import datetime
 import babel
 import dateutil.relativedelta

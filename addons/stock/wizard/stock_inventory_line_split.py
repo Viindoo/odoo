@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2004-2011 OpenERP S.A (<http://www.openerp.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,42 +18,39 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
 
 class stock_inventory_line_split(osv.osv_memory):
-    _inherit = "stock.move.split"
-    _name = "stock.inventory.line.split"
-    _description = "Split inventory lines"
-
+    _inherit = 'stock.move.split'
+    _name = 'stock.inventory.line.split'
+    _description = 'Split inventory lines'
     _columns = {
-        'line_ids': fields.one2many('stock.inventory.line.split.lines', 'wizard_id', 'Serial Numbers'),
-        'line_exist_ids': fields.one2many('stock.inventory.line.split.lines', 'wizard_exist_id', 'Serial Numbers'),
-     }
+         'line_ids': fields.one2many('stock.inventory.line.split.lines', 'wizard_id', 'Serial Numbers'),
+         'line_exist_ids': fields.one2many('stock.inventory.line.split.lines', 'wizard_exist_id', 'Serial Numbers')
+         }
 
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self, cr, uid, fields, context = None):
         if context is None:
             context = {}
-        record_id = context and context.get('active_id',False)
+        record_id = context and context.get('active_id', False)
         res = {}
         line = self.pool.get('stock.inventory.line').browse(cr, uid, record_id, context=context)
         if 'product_id' in fields:
-            res.update({'product_id':line.product_id.id})
+            res.update({'product_id': line.product_id.id})
         if 'product_uom' in fields:
             res.update({'product_uom': line.product_uom.id})
         if 'qty' in fields:
             res.update({'qty': line.product_qty})
         return res
 
-    def split(self, cr, uid, ids, line_ids, context=None):
+    def split(self, cr, uid, ids, line_ids, context = None):
         """ To split stock inventory lines according to serial numbers.
-
+        
         :param line_ids: the ID or list of IDs of inventory lines we want to split
         """
         if context is None:
             context = {}
-        assert context.get('active_model') == 'stock.inventory.line',\
-             'Incorrect use of the inventory line split wizard.'
+        assert context.get('active_model') == 'stock.inventory.line' or AssertionError('Incorrect use of the inventory line split wizard.')
         prodlot_obj = self.pool.get('stock.production.lot')
         ir_sequence_obj = self.pool.get('ir.sequence')
         line_obj = self.pool.get('stock.inventory.line')
@@ -64,9 +61,9 @@ class stock_inventory_line_split(osv.osv_memory):
                 quantity_rest = inv_line.product_qty
                 new_line = []
                 if data.use_exist:
-                    lines = [l for l in data.line_exist_ids if l]
+                    lines = [ l for l in data.line_exist_ids if l ]
                 else:
-                    lines = [l for l in data.line_ids if l]
+                    lines = [ l for l in data.line_ids if l ]
                 for line in lines:
                     quantity = line.quantity
                     if quantity <= 0 or line_qty == 0:
@@ -75,9 +72,7 @@ class stock_inventory_line_split(osv.osv_memory):
                     if quantity_rest < 0:
                         quantity_rest = quantity
                         break
-                    default_val = {
-                        'product_qty': quantity,
-                    }
+                    default_val = {'product_qty': quantity}
                     if quantity_rest > 0:
                         current_line = line_obj.copy(cr, uid, inv_line.id, default_val)
                         new_line.append(current_line)
@@ -87,13 +82,10 @@ class stock_inventory_line_split(osv.osv_memory):
                     if data.use_exist:
                         prodlot_id = line.prodlot_id.id
                     if not prodlot_id:
-                        prodlot_id = prodlot_obj.create(cr, uid, {
-                            'name': line.name,
-                            'product_id': inv_line.product_id.id},
-                        context=context)
+                        prodlot_id = prodlot_obj.create(cr, uid, {'name': line.name,
+                         'product_id': inv_line.product_id.id}, context=context)
                     line_obj.write(cr, uid, [current_line], {'prod_lot_id': prodlot_id})
                     prodlot = prodlot_obj.browse(cr, uid, prodlot_id)
-
                     update_val = {}
                     if quantity_rest > 0:
                         update_val['product_qty'] = quantity_rest
@@ -101,12 +93,12 @@ class stock_inventory_line_split(osv.osv_memory):
 
         return new_line
 
-class stock_inventory_split_lines(osv.osv_memory):
-    _inherit = "stock.move.split.lines"
-    _name = "stock.inventory.line.split.lines"
-    _description = "Inventory Split lines"
-    _columns = {
-        'wizard_id': fields.many2one('stock.inventory.line.split', 'Parent Wizard'),
-        'wizard_exist_id': fields.many2one('stock.inventory.line.split', 'Parent Wizard'),
-    }
 
+class stock_inventory_split_lines(osv.osv_memory):
+    _inherit = 'stock.move.split.lines'
+    _name = 'stock.inventory.line.split.lines'
+    _description = 'Inventory Split lines'
+    _columns = {
+         'wizard_id': fields.many2one('stock.inventory.line.split', 'Parent Wizard'),
+         'wizard_exist_id': fields.many2one('stock.inventory.line.split', 'Parent Wizard')
+         }

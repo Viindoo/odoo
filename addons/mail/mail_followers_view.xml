@@ -8,7 +8,7 @@
             <field name="model">mail.followers</field>
             <field name="priority">10</field>
             <field name="arch" type="xml">
-                <tree string="Followers">
+                <tree string="Theo dõi">
                     <field name="res_model"/>
                     <field name="res_id"/>
                     <field name="partner_id"/>
@@ -20,7 +20,7 @@
             <field name="name">mail.followers.form</field>
             <field name="model">mail.followers</field>
             <field name="arch" type="xml">
-                <form string="Followers Form" version="7.0">
+                <form string="Theo dõi" version="7.0">
                     <sheet>
                         <group>
                             <group>
@@ -51,7 +51,7 @@
         </record>
 
         <record id="action_view_followers" model="ir.actions.act_window">
-            <field name="name">Followers</field>
+            <field name="name">Theo dõi</field>
             <field name="res_model">mail.followers</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -65,7 +65,7 @@
         </record>
 
         <!-- Add followers related menu entries in Settings/Email -->
-        <menuitem name="Followers" id="menu_email_followers" parent="base.menu_email"
+        <menuitem name="Theo dõi" id="menu_email_followers" parent="base.menu_email"
                     action="action_view_followers" sequence="30" groups="base.group_no_one"/> -->
         
         <!-- Add notifications related menu entry in Settings/Email -->

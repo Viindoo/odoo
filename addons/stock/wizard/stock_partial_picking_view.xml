@@ -15,22 +15,34 @@
             <field name="model">stock.partial.picking</field>
             <field name="arch" type="xml">
                 <form string="Stock partial Picking" version="7.0">
+                  <group>
+                   	 <group>
+                   	 	 <field name="date" string="Ngày giao hàng" />
+                   	 </group>
+                   	 <group>
+                   	    <field name="user_id"/>
+                   	 </group>
+                    
+                    
+                  </group>
                     <field name="hide_tracking" invisible="1"/>
+                    
+                   
                     <separator string="Transfer Products" name="product_separator"/>
                     <field name="move_ids" context="{'hide_tracking': hide_tracking}">
-                        <tree editable="bottom" string="Product Moves" create="false">
+                        <tree editable="bottom" string="Product Moves">
                             <field name="product_id" on_change="onchange_product_id(product_id)"/>
                             <field name="quantity" />
+                            <field name="location_id" string="Địa điểm nguồn" readonly="1"/>
                             <field name="product_uom" groups="product.group_uom"/>
                             <field name="tracking" invisible="1"/>
                             <field name="prodlot_id" domain="[('product_id', '=', product_id)]" invisible="context.get('hide_tracking',False)" attrs="{'required':[('tracking','=',True), ('quantity', '!=', 0)]}" groups="stock.group_production_lot" context="{'default_product_id':product_id}"/>
                             <!-- Removed as this feature is not logic: price must be updated upon reception of invoice -->
                             <field name="update_cost" invisible="1"/>
-                            <field name="cost" groups="base.group_multi_currency"/>
-                            <field name="currency" readonly="1" groups="base.group_multi_currency"/>
+                            <field name="cost"  invisible="1"/>
+                            <field name="currency"  invisible="1"/>
                         </tree>
                     </field>
-                    <field name="help_text" groups="base.group_multi_currency" class="oe_grey"/>
                     <footer>
                         <button name="do_partial" string="_Transfer" type="object" class="oe_highlight"/>
                         or
