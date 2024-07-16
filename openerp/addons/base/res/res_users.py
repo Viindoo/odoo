@@ -30,6 +30,7 @@ from openerp import pooler, tools
 import openerp.exceptions
 from openerp.osv import fields,osv, expression
 from openerp.osv.orm import browse_record
+from openerp.service.security import check_super
 from openerp.tools.translate import _
 
 _logger = logging.getLogger(__name__)
@@ -136,7 +137,7 @@ class res_users(osv.osv):
         avatar, ... The user model is now dedicated to technical data.
     """
     __admin_ids = {}
-    _uid_cache = {}
+    __uid_cache = {}
     _inherits = {
         'res.partner': 'partner_id',
     }
@@ -275,7 +276,7 @@ class res_users(osv.osv):
     }
 
     # User can write on a few of his own fields (but not his groups for example)
-    SELF_WRITEABLE_FIELDS = ['password', 'signature', 'action_id', 'company_id', 'email', 'name', 'image', 'image_medium', 'image_small', 'lang', 'tz']
+    SELF_WRITEABLE_FIELDS = ['signature', 'action_id', 'company_id', 'email', 'name', 'image', 'image_medium', 'image_small', 'lang', 'tz']
     # User can read a few of his own fields
     SELF_READABLE_FIELDS = ['signature', 'company_id', 'login', 'email', 'name', 'image', 'image_medium', 'image_small', 'lang', 'tz', 'tz_offset', 'groups_id', 'partner_id', '__last_update']
 
@@ -304,6 +305,24 @@ class res_users(osv.osv):
                 result = map(override_password, result)
 
         return result
+
+    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context=None, orderby=False):
+        if uid != SUPERUSER_ID:
+            groupby_fields = set([groupby] if isinstance(groupby, basestring) else groupby)
+            if groupby_fields.intersection(USER_PRIVATE_FIELDS):
+                raise openerp.exceptions.AccessError('Invalid groupby')
+        return super(res_users, self).read_group(
+            cr, uid, domain, fields, groupby, offset=offset, limit=limit, context=context, orderby=orderby)
+
+    def _search(self, cr, user, args, offset=0, limit=None, order=None, context=None, count=False, access_rights_uid=None):
+        if user != SUPERUSER_ID and args:
+            domain_terms = [term for term in args if isinstance(term, (tuple, list))]
+            domain_fields = set(left for (left, op, right) in domain_terms)
+            if domain_fields.intersection(USER_PRIVATE_FIELDS):
+                raise openerp.exceptions.AccessError('Invalid search criterion')
+        return super(res_users, self)._search(
+            cr, user, args, offset=offset, limit=limit, order=order, context=context, count=count,
+            access_rights_uid=access_rights_uid)
 
     def create(self, cr, uid, vals, context=None):
         user_id = super(res_users, self).create(cr, uid, vals, context=context)
@@ -336,10 +355,10 @@ class res_users(osv.osv):
         clear = partial(self.pool.get('ir.rule').clear_cache, cr)
         map(clear, ids)
         db = cr.dbname
-        if db in self._uid_cache:
+        if db in self.__uid_cache:
             for id in ids:
-                if id in self._uid_cache[db]:
-                    del self._uid_cache[db][id]
+                if id in self.__uid_cache[db]:
+                    del self.__uid_cache[db][id]
         self.context_get.clear_cache(self)
         return res
 
@@ -347,10 +366,10 @@ class res_users(osv.osv):
         if 1 in ids:
             raise osv.except_osv(_('Can not remove root user!'), _('You can not remove the admin user as it is used internally for resources created by OpenERP (updates, module installation, ...)'))
         db = cr.dbname
-        if db in self._uid_cache:
+        if db in self.__uid_cache:
             for id in ids:
-                if id in self._uid_cache[db]:
-                    del self._uid_cache[db][id]
+                if id in self.__uid_cache[db]:
+                    del self.__uid_cache[db][id]
         return super(res_users, self).unlink(cr, uid, ids, context=context)
 
     def name_search(self, cr, user, name='', args=None, operator='ilike', context=None, limit=100):
@@ -404,10 +423,7 @@ class res_users(osv.osv):
         return dataobj.browse(cr, uid, data_id, context=context).res_id
 
     def check_super(self, passwd):
-        if passwd == tools.config['admin_passwd']:
-            return True
-        else:
-            raise openerp.exceptions.AccessDenied()
+        return check_super(passwd)
 
     def check_credentials(self, cr, uid, password):
         """ Override this method to plug additional authentication methods"""
@@ -491,15 +507,12 @@ class res_users(osv.osv):
         if not passwd:
             # empty passwords disallowed for obvious security reasons
             raise openerp.exceptions.AccessDenied()
-        if self._uid_cache.get(db, {}).get(uid) == passwd:
+        if self.__uid_cache.setdefault(db, {}).get(uid) == passwd:
             return
         cr = pooler.get_db(db).cursor()
         try:
             self.check_credentials(cr, uid, passwd)
-            if self._uid_cache.has_key(db):
-                self._uid_cache[db][uid] = passwd
-            else:
-                self._uid_cache[db] = {uid:passwd}
+            self.__uid_cache[db][uid] = passwd
         finally:
             cr.close()
 
@@ -514,7 +527,7 @@ class res_users(osv.osv):
         """
         self.check(cr.dbname, uid, old_passwd)
         if new_passwd:
-            return self.write(cr, uid, uid, {'password': new_passwd})
+            return self.write(cr, SUPERUSER_ID, uid, {'password': new_passwd})
         raise osv.except_osv(_('Warning!'), _("Setting empty passwords is not allowed for security reasons!"))
 
     def preference_save(self, cr, uid, ids, context=None):

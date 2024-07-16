@@ -164,7 +164,6 @@
                             <field name="priority"/>
                             <field name="categ_ids"
                                 widget="many2many_tags"
-                                domain="[('object_id.model','=','crm.lead')]"
                                 context="{'object_name': 'crm.lead'}"
                             />
                         </group>
@@ -392,8 +391,7 @@
                                 type="action"/>
                             <button string="Meeting"
                                 name="action_makeMeeting"
-                                type="object"
-                                context="{'search_default_attendee_id': active_id, 'default_attendee_id' : active_id}"/>
+                                type="object" />
                         </div>
                         <div class="oe_title">
                             <label for="name" class="oe_edit_only"/>
@@ -437,9 +435,7 @@
                             <group>
                                 <field name="categ_ids"
                                     string="Categories" widget="many2many_tags"
-                                    context = "{'object_name': 'crm.lead'}"
-                                    domain="[('object_id.model', '=', 'crm.lead')]"/>
-
+                                    context="{'object_name': 'crm.lead'}"/>
                             </group>
                         </group>
 

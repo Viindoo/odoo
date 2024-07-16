@@ -132,6 +132,9 @@ class ir_attachment(osv.osv):
                 result[attach.id] = self._file_read(cr, uid, location, attach.store_fname, bin_size)
             else:
                 result[attach.id] = attach.db_datas
+                if bin_size:
+                    result[attach.id] = int(result[attach.id] or 0)
+
         return result
 
     def _data_set(self, cr, uid, id, name, value, arg, context=None):
@@ -181,11 +184,12 @@ class ir_attachment(osv.osv):
     }
 
     def _auto_init(self, cr, context=None):
-        super(ir_attachment, self)._auto_init(cr, context)
+        res = super(ir_attachment, self)._auto_init(cr, context)
         cr.execute('SELECT indexname FROM pg_indexes WHERE indexname = %s', ('ir_attachment_res_idx',))
         if not cr.fetchone():
             cr.execute('CREATE INDEX ir_attachment_res_idx ON ir_attachment (res_model, res_id)')
             cr.commit()
+        return res
 
     def check(self, cr, uid, ids, mode, context=None, values=None):
         """Restricts the access to an ir.attachment, according to referred model

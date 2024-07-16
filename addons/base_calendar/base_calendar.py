@@ -647,7 +647,7 @@ class res_alarm(osv.osv):
 are both optional, but if one occurs, so MUST the other"""),
         'repeat': fields.integer('Repeat'),
         'active': fields.boolean('Active', help="If the active field is set to \
-true, it will allow you to hide the event alarm information without removing it.")
+false, it will allow you to hide the event alarm information without removing it.")
     }
     _defaults = {
         'trigger_interval': 'minutes',
@@ -1108,7 +1108,7 @@ rule or repeating pattern of time to exclude from the recurring rule."),
                                  'event_id', 'attendee_id', 'Attendees'),
         'allday': fields.boolean('All Day', states={'done': [('readonly', True)]}),
         'active': fields.boolean('Active', help="If the active field is set to \
-         true, it will allow you to hide the event alarm information without removing it."),
+         false, it will allow you to hide the event alarm information without removing it."),
         'recurrency': fields.boolean('Recurrent', help="Recurrent Meeting"),
         'partner_ids': fields.many2many('res.partner', string='Attendees', states={'done': [('readonly', True)]}),
     }
@@ -1826,7 +1826,7 @@ ir_model()
 
 class virtual_report_spool(web_services.report_spool):
 
-    def exp_report(self, db, uid, object, ids, data=None, context=None):
+    def exp_report(self, db, uid, object, ids, datas=None, context=None):
         """
         Export Report
         @param self: The object pointer
@@ -1837,13 +1837,13 @@ class virtual_report_spool(web_services.report_spool):
 
         if object == 'printscreen.list':
             return super(virtual_report_spool, self).exp_report(db, uid, \
-                            object, ids, data, context)
+                            object, ids, datas, context)
         new_ids = []
         for id in ids:
             new_ids.append(base_calendar_id2real_id(id))
-        if data.get('id', False):
-            data['id'] = base_calendar_id2real_id(data['id'])
-        return super(virtual_report_spool, self).exp_report(db, uid, object, new_ids, data, context)
+        if datas.get('id', False):
+            datas['id'] = base_calendar_id2real_id(datas['id'])
+        return super(virtual_report_spool, self).exp_report(db, uid, object, new_ids, datas, context)
 
 virtual_report_spool()
 
