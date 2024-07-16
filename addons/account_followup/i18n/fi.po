@@ -1,21 +1,22 @@
-# Finnish translation for openobject-addons
-# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
-#
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# * account_followup
+# 
+# Translators:
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: Odoo 7.0\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-07 19:36+0000\n"
-"PO-Revision-Date: 2012-12-21 23:00+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Finnish <fi@li.org>\n"
+"PO-Revision-Date: 2016-06-23 09:56+0000\n"
+"Last-Translator: Martin Trigaux\n"
+"Language-Team: Finnish (http://www.transifex.com/odoo/odoo-7/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-21 05:58+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
+"Content-Transfer-Encoding: \n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: account_followup
 #: model:email.template,subject:account_followup.email_template_account_followup_default
@@ -23,16 +24,15 @@ msgstr ""
 #: model:email.template,subject:account_followup.email_template_account_followup_level1
 #: model:email.template,subject:account_followup.email_template_account_followup_level2
 msgid "${user.company_id.name} Payment Reminder"
-msgstr ""
+msgstr "${user.company_id.name} Maksumuistutus"
 
 #. module: account_followup
 #: help:res.partner,latest_followup_level_id:0
 msgid "The maximum follow-up level"
-msgstr ""
+msgstr "Seurantatoimenpiteiden maksimitaso"
 
 #. module: account_followup
-#: view:account_followup.stat:0
-#: view:res.partner:0
+#: view:account_followup.stat:0 view:res.partner:0
 msgid "Group By..."
 msgstr "Ryhmittely.."
 
@@ -44,32 +44,31 @@ msgstr "Seuranta"
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid "%(date)s"
-msgstr ""
+msgstr "%(date)s"
 
 #. module: account_followup
 #: field:res.partner,payment_next_action_date:0
 msgid "Next Action Date"
-msgstr ""
+msgstr "Seuraava toimenpidepäivä"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 #: field:account_followup.followup.line,manual_action:0
 msgid "Manual Action"
-msgstr ""
+msgstr "Manuaalinen toimenpide"
 
 #. module: account_followup
 #: field:account_followup.sending.results,needprinting:0
 msgid "Needs Printing"
-msgstr ""
+msgstr "Odottaa tulostusta"
 
 #. module: account_followup
 #: field:account_followup.followup.line,manual_action_note:0
 msgid "Action To Do"
-msgstr ""
+msgstr "Tehtävät"
 
 #. module: account_followup
-#: field:account_followup.followup,company_id:0
-#: view:account_followup.stat:0
+#: field:account_followup.followup,company_id:0 view:account_followup.stat:0
 #: field:account_followup.stat,company_id:0
 #: field:account_followup.stat.by.partner,company_id:0
 msgid "Company"
@@ -90,28 +89,28 @@ msgstr "Sähköpostin aihe"
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid "%(user_signature)s"
-msgstr ""
+msgstr "%(user_signature)s"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid "days overdue, do the following actions:"
-msgstr ""
+msgstr "päivää ohi eräpäivän, tee seuraavat toiminnot:"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid "Follow-up Steps"
-msgstr ""
+msgstr "Seurantatoimenpiteiden askeleet"
 
 #. module: account_followup
 #: code:addons/account_followup/account_followup.py:261
 #, python-format
 msgid "Due Date"
-msgstr ""
+msgstr "Eräpäivä"
 
 #. module: account_followup
 #: model:ir.actions.act_window,name:account_followup.action_account_followup_print
 msgid "Send Follow-Ups"
-msgstr ""
+msgstr "Lähetä maksunseurantaviestit"
 
 #. module: account_followup
 #: code:addons/account_followup/account_followup.py:312
@@ -119,7 +118,7 @@ msgstr ""
 #: code:addons/account_followup/report/account_followup_print.py:86
 #, python-format
 msgid "Error!"
-msgstr ""
+msgstr "Virhe!"
 
 #. module: account_followup
 #: report:account_followup.followup.print:0
@@ -133,12 +132,12 @@ msgstr "Määrä"
 msgid ""
 "This is the next action to be taken.  It will automatically be set when the "
 "partner gets a follow-up level that requires a manual action. "
-msgstr ""
+msgstr "Tämä on seuraava tehtävä toimenpide. Se asetetaan automaattisesti kun kumppanille tehdään automaattinen seurantatoimenpide joka vaatii manuaalisia toimia."
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "No Responsible"
-msgstr ""
+msgstr "Ei vastuullista"
 
 #. module: account_followup
 #: model:account_followup.followup.line,description:account_followup.demo_followup_line2
@@ -146,40 +145,30 @@ msgid ""
 "\n"
 "Dear %(partner_name)s,\n"
 "\n"
-"We are disappointed to see that despite sending a reminder, that your "
-"account is now seriously overdue.\n"
+"We are disappointed to see that despite sending a reminder, that your account is now seriously overdue.\n"
 "\n"
-"It is essential that immediate payment is made, otherwise we will have to "
-"consider placing a stop on your account which means that we will no longer "
-"be able to supply your company with (goods/services).\n"
-"Please, take appropriate measures in order to carry out this payment in the "
-"next 8 days.\n"
+"It is essential that immediate payment is made, otherwise we will have to consider placing a stop on your account which means that we will no longer be able to supply your company with (goods/services).\n"
+"Please, take appropriate measures in order to carry out this payment in the next 8 days.\n"
 "\n"
-"If there is a problem with paying invoice that we are not aware of, do not "
-"hesitate to contact our accounting department, so that we can resolve the "
-"matter quickly.\n"
+"If there is a problem with paying invoice that we are not aware of, do not hesitate to contact our accounting department, so that we can resolve the matter quickly.\n"
 "\n"
 "Details of due payments is printed below.\n"
 "\n"
 "Best Regards,\n"
-msgstr ""
+msgstr "\nHyvä %(partner_name)s,\n\nToistuvista muistutuksista huolimatta laskunne näyttävät olevan edelleen maksamatta.\n\nJos maksua ei suoriteta välittömästi, joudumme harkitsemaan palvelunne keskeyttämistä. Tämä tarkoittaa että emme tule toimittamaan teille enää tuotteitamme (tai palveluitamme) ennen kuin velka on hoidettu kokonaisuudessaan.\n\nOlkaa hyvät ja tehkää tarvittavat toimenpiteet maksun suorittamiseksi seuraavan 8 päivän aikana.\n\nJos laskun kanssa on ongelma, josta emme ole tietoisia, kannattaa olla yhteydessä laskutusosastoomme.\n\nParhain terveisin,\n"
 
 #. module: account_followup
 #: model:email.template,body_html:account_followup.email_template_account_followup_level0
 msgid ""
 "\n"
-"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-"
-"serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, "
-"255, 255); \">\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n"
 "\n"
 "    <p>Dear ${object.name},</p>\n"
 "    <p>\n"
-"    Exception made if there was a mistake of ours, it seems that the "
-"following amount stays unpaid. Please, take\n"
+"    Exception made if there was a mistake of ours, it seems that the following amount stays unpaid. Please, take\n"
 "appropriate measures in order to carry out this payment in the next 8 days.\n"
 "\n"
-"Would your payment have been carried out after this mail was sent, please "
-"ignore this message. Do not hesitate to\n"
+"Would your payment have been carried out after this mail was sent, please ignore this message. Do not hesitate to\n"
 "contact our accounting department.  \n"
 "\n"
 "    </p>\n"
@@ -199,13 +188,13 @@ msgid ""
 "\n"
 "</div>\n"
 "            "
-msgstr ""
+msgstr "\n<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n\n    <p>Hyvä ${object.name},</p>\n    <p>\nVaikuttaisi että viestin lopusta löytyvä summa on vielä maksamatta. Olkaa hyvät ja tehkää tarvittavat toimenpiteet maksun suorittamiseksi\n\nJos maksu on jo suoritettu ennen tämän viestin lähettämistä, voit jättää kehoituksen huomioimatta.\n\nEpäselvissä tilanteissa voitte ottaa yhteyttä laskutusosastoomme.\n\n    </p>\n<br/>\nParhain terveisin,\n<br/>\n   <br/>\n${user.name}\n\n<br/>\n<br/>\n\n\n${object.get_followup_table_html() | safe}\n\n    <br/>\n\n</div>\n            "
 
 #. module: account_followup
 #: code:addons/account_followup/account_followup.py:260
 #, python-format
 msgid "Reference"
-msgstr ""
+msgstr "Viite"
 
 #. module: account_followup
 #: view:account_followup.stat.by.partner:0
@@ -220,22 +209,21 @@ msgstr "Kokonais debet"
 #. module: account_followup
 #: field:res.partner,payment_next_action:0
 msgid "Next Action"
-msgstr ""
+msgstr "Seuraava Toimenpide"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid ": Partner Name"
-msgstr ""
+msgstr "Kumppanin nimi"
 
 #. module: account_followup
 #: field:account_followup.followup.line,manual_action_responsible_id:0
 msgid "Assign a Responsible"
-msgstr ""
+msgstr "Merkitse vastuulliseksi"
 
 #. module: account_followup
 #: view:account_followup.followup:0
-#: field:account_followup.followup,followup_line:0
-#: view:res.partner:0
+#: field:account_followup.followup,followup_line:0 view:res.partner:0
 msgid "Follow-up"
 msgstr "Seuranta"
 
@@ -245,8 +233,7 @@ msgid "VAT:"
 msgstr "ALV:"
 
 #. module: account_followup
-#: view:account_followup.stat:0
-#: field:account_followup.stat,partner_id:0
+#: view:account_followup.stat:0 field:account_followup.stat,partner_id:0
 #: field:account_followup.stat.by.partner,partner_id:0
 #: model:ir.model,name:account_followup.model_res_partner
 msgid "Partner"
@@ -255,7 +242,7 @@ msgstr "Kumppani"
 #. module: account_followup
 #: field:account_followup.print,email_body:0
 msgid "Email Body"
-msgstr ""
+msgstr "Sähköpostin teksti"
 
 #. module: account_followup
 #: view:account_followup.followup:0
@@ -263,14 +250,12 @@ msgid ""
 "To remind customers of paying their invoices, you can\n"
 "                        define different actions depending on how severely\n"
 "                        overdue the customer is. These actions are bundled\n"
-"                        into follow-up levels that are triggered when the "
-"due\n"
+"                        into follow-up levels that are triggered when the due\n"
 "                        date of an invoice has passed a certain\n"
-"                        number of days. If there are other overdue invoices "
-"for the \n"
+"                        number of days. If there are other overdue invoices for the \n"
 "                        same customer, the actions of the most \n"
 "                        overdue invoice will be executed."
-msgstr ""
+msgstr "Jotta voit muistuttaa asiakkaita laskujen maksamisesta, voit määrittää erilaisia toimenpiteitä riippuen siitä kuinka paljon asiakkaan maksut on myöhässä. Nämä toiminnot niputetaan seurantatoimenpiteiden tasoihin, jotka laukeavat kun laskun eräpäivästä on kulunut riittävästi aikaa. Jos samalla asiakkaalla on on muita erääntyneitä laskuja, vain pahiten myöhässä olevan laskun toiminto suoritetaan."
 
 #. module: account_followup
 #: report:account_followup.followup.print:0
@@ -285,7 +270,7 @@ msgstr "Kumppanit"
 #. module: account_followup
 #: sql_constraint:account_followup.followup:0
 msgid "Only one follow-up per company is allowed"
-msgstr ""
+msgstr "Vain yksi seurantatoimenpide yritystä kohtaan on sallittu"
 
 #. module: account_followup
 #: code:addons/account_followup/wizard/account_followup_print.py:254
@@ -296,12 +281,12 @@ msgstr "Laskumuistutus"
 #. module: account_followup
 #: help:account_followup.followup.line,send_letter:0
 msgid "When processing, it will print a letter"
-msgstr ""
+msgstr "Tulostaa kirjeen käsiteltäessä"
 
 #. module: account_followup
 #: field:res.partner,payment_earliest_due_date:0
 msgid "Worst Due Date"
-msgstr ""
+msgstr "Aikaisin mahdollinen eräpäivä"
 
 #. module: account_followup
 #: view:account_followup.stat:0
@@ -311,38 +296,31 @@ msgstr "Ei perittävä"
 #. module: account_followup
 #: view:account_followup.print:0
 msgid "Send emails and generate letters"
-msgstr ""
+msgstr "Lähetä sähköpostit ja luo kirjeet"
 
 #. module: account_followup
 #: model:ir.actions.act_window,name:account_followup.action_customer_followup
 msgid "Manual Follow-Ups"
-msgstr ""
+msgstr "Käsin tehtävät seurantatoimenpiteet"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid "%(partner_name)s"
-msgstr ""
+msgstr "%(partner_name)s"
 
 #. module: account_followup
 #: model:email.template,body_html:account_followup.email_template_account_followup_level1
 msgid ""
 "\n"
-"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-"
-"serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, "
-"255, 255); \">\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n"
 "    \n"
 "    <p>Dear ${object.name},</p>\n"
 "   <p>\n"
-"    We are disappointed to see that despite sending a reminder, that your "
-"account is now seriously overdue.\n"
-"It is essential that immediate payment is made, otherwise we will have to "
-"consider placing a stop on your account\n"
-"which means that we will no longer be able to supply your company with "
-"(goods/services).\n"
-"Please, take appropriate measures in order to carry out this payment in the "
-"next 8 days.\n"
-"If there is a problem with paying invoice that we are not aware of, do not "
-"hesitate to contact our accounting\n"
+"    We are disappointed to see that despite sending a reminder, that your account is now seriously overdue.\n"
+"It is essential that immediate payment is made, otherwise we will have to consider placing a stop on your account\n"
+"which means that we will no longer be able to supply your company with (goods/services).\n"
+"Please, take appropriate measures in order to carry out this payment in the next 8 days.\n"
+"If there is a problem with paying invoice that we are not aware of, do not hesitate to contact our accounting\n"
 "department. so that we can resolve the matter quickly.\n"
 "Details of due payments is printed below.\n"
 " </p>\n"
@@ -362,7 +340,7 @@ msgid ""
 "\n"
 "</div>\n"
 "            "
-msgstr ""
+msgstr "\n<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n    \n    <p>Hyvä ${object.name},</p>\n   <p>\nToistuvista muistutuksista huolimatta hoitamattomia laskujanne ei ole maksettu. Ellei velkaa makseta kokonaisuudessaan seuraavan 8 päivän aikana, velka siirretään perintätoimiston hoidettavaksi.\n\nToivomme että tätä ei jouduta tekemään, vaan hoidatte viestin alaosasa näkyvät maksut viipymättä.\n\nEpäselvissä tapauksissa voitte olla yhteydessä laskutusosastoomme.\n </p>\n<br/>\nParhain terveisin,\n    \n<br/>\n<br/>\n${user.name}\n    \n<br/>\n<br/>\n\n${object.get_followup_table_html() | safe}\n\n    <br/>\n\n</div>\n            "
 
 #. module: account_followup
 #: field:account_followup.stat,debit:0
@@ -372,17 +350,17 @@ msgstr "Debet"
 #. module: account_followup
 #: model:ir.model,name:account_followup.model_account_followup_stat
 msgid "Follow-up Statistics"
-msgstr ""
+msgstr "Seurantatoimenpiteiden tilastot"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "Send Overdue Email"
-msgstr ""
+msgstr "Lähetä muistutussähköposti"
 
 #. module: account_followup
 #: model:ir.model,name:account_followup.model_account_followup_followup_line
 msgid "Follow-up Criteria"
-msgstr ""
+msgstr "Seurantatoimenpiteiden kriteerit"
 
 #. module: account_followup
 #: help:account_followup.followup.line,sequence:0
@@ -393,40 +371,39 @@ msgstr "Antaa järjestyksen näytettäessä muistutusrivejä."
 #: code:addons/account_followup/wizard/account_followup_print.py:166
 #, python-format
 msgid " will be sent"
-msgstr ""
+msgstr "lähetetään"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid ": User's Company Name"
-msgstr ""
+msgstr "Käyttäjän yrityksen nimi"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 #: field:account_followup.followup.line,send_letter:0
 msgid "Send a Letter"
-msgstr ""
+msgstr "Lähetä kirje"
 
 #. module: account_followup
 #: model:ir.actions.act_window,name:account_followup.action_account_followup_definition_form
 msgid "Payment Follow-ups"
-msgstr ""
+msgstr "Maksujen seurantatoimenpiteet"
 
 #. module: account_followup
 #: code:addons/account_followup/report/account_followup_print.py:86
 #, python-format
 msgid ""
-"The followup plan defined for the current company does not have any followup "
-"action."
-msgstr ""
+"The followup plan defined for the current company does not have any followup"
+" action."
+msgstr "Yritykselle määritetyssä seurantatoimenpiteiden suunnitelmassa ei ole yhtään seurantatoimenpidettä."
 
 #. module: account_followup
 #: field:account_followup.followup.line,delay:0
 msgid "Due Days"
-msgstr ""
+msgstr "Eräpäivät"
 
 #. module: account_followup
-#: field:account.move.line,followup_line_id:0
-#: view:account_followup.stat:0
+#: field:account.move.line,followup_line_id:0 view:account_followup.stat:0
 msgid "Follow-up Level"
 msgstr "Muistutuksen taso"
 
@@ -438,27 +415,27 @@ msgstr "Viimeisin muistutus"
 #. module: account_followup
 #: model:ir.ui.menu,name:account_followup.menu_manual_reconcile_followup
 msgid "Reconcile Invoices & Payments"
-msgstr ""
+msgstr "Hyvitä laskut ja maksut"
 
 #. module: account_followup
 #: model:ir.ui.menu,name:account_followup.account_followup_s
 msgid "Do Manual Follow-Ups"
-msgstr ""
+msgstr "Tee jälkikäsittely manuaalisesti"
 
 #. module: account_followup
 #: report:account_followup.followup.print:0
 msgid "Li."
-msgstr ""
+msgstr "Li"
 
 #. module: account_followup
 #: field:account_followup.print,email_conf:0
 msgid "Send Email Confirmation"
-msgstr ""
+msgstr "Lähetä sähköpostivahvistus"
 
 #. module: account_followup
 #: view:account_followup.stat:0
 msgid "Follow-up Entries with period in current year"
-msgstr ""
+msgstr "Seurantatoimenpiteiden tapahtumat joiden jakso on tänä vuonna"
 
 #. module: account_followup
 #: field:account_followup.stat.by.partner,date_followup:0
@@ -479,7 +456,7 @@ msgstr ""
 #. module: account_followup
 #: model:ir.model,name:account_followup.model_account_followup_print
 msgid "Print Follow-up & Send Mail to Customers"
-msgstr ""
+msgstr "Tulosta seurantatoimenpiteet ja lähetä postia asiakkaille"
 
 #. module: account_followup
 #: field:account_followup.followup.line,description:0
@@ -489,18 +466,18 @@ msgstr "Tulostettu viesti"
 #. module: account_followup
 #: view:res.partner:0
 msgid "Responsible of credit collection"
-msgstr ""
+msgstr "Luoton perinnästä vastuullinen"
 
 #. module: account_followup
 #: code:addons/account_followup/wizard/account_followup_print.py:155
 #, python-format
 msgid "Anybody"
-msgstr ""
+msgstr "Kuka tahansa"
 
 #. module: account_followup
 #: help:account_followup.followup.line,send_email:0
 msgid "When processing, it will send an email"
-msgstr ""
+msgstr "Lähettää sähköpostin käsiteltäessä"
 
 #. module: account_followup
 #: view:account_followup.stat.by.partner:0
@@ -510,7 +487,7 @@ msgstr "Muistutettava kumppani"
 #. module: account_followup
 #: view:res.partner:0
 msgid "Print Overdue Payments"
-msgstr ""
+msgstr "Tulosta erääntyneet maksut"
 
 #. module: account_followup
 #: field:account_followup.followup.line,followup_id:0
@@ -522,80 +499,80 @@ msgstr "Muistutukset"
 #: code:addons/account_followup/account_followup.py:218
 #, python-format
 msgid "Email not sent because of email address of partner not filled in"
-msgstr ""
+msgstr "Sähköpostia ei lähetetty koska vastaanottajan sähköpostia ei oltu asetettu"
 
 #. module: account_followup
 #: model:ir.model,name:account_followup.model_account_followup_followup
 msgid "Account Follow-up"
-msgstr ""
+msgstr "Maksujen seuranta"
 
 #. module: account_followup
 #: help:res.partner,payment_responsible_id:0
 msgid ""
 "Optionally you can assign a user to this field, which will make him "
 "responsible for the action."
-msgstr ""
+msgstr "Voit määrittää tähän kenttään halutessassi käyttäjän, josta tulee toiminnon vastuullinen."
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "Partners with Overdue Credits"
-msgstr ""
+msgstr "Kumppanit joiden tili on ylitetty"
 
 #. module: account_followup
 #: model:ir.model,name:account_followup.model_account_followup_sending_results
 msgid "Results from the sending of the different letters and emails"
-msgstr ""
+msgstr "Kirjeiden ja sähköpostien lähettämisestä saavutetut tulokset"
 
 #. module: account_followup
 #: constraint:account_followup.followup.line:0
 msgid ""
 "Your description is invalid, use the right legend or %% if you want to use "
 "the percent character."
-msgstr ""
+msgstr "Kuvaus on virheellinen. Käytä oikeaa selitystä tai %% jos haluat näyttää prosenttimerkin"
 
 #. module: account_followup
 #: code:addons/account_followup/wizard/account_followup_print.py:172
 #, python-format
 msgid " manual action(s) assigned:"
-msgstr ""
+msgstr "käsintehtäviä toimenpiteitä asetettu:"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "Search Partner"
-msgstr ""
+msgstr "Hae kumppani"
 
 #. module: account_followup
 #: model:ir.ui.menu,name:account_followup.account_followup_print_menu
 msgid "Send Letters and Emails"
-msgstr ""
+msgstr "Lähetä kirjeet ja sähköpostit"
 
 #. module: account_followup
 #: view:account_followup.followup:0
 msgid "Search Follow-up"
-msgstr ""
+msgstr "Etsi maksunseurannasta"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid ""
 "He said the problem was temporary and promised to pay 50% before 15th of "
 "May, balance before 1st of July."
-msgstr ""
+msgstr "Hän sanoi että ongelma on väliaikainen ja lupasi maksaa 50% ennen kuun 15. päivää ja loput kuun loppuun mennessä."
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "Account Move line"
-msgstr ""
+msgstr "Kirjanpidon tapahtumat"
 
 #. module: account_followup
 #: code:addons/account_followup/wizard/account_followup_print.py:237
 #, python-format
 msgid "Send Letters and Emails: Actions Summary"
-msgstr ""
+msgstr "Lähetä kirjeitä ja sähköposteja: toimintojen yhteenveto"
 
 #. module: account_followup
 #: view:account_followup.print:0
 msgid "or"
-msgstr ""
+msgstr "tai"
 
 #. module: account_followup
 #: field:account_followup.stat,blocked:0
@@ -605,22 +582,22 @@ msgstr "Estetty"
 #. module: account_followup
 #: sql_constraint:account_followup.followup.line:0
 msgid "Days of the follow-up levels must be different"
-msgstr ""
+msgstr "Maksunseurannan tasojen päivämäärien täytyy olla erilaiset"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "Click to mark the action as done."
-msgstr ""
+msgstr "Merkitse toiminto tehdyksi"
 
 #. module: account_followup
 #: model:ir.ui.menu,name:account_followup.menu_action_followup_stat_follow
 msgid "Follow-Ups Analysis"
-msgstr ""
+msgstr "Seurantatoimenpiteiden analyysi"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "Action to be taken e.g. Give a phonecall, Check if it's paid, ..."
-msgstr ""
+msgstr "Seuraavaksi tehtävä toiminto, kuten soitto, maksun tarkistus, tms."
 
 #. module: account_followup
 #: help:res.partner,payment_next_action_date:0
@@ -629,18 +606,17 @@ msgid ""
 "current date when the partner gets a follow-up level that requires a manual "
 "action. Can be practical to set manually e.g. to see if he keeps his "
 "promises."
-msgstr ""
+msgstr "Tämä on manuaalinen seurantatoimenpide joka täytyy tehdä. Päivämääräksi asetetaan päivä jolloin tehdään seurantatoimenpide joka vaatii manuaalisia toimia. Joskus tämä voi olla hyödyllistä asettaa myös käsin, esim. tarkastaa pitikö asiakas lupauksensa."
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "Print overdue payments report independent of follow-up line"
-msgstr ""
+msgstr "Tulosta erääntyneiden maksujen raportti"
 
 #. module: account_followup
 #: help:account_followup.print,date:0
-msgid ""
-"This field allow you to select a forecast date to plan your follow-ups"
-msgstr ""
+msgid "This field allow you to select a forecast date to plan your follow-ups"
+msgstr "Tämä kenttä sallii ennustepäivän valitsemisen seurantatoimenpiteille"
 
 #. module: account_followup
 #: field:account_followup.print,date:0
@@ -648,29 +624,23 @@ msgid "Follow-up Sending Date"
 msgstr "Seurannan lähetyspäivä"
 
 #. module: account_followup
-#: view:res.partner:0
-#: field:res.partner,payment_responsible_id:0
+#: view:res.partner:0 field:res.partner,payment_responsible_id:0
 msgid "Follow-up Responsible"
-msgstr ""
+msgstr "Maksun vastuullinen"
 
 #. module: account_followup
 #: model:email.template,body_html:account_followup.email_template_account_followup_level2
 msgid ""
 "\n"
-"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-"
-"serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, "
-"255, 255); \">\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n"
 "    \n"
 "    <p>Dear ${object.name},</p>\n"
 "    <p>\n"
 "    Despite several reminders, your account is still not settled.\n"
-"Unless full payment is made in next 8 days, legal action for the recovery of "
-"the debt will be taken without\n"
+"Unless full payment is made in next 8 days, legal action for the recovery of the debt will be taken without\n"
 "further notice.\n"
-"I trust that this action will prove unnecessary and details of due payments "
-"is printed below.\n"
-"In case of any queries concerning this matter, do not hesitate to contact "
-"our accounting department.\n"
+"I trust that this action will prove unnecessary and details of due payments is printed below.\n"
+"In case of any queries concerning this matter, do not hesitate to contact our accounting department.\n"
 "</p>\n"
 "<br/>\n"
 "Best Regards,\n"
@@ -687,7 +657,7 @@ msgid ""
 "\n"
 "</div>\n"
 "            "
-msgstr ""
+msgstr "\n<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n    \n    <p>Arvon ${object.name},</p>\n    <p>\nToistuvista muistutuksista huolimatta hoitamattomia laskujanne ei ole maksettu. Ellei velkaa makseta kokonaisuudessaan seuraavan 8 päivän aikana, velka siirretään perintätoimiston hoidettavaksi.\n\nToivomme että tätä ei jouduta tekemään, vaan hoidatte viestin alaosasa näkyvät maksut viipymättä.\n\nEpäselvissä tapauksissa voitte ottaa yhteyttä laskutusosastoomme.\n</p>\n<br/>\nParhain terveisin,\n<br/>\n<br/>\n${user.name}\n<br/>\n<br/>\n\n\n${object.get_followup_table_html() | safe}\n\n    <br/>\n\n</div>\n            "
 
 #. module: account_followup
 #: report:account_followup.followup.print:0
@@ -697,7 +667,7 @@ msgstr "Dokumentti : Asiakkaan tiliote"
 #. module: account_followup
 #: model:ir.ui.menu,name:account_followup.account_followup_menu
 msgid "Follow-up Levels"
-msgstr ""
+msgstr "Jälkikäsittelyn tasot"
 
 #. module: account_followup
 #: model:account_followup.followup.line,description:account_followup.demo_followup_line4
@@ -708,23 +678,20 @@ msgid ""
 "\n"
 "Despite several reminders, your account is still not settled.\n"
 "\n"
-"Unless full payment is made in next 8 days, then legal action for the "
-"recovery of the debt will be taken without further notice.\n"
+"Unless full payment is made in next 8 days, then legal action for the recovery of the debt will be taken without further notice.\n"
 "\n"
-"I trust that this action will prove unnecessary and details of due payments "
-"is printed below.\n"
+"I trust that this action will prove unnecessary and details of due payments is printed below.\n"
 "\n"
-"In case of any queries concerning this matter, do not hesitate to contact "
-"our accounting department.\n"
+"In case of any queries concerning this matter, do not hesitate to contact our accounting department.\n"
 "\n"
 "Best Regards,\n"
 "            "
-msgstr ""
+msgstr "\nHyvä %(partner_name)s,\n\nToistuvista muistutuksista huolimatta hoitamattomia laskujanne ei ole maksettu. \n\nEllei maksua suoriteta kokonaisuudessaan seuraavan 8 päivän aikana, maksu tullaan perimään oikeusteitse ilman erillistä ilmoitusta.\n\nToivomme että perintätoimiin ei tarvitse ryhtyä, vaan hoidatte viestin alaosassa olevan velan viipymättä.\n\nEpäselvissä tapauksissa voitte olla yhteydessä laskutusosastoomme.\n\nParhain terveisin,\n            "
 
 #. module: account_followup
 #: field:res.partner,payment_amount_due:0
 msgid "Amount Due"
-msgstr ""
+msgstr "Erääntynyt summa"
 
 #. module: account_followup
 #: field:account.move.line,followup_date:0
@@ -734,48 +701,47 @@ msgstr "Viimeisin muistutus"
 #. module: account_followup
 #: view:account_followup.sending.results:0
 msgid "Download Letters"
-msgstr ""
+msgstr "Lataa kirjeet"
 
 #. module: account_followup
 #: field:account_followup.print,company_id:0
 #: field:res.partner,unreconciled_aml_ids:0
 msgid "unknown"
-msgstr ""
+msgstr "Tuntematon"
 
 #. module: account_followup
 #: code:addons/account_followup/account_followup.py:313
 #, python-format
 msgid "Printed overdue payments report"
-msgstr ""
+msgstr "Tulostettu erääntyneiden maksujen raportti"
 
 #. module: account_followup
 #: code:addons/account_followup/account_followup.py:290
 #, python-format
 msgid ""
 "You became responsible to do the next action for the payment follow-up of"
-msgstr ""
+msgstr "Sinsuta tulee vastuullinen seuraavelle toimenpiteelle joka tehdään maksunseurannan puolesta kumppanille "
 
 #. module: account_followup
 #: help:account_followup.followup.line,manual_action:0
 msgid ""
 "When processing, it will set the manual action to be taken for that "
 "customer. "
-msgstr ""
+msgstr "Asettaa manuaalisen toimenpiteen joka asiakkaalle tarvii tehdä."
 
 #. module: account_followup
 #: view:res.partner:0
 msgid ""
 "Below is the history of the transactions of this\n"
 "                            customer. You can check \"No Follow-up\" in\n"
-"                            order to exclude it from the next follow-up "
-"actions."
-msgstr ""
+"                            order to exclude it from the next follow-up actions."
+msgstr "Alla on maksuhistoria tämän asiakkana maksuista. Voit valita \"Ei seurantaa\", jos haluat jättää sen pois seurannan toimenpiteistä."
 
 #. module: account_followup
 #: code:addons/account_followup/wizard/account_followup_print.py:171
 #, python-format
 msgid " email(s) should have been sent, but "
-msgstr ""
+msgstr "sähköpostia yritettiin lähettää, mutta"
 
 #. module: account_followup
 #: model:ir.model,name:account_followup.model_account_move_line
@@ -786,17 +752,17 @@ msgstr "Päiväkirjan tapahtumat"
 #: code:addons/account_followup/account_followup.py:280
 #, python-format
 msgid "Amount due"
-msgstr ""
+msgstr "Erääntynyt summa"
 
 #. module: account_followup
 #: report:account_followup.followup.print:0
 msgid "Total:"
-msgstr ""
+msgstr "Summa:"
 
 #. module: account_followup
 #: field:account_followup.followup.line,email_template_id:0
 msgid "Email Template"
-msgstr ""
+msgstr "Sähköpostin mallipohja"
 
 #. module: account_followup
 #: field:account_followup.print,summary:0
@@ -807,7 +773,7 @@ msgstr "Yhteenveto"
 #: view:account_followup.followup.line:0
 #: field:account_followup.followup.line,send_email:0
 msgid "Send an Email"
-msgstr ""
+msgstr "Lähetä sähköposti"
 
 #. module: account_followup
 #: field:account_followup.stat,credit:0
@@ -817,42 +783,37 @@ msgstr "Luotto"
 #. module: account_followup
 #: field:res.partner,payment_amount_overdue:0
 msgid "Amount Overdue"
-msgstr ""
+msgstr "Erääntynyt summa"
 
 #. module: account_followup
 #: code:addons/account_followup/account_followup.py:263
 #, python-format
 msgid "Lit."
-msgstr ""
+msgstr "Oik."
 
 #. module: account_followup
 #: help:res.partner,latest_followup_level_id_without_lit:0
 msgid ""
 "The maximum follow-up level without taking into account the account move "
 "lines with litigation"
-msgstr ""
+msgstr "Seurantatoimenpiteiden maksimitaso ilman että huomioidaan tapahtumia jotka on merkattu oikedellisiksi toimenpiteiksi"
 
 #. module: account_followup
-#: view:account_followup.stat:0
-#: field:res.partner,latest_followup_date:0
+#: view:account_followup.stat:0 field:res.partner,latest_followup_date:0
 msgid "Latest Follow-up Date"
-msgstr ""
+msgstr "Viimeisin seurantatoimenpiteen päivä"
 
 #. module: account_followup
 #: model:email.template,body_html:account_followup.email_template_account_followup_default
 msgid ""
 "\n"
-"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-"
-"serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, "
-"255, 255); \">\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n"
 "    \n"
 "    <p>Dear ${object.name},</p>\n"
 "    <p>\n"
-"    Exception made if there was a mistake of ours, it seems that the "
-"following amount stays unpaid. Please, take\n"
+"    Exception made if there was a mistake of ours, it seems that the following amount stays unpaid. Please, take\n"
 "appropriate measures in order to carry out this payment in the next 8 days.\n"
-"Would your payment have been carried out after this mail was sent, please "
-"ignore this message. Do not hesitate to\n"
+"Would your payment have been carried out after this mail was sent, please ignore this message. Do not hesitate to\n"
 "contact our accounting department.\n"
 "    </p>\n"
 "<br/>\n"
@@ -868,11 +829,10 @@ msgid ""
 "<br/>\n"
 "</div>\n"
 "            "
-msgstr ""
+msgstr "\n<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n    \n    <p>Hyvä ${object.name},</p>\n    <p>\nKirjanpitomme mukaan viestin lopusta löytyvä summa on vielä maksamatta. Olkaa hyvät ja tehkää tarvittavat toimenpiteet maksun suorittamiseksi 8 päivän kuluessa.\n\nJos maksu on jo suoritettu ennen tämän viestin lähettämistä, voit jättää kehoituksen huomioimatta.\n\n    </p>\n<br/>\nBest Regards,\n<br/>\n<br/>\n${user.name}\n<br/>\n<br/>\n\n${object.get_followup_table_html() | safe}\n\n<br/>\n</div>\n            "
 
 #. module: account_followup
-#: field:account.move.line,result:0
-#: view:account_followup.stat:0
+#: field:account.move.line,result:0 view:account_followup.stat:0
 #: field:account_followup.stat,balance:0
 #: field:account_followup.stat.by.partner,balance:0
 msgid "Balance"
@@ -881,17 +841,17 @@ msgstr "Saldo"
 #. module: account_followup
 #: help:res.partner,payment_note:0
 msgid "Payment Note"
-msgstr ""
+msgstr "Maksun muistiinpano"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "My Follow-ups"
-msgstr ""
+msgstr "Omat seurantatoimenpiteet"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid "%(company_name)s"
-msgstr ""
+msgstr "%(company_name)s"
 
 #. module: account_followup
 #: model:account_followup.followup.line,description:account_followup.demo_followup_line1
@@ -899,16 +859,12 @@ msgid ""
 "\n"
 "Dear %(partner_name)s,\n"
 "\n"
-"Exception made if there was a mistake of ours, it seems that the following "
-"amount stays unpaid. Please, take appropriate measures in order to carry out "
-"this payment in the next 8 days.\n"
+"Exception made if there was a mistake of ours, it seems that the following amount stays unpaid. Please, take appropriate measures in order to carry out this payment in the next 8 days.\n"
 "\n"
-"Would your payment have been carried out after this mail was sent, please "
-"ignore this message. Do not hesitate to contact our accounting department.  "
-"\n"
+"Would your payment have been carried out after this mail was sent, please ignore this message. Do not hesitate to contact our accounting department.  \n"
 "\n"
 "Best Regards,\n"
-msgstr ""
+msgstr "\nHyvä %(partner_name)s,\n\nKirjanpitomme mukaan viestin lopusta löytyvä summa on vielä maksamatta. Olkaa hyvät ja tehkää tarvittavat toimenpiteet maksun suorittamiseksi 8 päivän kuluessa.\n\nJos maksu on jo suoritettu ennen tämän viestin lähettämistä, voitte jättää kehoituksen huomioimatta.\n\nEpäselvissä tapauksissa voitte olla yhteydessä laskutusosastoomme.\n\nBest Regards,\n"
 
 #. module: account_followup
 #: field:account_followup.stat,date_move_last:0
@@ -925,19 +881,19 @@ msgstr "Jakso"
 #: code:addons/account_followup/wizard/account_followup_print.py:228
 #, python-format
 msgid "%s partners have no credits and as such the action is cleared"
-msgstr ""
+msgstr "kumppanilla ei ole maksuja joten niihin liittyvät toimenpiteet poistetaan"
 
 #. module: account_followup
 #: model:ir.actions.report.xml,name:account_followup.account_followup_followup_report
 msgid "Follow-up Report"
-msgstr ""
+msgstr "Jälkikäsittelyraportti"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid ""
 ", the latest payment follow-up\n"
 "                            was:"
-msgstr ""
+msgstr ", viimeisin maksumuistutus oli:"
 
 #. module: account_followup
 #: view:account_followup.print:0
@@ -947,7 +903,7 @@ msgstr "Peruuta"
 #. module: account_followup
 #: view:account_followup.sending.results:0
 msgid "Close"
-msgstr ""
+msgstr "Sulje"
 
 #. module: account_followup
 #: view:account_followup.stat:0
@@ -963,42 +919,41 @@ msgstr "Suurin muistutustaso"
 #: code:addons/account_followup/wizard/account_followup_print.py:171
 #, python-format
 msgid " had unknown email address(es)"
-msgstr ""
+msgstr "oli tuntemattomia sähköpostiosoitteita"
 
 #. module: account_followup
 #: help:account_followup.print,test_print:0
 msgid ""
 "Check if you want to print follow-ups without changing follow-up level."
-msgstr ""
+msgstr "Merkitse jos haluat tulostaa maksumuistutukset muuttamatta maksumuistutusten tasoja"
 
 #. module: account_followup
 #: model:ir.ui.menu,name:account_followup.menu_finance_followup
 #: view:res.partner:0
 msgid "Payment Follow-up"
-msgstr ""
+msgstr "Maksun seuranta"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid ": Current Date"
-msgstr ""
+msgstr ": Nykyinen päivämäärä"
 
 #. module: account_followup
 #: view:account_followup.print:0
 msgid ""
 "This action will send follow-up emails, print the letters and\n"
-"                        set the manual actions per customer, according to "
-"the follow-up levels defined."
-msgstr ""
+"                        set the manual actions per customer, according to the follow-up levels defined."
+msgstr "Tämä toiminto luo maksunseurannan viestit ja kirjeet ja asettaa asiakaskohtaisesti käsin tehtävät toimenpiteet määriteltyjen maksunseurantatasojen perusteella."
 
 #. module: account_followup
 #: field:account_followup.followup.line,name:0
 msgid "Follow-Up Action"
-msgstr ""
+msgstr "Seurantatoimenpide"
 
 #. module: account_followup
 #: view:account_followup.stat:0
 msgid "Including journal entries marked as a litigation"
-msgstr ""
+msgstr "Sisältäen päiväkirjatapahtumat jotka on merkattu oikeudellisiksi toimenpiteiksi"
 
 #. module: account_followup
 #: report:account_followup.followup.print:0
@@ -1011,7 +966,7 @@ msgstr "Kuvaus"
 #. module: account_followup
 #: view:account_followup.sending.results:0
 msgid "Summary of actions"
-msgstr ""
+msgstr "Toimintojen yhteenveto"
 
 #. module: account_followup
 #: report:account_followup.followup.print:0
@@ -1021,7 +976,7 @@ msgstr "Viite"
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid "After"
-msgstr ""
+msgstr "Jälkeen"
 
 #. module: account_followup
 #: view:account_followup.stat:0
@@ -1031,12 +986,12 @@ msgstr "Kuluva tilivuosi"
 #. module: account_followup
 #: field:res.partner,latest_followup_level_id_without_lit:0
 msgid "Latest Follow-up Level without litigation"
-msgstr ""
+msgstr "Viimeisin seurantatoimenpiteen taso ilman oikeudellisia toimenpiteitä"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "⇾ Mark as Done"
-msgstr ""
+msgstr "⇾ Merkkaa tehdyksi"
 
 #. module: account_followup
 #: view:account.move.line:0
@@ -1046,12 +1001,12 @@ msgstr "Kumppaniviennit"
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid "e.g. Call the customer, check if it's paid, ..."
-msgstr ""
+msgstr "esim. soita asiakkaalle, tarkasta onko lasku maksettu"
 
 #. module: account_followup
 #: view:account_followup.stat:0
 msgid "Follow-up lines"
-msgstr ""
+msgstr "Seurantatoimenpiteiden rivit"
 
 #. module: account_followup
 #: model:account_followup.followup.line,description:account_followup.demo_followup_line3
@@ -1061,38 +1016,31 @@ msgid ""
 "\n"
 "Despite several reminders, your account is still not settled.\n"
 "\n"
-"Unless full payment is made in next 8 days, then legal action for the "
-"recovery of the debt will be taken without further notice.\n"
+"Unless full payment is made in next 8 days, then legal action for the recovery of the debt will be taken without further notice.\n"
 "\n"
-"I trust that this action will prove unnecessary and details of due payments "
-"is printed below.\n"
+"I trust that this action will prove unnecessary and details of due payments is printed below.\n"
 "\n"
-"In case of any queries concerning this matter, do not hesitate to contact "
-"our accounting department.\n"
+"In case of any queries concerning this matter, do not hesitate to contact our accounting department.\n"
 "\n"
 "Best Regards,\n"
-msgstr ""
+msgstr "\nHyvä %(partner_name)s,\n\nHuolimatta toistuvista muistutuksista, velkaanne ei ole hoidettu.\n\nEllei maksua suoriteta kokonaisuudessaan seuraavan 8 päivän aikana, maksu tullaan perimään oikeusteitse ilman erillistä ilmoitusta.\n\nToivomme että perintätoimiin ei tarvitse ryhtyä, vaan hoidatte alla olevien tietojen mukaisen velan.\n\nIn case of any queries concerning this matter, do not hesitate to contact our accounting department.\n\nParhain terveisin,\n"
 
 #. module: account_followup
 #: help:account_followup.print,partner_lang:0
 msgid ""
 "Do not change message text, if you want to send email in partner language, "
 "or configure from company"
-msgstr ""
-"Älä vaihda viestin tekstiä, jos haluat lähettää sähköpostia kumppanin "
-"kielellä tai konfiguroida yrityksestä"
+msgstr "Älä vaihda viestin tekstiä, jos haluat lähettää sähköpostia kumppanin kielellä tai konfiguroida yrityksestä"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
 msgid ""
 "Write here the introduction in the letter,\n"
-"                            according to the level of the follow-up. You "
-"can\n"
+"                            according to the level of the follow-up. You can\n"
 "                            use the following keywords in the text. Don't\n"
-"                            forget to translate in all languages you "
-"installed\n"
+"                            forget to translate in all languages you installed\n"
 "                            using to top right icon."
-msgstr ""
+msgstr "Kirjoita tähän kirjeen kuvaus, joka täsmää seurantatoimenpiteen tasoon. Voit käyttää seuraavia avainsanoja tekstissä. Älä unohda kääntää pohjaa kaikille käytössä oleville kielille käyttäen oikean yläkulman ikonia."
 
 #. module: account_followup
 #: view:account_followup.stat:0
@@ -1108,7 +1056,7 @@ msgstr "Nimi"
 #. module: account_followup
 #: field:res.partner,latest_followup_level_id:0
 msgid "Latest Follow-up Level"
-msgstr ""
+msgstr "Viimeisin seurantatoimenpiteen taso"
 
 #. module: account_followup
 #: field:account_followup.stat,date_move:0
@@ -1119,24 +1067,24 @@ msgstr "Ensimmäinen liike"
 #. module: account_followup
 #: model:ir.model,name:account_followup.model_account_followup_stat_by_partner
 msgid "Follow-up Statistics by Partner"
-msgstr ""
+msgstr "Seurantatoimenpiteiden tilastot kumppaneittain"
 
 #. module: account_followup
 #: code:addons/account_followup/wizard/account_followup_print.py:172
 #, python-format
 msgid " letter(s) in report"
-msgstr ""
+msgstr "kirjettä raportilla"
 
 #. module: account_followup
 #: model:ir.actions.act_window,name:account_followup.action_customer_my_followup
 #: model:ir.ui.menu,name:account_followup.menu_sale_followup
 msgid "My Follow-Ups"
-msgstr ""
+msgstr "Omat seurantatoimenpiteet"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "Customer Followup"
-msgstr ""
+msgstr "Asiakkaan seuranta"
 
 #. module: account_followup
 #: model:ir.actions.act_window,help:account_followup.action_account_followup_definition_form
@@ -1144,30 +1092,28 @@ msgid ""
 "<p class=\"oe_view_nocontent_create\">\n"
 "                Click to define follow-up levels and their related actions.\n"
 "              </p><p>\n"
-"                For each step, specify the actions to be taken and delay in "
-"days. It is\n"
-"                possible to use print and e-mail templates to send specific "
-"messages to\n"
+"                For each step, specify the actions to be taken and delay in days. It is\n"
+"                possible to use print and e-mail templates to send specific messages to\n"
 "                the customer.\n"
 "              </p>\n"
 "          "
-msgstr ""
+msgstr "<p class=\"oe_view_nocontent_create\">\nKlikkaa määrittääksesi seurantatoimenpiteiden tasot ja niihin liittyvät toimenpiteet.\n</p><p>\nVoit määrittää kullekin tasolle erilaset toimenpiteet ja kuinka monen päivän päästä erääntymisestä ne suoritetaan. Kussakin tasossa on mahdollista käyttää erilaisia sähköpostipohjia.\n</p>\n          "
 
 #. module: account_followup
 #: code:addons/account_followup/wizard/account_followup_print.py:166
 #, python-format
 msgid "Follow-up letter of "
-msgstr ""
+msgstr "Seurantatoimenpiteiden viesti vastaanottajelle"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid "The"
-msgstr ""
+msgstr "."
 
 #. module: account_followup
 #: view:account_followup.print:0
 msgid "Send follow-ups"
-msgstr ""
+msgstr "Lähetä maksunseurantaviestit"
 
 #. module: account_followup
 #: view:account.move.line:0
@@ -1180,7 +1126,7 @@ msgstr "Kokonaisluotto"
 msgid ""
 "The partner does not have any accounting entries to print in the overdue "
 "report for the current company."
-msgstr ""
+msgstr "Kumppanilla ei ole yhtään tulostettavaa erääntynyttä tapahtumaa tällä yrityksellä."
 
 #. module: account_followup
 #: field:account_followup.followup.line,sequence:0
@@ -1190,7 +1136,7 @@ msgstr "Sekvenssi"
 #. module: account_followup
 #: view:res.partner:0
 msgid "Follow-ups To Do"
-msgstr ""
+msgstr "Seurantatoimenpiteiden tehtävät"
 
 #. module: account_followup
 #: report:account_followup.followup.print:0
@@ -1208,17 +1154,17 @@ msgid ""
 "The number of days after the due date of the invoice to wait before sending "
 "the reminder.  Could be negative if you want to send a polite alert "
 "beforehand."
-msgstr ""
+msgstr "Montako päivää eräpäivän jälkeen muistutus lähetetään. Voi olla myös negatiivinen, jos halutaan lähettää kohtelias muistus etukäteen."
 
 #. module: account_followup
 #: help:res.partner,latest_followup_date:0
 msgid "Latest date that the follow-up level of the partner was changed"
-msgstr ""
+msgstr "Viimeisin päiväys jolloin kumppanin seurantatoimenpiteiden tasoa on muutettu"
 
 #. module: account_followup
 #: field:account_followup.print,test_print:0
 msgid "Test Print"
-msgstr ""
+msgstr "Testituloste"
 
 #. module: account_followup
 #: view:account_followup.followup.line:0
@@ -1228,22 +1174,22 @@ msgstr ""
 #. module: account_followup
 #: view:res.partner:0
 msgid "Accounting"
-msgstr ""
+msgstr "Kirjanpito"
 
 #. module: account_followup
 #: view:res.partner:0
 msgid ""
 "If not specified by the latest follow-up level, it will send from the "
 "default email template"
-msgstr ""
+msgstr "Jos ei määritetty viimeisimmän seurantatason mukaan, lähetetään oletussähköpostipohja"
 
 #. module: account_followup
 #: code:addons/account_followup/account_followup.py:318
 #, python-format
 msgid "There is no followup plan defined for the current company."
-msgstr ""
+msgstr "Tälle yritykselle ei ole määritetty seurantasuunnitelmaa"
 
 #. module: account_followup
 #: field:res.partner,payment_note:0
 msgid "Customer Payment Promise"
-msgstr ""
+msgstr "Asiakkaan maksulupaus"

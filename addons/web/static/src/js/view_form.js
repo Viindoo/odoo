@@ -726,14 +726,16 @@ instance.web.FormView = instance.web.View.extend(instance.web.form.FieldManagerM
         $(e.target).attr("disabled", true);
         return this.save().done(function(result) {
             self.trigger("save", result);
-            self.reload().then(function() {
+            self.reload().always(function(){
+                $(e.target).attr("disabled", false);
+            }).then(function() {
                 self.to_view_mode();
                 var parent = self.ViewManager.ActionManager.getParent();
                 if(parent){
                     parent.menu.do_reload_needaction();
                 }
             });
-        }).always(function(){
+        }).fail(function(){
             $(e.target).attr("disabled", false);
         });
     },
@@ -2764,6 +2766,10 @@ instance.web.form.FieldTextHtml = instance.web.form.AbstractField.extend(instanc
                 this.$cleditor.$toolbar.append($img);
             }
         }
+    },
+    focus: function() {
+        var input = !this.get("effective_readonly") && this.$cleditor
+        return input ? input.focus() : false;
     },
     render_value: function() {
         if (! this.get("effective_readonly")) {
@@ -5177,6 +5183,17 @@ instance.web.form.FieldBinaryFile = instance.web.form.FieldBinary.extend({
         this._super.apply(this, arguments);
         this.$el.find('input').eq(0).val('');
         this.set_filename('');
+    },
+    set_value: function(value_){
+        var changed = value_ !== this.get_value();
+        this._super.apply(this, arguments);
+        // Trigger value change if size is the same
+        if (!changed){
+            this.trigger("change:value", this, {
+                oldValue: value_,
+                newValue: value_
+            });
+        }
     }
 });
 
@@ -5214,6 +5231,7 @@ instance.web.form.FieldBinaryImage = instance.web.form.FieldBinary.extend({
             $img.css("margin-top", "" + (self.options.size[1] - $img.height()) / 2 + "px");
         });
         $img.on('error', function() {
+            self.on_clear();
             $img.attr('src', self.placeholder);
             instance.webclient.notification.warn(_t("Image"), _t("Could not display the selected image."));
         });

@@ -1,21 +1,22 @@
-# Japanese translation for openobject-addons
-# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
-#
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# * procurement
+# 
+# Translators:
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: Odoo 7.0\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-14 00:10+0000\n"
-"PO-Revision-Date: 2014-03-31 06:07+0000\n"
-"Last-Translator: hiro TAKADA <tkhiro0712@gmail.com>\n"
-"Language-Team: Japanese <ja@li.org>\n"
+"PO-Revision-Date: 2016-07-30 05:58+0000\n"
+"Last-Translator: Martin Trigaux\n"
+"Language-Team: Japanese (http://www.transifex.com/odoo/odoo-7/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-14 07:11+0000\n"
-"X-Generator: Launchpad (build 17156)\n"
+"Content-Transfer-Encoding: \n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #. module: procurement
 #: model:ir.ui.menu,name:procurement.menu_stock_sched
@@ -33,18 +34,15 @@ msgid ""
 "This is the time frame analysed by the scheduler when computing "
 "procurements. All procurements that are not between today and today+range "
 "are skipped for future computation."
-msgstr ""
-"これは、計算による調達の時のスケジューラによる時間枠分析です。本日から本日＋範囲の範囲にない全ての調達は、今後の計算のためにスキップされます。"
+msgstr "これは、計算による調達の時のスケジューラによる時間枠分析です。本日から本日＋範囲の範囲にない全ての調達は、今後の計算のためにスキップされます。"
 
 #. module: procurement
 #: help:procurement.order.compute.all,automatic:0
 msgid ""
-"Triggers an automatic procurement for all products that have a virtual stock "
-"under 0. You should probably not use this option, we suggest using a MTO "
+"Triggers an automatic procurement for all products that have a virtual stock"
+" under 0. You should probably not use this option, we suggest using a MTO "
 "configuration on products."
-msgstr ""
-"実質上の在庫が0未満である全製品のために自動調達のトリガーです。恐らくこのオプションは使用すべきではありません。製品のMTO（make to "
-"order：受注生産）設定を使用することを推奨します。"
+msgstr "実質上の在庫が0未満である全製品のために自動調達のトリガーです。恐らくこのオプションは使用すべきではありません。製品のMTO（make to order：受注生産）設定を使用することを推奨します。"
 
 #. module: procurement
 #: view:stock.warehouse.orderpoint:0
@@ -60,10 +58,8 @@ msgstr "ドラフトの製品の調達とその発注点の場所"
 #: view:make.procurement:0
 msgid ""
 "Use this assistant to generate a procurement request for this\n"
-"                        product. According to the product configuration, "
-"this may\n"
-"                        trigger a draft purchase order, a manufacturing "
-"order or\n"
+"                        product. According to the product configuration, this may\n"
+"                        trigger a draft purchase order, a manufacturing order or\n"
 "                        a new task."
 msgstr "この製品の調達要求を生成するためのアシスタントです。製品の構成によってドラフト発注、製造オーダーまたは新しいタスクを起動します。"
 
@@ -76,8 +72,7 @@ msgstr "外部メモ…"
 #: view:product.product:0
 msgid ""
 "If there are not enough quantities available, the delivery order\n"
-"                           will wait for new products. To fulfill the "
-"inventory, you should\n"
+"                           will wait for new products. To fulfill the inventory, you should\n"
 "                           create others rules like orderpoints."
 msgstr "利用できる十分な量がない場合、新しい製品が用意できるまで配送は待たされます。在庫切れを防ぐには発注点のような他のルールを作成すべきです。"
 
@@ -105,7 +100,7 @@ msgstr "在庫最小ルールのみ計算"
 #. module: procurement
 #: view:stock.warehouse.orderpoint:0
 msgid "Rules"
-msgstr ""
+msgstr "ルール"
 
 #. module: procurement
 #: field:procurement.order,company_id:0
@@ -127,12 +122,7 @@ msgstr "理由"
 #: model:ir.actions.act_window,help:procurement.action_orderpoint_form
 msgid ""
 "<p class=\"oe_view_nocontent_create\">\n"
-"              You can define your minimum stock rules, so that OpenERP will "
-"automatically create draft manufacturing orders or purchase quotations "
-"according to the stock level.Once the virtual stock of a product (= stock on "
-"hand minus all confirmed orders and reservations) is below the minimum "
-"quantity, OpenERP will generate a procurement request to increase the stock "
-"up to the maximum quantity.\n"
+"              You can define your minimum stock rules, so that OpenERP will automatically create draft manufacturing orders or purchase quotations according to the stock level.Once the virtual stock of a product (= stock on hand minus all confirmed orders and reservations) is below the minimum quantity, OpenERP will generate a procurement request to increase the stock up to the maximum quantity.\n"
 "              </p>\n"
 "            "
 msgstr ""
@@ -165,7 +155,7 @@ msgstr "直近の調達"
 #. module: procurement
 #: field:procurement.order,message_ids:0
 msgid "Messages"
-msgstr ""
+msgstr "メッセージ"
 
 #. module: procurement
 #: view:procurement.order:0
@@ -175,7 +165,7 @@ msgstr "調達取消"
 #. module: procurement
 #: view:product.product:0
 msgid "Products"
-msgstr ""
+msgstr "品目"
 
 #. module: procurement
 #: selection:procurement.order,state:0
@@ -211,7 +201,7 @@ msgstr ""
 #: code:addons/procurement/procurement.py:154
 #, python-format
 msgid "Invalid Action!"
-msgstr ""
+msgstr "操作は無効です。"
 
 #. module: procurement
 #: help:procurement.order,message_summary:0
@@ -234,16 +224,7 @@ msgstr "自動発注点"
 #: model:ir.actions.act_window,help:procurement.procurement_exceptions
 msgid ""
 "<p>\n"
-"                Procurement Orders represent the need for a certain quantity "
-"of products, at a given time, in a given location. Sales Orders are one "
-"typical source of Procurement Orders (but these are distinct documents). "
-"Depending on the procurement parameters and the product configuration, the "
-"procurement engine will attempt to satisfy the need by reserving products "
-"from stock, ordering products from a supplier, or passing a manufacturing "
-"order, etc. A Procurement Exception occurs when the system cannot find a way "
-"to fulfill a procurement. Some exceptions will resolve themselves "
-"automatically, but others require manual intervention (those are identified "
-"by a specific error message).\n"
+"                Procurement Orders represent the need for a certain quantity of products, at a given time, in a given location. Sales Orders are one typical source of Procurement Orders (but these are distinct documents). Depending on the procurement parameters and the product configuration, the procurement engine will attempt to satisfy the need by reserving products from stock, ordering products from a supplier, or passing a manufacturing order, etc. A Procurement Exception occurs when the system cannot find a way to fulfill a procurement. Some exceptions will resolve themselves automatically, but others require manual intervention (those are identified by a specific error message).\n"
 "                </p>\n"
 "            "
 msgstr ""
@@ -259,8 +240,7 @@ msgid "Retry"
 msgstr "再試行"
 
 #. module: procurement
-#: view:procurement.order.compute:0
-#: view:procurement.orderpoint.compute:0
+#: view:procurement.order.compute:0 view:procurement.orderpoint.compute:0
 msgid "Parameters"
 msgstr "パラメータ"
 
@@ -279,9 +259,7 @@ msgstr "倍乗基準数量"
 msgid ""
 "Reference of the document that created this Procurement.\n"
 "This is automatically completed by OpenERP."
-msgstr ""
-"この調達を作成したドキュメントへの参照です。\n"
-"これはOpenERPによって自動的に完了します。"
+msgstr "この調達を作成したドキュメントへの参照です。\nこれはOpenERPによって自動的に完了します。"
 
 #. module: procurement
 #: view:stock.warehouse.orderpoint:0
@@ -317,11 +295,10 @@ msgstr "待機中"
 #. module: procurement
 #: field:procurement.order,message_follower_ids:0
 msgid "Followers"
-msgstr ""
+msgstr "フォロワー"
 
 #. module: procurement
-#: field:procurement.order,location_id:0
-#: view:stock.warehouse.orderpoint:0
+#: field:procurement.order,location_id:0 view:stock.warehouse.orderpoint:0
 #: field:stock.warehouse.orderpoint,location_id:0
 msgid "Location"
 msgstr "場所"
@@ -332,8 +309,7 @@ msgid "Picking List"
 msgstr "集荷リスト"
 
 #. module: procurement
-#: field:make.procurement,warehouse_id:0
-#: view:stock.warehouse.orderpoint:0
+#: field:make.procurement,warehouse_id:0 view:stock.warehouse.orderpoint:0
 #: field:stock.warehouse.orderpoint,warehouse_id:0
 msgid "Warehouse"
 msgstr "倉庫"
@@ -369,8 +345,7 @@ msgid "Group By"
 msgstr "グループ化"
 
 #. module: procurement
-#: field:make.procurement,qty:0
-#: field:procurement.order,product_qty:0
+#: field:make.procurement,qty:0 field:procurement.order,product_qty:0
 msgid "Quantity"
 msgstr "数量"
 
@@ -381,8 +356,7 @@ msgid "Not enough stock and no minimum orderpoint rule defined."
 msgstr "在庫不足かつ最小発注点規則の定義がありません。"
 
 #. module: procurement
-#: field:make.procurement,uom_id:0
-#: view:procurement.order:0
+#: field:make.procurement,uom_id:0 view:procurement.order:0
 msgid "Unit of Measure"
 msgstr "単位"
 
@@ -399,15 +373,12 @@ msgid ""
 "                Click to create a procurement order. \n"
 "              </p><p>\n"
 "                A procurement order is used to record a need for a specific\n"
-"                product at a specific location.  Procurement orders are "
-"usually\n"
-"                created automatically from sales orders, pull logistic rules "
-"or\n"
+"                product at a specific location.  Procurement orders are usually\n"
+"                created automatically from sales orders, pull logistic rules or\n"
 "                minimum stock rules.\n"
 "              </p><p>\n"
 "                When the procurement order is confirmed, it automatically\n"
-"                creates the necessary operations to fullfil the need: "
-"purchase\n"
+"                creates the necessary operations to fullfil the need: purchase\n"
 "                order proposition, manufacturing order, etc.\n"
 "              </p>\n"
 "            "
@@ -488,7 +459,7 @@ msgstr "関連する調達オーダー"
 #. module: procurement
 #: field:procurement.order,message_unread:0
 msgid "Unread Messages"
-msgstr ""
+msgstr "未読メッセージ"
 
 #. module: procurement
 #: selection:mrp.property,composition:0
@@ -499,21 +470,12 @@ msgstr "＋"
 #: help:procurement.order,state:0
 msgid ""
 "When a procurement is created the status is set to 'Draft'.\n"
-" If the procurement is confirmed, the status is set to 'Confirmed'.          "
-"  \n"
+" If the procurement is confirmed, the status is set to 'Confirmed'.            \n"
 "After confirming the status is set to 'Running'.\n"
-" If any exception arises in the order then the status is set to "
-"'Exception'.\n"
+" If any exception arises in the order then the status is set to 'Exception'.\n"
 " Once the exception is removed the status becomes 'Ready'.\n"
-" It is in 'Waiting'. status when the procurement is waiting for another one "
-"to finish."
-msgstr ""
-"調達が作成されると、ステータスは「ドラフト」に設定されます。\n"
-"調達が確認された場合、ステータスは「確認済」に設定されます。\n"
-"確認後のステータスは「実行中」に設定されます。\n"
-"注文で例外が発生すると、ステータスは「例外」に設定されます。\n"
-"例外が除去されると、ステータスは「準備完了」になります。\n"
-"調達が別の状態の終了を待つ場合、「待ち」状態になります。"
+" It is in 'Waiting'. status when the procurement is waiting for another one to finish."
+msgstr "調達が作成されると、ステータスは「ドラフト」に設定されます。\n調達が確認された場合、ステータスは「確認済」に設定されます。\n確認後のステータスは「実行中」に設定されます。\n注文で例外が発生すると、ステータスは「例外」に設定されます。\n例外が除去されると、ステータスは「準備完了」になります。\n調達が別の状態の終了を待つ場合、「待ち」状態になります。"
 
 #. module: procurement
 #: help:stock.warehouse.orderpoint,active:0
@@ -525,7 +487,7 @@ msgstr "アクティブな項目がFalseにセットされている場合は、�
 #. module: procurement
 #: view:procurement.order:0
 msgid "Internal note..."
-msgstr ""
+msgstr "内部注記..."
 
 #. module: procurement
 #: help:procurement.orderpoint.compute,automatic:0
@@ -565,9 +527,9 @@ msgstr "注記"
 #. module: procurement
 #: help:stock.warehouse.orderpoint,product_min_qty:0
 msgid ""
-"When the virtual stock goes below the Min Quantity specified for this field, "
-"OpenERP generates a procurement to bring the forecasted quantity to the Max "
-"Quantity."
+"When the virtual stock goes below the Min Quantity specified for this field,"
+" OpenERP generates a procurement to bring the forecasted quantity to the Max"
+" Quantity."
 msgstr "このフィールドで指定された最小数量を仮想的な在庫が下回った場合、OpenERPは予測数量を最大数量にするための調達を生成します。"
 
 #. module: procurement
@@ -588,8 +550,7 @@ msgid "This wizard will schedule procurements."
 msgstr "ウィザードは調達をスケジュールします。"
 
 #. module: procurement
-#: view:procurement.order:0
-#: field:procurement.order,state:0
+#: view:procurement.order:0 field:procurement.order,state:0
 msgid "Status"
 msgstr "ステータス"
 
@@ -611,12 +572,9 @@ msgstr "通常"
 #. module: procurement
 #: help:product.template,supply_method:0
 msgid ""
-"Manufacture: When procuring the product, a manufacturing order or a task "
-"will be generated, depending on the product type. \n"
+"Manufacture: When procuring the product, a manufacturing order or a task will be generated, depending on the product type. \n"
 "Buy: When procuring the product, a purchase order will be generated."
-msgstr ""
-"製造：製品を調達する場合、製品の種類に応じて製造オーダーまたはタスクが生成されます。\n"
-"購入：製品を調達する場合、発注書が生成されます。"
+msgstr "製造：製品を調達する場合、製品の種類に応じて製造オーダーまたはタスクが生成されます。\n購入：製品を調達する場合、発注書が生成されます。"
 
 #. module: procurement
 #: field:stock.warehouse.orderpoint,product_max_qty:0
@@ -648,8 +606,8 @@ msgstr "調達製品"
 #: code:addons/procurement/procurement.py:330
 #, python-format
 msgid ""
-"Please check the quantity in procurement order(s) for the product \"%s\", it "
-"should not be 0 or less!"
+"Please check the quantity in procurement order(s) for the product \"%s\", it"
+" should not be 0 or less!"
 msgstr ""
 
 #. module: procurement
@@ -689,8 +647,7 @@ msgstr "数量倍数"
 #: view:product.product:0
 msgid ""
 "When you sell this service, nothing special will be triggered\n"
-"                           to deliver the customer, as you set the "
-"procurement method as\n"
+"                           to deliver the customer, as you set the procurement method as\n"
 "                           'Make to Stock'."
 msgstr ""
 
@@ -712,7 +669,7 @@ msgstr "追加情報"
 #. module: procurement
 #: field:procurement.order,message_summary:0
 msgid "Summary"
-msgstr ""
+msgstr "要約"
 
 #. module: procurement
 #: sql_constraint:stock.warehouse.orderpoint:0
@@ -732,17 +689,14 @@ msgstr "終了日"
 #. module: procurement
 #: view:res.company:0
 msgid "Logistics"
-msgstr ""
+msgstr "ロジスティクス"
 
 #. module: procurement
 #: help:product.template,procure_method:0
 msgid ""
-"Make to Stock: When needed, the product is taken from the stock or we wait "
-"for replenishment. \n"
+"Make to Stock: When needed, the product is taken from the stock or we wait for replenishment. \n"
 "Make to Order: When needed, the product is purchased or produced."
-msgstr ""
-"見込み生産：製品は必要に応じて在庫から取り出すか補充を待ちます。\n"
-"受注生産：製品は必要に応じて購入するか生産します。"
+msgstr "見込み生産：製品は必要に応じて在庫から取り出すか補充を待ちます。\n受注生産：製品は必要に応じて購入するか生産します。"
 
 #. module: procurement
 #: field:mrp.property,composition:0
@@ -751,8 +705,7 @@ msgstr "属性の構成"
 
 #. module: procurement
 #: model:ir.model,name:procurement.model_mrp_property_group
-#: field:mrp.property,group_id:0
-#: field:mrp.property.group,name:0
+#: field:mrp.property,group_id:0 field:mrp.property.group,name:0
 msgid "Property Group"
 msgstr "属性グループ"
 
@@ -777,10 +730,8 @@ msgid "Done"
 msgstr "完了"
 
 #. module: procurement
-#: view:make.procurement:0
-#: view:procurement.order.compute:0
-#: view:procurement.order.compute.all:0
-#: view:procurement.orderpoint.compute:0
+#: view:make.procurement:0 view:procurement.order.compute:0
+#: view:procurement.order.compute.all:0 view:procurement.orderpoint.compute:0
 msgid "Cancel"
 msgstr "取消"
 
@@ -788,7 +739,7 @@ msgstr "取消"
 #: code:addons/procurement/procurement.py:329
 #, python-format
 msgid "Data Insufficient!"
-msgstr ""
+msgstr "データ不足です。"
 
 #. module: procurement
 #: field:stock.warehouse.orderpoint,logic:0
@@ -860,8 +811,7 @@ msgstr "予定日"
 
 #. module: procurement
 #: model:ir.model,name:procurement.model_product_product
-#: field:make.procurement,product_id:0
-#: view:procurement.order:0
+#: field:make.procurement,product_id:0 view:procurement.order:0
 #: field:procurement.order,product_id:0
 #: field:stock.warehouse.orderpoint,product_id:0
 msgid "Product"
@@ -873,8 +823,7 @@ msgid "Temporary"
 msgstr "一時的"
 
 #. module: procurement
-#: field:mrp.property,description:0
-#: field:mrp.property.group,description:0
+#: field:mrp.property,description:0 field:mrp.property.group,description:0
 #: field:procurement.order,name:0
 msgid "Description"
 msgstr "説明"
@@ -929,8 +878,7 @@ msgid "Temporary Procurement Exceptions"
 msgstr "一時的な調達例外"
 
 #. module: procurement
-#: field:mrp.property,name:0
-#: field:stock.warehouse.orderpoint,name:0
+#: field:mrp.property,name:0 field:stock.warehouse.orderpoint,name:0
 msgid "Name"
 msgstr "名称"
 
@@ -962,7 +910,7 @@ msgstr "製品販売単位"
 #. module: procurement
 #: model:ir.model,name:procurement.model_product_template
 msgid "Product Template"
-msgstr ""
+msgstr "製品テンプレート"
 
 #. module: procurement
 #: view:procurement.orderpoint.compute:0
@@ -993,7 +941,7 @@ msgstr "自動発注点"
 #. module: procurement
 #: help:procurement.order,message_ids:0
 msgid "Messages and communication history"
-msgstr ""
+msgstr "メッセージと通信履歴"
 
 #. module: procurement
 #: view:procurement.order:0
@@ -1006,10 +954,8 @@ msgid "min"
 msgstr "最小"
 
 #. module: procurement
-#: view:make.procurement:0
-#: view:procurement.order.compute:0
-#: view:procurement.order.compute.all:0
-#: view:procurement.orderpoint.compute:0
+#: view:make.procurement:0 view:procurement.order.compute:0
+#: view:procurement.order.compute.all:0 view:procurement.orderpoint.compute:0
 msgid "or"
 msgstr "または"
 
@@ -1029,27 +975,3 @@ msgstr "調達申請"
 #, python-format
 msgid "Products reserved from stock."
 msgstr "製品在庫が確保されました。"
-
-#, python-format
-#~ msgid "PROC %d: from stock - %3.2f %-5s - %s"
-#~ msgstr "調達 %d： 元在庫 - %3.2f %-5s - %s"
-
-#, python-format
-#~ msgid "Data Insufficient !"
-#~ msgstr "データが不足しています。"
-
-#, python-format
-#~ msgid "PROC %d: on order - %3.2f %-5s - %s"
-#~ msgstr "調達 %d：オーダー中 - %3.2f %-5s - %s"
-
-#~ msgid ""
-#~ "You can define your minimum stock rules, so that OpenERP will automatically "
-#~ "create draft manufacturing orders or purchase quotations according to the "
-#~ "stock level. Once the virtual stock of a product (= stock on hand minus all "
-#~ "confirmed orders and reservations) is below the minimum quantity, OpenERP "
-#~ "will generate a procurement request to increase the stock up to the maximum "
-#~ "quantity."
-#~ msgstr ""
-#~ "最小在庫ルールを定義できます。それによってOpenERPは自動的に在庫レベルに応じて、ドラフトの製造オーダーまたは発注見積を作成します。ひとたび、製品の実"
-#~ "質上の在庫（全ての確認済オーダーと予約を在庫から差し引く）が最小在庫を下回ったなら、OpenERPは在庫を最大数量まで増加させるための調達要求を生成します"
-#~ "。"

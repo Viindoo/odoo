@@ -41,10 +41,11 @@ class view_custom(osv.osv):
     }
 
     def _auto_init(self, cr, context=None):
-        super(view_custom, self)._auto_init(cr, context)
+        res = super(view_custom, self)._auto_init(cr, context)
         cr.execute('SELECT indexname FROM pg_indexes WHERE indexname = \'ir_ui_view_custom_user_id_ref_id\'')
         if not cr.fetchone():
             cr.execute('CREATE INDEX ir_ui_view_custom_user_id_ref_id ON ir_ui_view_custom (user_id, ref_id)')
+        return res
 
 class view(osv.osv):
     _name = 'ir.ui.view'
@@ -161,10 +162,11 @@ class view(osv.osv):
     ]
 
     def _auto_init(self, cr, context=None):
-        super(view, self)._auto_init(cr, context)
+        res = super(view, self)._auto_init(cr, context)
         cr.execute('SELECT indexname FROM pg_indexes WHERE indexname = \'ir_ui_view_model_type_inherit_id\'')
         if not cr.fetchone():
             cr.execute('CREATE INDEX ir_ui_view_model_type_inherit_id ON ir_ui_view (model, inherit_id)')
+        return res
 
     def get_inheriting_views_arch(self, cr, uid, view_id, model, context=None):
         """Retrieves the architecture of views that inherit from the given view, from the sets of
@@ -232,15 +234,15 @@ class view(osv.osv):
                     if model_value._obj==node_obj:
                         _Node_Field=model_key
                         _Model_Field=model_value._fields_id
-                    flag=False
                     for node_key,node_value in _Node_Obj._columns.items():
                         if node_value._type=='one2many':
                              if node_value._obj==conn_obj:
-                                 if src_node in _Arrow_Obj._columns and flag:
+                                 # _Source_Field = "Incoming Arrows" (connected via des_node)
+                                 if node_value._fields_id == des_node:
                                     _Source_Field=node_key
-                                 if des_node in _Arrow_Obj._columns and not flag:
+                                 # _Destination_Field = "Outgoing Arrows" (connected via src_node)
+                                 if node_value._fields_id == src_node:
                                     _Destination_Field=node_key
-                                    flag = True
 
         datas = _Model_Obj.read(cr, uid, id, [],context)
         for a in _Node_Obj.read(cr,uid,datas[_Node_Field],[]):
@@ -291,10 +293,11 @@ class view_sc(osv.osv):
     }
 
     def _auto_init(self, cr, context=None):
-        super(view_sc, self)._auto_init(cr, context)
+        res = super(view_sc, self)._auto_init(cr, context)
         cr.execute('SELECT indexname FROM pg_indexes WHERE indexname = \'ir_ui_view_sc_user_id_resource\'')
         if not cr.fetchone():
             cr.execute('CREATE INDEX ir_ui_view_sc_user_id_resource ON ir_ui_view_sc (user_id, resource)')
+        return res
 
     def get_sc(self, cr, uid, user_id, model='ir.ui.menu', context=None):
         ids = self.search(cr, uid, [('user_id','=',user_id),('resource','=',model)], context=context)

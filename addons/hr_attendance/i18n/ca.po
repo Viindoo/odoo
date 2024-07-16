@@ -1,21 +1,22 @@
-# Catalan translation for openobject-addons
-# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
-#
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# * hr_attendance
+# 
+# Translators:
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: Odoo 7.0\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-14 00:10+0000\n"
-"PO-Revision-Date: 2012-12-21 23:00+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Catalan <ca@li.org>\n"
+"PO-Revision-Date: 2016-07-13 07:50+0000\n"
+"Last-Translator: Martin Trigaux\n"
+"Language-Team: Catalan (http://www.transifex.com/odoo/odoo-7/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-14 06:54+0000\n"
-"X-Generator: Launchpad (build 17156)\n"
+"Content-Transfer-Encoding: \n"
+"Language: ca\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: hr_attendance
 #: model:ir.model,name:hr_attendance.model_hr_attendance_month
@@ -30,11 +31,10 @@ msgstr "Cerca assistències RH"
 #. module: hr_attendance
 #: field:hr.employee,last_sign:0
 msgid "Last Sign"
-msgstr ""
+msgstr "Últim registre"
 
 #. module: hr_attendance
-#: view:hr.attendance:0
-#: field:hr.employee,state:0
+#: view:hr.attendance:0 field:hr.employee,state:0
 #: model:ir.model,name:hr_attendance.model_hr_attendance
 msgid "Attendance"
 msgstr "Assistència"
@@ -44,12 +44,12 @@ msgstr "Assistència"
 #: code:addons/hr_attendance/static/src/js/attendance.js:34
 #, python-format
 msgid "Last sign in: %s,<br />%s.<br />Click to sign out."
-msgstr ""
+msgstr "Última entrada: %s, <br/> %s. <br/> Premi per registrar la sortida."
 
 #. module: hr_attendance
 #: constraint:hr.attendance:0
 msgid "Error ! Sign in (resp. Sign out) must follow Sign out (resp. Sign in)"
-msgstr ""
+msgstr "Error! Una entrada ha de seguir a un registre de sortida."
 
 #. module: hr_attendance
 #: help:hr.action.reason,name:0
@@ -60,9 +60,7 @@ msgstr "Indiqueu el motiu de l'entrada/sortida."
 #: report:report.hr.timesheet.attendance.error:0
 msgid ""
 "(*) A positive delay means that the employee worked less than recorded."
-msgstr ""
-"(*) Un valor positiu significa que l'empleat ha treballat menys del "
-"programat."
+msgstr "(*) Un valor positiu significa que l'empleat ha treballat menys del programat."
 
 #. module: hr_attendance
 #: view:hr.attendance.month:0
@@ -98,12 +96,11 @@ msgstr "Octubre"
 #. module: hr_attendance
 #: field:hr.employee,attendance_access:0
 msgid "Attendance Access"
-msgstr ""
+msgstr "Accés a l'assistència"
 
 #. module: hr_attendance
 #: code:addons/hr_attendance/hr_attendance.py:154
-#: selection:hr.attendance,action:0
-#: view:hr.employee:0
+#: selection:hr.attendance,action:0 view:hr.employee:0
 #, python-format
 msgid "Sign Out"
 msgstr "Registra sortida"
@@ -112,18 +109,16 @@ msgstr "Registra sortida"
 #: code:addons/hr_attendance/wizard/hr_attendance_error.py:49
 #, python-format
 msgid "No records are found for your selection!"
-msgstr ""
+msgstr "No s'han trobat registres per la seva selecció!"
 
 #. module: hr_attendance
-#: view:hr.attendance.error:0
-#: view:hr.attendance.month:0
+#: view:hr.attendance.error:0 view:hr.attendance.month:0
 #: view:hr.attendance.week:0
 msgid "Print"
 msgstr "Imprimeix"
 
 #. module: hr_attendance
-#: view:hr.attendance:0
-#: field:hr.attendance,employee_id:0
+#: view:hr.attendance:0 field:hr.attendance,employee_id:0
 #: model:ir.model,name:hr_attendance.model_hr_employee
 msgid "Employee"
 msgstr "Empleat"
@@ -140,15 +135,13 @@ msgstr "Data registrada"
 
 #. module: hr_attendance
 #: code:addons/hr_attendance/hr_attendance.py:154
-#: selection:hr.attendance,action:0
-#: view:hr.employee:0
+#: selection:hr.attendance,action:0 view:hr.employee:0
 #, python-format
 msgid "Sign In"
 msgstr "Registra entrada"
 
 #. module: hr_attendance
-#: field:hr.attendance.error,init_date:0
-#: field:hr.attendance.week,init_date:0
+#: field:hr.attendance.error,init_date:0 field:hr.attendance.week,init_date:0
 msgid "Starting Date"
 msgstr "Data inicial"
 
@@ -178,12 +171,12 @@ msgstr "Avís"
 #. module: hr_attendance
 #: help:hr.config.settings,group_hr_attendance:0
 msgid "Allocates attendance group to all users."
-msgstr ""
+msgstr "Assigna assistència en grup per tots els usuaris"
 
 #. module: hr_attendance
 #: view:hr.attendance:0
 msgid "My Attendance"
-msgstr ""
+msgstr "La meva assistència"
 
 #. module: hr_attendance
 #: selection:hr.attendance.month,month:0
@@ -227,12 +220,7 @@ msgid ""
 "The Time Tracking functionality aims to manage employee attendances from "
 "Sign in/Sign out actions. You can also link this feature to an attendance "
 "device using OpenERP's web service features."
-msgstr ""
-"La funcionalitat de Seguiment de Temps us permet gestionar les assistències "
-"dels empleats a través de les accions de Registrar Entrada/Registrar "
-"Sortides. També podeu enllaçar aquesta funcionalitat amb un dispositiu de "
-"registre d'assistència utilitzant les característiques del servei web "
-"d'OpenERP."
+msgstr "La funcionalitat de Seguiment de Temps us permet gestionar les assistències dels empleats a través de les accions de Registrar Entrada/Registrar Sortides. També podeu enllaçar aquesta funcionalitat amb un dispositiu de registre d'assistència utilitzant les característiques del servei web d'OpenERP."
 
 #. module: hr_attendance
 #: view:hr.attendance:0
@@ -252,7 +240,7 @@ msgstr "Data"
 #. module: hr_attendance
 #: field:hr.config.settings,group_hr_attendance:0
 msgid "Track attendances for all employees"
-msgstr ""
+msgstr "Rastrejar assistències per tots els empleats"
 
 #. module: hr_attendance
 #: selection:hr.attendance.month,month:0
@@ -266,8 +254,7 @@ msgid "Attendance Error Report"
 msgstr "Informe errors d'assistència"
 
 #. module: hr_attendance
-#: view:hr.attendance:0
-#: field:hr.attendance,day:0
+#: view:hr.attendance:0 field:hr.attendance,day:0
 msgid "Day"
 msgstr "Dia"
 
@@ -348,8 +335,7 @@ msgid "Attendance Errors"
 msgstr "Errors d'assistència"
 
 #. module: hr_attendance
-#: field:hr.attendance,action:0
-#: selection:hr.attendance,action:0
+#: field:hr.attendance,action:0 selection:hr.attendance,action:0
 msgid "Action"
 msgstr "Acció"
 
@@ -372,8 +358,7 @@ msgstr "Novembre"
 #. module: hr_attendance
 #: view:hr.attendance.error:0
 msgid "Bellow this delay, the error is considered to be voluntary"
-msgstr ""
-"Encara que indiqueu aquest retard, es considera que l'error és voluntari"
+msgstr "Encara que indiqueu aquest retard, es considera que l'error és voluntari"
 
 #. module: hr_attendance
 #: field:hr.attendance.error,max_delay:0
@@ -381,8 +366,7 @@ msgid "Max. Delay (Min)"
 msgstr "Màx. retard (minuts)"
 
 #. module: hr_attendance
-#: field:hr.attendance.error,end_date:0
-#: field:hr.attendance.week,end_date:0
+#: field:hr.attendance.error,end_date:0 field:hr.attendance.week,end_date:0
 msgid "Ending Date"
 msgstr "Data final"
 
@@ -390,7 +374,7 @@ msgstr "Data final"
 #: code:addons/hr_attendance/wizard/hr_attendance_error.py:49
 #, python-format
 msgid "No Data Available!"
-msgstr ""
+msgstr "Sense dades disponibles"
 
 #. module: hr_attendance
 #: selection:hr.attendance.month,month:0
@@ -417,12 +401,12 @@ msgstr ""
 #: code:addons/hr_attendance/static/src/js/attendance.js:36
 #, python-format
 msgid "Click to Sign In at %s."
-msgstr ""
+msgstr "Premi per registrar l'entrada a %s."
 
 #. module: hr_attendance
 #: field:hr.action.reason,action_type:0
 msgid "Action Type"
-msgstr ""
+msgstr "Tipus d'acció"
 
 #. module: hr_attendance
 #: selection:hr.attendance.month,month:0
@@ -435,7 +419,7 @@ msgstr "Maig"
 msgid ""
 "You tried to %s with a date anterior to another event !\n"
 "Try to contact the HR Manager to correct attendances."
-msgstr ""
+msgstr "Ha intentat %s amb una data anterior a un altre esdeveniment! Intenti contactar amb el responsable de RRHH per corregir les assistències."
 
 #. module: hr_attendance
 #: selection:hr.attendance.month,month:0
@@ -443,8 +427,7 @@ msgid "December"
 msgstr "Desembre"
 
 #. module: hr_attendance
-#: view:hr.attendance.error:0
-#: view:hr.attendance.month:0
+#: view:hr.attendance.error:0 view:hr.attendance.month:0
 #: view:hr.attendance.week:0
 msgid "Cancel"
 msgstr "Cancel·la"
@@ -456,18 +439,14 @@ msgstr "Operació"
 
 #. module: hr_attendance
 #: report:report.hr.timesheet.attendance.error:0
-msgid ""
-"(*) A negative delay means that the employee worked more than encoded."
-msgstr ""
-"(*) Un retard negatiu significa que l'empleat va treballar més hores de les "
-"codificades."
+msgid "(*) A negative delay means that the employee worked more than encoded."
+msgstr "(*) Un retard negatiu significa que l'empleat va treballar més hores de les codificades."
 
 #. module: hr_attendance
-#: view:hr.attendance.error:0
-#: view:hr.attendance.month:0
+#: view:hr.attendance.error:0 view:hr.attendance.month:0
 #: view:hr.attendance.week:0
 msgid "or"
-msgstr ""
+msgstr "o"
 
 #. module: hr_attendance
 #: help:hr.attendance,action_desc:0

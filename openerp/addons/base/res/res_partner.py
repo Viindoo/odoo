@@ -534,7 +534,10 @@ class res_partner(osv.osv, format_address):
                     if len(user_companies) > 1 or vals['company_id'] not in user_companies:
                         raise osv.except_osv(_("Warning"),_("You can not change the company as the partner/user has multiple user linked with different companies."))
         result = super(res_partner,self).write(cr, uid, ids, vals, context=context)
+        res_users = self.pool['res.users']
         for partner in self.browse(cr, uid, ids, context=context):
+            if any(res_users.has_group(cr, u.id, 'base.group_user') for u in partner.user_ids if u.id != uid):
+                res_users.check_access_rights(cr, uid, 'write')
             self._fields_sync(cr, uid, partner, vals, context)
         return result
 
@@ -622,6 +625,20 @@ class res_partner(osv.osv, format_address):
         return super(res_partner, self)._search(cr, user, args, offset=offset, limit=limit, order=order, context=context,
                                                 count=count, access_rights_uid=access_rights_uid)
 
+    def _get_display_name(self, unaccent):
+        # TODO: simplify this in trunk with `display_name`, once it is stored
+        # Perf note: a CTE expression (WITH ...) seems to have an even higher cost
+        #            than this query with duplicated CASE expressions. The bulk of
+        #            the cost is the ORDER BY, and it is inevitable if we want
+        #            relevant results for the next step, otherwise we'd return
+        #            a random selection of `limit` results.
+
+        return """CASE WHEN company.id IS NULL OR res_partner.is_company
+                       THEN {partner_name}
+                       ELSE {company_name} || ', ' || {partner_name}
+                  END""".format(partner_name=unaccent('res_partner.name'),
+                                company_name=unaccent('company.name'))
+
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
         if not args:
             args = []
@@ -642,18 +659,7 @@ class res_partner(osv.osv, format_address):
 
             unaccent = get_unaccent_wrapper(cr)
 
-            # TODO: simplify this in trunk with `display_name`, once it is stored
-            # Perf note: a CTE expression (WITH ...) seems to have an even higher cost
-            #            than this query with duplicated CASE expressions. The bulk of
-            #            the cost is the ORDER BY, and it is inevitable if we want
-            #            relevant results for the next step, otherwise we'd return
-            #            a random selection of `limit` results.
-
-            display_name = """CASE WHEN company.id IS NULL OR res_partner.is_company
-                                   THEN {partner_name}
-                                   ELSE {company_name} || ', ' || {partner_name}
-                               END""".format(partner_name=unaccent('res_partner.name'),
-                                             company_name=unaccent('company.name'))
+            display_name = self._get_display_name(unaccent)
 
             query = """SELECT res_partner.id
                          FROM res_partner
