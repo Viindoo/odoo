@@ -42,7 +42,7 @@ msgstr "Đơn vị tính liên kết"
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model,name:barcodes_gs1_nomenclature.model_barcode_nomenclature
 msgid "Barcode Nomenclature"
-msgstr "Phép đặt tên mã vạch"
+msgstr "Phép đặt mã vạch"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model,name:barcodes_gs1_nomenclature.model_barcode_rule
@@ -52,7 +52,7 @@ msgstr "Quy tắc mã vạch"
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__use_date
 msgid "Best before Date"
-msgstr "Sử dụng tốt nhất trước ngày"
+msgstr "Tốt nhất trước ngày"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__gs1_content_type__date
@@ -67,7 +67,7 @@ msgstr "Số thập phân"
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__location_dest
 msgid "Destination location"
-msgstr "Vị trí đích"
+msgstr "Địa điểm đích"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields,field_description:barcodes_gs1_nomenclature.field_barcode_rule__encoding
@@ -128,37 +128,37 @@ msgstr "Là phép đặt tên GS1"
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__location
 msgid "Location"
-msgstr "Vị trí"
+msgstr "Địa điểm"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__lot
 msgid "Lot"
-msgstr "Lô"
+msgstr "Lô hàng"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__gs1_content_type__measure
 msgid "Measure"
-msgstr "Thước đo"
+msgstr "Đo kiểm"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__gs1_content_type__identifier
 msgid "Numeric Identifier"
-msgstr "Mã dạng số"
+msgstr "Ký hiệu nhận dạng dạng số"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__pack_date
 msgid "Pack Date"
-msgstr "Ngày đóng hàng"
+msgstr "Ngày Đóng gói"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__package
 msgid "Package"
-msgstr "Kiện hàng"
+msgstr "Gói"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__package_type
 msgid "Package Type"
-msgstr "Kiểu đóng gói"
+msgstr "Kiểu Đóng gói"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__quantity
@@ -185,8 +185,8 @@ msgstr ""
 "Loại nội dung GS1 xác định loại dữ liệu mà quy tắc sẽ xử lý mã vạch thành:"
 "       * Ngày: mã vạch sẽ được chuyển đổi thành ngày giờ của Odoo;         *"
 " Đơn vị tính: giá trị của mã vạch liên quan đến một đơn vị tính cụ thể;"
-"         * Mã dạng số: mã vạch có độ dài cố định theo một cách mã hóa cụ "
-"thể;       * Tên chứa chữ và số: mã vạch có độ dài không cố định."
+"         * Mã định danh dạng số: mã vạch có độ dài cố định theo một cách mã "
+"hóa cụ thể;       * Tên chứa chữ và số: mã vạch có độ dài không cố định."
 
 #. module: barcodes_gs1_nomenclature
 #. odoo-python
@@ -197,7 +197,7 @@ msgid ""
 "\t- A second one to catch the value."
 msgstr ""
 "Mẫu quy tắc \"%s\" không hợp lệ, cần hai nhóm:\n"
-"\t- Nhóm đầu tiên dành cho Mã ứng dụng (thường là 2 đến 4 chữ số);\n"
+"\t- Nhóm đầu tiên dành cho Ký tự định danh Ứng dụng (thường là 2 đến 4 chữ số);\n"
 "\t- Nhóm thứ hai để ghi nhận giá trị."
 
 #. module: barcodes_gs1_nomenclature
@@ -217,7 +217,7 @@ msgid ""
 "Check also the possible matched values can only be digits, otherwise the value can't be casted as a measure."
 msgstr ""
 "Đã xảy ra lỗi với mẫu quy tắc mã vạch \"%s\".\n"
-"Nếu quy tắc này sử dụng số thập phân, hãy đảm bảo rằng ký tự cuối cùng của Mã ứng dụng phải là một chữ số.\n"
+"Nếu quy tắc này sử dụng số thập phân, hãy đảm bảo rằng ký tự cuối cùng của Mã định danh Ứng dụng phải là một chữ số.\n"
 "Ngoài ra, hãy đảm bảo các giá trị có thể khớp phải là chữ số, nếu không, giá trị không thể được sử dụng làm đơn vị tính."
 
 #. module: barcodes_gs1_nomenclature
@@ -248,9 +248,7 @@ msgstr "Không thể phân tích cú pháp một phần hoặc toàn bộ mã v�
 msgid ""
 "This rule will apply only if the barcode is encoded with the specified "
 "encoding"
-msgstr ""
-"Quy tắc này sẽ chỉ áp dụng nếu mã vạch được mã hóa bằng cách mã hóa được chỉ"
-" định"
+msgstr "Quy tắc này sẽ chỉ áp dụng nếu mã vạch chỉ định mã hóa"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields,field_description:barcodes_gs1_nomenclature.field_barcode_rule__type

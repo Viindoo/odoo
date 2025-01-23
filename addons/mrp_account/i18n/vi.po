@@ -114,7 +114,7 @@ msgstr "Acme Corp."
 #. module: mrp_account
 #: model:ir.model,name:mrp_account.model_account_analytic_account
 msgid "Analytic Account"
-msgstr "Tài khoản phân tích"
+msgstr "Tài khoản KT quản trị"
 
 #. module: mrp_account
 #: model:ir.model.fields,field_description:mrp_account.field_mrp_workcenter__analytic_distribution
@@ -124,7 +124,7 @@ msgstr "Phân bổ phân tích"
 #. module: mrp_account
 #: model:ir.model,name:mrp_account.model_account_analytic_line
 msgid "Analytic Line"
-msgstr "Dòng phân tích"
+msgstr "Phát sinh KT quản trị"
 
 #. module: mrp_account
 #: model:ir.model,name:mrp_account.model_account_analytic_applicability
@@ -141,12 +141,12 @@ msgstr "Độ chính xác phân tích"
 #: code:addons/mrp_account/models/analytic_account.py:0
 #: model_terms:ir.ui.view,arch_db:mrp_account.account_analytic_account_view_form_mrp
 msgid "Bills of Materials"
-msgstr "Danh mục vật tư"
+msgstr "Định mức nguyên vật liệu"
 
 #. module: mrp_account
 #: model:ir.model.fields,field_description:mrp_account.field_account_analytic_account__bom_count
 msgid "BoM Count"
-msgstr "Số DMVT"
+msgstr "Số ĐMNVL"
 
 #. module: mrp_account
 #: model:ir.model.fields,field_description:mrp_account.field_account_analytic_account__bom_ids
@@ -165,7 +165,7 @@ msgstr "Danh mục"
 #: model_terms:ir.ui.view,arch_db:mrp_account.product_product_view_form_normal_inherit_extended
 #: model_terms:ir.ui.view,arch_db:mrp_account.product_variant_easy_edit_view_bom_inherit
 msgid "Compute Price from BoM"
-msgstr "Tính giá từ DMVT"
+msgstr "Tính giá từ BoM"
 
 #. module: mrp_account
 #: model_terms:ir.ui.view,arch_db:mrp_account.product_product_ext_form_view2
@@ -175,8 +175,8 @@ msgid ""
 "Compute the price of the product using products and operations of related "
 "bill of materials, for manufactured products only."
 msgstr ""
-"Tính toán giá của sản phẩm bằng cách sử dụng sản phẩm và hoạt động của danh "
-"mục vật tư liên quan, chỉ áp dụng cho sản phẩm được sản xuất. "
+"Tính giá của sản phẩm sử dụng các sản phẩm và hoạt động của các định mức "
+"nguyên vật liệu liên quan, chỉ dành cho các sản phẩm có thể sản xuất được."
 
 #. module: mrp_account
 #: model:ir.model.fields,field_description:mrp_account.field_mrp_workcenter__costs_hour_account_ids
@@ -265,7 +265,7 @@ msgstr "Bút toán"
 #. module: mrp_account
 #: model:ir.model,name:mrp_account.model_account_move_line
 msgid "Journal Item"
-msgstr "Hạng mục bút toán"
+msgstr "Phát sinh kế toán"
 
 #. module: mrp_account
 #: model:ir.model.fields,field_description:mrp_account.field_mrp_account_wip_accounting_line__label
@@ -335,7 +335,7 @@ msgstr "LSX"
 #. module: mrp_account
 #: model:ir.model.fields,field_description:mrp_account.field_mrp_workorder__mo_analytic_account_line_ids
 msgid "Mo Analytic Account Line"
-msgstr "Dòng tài khoản phân tích LSX"
+msgstr "Phát sinh KT quản trị MO"
 
 #. module: mrp_account
 #. odoo-python
@@ -420,12 +420,12 @@ msgstr "Đảo ngược của: %s"
 #. module: mrp_account
 #: model:ir.model.fields,field_description:mrp_account.field_mrp_production__show_valuation
 msgid "Show Valuation"
-msgstr "Hiển thị định giá"
+msgstr "Hiện giá trị"
 
 #. module: mrp_account
 #: model:ir.model,name:mrp_account.model_stock_move
 msgid "Stock Move"
-msgstr "Điều chuyển tồn kho"
+msgstr "Dịch chuyển Kho"
 
 #. module: mrp_account
 #: model:ir.model.fields,help:mrp_account.field_account_bank_statement_line__wip_production_ids
@@ -513,7 +513,7 @@ msgstr "Báo cáo WIP"
 #. module: mrp_account
 #: model:ir.model.fields,field_description:mrp_account.field_mrp_workorder__wc_analytic_account_line_ids
 msgid "Wc Analytic Account Line"
-msgstr "Dòng tài khoản phân tích khu vực sản xuất"
+msgstr "Phát sinh KT quản trị WC"
 
 #. module: mrp_account
 #: model:ir.model,name:mrp_account.model_mrp_account_wip_accounting
@@ -523,12 +523,12 @@ msgstr "Công cụ ghi sổ bút toán kế toán WIP sản xuất"
 #. module: mrp_account
 #: model:ir.model,name:mrp_account.model_mrp_workcenter
 msgid "Work Center"
-msgstr "Khu vực sản xuất"
+msgstr "Năng lực sản xuất"
 
 #. module: mrp_account
 #: model:ir.model,name:mrp_account.model_mrp_routing_workcenter
 msgid "Work Center Usage"
-msgstr "Sử dụng khu vực sản xuất"
+msgstr "Sử dụng năng lực sản xuất"
 
 #. module: mrp_account
 #: model:ir.model,name:mrp_account.model_mrp_workorder
@@ -538,7 +538,7 @@ msgstr "Công đoạn"
 #. module: mrp_account
 #: model:ir.model.fields,field_description:mrp_account.field_account_analytic_account__workorder_count
 msgid "Work Order Count"
-msgstr "Số công đoạn"
+msgstr "Số lượng Công đoạn"
 
 #. module: mrp_account
 #. odoo-python
@@ -561,4 +561,4 @@ msgstr "Nhật ký sản xuất của khu vực sản xuất"
 #: code:addons/mrp_account/models/mrp_production.py:0
 #: code:addons/mrp_account/models/mrp_workorder.py:0
 msgid "[WC] %s"
-msgstr "[Khu vực sản xuất] %s"
+msgstr "[CĐ] %s"
