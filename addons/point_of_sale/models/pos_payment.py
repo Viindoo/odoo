@@ -86,11 +86,13 @@ class PosPayment(models.Model):
         return result
 
     def _create_payment_move_with_change(self, is_reverse, change_payment):
-        if self.payment_method_id.type != 'pay_later' and not float_is_zero(self.amount, precision_rounding=self.pos_order_id.currency_id.rounding):
+        payment_amount = self.amount + change_payment.amount if change_payment else self.amount
+        if self.payment_method_id.type != 'pay_later' and not float_is_zero(payment_amount, precision_rounding=self.pos_order_id.currency_id.rounding):
             payment_move = self._generate_payment_move(is_reverse, change_payment)
             self.write({'account_move_id': payment_move.id})
             payment_move._post()
             return payment_move
+        return self.env['account.move']
 
     def _create_payment_move_entry(self, is_reverse=False):
         self.ensure_one()
