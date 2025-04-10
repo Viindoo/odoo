@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="bonus_type_tree" model="ir.ui.view">
+	    <field name="name">bonus.type.tree</field>
+	    <field name="model">bonus.tag</field>
+	    <field name="arch" type="xml">
+	        <list string="Bonus Type" sample = "1">
+				<field name= "name"/>
+	            <field name="amount"/>
+	        </list>
+	    </field>
+	</record>
+	
+	<record id="bonus_type_form" model="ir.ui.view">
+		<field name="name">bonus.type.form</field>
+		<field name="model">bonus.tag</field>
+		<field name="arch" type="xml">
+			<form string="Bonus Form">
+				<sheet>
+					<group>
+						<group>
+							<field name="name"/>
+							<field name="amount"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	
+	<record id="bonus_type_action" model="ir.actions.act_window">
+        <field name="name">Bonus Type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bonus.tag</field> 
+        <field name="view_mode">list,form</field> 
+        <field name="help" type="html">
+            <p class="test">Create a new Bonus Type</p>
+        </field>
+    </record>
+</odoo>

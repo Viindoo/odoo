@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="payslip_deduction_tree" model="ir.ui.view">
+	    <field name="name">payslip.deduction.type.tree</field>
+	    <field name="model">payslip.deduction.type</field>
+	    <field name="arch" type="xml">
+	        <list string="Deduction Type" sample = "1">
+				<field name= "name"/>
+	            <field name="default_amount"/>
+	            <field name="active"/>
+	            <field name="auto_apply"/>
+	        </list>
+	    </field>
+	</record>
+	
+	<record id="payslip_deduction_type_form" model="ir.ui.view">
+		<field name="name">payslip.deduction.type.form</field>
+		<field name="model">payslip.deduction.type</field>
+		<field name="arch" type="xml">
+			<form string="Task Form">
+				<sheet>
+					<group>
+						<group>
+							<field name="name"/>
+							<field name="default_amount"/>
+						    <field name="active"/>
+							<field name="auto_apply"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	
+	<record id = "payslip_deduction_type_search" model = "ir.ui.view">
+		<field name="name">payslip.deduction.type.tree.search</field>
+	    <field name="model">payslip.deduction.type</field>
+	    <field name="arch" type="xml">
+			<search string = "Search Employee Payslip">
+				<field name="name"/>
+			    <group expand="1" string="Group By">
+					<filter name="active" string="Active" domain="[]" context="{'group_by' : 'active'}"/>
+					<filter name="auto_apply" string="Auto Apply" domain="[]" context="{'group_by' : 'auto_apply'}"/>
+			    </group>		
+			</search>
+		</field>
+	</record>
+	
+	<record id="payslip_deduction_type_action" model="ir.actions.act_window">
+        <field name="name">Payslip Deduction Type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">payslip.deduction.type</field> 
+        <field name="search_view_id" ref="payslip_deduction_type_search"/> 
+        <field name="view_mode">list,form</field> 
+        <field name="help" type="html">
+            <p class="test">Create a new Deduction Type</p>
+        </field>
+    </record>
+</odoo>

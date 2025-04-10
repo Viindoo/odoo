@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="employee_tree" model="ir.ui.view">
+	    <field name="name">company.employee.tree</field>
+	    <field name="model">company.employee</field>
+	    <field name="arch" type="xml">
+	        <list string="Employees" sample = "1">
+	            <field name="user_id" widget = "many2one_avatar_user"/>
+	            <field name="age"/>
+	            <field name="gender"/>
+	            <field name="email"/>
+	            <field name="job_title"/>
+	            <field name="salary" readonly="1" groups="hr_manager.group_employee_manager"/>
+	            <field name = 'rating' widget = 'star_rating'/>
+	            <field name = 'attitude' widget = 'emoji'/>
+	        </list>
+	    </field>
+	</record>
+	
+	<record id="employee_form" model="ir.ui.view">
+	    <field name="name">company.employee.form</field>
+	    <field name="model">company.employee</field>
+	    <field name="arch" type="xml">
+	        <form string="Employee">
+	            <sheet>
+					<widget name="web_ribbon"
+			        title="Terminated"
+			        bg_color="bg-danger"
+			        invisible = "active"/>
+					<div class="oe_button_box" name="button_box">
+					    <button name="action_open_task"
+					            type="object"
+					            class="oe_stat_button"
+					            icon="fa-calendar">
+					        <div class="o_stat_info">
+					            <field name="task_count" class="o_stat_value"/>
+					            <span class="o_stat_text">Task Completed</span>
+					        </div>
+					    </button>
+					
+					    <button name="action_open_training"
+					            type="object"
+					            class="oe_stat_button"
+					            icon="fa-graduation-cap">
+					        <div class="o_stat_info">
+					            <field name="training_count" class="o_stat_value"/>
+					            <span class="o_stat_text">Training</span>
+					        </div>
+					    </button>
+					
+					    <button name="action_open_review"
+					            type="object"
+					            class="oe_stat_button"
+					            icon="fa-star">
+					        <div class="o_stat_info">
+					            <field name="review_count" class="o_stat_value"/>
+					            <span class="o_stat_text">Review</span>
+					        </div>
+					    </button>
+					</div>
+					<group>
+					    <group string="Employee Details">
+		                    <field name="user_id"/>
+		                    <field name="age" readonly="1"/>
+		                    <field name="gender"/>
+		                    <field name="email"/>
+		                    <field name="address"/>
+		                    <field name="phone"/>
+		                    <field name="date_of_birth"/>
+		                    <field name="job_title"/>
+		                    <field name ="currency_id"/>
+		                    <field name="salary" readonly="1" groups="hr_manager.group_employee_manager"/>
+		                    <field name = 'rating' widget = 'star_rating'/>
+		                    <field name = 'attitude' widget = 'emoji'/>
+		                    <field name = "active" invisible = '1'/>
+		                </group>
+		                <group string="Profile Picture" colspan="1">
+							<field name="image" widget = "image" style="width: 300px; height: 300px; margin: auto;" nolabel="1"/>
+						</group>
+					</group>
+	                <notebook>
+	                    <page string="Certifications">
+	                        <field name="certification_id">
+	                            <list editable="bottom">
+	                                <field name="name"/>
+	                                <field name="issuer"/>
+	                                <field name="date_obtained"/>
+	                                <field name="valid_until"/>
+	                            </list>
+	                        </field>
+	                    </page>
+	
+	                    <page string="Expertise">
+	                        <field name="expertise_id">
+	                            <list editable="bottom">
+	                                <field name="name"/>
+	                                <field name="level"/>
+	                                <field name="years_of_experience"/>
+	                            </list>
+	                        </field>
+	                    </page>
+	
+	                    <page string="Experience">
+	                        <field name="experience_id">
+	                            <list editable="bottom">
+	                                <field name="name"/>
+	                                <field name="job_title"/>
+	                                <field name="start_date"/>
+	                                <field name="end_date"/>
+	                            </list>
+	                        </field>
+	                    </page>
+	                </notebook>
+	            </sheet>
+	        </form>
+	    </field>
+	</record>
+	<record id="employee_kanban_view" model="ir.ui.view">
+	    <field name="name">company.employee.kanban</field>
+	    <field name="model">company.employee</field>
+	    <field name="arch" type="xml">
+	        <kanban class="o_kanban_example" sample = "1">
+	            <field name="user_id"/>
+	            <field name="job_title"/>
+	            <field name="image"/>
+	            <templates>
+	                <t t-name="kanban-box">
+					  <div class="oe_kanban_global_click" style="height:100%; width: 100%;" t-att-data-id="record.id">
+					    <div class="kanban_details" style="display: flex; width: 100%;">
+					      <div class="kanban_image" style="height: 100px; width: 100px;">
+					        <field name="user_image" widget="image"/>
+					      </div>
+					      <div style="margin-left: 10px;">
+					        <strong><field name="user_id"/></strong>
+					        <div class = "user_detail" style = "display:flex; flex-direction:column;">
+					          <span class="text-muted"><field name="job_title"/></span>
+					          <span class="text-muted"><field name="email"/></span>
+					          <span class="text-muted"><field name="phone"/></span>
+					        </div>
+					      </div>
+					    </div>
+					  </div>
+					</t>
+	            </templates>
+	        </kanban>
+	    </field>
+	</record>
+	
+	<record id="view_company_employee_pivot" model="ir.ui.view">
+	    <field name="name">company.employee.pivot</field>
+	    <field name="model">company.employee</field>
+	    <field name="arch" type="xml">
+	        <pivot string="Employee Analysis">
+	            <field name="job_title" type="row"/>
+	            <field name="salary" type="measure"/>
+	            <field name="id" widget="count"/>
+	        </pivot>
+	    </field>
+	</record>
+
+
+	
+	<record id = "employee_search" model = "ir.ui.view">
+		<field name="name">company.employee.tree.search</field>
+	    <field name="model">company.employee</field>
+	    <field name="arch" type="xml">
+			<search string = "Search Employee">
+				<field name="user_id"/>
+	            <field name="age"/>
+	            <field name="gender"/>
+			    <group expand="1" string="Group By">
+					<filter name="gender" string="Gender" domain="[]" context="{'group_by' : 'gender'}"/>
+					<filter name="active" string="Archieved" domain = "[('active','=', False)]"/>
+				    <filter name="job_title" string="Job Title" domain="[]" context="{'group_by' : 'job_title'}"/>
+			    </group>
+			    <searchpanel>
+					<field name ="job_title" string = "Job Title" enable_counters = "1"/>
+				</searchpanel>			
+			</search>
+		</field>
+	</record>
+	
+	<record id="employee_action" model="ir.actions.act_window">
+        <field name="name">Employees</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">company.employee</field>  
+        <field name="view_mode">kanban,list,pivot,form</field> 
+        <field name="search_view_id" ref="employee_search"/>
+        <field name="help" type="html">
+            <p class="test">Create a new View</p>
+        </field>
+    </record>
+</odoo>

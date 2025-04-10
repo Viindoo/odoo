@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_employee_task_document">
+    <t t-call="web.external_layout">
+	  <t t-set="doc" t-value="docs[0]"/>
+      <main class="page">
+        <h2>Employee Information</h2>
+        <table class="table table-sm">
+          <tr><td><strong>Name:</strong></td><td><t t-esc="doc.user_id.name"/></td></tr>
+          <tr><td><strong>Email:</strong></td><td><t t-esc="doc.email"/></td></tr>
+          <tr><td><strong>Phone:</strong></td><td><t t-esc="doc.phone"/></td></tr>
+          <tr><td><strong>Job Title:</strong></td><td><t t-esc="doc.job_title"/></td></tr>
+        </table>
+
+        <br/>
+
+        <h3>Assigned Tasks</h3>
+        <table class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th>Task Name</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Status</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            <t t-foreach="doc.task_id" t-as="task">
+              <tr>
+                <td><t t-esc="task.name"/></td>
+                <td><t t-esc="task.start_date"/></td>
+                <td><t t-esc="task.end_date"/></td>
+                <td><t t-esc="task.status"/></td>
+                <td><t t-esc="task.priority"/></td>
+              </tr>
+            </t>
+          </tbody>
+        </table>
+      </main>
+    </t>
+  </template>
+</odoo>

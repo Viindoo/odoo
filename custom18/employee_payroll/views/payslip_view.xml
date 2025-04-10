@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="employee_payslip_tree" model="ir.ui.view">
+	    <field name="name">employee.payslip.tree</field>
+	    <field name="model">employee.payslip</field>
+	    <field name="arch" type="xml">
+	        <list string="Payslip" sample = "1">
+				<field name= "name"/>
+	            <field name="employee_user_id" widget = "many2one_avatar_user"/>
+	            <field name="period_start" optional="hidden"/>
+	            <field name="period_end"/>
+	            <field name="bonus"/>
+	            <field name="day_off" optional="hidden"/>
+	            <field name ="work_days" optional="hidden"/>
+	            <field name="work_hours"/>
+	            <field name="task_completed" optional="hidden"/>
+	            <field name="net_salary"/>
+	            <field name="status" widget="badge"			       
+	                   decoration-success="status == 'done'"
+	                   decoration-warning="status == 'waiting'"
+                       decoration-danger="status == 'rejected'"/>
+	        </list>
+	    </field>
+	</record>
+	
+	<record id="employee_payslip_form" model="ir.ui.view">
+	    <field name="name">employee.payslip.form</field>
+	    <field name="model">employee.payslip</field>
+	    <field name="arch" type="xml">
+	        <form string="Payslip">
+				<header>
+					<field name="status" widget="statusbar"/>
+				</header>
+	            <sheet>
+					<field name = "name" placeholder = "Enter Payslip title" style = "font-size: 30px; font-weight: bold; color: #2c3e50; margin: 20px 0; width: 80%;" nolabel = "1"/>
+					<group>
+	                    <group>
+		                    <field name="employee_id"/>
+		                    <field name="period_start"/>
+		                    <field name="period_end"/>
+		                    <field name="task_completed"/>
+						</group>
+					</group>
+					<group string = "Work Hours" style = "margin: 20px 0;">
+	                    <field name="work_hours"/>
+			            <field name = "expected_hours"/>
+					</group>
+					<group string = 'Work Days'>
+			            <group>
+							<field name="day_off"/>
+							<field name = "total_days"/>
+						</group>
+						<group>
+							<field name="work_days"/>
+						</group>
+					</group>
+					<label for="bonus_tag_ids" string="Bonus"/>
+					<field name="bonus_tag_ids" nolabel="1">
+					    <list editable="bottom">
+					        <field name="name"/>  
+					        <field name="amount"/>
+					    </list>
+					</field>
+					<label for="deduction_ids" string="Deductions"/>
+					<field name="deduction_ids" nolabel="1">
+					    <list editable="bottom">
+					        <field name="type_id"/>  
+					        <field name="amount"/>
+					        <field name="note"/>
+					    </list>
+					</field>
+					<div class="oe_title" style="margin-top: 20px;">
+					    <h3>Payroll Summary</h3>
+					</div>
+					
+					<div class="table-responsive" style="margin-top: 10px;">
+					    <table class="table table-sm table-bordered">
+					        <thead>
+					            <tr>
+					                <th></th>
+					                <th>Amount (VND)</th>
+					            </tr>
+					        </thead>
+					        <tbody>
+					            <tr>
+					                <td>Base Salary</td>
+					                <td><field name="base_salary" readonly="1"/></td>
+					            </tr>
+					            <tr>
+					                <td>Total Deductions</td>
+					                <td><field name="total_deduction" readonly="1"/></td>
+					            </tr>
+					            <tr>
+					                <td><strong>Net Salary</strong></td>
+					                <td><field name="net_salary" readonly="1"/></td>
+					            </tr>
+					        </tbody>
+					    </table>
+					</div>
+
+	            </sheet>
+	            <chatter reload_on_post="True"/>
+	        </form>
+	    </field>
+	</record>
+	
+	<record id="view_employee_payslip_pivot" model="ir.ui.view">
+	    <field name="name">employee.payslip.pivot</field>
+	    <field name="model">employee.payslip</field>
+	    <field name="arch" type="xml">
+	        <pivot string="Employee Payslip Analysis">
+	            <field name="status" type="row"/>
+	            <field name="net_salary" type="measure"/>
+	            <field name="id" widget="count"/>
+	        </pivot>
+	    </field>
+	</record>
+
+
+	
+	<record id = "employee_payslip_search" model = "ir.ui.view">
+		<field name="name">employee.payslip.tree.search</field>
+	    <field name="model">employee.payslip</field>
+	    <field name="arch" type="xml">
+			<search string = "Search Employee Payslip">
+				<field name="create_date"/>
+			    <group expand="1" string="Group By">
+					<filter name="status" string="Status" domain="[]" context="{'group_by' : 'status'}"/>
+			    </group>	
+			</search>
+		</field>
+	</record>
+	
+	<record id="employee_payslip_action" model="ir.actions.act_window">
+        <field name="name">Employees Payslip</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">employee.payslip</field>  
+        <field name="view_mode">list,kanban,pivot,form</field> 
+        <field name="search_view_id" ref="employee_payslip_search"/>
+        <field name="help" type="html">
+            <p class="test">Create a new payslip</p>
+        </field>
+    </record>
+</odoo>

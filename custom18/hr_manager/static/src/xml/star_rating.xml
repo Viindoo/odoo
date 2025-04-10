@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="owl.StarRatingWidget" owl="1">
+    <div class="o_star_rating">
+		<t t-foreach="[1, 2, 3, 4, 5]" t-as="i" t-key="i">
+			<span
+			  t-att-class="{
+			    'star': true,
+			    'filled': !(i > state.rating),
+			    'empty': i > state.rating
+			  }"
+			  t-att-style="'cursor: ' + state.cursor"
+			 t-on-click="updateRating.bind(this, i)">
+			  <t t-esc="i &lt;= state.rating ? '★' : '☆'"/>
+			</span>
+      </t>
+    </div>
+  </t>
+</templates>

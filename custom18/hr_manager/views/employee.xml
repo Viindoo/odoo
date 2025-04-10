@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="Company_Menu" 
+        name="Company"
+        action = "employee_action" 
+        sequence="10"/>
+
+    <menuitem 
+    id="Company_Employee_Management_Menu" 
+    name="Management" 
+    parent="Company_Menu" 
+    sequence="10"/>
+    
+    <menuitem 
+    id="Company_Employee_Task" 
+    name="Tasks" 
+    parent="Company_Employee_Management_Menu" 
+    action = "employee_task_action"
+    sequence="7"/>
+    
+    <menuitem 
+    id="Company_Employee_Absence" 
+    name="Absence" 
+    parent="Company_Employee_Management_Menu" 
+    action = "employee_absence_action"
+    sequence="8"/>
+    
+    <menuitem 
+    id="Company_Absence_Request_Wizard" 
+    name="Create Absence" 
+    parent="Company_Employee_Management_Menu" 
+    action = "action_absence_request_wizard"
+    sequence="9"/>
+    
+    <menuitem 
+    id="Company_Employee_Development_Menu" 
+    name="Employee Development " 
+    parent="Company_Menu" 
+    sequence="20"/>
+    
+    <menuitem 
+    id="Employees_Training" 
+    name="Training" 
+    parent="Company_Employee_Development_Menu" 
+    action = "employee_traning_action" 
+    sequence="2"/>
+    
+    <menuitem 
+    id="Employees_Performance_Review" 
+    name="Performance Review" 
+    parent="Company_Employee_Development_Menu" 
+    action = "employee_performance_review_action" 
+    sequence="6"/>
+    <menuitem 
+    id="Employees_Performance_Review_Wizard" 
+    name="Performance Review Request" 
+    parent="Company_Employee_Development_Menu" 
+    action = "action_performance_review_wizard" 
+    sequence="7"/>
+</odoo>

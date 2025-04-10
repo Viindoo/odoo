@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="Payslip_Menu" 
+        name="Payroll"
+        action = "employee_payslip_action" 
+        sequence="10"/>
+
+    <menuitem 
+    id="Setting_Menu" 
+    name="Setting" 
+    parent="Payslip_Menu" 
+    sequence="10"/>
+    
+    <menuitem 
+    id="Deduction_Type" 
+    name="Deduction Type" 
+    parent="Setting_Menu"
+    action = "payslip_deduction_type_action" 
+    sequence="1"/>
+    
+    <menuitem 
+    id="Bonus_tag" 
+    name="Bonus Type" 
+    parent="Setting_Menu"
+    action = "bonus_type_action" 
+    sequence="2"/>
+</odoo>

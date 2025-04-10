@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+	<t t-name="owl.EmojiWidget" owl="1">
+	    <div class="emoji-picker-container" style="position: relative;">
+	        <div
+	            class="emoji-display"
+	            t-on-click="() => state.showPicker = !state.showPicker"
+	            style="cursor: pointer;"
+	        >
+	            <t t-esc="state.selectedEmoji || '😐'"/>
+	        </div>
+	
+
+	        <div
+	            t-if="state.showPicker and !props.readonly"
+	            class="emoji-dropdown"
+	            style="position: absolute; top: 100%; left: 0; background: white; border: 1px solid #ccc; padding: 5px; z-index: 999; box-shadow: 0 2px 5px rgba(0,0,0,0.15);"
+	        >
+	            <t t-foreach="['😀', '😐', '😢', '😡', '😍', '😴']" t-as="emoji" t-key="emoji">
+	                <span
+	                    t-att-class="['emoji', emoji === state.selectedEmoji ? 'selected' : '']"
+	                    t-on-click="updateEmoji.bind(this, emoji)"
+	                    style="cursor: pointer;"
+	                >
+	                    <t t-esc="emoji"/>
+	                </span>
+	            </t>
+	        </div>
+	    </div>
+	</t>
+</templates>
