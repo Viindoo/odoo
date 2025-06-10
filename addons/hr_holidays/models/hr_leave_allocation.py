@@ -566,7 +566,8 @@ class HolidaysAllocation(models.Model):
         self.ensure_one()
         if not accrual_date or accrual_date <= date.today():
             return 0
-
+        if self.accrual_date_end and self.accrual_date_end < accrual_date:
+            accrual_date = self.accrual_date_end
         if not (self.accrual_plan_id
                 and self.state == 'validate'
                 and self.allocation_type == 'accrual'
