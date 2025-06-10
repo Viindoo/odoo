@@ -26,7 +26,7 @@
 # jabiri7, 2024
 # Quim - coopdevs <quim.rebull@coopdevs.org>, 2024
 # RGB Consulting <odoo@rgbconsulting.com>, 2024
-# Xavier, 2024
+# Harcogourmet, 2024
 # Jonatan Gk, 2024
 # marcescu, 2024
 # Guspy12, 2024
@@ -34,20 +34,20 @@
 # eriiikgt, 2024
 # Ivan Espinola, 2024
 # Josep Anton Belchi, 2024
-# Adrià Navarro Rico, 2025
-# Noemi Pla, 2025
+# Adrià Navarro PYMING, 2025
 # Wil Odoo, 2025
 # Martin Trigaux, 2025
 # oscaryuu, 2025
 # EstudiTIC - estuditic.com <odoo@estuditic.com>, 2025
+# Noemi Pla, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 11:26+0000\n"
+"POT-Creation-Date: 2025-03-03 11:38+0000\n"
 "PO-Revision-Date: 2023-10-26 23:09+0000\n"
-"Last-Translator: EstudiTIC - estuditic.com <odoo@estuditic.com>, 2025\n"
+"Last-Translator: Noemi Pla, 2025\n"
 "Language-Team: Catalan (https://app.transifex.com/odoo/teams/41243/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -306,6 +306,72 @@ msgid ""
 "110101- Caja\n"
 "11010101 Caja General\n"
 msgstr ""
+"\n"
+"\n"
+"Localization Module for Dominican Republic\n"
+"===========================================\n"
+"\n"
+"Catálogo de Cuentas e Impuestos para República Dominicana, Compatible para\n"
+"**Internacionalización** con **NIIF** y alineado a las normas y regulaciones\n"
+"de la Dirección General de Impuestos Internos (**DGII**).\n"
+"\n"
+"**Este módulo consiste de:**\n"
+"\n"
+"- Catálogo de Cuentas Estándar (alineado a DGII y NIIF)\n"
+"- Catálogo de Impuestos con la mayoría de Impuestos Preconfigurados\n"
+"        - ITBIS para compras y ventas\n"
+"        - Retenciones de ITBIS\n"
+"        - Retenciones de ISR\n"
+"        - Grupos de Impuestos y Retenciones:\n"
+"                - Telecomunicaiones\n"
+"                - Proveedores de Materiales de Construcción\n"
+"                - Personas Físicas Proveedoras de Servicios\n"
+"        - Otros impuestos\n"
+"- Secuencias Preconfiguradas para manejo de todos los NCF\n"
+"        - Facturas con Valor Fiscal (para Ventas)\n"
+"        - Facturas para Consumidores Finales\n"
+"        - Notas de Débito y Crédito\n"
+"        - Registro de Proveedores Informales\n"
+"        - Registro de Ingreso Único\n"
+"        - Registro de Gastos Menores\n"
+"        - Gubernamentales\n"
+"- Posiciones Fiscales para automatización de impuestos y retenciones\n"
+"        - Cambios de Impuestos a Exenciones (Ej. Ventas al Estado)\n"
+"        - Cambios de Impuestos a Retenciones (Ej. Compra Servicios al Exterior)\n"
+"        - Entre otros\n"
+"\n"
+"**Nota:**\n"
+"Esta localización, aunque posee las secuencias para NCF, las mismas no pueden\n"
+"ser utilizadas sin la instalación de módulos de terceros o desarrollo\n"
+"adicional.\n"
+"\n"
+"Estructura de Codificación del Catálogo de Cuentas:\n"
+"===================================================\n"
+"\n"
+"**Un dígito** representa la categoría/tipo de cuenta del del estado financiero.\n"
+"**1** - Activo        **4** - Cuentas de Ingresos y Ganancias\n"
+"**2** - Pasivo        **5** - Costos, Gastos y Pérdidas\n"
+"**3** - Capital       **6** - Cuentas Liquidadoras de Resultados\n"
+"\n"
+"**Dos dígitos** representan los rubros de agrupación:\n"
+"11- Activo Corriente\n"
+"21- Pasivo Corriente\n"
+"31- Capital Contable\n"
+"\n"
+"**Cuatro dígitos** se asignan a las cuentas de mayor: cuentas de primer orden\n"
+"1101- Efectivo y Equivalentes de Efectivo\n"
+"2101- Cuentas y Documentos por pagar\n"
+"3101- Capital Social\n"
+"\n"
+"**Seis dígitos** se asignan a las sub-cuentas: cuentas de segundo orden\n"
+"110101 - Caja\n"
+"210101 - Proveedores locales\n"
+"\n"
+"**Ocho dígitos** son para las cuentas de tercer orden (las visualizadas\n"
+"en Odoo):\n"
+"1101- Efectivo y Equivalentes\n"
+"110101- Caja\n"
+"11010101 Caja General\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_jp
@@ -9485,6 +9551,12 @@ msgid ""
 "- Follow-up Address: Preferred address for follow-up reports. Selected by default when you send reminders about overdue invoices.\n"
 "- Other: Other address for the company (e.g. subsidiary, ...)"
 msgstr ""
+"- Contacte: utilitza-ho per organitzar la informació de contacte dels empleats d'una empresa determinada (p. ex.: CEO i CFO.).\n"
+"- Adreça de la factura: adreça preferida per a totes les factures. Se selecciona per defecte quan factures una comanda que pertany a aquesta empresa.\n"
+"- Adreça de lliurament: adreça preferida per a tots els lliuraments. Se selecciona per defecte quan factures una comanda que pertany a aquesta empresa.\n"
+"- Privat: les adreces privades només són visibles pels usuaris autoritzats i contenen dades confidencials (adreces del domicili dels empleats, per exemple).\n"
+"- Adreça de seguiment: adreça preferida per als informes de seguiment. Se selecciona per defecte quan envies recordatoris sobre factures vençudes o pendents.\n"
+"- Altres: altres adreces de l'empresa (p. ex.: filial)"
 
 #. module: base
 #. odoo-python
@@ -9697,6 +9769,8 @@ msgid ""
 "<code>model</code>: model of the record on which the action is triggered; is"
 " a void recordset"
 msgstr ""
+"<code>model</code>: model del registre en el qual s'activa l'acció; és un "
+"conjunt de registres buit"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_server_action_form
@@ -10728,7 +10802,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,summary:base.module_payment_xendit
 msgid "A payment provider for Indonesian and the Philippines."
-msgstr ""
+msgstr "Un proveïdor de pagaments per a Indonèsia i les Filipines."
 
 #. module: base
 #: model:ir.module.module,summary:base.module_payment_custom
@@ -14081,7 +14155,7 @@ msgstr "Camerun"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_cm
 msgid "Cameroon - Accounting"
-msgstr ""
+msgstr "Camerun - Comptabilitat"
 
 #. module: base
 #. odoo-python
@@ -14127,7 +14201,7 @@ msgstr "Canadà - Comptabilitat"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_ca_reports
 msgid "Canada - Accounting Reports"
-msgstr ""
+msgstr "Canadà - Informes comptables"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_ca_check_printing
@@ -14491,13 +14565,13 @@ msgstr "Xile - Rebut electrònic"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_cl_edi_website_sale
 msgid "Chilean eCommerce"
-msgstr ""
+msgstr "Comerç electrònic de Xile"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_cl_edi_pos
 #: model:ir.module.module,summary:base.module_l10n_cl_edi_pos
 msgid "Chilean module for Point of Sale"
-msgstr ""
+msgstr "Mòdul xilè per al Punt de venda"
 
 #. module: base
 #: model:res.country,name:base.cn
@@ -15119,7 +15193,7 @@ msgstr "Congo"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_cg
 msgid "Congo - Accounting"
-msgstr ""
+msgstr "Congo - Comptabilitat"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_hw_drivers
@@ -16161,8 +16235,8 @@ msgstr "D - SUBMINISTRACIÓ D'ELECTRICITAT, GAS, VAPOR I AIRE CONDICIONAT"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_delivery_dhl
-msgid "DHL Express Shipping"
-msgstr "Enviament DHL Express"
+msgid "DHL Express Shipping (Legacy)"
+msgstr ""
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_din5008
@@ -18073,7 +18147,7 @@ msgstr "Exclusiu"
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_actions_server__state__code
 msgid "Execute Code"
-msgstr ""
+msgstr "Executar codi"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.ir_cron_view_form
@@ -18083,7 +18157,7 @@ msgstr "Executa cada"
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_actions_server__state__multi
 msgid "Execute Existing Actions"
-msgstr ""
+msgstr "Executar accions existents"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.ir_cron_view_search
@@ -30248,27 +30322,27 @@ msgstr "Sant Marino"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_model_fields__sanitize
 msgid "Sanitize HTML"
-msgstr ""
+msgstr "Saneja HTML"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_model_fields__sanitize_attributes
 msgid "Sanitize HTML Attributes"
-msgstr ""
+msgstr "Saneja els Atributs HTML"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_model_fields__sanitize_form
 msgid "Sanitize HTML Form"
-msgstr ""
+msgstr "Saneja el Formulari HTML"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_model_fields__sanitize_style
 msgid "Sanitize HTML Style"
-msgstr ""
+msgstr "Seneja l'estil HTML"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_model_fields__sanitize_tags
 msgid "Sanitize HTML Tags"
-msgstr ""
+msgstr "Seneja Etiquetes HTML"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_model_fields__sanitize_overridable
@@ -30734,8 +30808,11 @@ msgstr ""
 
 #. module: base
 #: model:ir.module.module,description:base.module_delivery_dhl
-msgid "Send your shippings through DHL and track them online"
-msgstr "Envia els teus enviaments a través de DHL i rastreja'ls en línia"
+msgid ""
+"This is the legacy integration with DHL Express that is no longer supported."
+" Please install the new \"DHL Express Shipping\" module and uninstall this "
+"one as soon as possible."
+msgstr ""
 
 #. module: base
 #: model:ir.module.module,description:base.module_delivery_fedex_rest
@@ -31425,7 +31502,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_es_edi_facturae
 msgid "Spain - Facturae EDI"
-msgstr ""
+msgstr "Espanya - Facturae EDI"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_es_edi_facturae_adm_centers
@@ -31440,7 +31517,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_es_reports_modelo130
 msgid "Spain - Modelo 130"
-msgstr ""
+msgstr "Espanya - Model 130"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_es_modelo130
@@ -31455,7 +31532,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_es_pos
 msgid "Spain - Point of Sale"
-msgstr ""
+msgstr "Espanya - Punt de Venda"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_es_real_estates
@@ -31470,12 +31547,12 @@ msgstr "Espanya - SII EDI Suministro de Libros"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_es_edi_tbai
 msgid "Spain - TicketBAI"
-msgstr ""
+msgstr "Espanya - TicketBAI"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_l10n_es_pos
 msgid "Spanish localization for Point of Sale"
-msgstr ""
+msgstr "Localització Espanyola pel Punt de Venda"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_base_sparse_field
@@ -32244,7 +32321,7 @@ msgstr "Format TGZ: agrupa diversos fitxers PO(T) com un sol arxiu"
 #. module: base
 #: model:res.country,vat_label:base.ug
 msgid "TIN"
-msgstr ""
+msgstr "TIN"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_mail_server__smtp_encryption__starttls
@@ -32259,7 +32336,7 @@ msgstr "TOTPortal"
 #. module: base
 #: model:res.country,vat_label:base.zm
 msgid "TPIN"
-msgstr ""
+msgstr "TPIN"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__report_paperformat__format__tabloid
@@ -33813,6 +33890,13 @@ msgid ""
 "This module allows Accounting Firms to connect to CodaBox\n"
 "and automatically import CODA and SODA statements for their clients in Odoo.\n"
 "The connection must be done by the Accounting Firm.\n"
+msgstr ""
+
+#. module: base
+#: model:ir.module.module,description:base.module_account_online_payment
+msgid ""
+"This module allows customers to pay their invoices online using various "
+"payment methods."
 msgstr ""
 
 #. module: base

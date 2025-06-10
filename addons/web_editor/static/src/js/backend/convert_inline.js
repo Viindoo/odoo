@@ -170,7 +170,7 @@ function bootstrapToTable(editable) {
         masonryRow.parentElement.style.setProperty('height', '100%');
     }
 
-    const containers = editable.querySelectorAll('.container, .container-fluid, .o_fake_table');
+    const containers = editable.querySelectorAll('.container, .container-fluid, .o_fake_table, .o_text_columns');
     // Capture the widths of the containers before manipulating it.
     for (const container of containers) {
         container.setAttribute('o-temp-width', _getWidth(container));
@@ -1800,12 +1800,17 @@ function correctBorderAttributes(style) {
     }, 0);
 
     if (totalBorderWidth === 0) {
-        stylesObject["border-style"] = "none";
+        let correctedStyle = style.trim();
+        if (correctedStyle.slice(-1) != ';') {
+            correctedStyle += ';';
+        }
+        correctedStyle = correctedStyle.replace(
+            /(;|^)\s*border-style\s*:[^;]*(;|$)|$/, '$1border-style:none$2'
+        );
+        return correctedStyle;
     }
 
-    return Object.entries(stylesObject)
-        .map(([attribute, value]) => `${attribute}:${value}`)
-        .join(";");
+    return style;
 }
 
 export default {

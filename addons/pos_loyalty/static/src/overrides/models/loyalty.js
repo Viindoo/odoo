@@ -164,9 +164,10 @@ patch(Order.prototype, {
                     continue;
                 }
                 const newId = nextId--;
-                delete this.oldCouponMapping[pe.coupon_id];
+                this.oldCouponMapping[pe.coupon_id] = newId;
                 pe.coupon_id = newId;
                 this.couponPointChanges[newId] = pe;
+                delete this.couponPointChanges[key];
             }
         }
         super.init_from_JSON(...arguments);
@@ -1120,7 +1121,9 @@ patch(Order.prototype, {
             if (!line.get_quantity()) {
                 continue;
             }
-            const taxKey = line.get_taxes().map((t) => t.id);
+            const taxKey = ['ewallet', 'gift_card'].includes(reward.program_id.program_type)
+                ? line.get_taxes().map((t) => t.id)
+                : line.get_taxes().filter((t) => t.amount_type !== 'fixed').map((t) => t.id);
             discountable += line.get_price_with_tax();
             if (!discountablePerTax[taxKey]) {
                 discountablePerTax[taxKey] = 0;

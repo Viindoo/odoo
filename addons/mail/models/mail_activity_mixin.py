@@ -213,6 +213,8 @@ class MailActivityMixin(models.AbstractModel):
     def _search_activity_user_id(self, operator, operand):
         if isinstance(operand, bool) and ((operator == '=' and not operand) or (operator == '!=' and operand)):
             return [('activity_ids', '=', False)]
+        if self.env.context.get('exclude_done_activities'):
+            return [('activity_ids', 'any', [('active', '=', True), ('user_id', operator, operand)])]
         return [('activity_ids', 'any', [('active', 'in', [True, False]), ('user_id', operator, operand)])]
 
     @api.model
@@ -253,7 +255,7 @@ class MailActivityMixin(models.AbstractModel):
         """ Override unlink to delete records activities through (res_model, res_id). """
         record_ids = self.ids
         result = super(MailActivityMixin, self).unlink()
-        self.env['mail.activity'].sudo().search(
+        self.env['mail.activity'].with_context(active_test=False).sudo().search(
             [('res_model', '=', self._name), ('res_id', 'in', record_ids)]
         ).unlink()
         return result

@@ -60,7 +60,7 @@ class StockMove(models.Model):
         price_unit_map = {
             move.id: (
                 move.unbuild_id.mo_id.move_finished_ids.stock_valuation_layer_ids.filtered(
-                    lambda svl: svl.product_id == move.unbuild_id.mo_id.product_id
+                    lambda svl: svl.product_id == move.product_id
                 )[0].unit_cost,
                 move.company_id.currency_id.round,
             )
@@ -78,3 +78,11 @@ class StockMove(models.Model):
                         'value': price_unit_map[move_id][1](unit_cost * svl_vals['quantity']),
                     })
         return svl_vals_list
+
+    def _get_all_related_sm(self, product):
+        moves = super()._get_all_related_sm(product)
+        return moves | self.filtered(
+            lambda m:
+            m.bom_line_id.bom_id.type == 'phantom' and
+            m.bom_line_id.bom_id == moves.bom_line_id.bom_id
+        )

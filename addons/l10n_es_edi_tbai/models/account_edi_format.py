@@ -406,8 +406,6 @@ class AccountEdiFormat(models.Model):
 
         if is_oss:
             values['regime_key'] = ['17']
-        elif invoice.l10n_es_is_simplified and invoice.company_id.l10n_es_tbai_tax_agency != 'bizkaia':
-            values['regime_key'] = ['52']  # code for simplified invoices
         elif export_exempts:
             values['regime_key'] = ['02']
         else:
@@ -436,7 +434,8 @@ class AccountEdiFormat(models.Model):
     def _l10n_es_tbai_get_importe_desglose(self, invoice):
         com_partner = invoice.commercial_partner_id
         sign = -1 if invoice.move_type in ('out_refund', 'in_refund') else 1
-        if com_partner.country_id.code in ('ES', False) and not (com_partner.vat or '').startswith("ESN"):
+        if (com_partner.country_id.code in ('ES', False) and not (com_partner.vat or '').startswith("ESN")) \
+                or invoice.l10n_es_is_simplified:
             tax_details_info_vals = self._l10n_es_edi_get_invoices_tax_details_info(invoice)
             tax_amount_retention = tax_details_info_vals['tax_amount_retention']
             desglose = {'DesgloseFactura': tax_details_info_vals['tax_details_info']}
@@ -646,13 +645,25 @@ class AccountEdiFormat(models.Model):
         mod_303_11 = self.env.ref('l10n_es.mod_303_casilla_11_balance')._get_matching_tags()
         tax_tags = invoice.invoice_line_ids.tax_ids.repartition_line_ids.tag_ids
         intracom = bool(tax_tags & (mod_303_10 + mod_303_11))
-        values['regime_key'] = ['09'] if intracom else ['01']
+        # Special regime for agriculture, livestock and fishing https://sede.agenciatributaria.gob.es/Sede/iva/regimenes-tributacion-iva/regimen-especial-agricultura-ganaderia-pesca.html
+        reagyp = invoice.invoice_line_ids.tax_ids.filtered(lambda t: t.l10n_es_type == 'sujeto_agricultura')
+        if intracom:
+            values['regime_key'] = ['09']
+        elif reagyp:
+            values['regime_key'] = ['02']
+        else:
+            values['regime_key'] = ['01']
         # Credit notes (factura rectificativa)
         values['is_refund'] = invoice.move_type == 'in_refund'
         if values['is_refund']:
             values['credit_note_code'] = invoice.l10n_es_tbai_refund_reason
             values['credit_note_invoice'] = invoice.reversed_entry_id
-        values['tipofactura'] = 'F5' if invoice._l10n_es_is_dua() else 'F1'
+        if reagyp:
+            values['tipofactura'] = 'F6'
+        elif invoice._l10n_es_is_dua():
+            values['tipofactura'] = 'F5'
+        else:
+            values['tipofactura'] = 'F1'
         return values
 
     def _l10n_es_tbai_prepare_values_bi(self, invoice, invoice_xml, cancel=False):

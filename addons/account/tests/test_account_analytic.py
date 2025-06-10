@@ -218,6 +218,32 @@ class TestAccountAnalyticAccount(AccountTestInvoicingCommon):
         invoice.action_post()
         self.assertEqual(invoice.state, 'posted')
 
+    def test_mandatory_plan_validation_mass_posting(self):
+        """
+        In case of mass posting, we should still check for mandatory analytic plans. This may raise a RedirectWarning,
+        if more than one entry was selected for posting, or a ValidationError if only one entry was selected.
+        """
+        invoice1 = self.create_invoice(self.partner_a, self.product_a)
+        invoice2 = self.create_invoice(self.partner_b, self.product_a)
+        self.default_plan.write({
+            'applicability_ids': [Command.create({
+                'business_domain': 'invoice',
+                'product_categ_id': self.product_a.categ_id.id,
+                'applicability': 'mandatory',
+            })]
+        })
+
+        vam = self.env['validate.account.move'].create({'force_post': True})
+        for invoices in [invoice1, invoice1 | invoice2]:
+            with self.subTest(invoices=invoices):
+                with self.assertRaises(Exception):
+                    vam.with_context({
+                        'active_model': 'account.move',
+                        'active_ids': [invoice1.id, invoice2.id],
+                        'validate_analytic': True,
+                    }).validate_move()
+                self.assertTrue('posted' not in invoices.mapped('state'))
+
     def test_cross_analytics_computing(self):
 
         out_invoice = self.env['account.move'].create([{
@@ -292,3 +318,119 @@ class TestAccountAnalyticAccount(AccountTestInvoicingCommon):
         self.assertEqual(score, 2)
         score = applicability_with_company._get_score(business_domain='invoice', product=self.product_a.id)
         self.assertEqual(score, 1)
+
+    def test_analytic_lines_partner_compute(self):
+        ''' Ensures analytic lines partner is changed when changing partner on move line'''
+        def get_analytic_lines():
+            return self.env['account.analytic.line'].search([
+                ('move_line_id', 'in', entry.line_ids.ids)
+            ]).sorted('amount')
+
+        entry = self.env['account.move'].create([{
+            'move_type': 'entry',
+            'partner_id': self.partner_a.id,
+            'line_ids': [
+                Command.create({
+                    'account_id': self.company_data['default_account_receivable'].id,
+                    'debit': 200.0,
+                    'partner_id': self.partner_a.id,
+                }),
+                Command.create({
+                    'account_id': self.company_data['default_account_revenue'].id,
+                    'credit': 200.0,
+                    'partner_id': self.partner_b.id,
+                    'analytic_distribution': {
+                        self.analytic_account_a.id: 100,
+                    },
+                }),
+            ]
+        }])
+        entry.action_post()
+
+        # Analytic lines are created when posting the invoice
+        analytic_line = get_analytic_lines()
+        self.assertRecordValues(analytic_line, [{
+            'amount': 200,
+            self.default_plan._column_name(): self.analytic_account_a.id,
+            'partner_id': self.partner_b.id,
+        }])
+        # Change the move line on the analytic line, partner changes on the analytic line
+        analytic_line.move_line_id = entry.line_ids[0]
+        self.assertRecordValues(analytic_line, [{
+            'amount': 200,
+            self.default_plan._column_name(): self.analytic_account_a.id,
+            'partner_id': self.partner_a.id,
+        }])
+        # Change the move line's partner, partner changes on the analytic line
+        entry.line_ids.write({'partner_id': self.partner_b.id})
+        self.assertRecordValues(analytic_line, [{
+            'amount': 200,
+            self.default_plan._column_name(): self.analytic_account_a.id,
+            'partner_id': self.partner_b.id,
+        }])
+
+    def test_analytic_distribution_with_discount(self):
+        """Ensure that discount lines include analytic distribution when a discount expense account is set."""
+
+        # Create discount expense account
+        self.company_data['company'].account_discount_expense_allocation_id = self.env['account.account'].create({
+            'name': 'Discount Expense',
+            'code': 'DIS',
+            'account_type': 'expense',
+            'reconcile': False,
+            'company_id': self.company_data['company'].id,
+        })
+
+        # Create invoice with 2 lines: each has a discount and analytic distribution
+        out_invoice = self.env['account.move'].create([{
+            'move_type': 'out_invoice',
+            'partner_id': self.partner_a.id,
+            'date': '2017-01-01',
+            'invoice_date': '2017-01-01',
+            'invoice_line_ids': [Command.create({
+                'product_id': self.product_a.id,
+                'tax_ids': [Command.clear()],
+                'price_unit': 200.0,
+                'discount': 20,  # 40.0 discount
+                'analytic_distribution': {
+                    self.analytic_account_a.id: 100,
+                },
+            }), Command.create({
+                'product_id': self.product_b.id,
+                'tax_ids': [Command.clear()],
+                'price_unit': 200.0,
+                'discount': 10,  # 20.0 discount
+                'analytic_distribution': {
+                    self.analytic_account_b.id: 100,
+                },
+            })]
+        }])
+        out_invoice.action_post()
+        self.assertRecordValues(out_invoice.line_ids, [{
+            'display_type': 'product',
+            'balance': -160.0,
+            'analytic_distribution': {str(self.analytic_account_a.id): 100},
+        }, {
+            'display_type': 'product',
+            'balance': -180.0,
+            'analytic_distribution': {str(self.analytic_account_b.id): 100},
+        }, {
+            'display_type': 'discount',
+            'balance': -40.0,
+            'analytic_distribution': {str(self.analytic_account_a.id): 100}
+        }, {
+            'display_type': 'discount',
+            'balance': 60.0,
+            'analytic_distribution': {
+                str(self.analytic_account_a.id): 66.67,
+                str(self.analytic_account_b.id): 33.33,
+            }
+        }, {
+            'display_type': 'discount',
+            'balance': -20.0,
+            'analytic_distribution': {str(self.analytic_account_b.id): 100}
+        }, {
+            'display_type': 'payment_term',
+            'balance': 340.0,
+            'analytic_distribution': False,
+        }])

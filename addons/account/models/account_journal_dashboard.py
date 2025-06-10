@@ -124,23 +124,33 @@ class account_journal(models.Model):
 
     def _query_has_sequence_holes(self):
         self.env['account.move'].flush_model(['journal_id', 'date', 'sequence_prefix', 'sequence_number', 'state'])
+        # A branch company is locked when the parent is locked.
+        # Parent companies of the journal company can not add moves to the journal.
+        # Thus it is good enough to consider all moves in the journal after the journal company lockdate.
+        # This way we find all holes that can still be corrected.
+        to_check = self.grouped(lambda j: j.company_id.fiscalyear_lock_date)
         queries = []
-        for company in self.env.companies:
+        for lock_date, journals in to_check.items():
+            # We add the companies to the query to benefit from index `account_move_journal_id_company_id_idx`
+            journal_company_ids = journals.company_id.ids
+            companies = self.env['res.company'].sudo().search([
+                ('id', 'child_of', journal_company_ids),
+            ])
             queries.append(SQL(
                 """
                     SELECT move.journal_id,
                            move.sequence_prefix
                       FROM account_move move
                      WHERE move.journal_id = ANY(%(journal_ids)s)
-                       AND move.company_id = %(company_id)s
+                       AND move.company_id = ANY(%(company_ids)s)
                        AND (move.state = 'posted' OR (move.state = 'draft' AND move.name != '/'))
                        AND %(fiscalyear_lock_date_clause)s
                   GROUP BY move.journal_id, move.sequence_prefix
                     HAVING COUNT(*) != MAX(move.sequence_number) - MIN(move.sequence_number) + 1
                 """,
-                journal_ids=self.ids,
-                company_id=company.id,
-                fiscalyear_lock_date_clause=SQL('move.date > %s', lock_date) if (lock_date := company.fiscalyear_lock_date) else SQL('TRUE')
+                journal_ids=journals.ids,
+                company_ids=companies.ids,
+                fiscalyear_lock_date_clause=SQL('move.date > %s', lock_date) if lock_date else SQL('TRUE'),
             ))
         self.env.cr.execute(SQL(' UNION ALL '.join(['%s'] * len(queries)), *queries))
         return self.env.cr.fetchall()
@@ -508,18 +518,9 @@ class account_journal(models.Model):
             for journal in sale_journals:
                 late_query_results[journal.id] = late_bills_query_results[journal.id]
 
-        to_check_vals = {
-            journal.id: (amount_total_signed_sum, count)
-            for journal, amount_total_signed_sum, count in self.env['account.move']._read_group(
-                domain=[
-                    *self.env['account.move']._check_company_domain(self.env.companies),
-                    ('journal_id', 'in', sale_purchase_journals.ids),
-                    ('to_check', '=', True),
-                ],
-                groupby=['journal_id'],
-                aggregates=['amount_total_signed:sum', '__count'],
-            )
-        }
+        query, params = sale_purchase_journals._get_to_check_payment_query().select(*bills_field_list)
+        self.env.cr.execute(query, params)
+        to_check_vals = group_by_journal(self.env.cr.dictfetchall())
 
         self.env.cr.execute(SQL("""
             SELECT id, moves_exists
@@ -544,10 +545,10 @@ class account_journal(models.Model):
             (number_waiting, sum_waiting) = self._count_results_and_sum_amounts(query_results_to_pay[journal.id], currency)
             (number_draft, sum_draft) = self._count_results_and_sum_amounts(query_results_drafts[journal.id], currency)
             (number_late, sum_late) = self._count_results_and_sum_amounts(late_query_results[journal.id], currency)
-            amount_total_signed_sum, count = to_check_vals.get(journal.id, (0, 0))
+            (number_to_check, sum_to_check) = self._count_results_and_sum_amounts(to_check_vals[journal.id], currency)
             dashboard_data[journal.id].update({
-                'number_to_check': count,
-                'to_check_balance': currency.format(amount_total_signed_sum),
+                'number_to_check': number_to_check,
+                'to_check_balance': currency.format(sum_to_check),
                 'title': _('Bills to pay') if journal.type == 'purchase' else _('Invoices owed to you'),
                 'number_draft': number_draft,
                 'number_waiting': number_waiting,
@@ -635,6 +636,14 @@ class account_journal(models.Model):
             ('amount_residual', '<', 0),
             ('parent_state', '=', 'posted'),
             ('journal_id.type', '=', 'purchase'),
+        ])
+
+    def _get_to_check_payment_query(self):
+        # todo in master: use this hook function in _fill_general_dashboard_data as it's the same domain
+        return self.env['account.move']._where_calc([
+            *self.env['account.move']._check_company_domain(self.env.companies),
+            ('journal_id', 'in', self.ids),
+            ('to_check', '=', True),
         ])
 
     def _count_results_and_sum_amounts(self, results_dict, target_currency):

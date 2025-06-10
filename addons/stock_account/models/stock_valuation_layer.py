@@ -44,6 +44,10 @@ class StockValuationLayer(models.Model):
             self._cr, 'stock_valuation_layer_index',
             self._table, ['product_id', 'remaining_qty', 'stock_move_id', 'company_id', 'create_date']
         )
+        tools.create_index(
+            self._cr, 'stock_valuation_company_product_index',
+            self._table, ['product_id', 'company_id', 'id', 'value', 'quantity']
+        )
 
     def _compute_warehouse_id(self):
         for svl in self:
@@ -61,6 +65,10 @@ class StockValuationLayer(models.Model):
             ('stock_move_id.location_id.warehouse_id', operator, value),
         ]).ids
         return [('id', 'in', layer_ids)]
+
+    def _candidate_sort_key(self):
+        self.ensure_one()
+        return tuple()
 
     def _validate_accounting_entries(self):
         am_vals = []

@@ -182,7 +182,7 @@ class Ewaybill(models.Model):
     def _compute_fiscal_position(self):
         for ewaybill in self.filtered(lambda ewb: ewb.state == 'pending'):
             ewaybill.fiscal_position_id = (
-                self.env['account.fiscal.position']._get_fiscal_position(
+                self.env['account.fiscal.position'].with_company(ewaybill.company_id)._get_fiscal_position(
                     ewaybill.picking_type_code == 'incoming'
                     and ewaybill.partner_bill_from_id
                     or ewaybill.partner_bill_to_id
@@ -262,6 +262,30 @@ class Ewaybill(models.Model):
         self.write({
             'state': 'challan',
         })
+
+    def action_print(self):
+        self.ensure_one()
+        if self.state in ['pending', 'cancel']:
+            raise UserError(_("Please generate the E-Waybill or mark the document as a Challan to print it."))
+
+        doc_label = _("Challan") if self.state == 'challan' else _("E-Waybill")
+        body = _("%s has been generated", doc_label)
+        filename = "%s - %s.pdf" % (doc_label, self.document_number)
+        pdf_content = self.env['ir.actions.report']._render_qweb_pdf(
+            'l10n_in_ewaybill_stock.action_report_ewaybill', res_ids=[self.id])[0]
+        attachment = self.env['ir.attachment'].create({
+            'name': filename,
+            'type': 'binary',
+            'datas': base64.b64encode(pdf_content),
+            'res_model': 'l10n.in.ewaybill',
+            'res_id': self.id,
+            'mimetype': 'application/pdf',
+        })
+        self.message_post(body=body, attachment_ids=[attachment.id])
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+        }
 
     def _is_overseas(self):
         self.ensure_one()
@@ -408,8 +432,8 @@ class Ewaybill(models.Model):
 
     def _l10n_in_ewaybill_stock_handle_zero_distance_alert_if_present(self, response):
         if self.distance == 0 and (alert := response.get('data').get('alert')):
-            pattern = r", Distance between these two pincodes is \d+, "
-            if re.fullmatch(pattern, alert) and (dist := int(re.search(r'\d+', alert).group())) > 0:
+            pattern = r"Distance between these two pincodes is (\d+)"
+            if (match := re.search(pattern, alert)) and (dist := int(match.group(1))) > 0:
                 self.distance = dist
 
     def _generate_ewaybill_direct(self):
@@ -504,31 +528,31 @@ class Ewaybill(models.Model):
             "hsnCode": AccountEDI._l10n_in_edi_extract_digits(product.l10n_in_hsn_code),
             "productDesc": product.name,
             "quantity": line.quantity,
-            "qtyUnit": product.uom_id.l10n_in_code and product.uom_id.l10n_in_code.split("-")[
+            "qtyUnit": line.product_uom.l10n_in_code and line.product_uom.l10n_in_code.split("-")[
                 0] or "OTH",
             "taxableAmount": AccountEDI._l10n_in_round_value(tax_details['total_excluded']),
         }
+        gst_types = ('sgst', 'cgst', 'igst')
+        gst_tax_rates = {}
         for tax in tax_details.get('taxes'):
-            gst_types = ['sgst', 'cgst', 'igst']
-            gst_tax_rates = {}
             for gst_type in gst_types:
                 if tax_rate := tax.get(f'{gst_type}_rate'):
                     gst_tax_rates.update({
                         f"{gst_type}Rate": AccountEDI._l10n_in_round_value(tax_rate)
                     })
-            line_details.update(
-                gst_tax_rates
-                or dict.fromkeys(
-                    [f"{gst_type}Rate" for gst_type in gst_types],
-                    0
-                )
-            )
             if cess_rate := tax.get("cess_rate"):
                 line_details.update({"cessRate": AccountEDI._l10n_in_round_value(cess_rate)})
             if cess_non_advol := tax.get("cess_non_advol_amount"):
                 line_details.update({
                     "cessNonadvol": AccountEDI._l10n_in_round_value(cess_non_advol)
                 })
+        line_details.update(
+            gst_tax_rates
+            or dict.fromkeys(
+                [f"{gst_type}Rate" for gst_type in gst_types],
+                0
+            )
+        )
         return line_details
 
     def _prepare_ewaybill_base_json_payload(self):

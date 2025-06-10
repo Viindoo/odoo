@@ -900,7 +900,7 @@ msgstr "活動檢視畫面"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
 msgid "Add a Product"
-msgstr "添加產品"
+msgstr "加入產品"
 
 #. module: stock
 #: model_terms:ir.actions.act_window,help:stock.action_product_production_lot_form
@@ -1443,7 +1443,7 @@ msgstr "阻止：%s"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_quant_package__quant_ids
 msgid "Bulk Content"
-msgstr "散裝內容"
+msgstr "大量內容"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__product_template__tracking__lot
@@ -1654,7 +1654,7 @@ msgstr "勾選此空格以允許使用此位置作為退回位置."
 #: model:ir.model.fields,help:stock.field_stock_move__scrapped
 msgid ""
 "Check this box to allow using this location to put scrapped/damaged goods."
-msgstr "勾取此選項以允許此位置放置已報廢/已毀壞的貨品."
+msgstr "若勾選此方格，將允許使用此位置存放已報廢/已損壞的貨物。"
 
 #. module: stock
 #. odoo-python
@@ -7006,7 +7006,7 @@ msgstr "配額會適時自動刪除。如果必須手動刪除，請要求庫存
 #: code:addons/stock/models/stock_quant.py:0
 #, python-format
 msgid "Quants cannot be created for consumables or services."
-msgstr "不能為消耗品或者服務建立數量."
+msgstr "消耗品或服務不可建立數量。"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_return_slip
@@ -8668,6 +8668,15 @@ msgstr "批次/序號（%s）已連結至另一個產品。"
 
 #. module: stock
 #. odoo-python
+#: code:addons/stock/models/stock_picking.py:0
+#, python-format
+msgid ""
+"The Picking Operations report has been deleted so you cannot print at this "
+"time unless the report is restored."
+msgstr "揀貨操作報告已被刪除，因此目前無法列印，除非將報告復原。"
+
+#. module: stock
+#. odoo-python
 #: code:addons/stock/models/stock_quant.py:0
 #, python-format
 msgid ""
@@ -10051,7 +10060,7 @@ msgstr "重量計量單位標籤"
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__barcode_rule__type__weight
 msgid "Weighted Product"
-msgstr "稱重的產品"
+msgstr "秤重的產品"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_replenishment_info__wh_replenishment_option_ids

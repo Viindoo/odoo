@@ -26,6 +26,7 @@ import {
     reactive,
 } from "@odoo/owl";
 import { downloadReport, getReportUrl } from "./reports/utils";
+import { FetchRecordError } from "@web/model/relational_model/utils";
 
 class BlankComponent extends Component {
     static props = ["onMounted", "withControlPanel", "*"];
@@ -271,6 +272,10 @@ function makeActionManager(env) {
                 // from there or load all fieldviews alongside the action for the sake of consistency
                 const searchViewId = action.search_view_id ? action.search_view_id[0] : false;
                 action.views.push([searchViewId, "search"]);
+            }
+            if ("no_breadcrumbs" in action.context) {
+                action._noBreadcrumbs = action.context.no_breadcrumbs;
+                delete action.context.no_breadcrumbs;
             }
         }
         return action;
@@ -540,8 +545,7 @@ function makeActionManager(env) {
         }
 
         viewProps.noBreadcrumbs =
-            "no_breadcrumbs" in action.context ? action.context.no_breadcrumbs : target === "new";
-        delete action.context.no_breadcrumbs;
+            "_noBreadcrumbs" in action ? action._noBreadcrumbs : target === "new";
         return {
             props: viewProps,
             config: {
@@ -692,6 +696,14 @@ function makeActionManager(env) {
                     if (action.target === "new") {
                         removeDialogFn?.();
                     } else {
+                        if (controller?.jsId) {
+                            if (error?.cause instanceof FetchRecordError) {
+                                // remove error controller from breadcrumb
+                                controllerStack = controllerStack.filter(
+                                    (c) => c.jsId !== controller.jsId
+                                );
+                            }
+                        }
                         const lastCt = controllerStack[controllerStack.length - 1];
                         if (lastCt) {
                             if (lastCt.jsId !== controller.jsId) {
@@ -835,7 +847,7 @@ function makeActionManager(env) {
             controller.props.globalState = controller.action.globalState;
         }
 
-        const closingProm = _executeCloseAction();
+        const closingProm = _executeCloseAction({ onCloseInfo: { noReload: true } });
 
         if (options.clearBreadcrumbs && !options.noEmptyTransition) {
             const def = new Deferred();

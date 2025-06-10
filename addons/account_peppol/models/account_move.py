@@ -3,7 +3,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-from odoo.addons.account.models.company import PEPPOL_DEFAULT_COUNTRIES
+from odoo.addons.account.models.company import PEPPOL_MAILING_COUNTRIES
 
 
 class AccountMove(models.Model):
@@ -76,9 +76,12 @@ class AccountMove(models.Model):
         render_context = super()._notify_by_email_prepare_rendering_context(message, **kwargs)
         invoice = render_context['record']
         invoice_country = invoice.commercial_partner_id.country_code
-        if invoice_country in PEPPOL_DEFAULT_COUNTRIES:
+        company_country = invoice.company_id.country_code
+        company_on_peppol = invoice.company_id.account_peppol_proxy_state == 'active'
+        if company_on_peppol and company_country in PEPPOL_MAILING_COUNTRIES and invoice_country in PEPPOL_MAILING_COUNTRIES:
             render_context['peppol_info'] = {
                 'peppol_country': invoice_country,
                 'is_peppol_sent': invoice.peppol_move_state in ('processing', 'done'),
+                'partner_on_peppol': invoice.commercial_partner_id.account_peppol_is_endpoint_valid,
             }
         return render_context
