@@ -23,12 +23,12 @@ msgstr ""
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__recipient_invalid_count
 msgid "# Invalid recipients"
-msgstr "# Người nhận không hợp lệ"
+msgstr "SL người nhận không hợp lệ"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__recipient_valid_count
 msgid "# Valid recipients"
-msgstr "# Người nhận hợp lệ"
+msgstr "SL người nhận hợp lệ"
 
 #. module: sms
 #. odoo-python
@@ -44,7 +44,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/sms/models/sms_template.py:0
 msgid "%s (copy)"
-msgstr "%s (sao chép)"
+msgstr "%s (bản sao)"
 
 #. module: sms
 #. odoo-python
@@ -103,12 +103,10 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_view_form
 msgid ""
 "<span class=\"o_stat_text\">Add</span>\n"
-"                                <span class=\"o_stat_text\">Context Action</"
-"span>"
+"                                <span class=\"o_stat_text\">Context Action</span>"
 msgstr ""
 "<span class=\"o_stat_text\">Thêm</span>\n"
-"                                <span class=\"o_stat_text\">Tác vụ theo ngữ "
-"cảnh</span>"
+"                                <span class=\"o_stat_text\">Hành động ngữ cảnh</span>"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_view_form
@@ -119,17 +117,14 @@ msgstr "<span class=\"o_stat_text\">Xem trước</span>"
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_view_form
 msgid ""
 "<span class=\"o_stat_text\">Remove</span>\n"
-"                                <span class=\"o_stat_text\">Context Action</"
-"span>"
+"                                <span class=\"o_stat_text\">Context Action</span>"
 msgstr ""
 "<span class=\"o_stat_text\">Gỡ bỏ</span>\n"
-"                               <span class=\"o_stat_text\">Tác vụ theo ngữ "
-"cảnh</span>"
+"                                <span class=\"o_stat_text\">Hành động ngữ cảnh</span>"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_preview_form
-msgid ""
-"<span class=\"text-warning\" invisible=\"not no_record\">No records</span>"
+msgid "<span class=\"text-warning\" invisible=\"not no_record\">No records</span>"
 msgstr ""
 "<span class=\"text-warning\" invisible=\"not no_record\">Không có bản ghi "
 "nào</span>"
@@ -138,40 +133,30 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sms.ir_actions_server_view_form
 msgid ""
 "<span invisible=\"sms_method != 'sms'\">\n"
-"                                The message will be sent as an SMS to the "
-"recipients of the template\n"
-"                                and will not appear in the messaging "
-"history.\n"
+"                                The message will be sent as an SMS to the recipients of the template\n"
+"                                and will not appear in the messaging history.\n"
 "                            </span>\n"
 "                            <span invisible=\"sms_method != 'note'\">\n"
-"                                The SMS will not be sent, it will only be "
-"posted as an\n"
+"                                The SMS will not be sent, it will only be posted as an\n"
 "                                internal note in the messaging history.\n"
 "                            </span>\n"
 "                            <span invisible=\"sms_method != 'comment'\">\n"
-"                                The SMS will be sent as an SMS to the "
-"recipients of the\n"
-"                                template and it will also be posted as an "
-"internal note\n"
+"                                The SMS will be sent as an SMS to the recipients of the\n"
+"                                template and it will also be posted as an internal note\n"
 "                                in the messaging history.\n"
 "                            </span>"
 msgstr ""
 "<span invisible=\"sms_method != 'sms'\">\n"
-"                                Tin nhắn sẽ được gửi tới người nhận mẫu dưới "
-"dạng SMS\n"
-"                                và sẽ không xuất hiện trong lịch sử nhắn "
-"tin.\n"
+"                                Tin nhắn sẽ được gửi tới người nhận mẫu dưới dạng SMS\n"
+"                                và sẽ không xuất hiện trong lịch sử nhắn tin.\n"
 "                            </span>\n"
 "                            <span invisible=\"sms_method != 'note'\">\n"
-"                                Tin nhắn sẽ không được gửi mà chỉ được đăng "
-"dưới dạng\n"
+"                                Tin nhắn sẽ không được gửi mà chỉ được đăng dưới dạng\n"
 "                                ghi chú nội bộ trong lịch sử nhắn tin.\n"
 "                            </span>\n"
 "                            <span invisible=\"sms_method != 'comment'\">\n"
-"                                Tin nhắn sẽ được gửi tới người nhận mẫu dưới "
-"dạng SMS\n"
-"                                và cũng sẽ được đăng dưới dạng ghi chú nội "
-"bộ \n"
+"                                Tin nhắn sẽ được gửi tới người nhận mẫu dưới dạng SMS\n"
+"                                và cũng sẽ được đăng dưới dạng ghi chú nội bộ \n"
 "                                trong lịch sử nhắn tin.\n"
 "                            </span>"
 
@@ -204,7 +189,7 @@ msgstr "Tài khoản"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_needaction
 msgid "Action Needed"
-msgstr "Tác vụ cần thiết"
+msgstr "Cần có hành động"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_view_form
@@ -255,13 +240,13 @@ msgid ""
 "Are you sure you want to reset these sms templates to their original "
 "configuration? Changes and translations will be lost."
 msgstr ""
-"Bạn có chắc chắn muốn đặt lại các mẫu SMS này về cấu hình ban đầu không? Các "
-"thay đổi và bản dịch sẽ bị mất."
+"Bạn có chắc chắn muốn đặt lại các mẫu SMS này về cấu hình ban đầu không? Các"
+" thay đổi và bản dịch sẽ bị mất."
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_attachment_count
 msgid "Attachment Count"
-msgstr "Số lượng tệp đính kèm"
+msgstr "SL tệp đính kèm"
 
 #. module: sms
 #: model:ir.model,name:sms.model_base
@@ -271,17 +256,17 @@ msgstr "Cơ sở"
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__sms_sms__failure_type__sms_blacklist
 msgid "Blacklisted"
-msgstr "Đã hạn chế"
+msgstr "Bị vào sổ đen"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__mobile_blacklisted
 msgid "Blacklisted Phone Is Mobile"
-msgstr "Số điện thoại bị hạn chế là số di động"
+msgstr "Số điện thoại vào sổ đen là di động"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__phone_blacklisted
 msgid "Blacklisted Phone is Phone"
-msgstr "Số điện thoại bị hạn chế là số điện thoại bàn"
+msgstr "Số điện thoại vào sổ đen là điện thoại thường"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_sms__body
@@ -299,7 +284,7 @@ msgstr "Mua tín dụng"
 #. odoo-python
 #: code:addons/sms/tools/sms_api.py:0
 msgid "Buy credits."
-msgstr "Mua tín dụng. "
+msgstr "Mua tín dụng."
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_resend__can_cancel
@@ -406,7 +391,7 @@ msgstr "Yêu cầu đăng ký theo quốc gia cụ thể"
 #: model:ir.model.fields,field_description:sms.field_sms_template_reset__create_uid
 #: model:ir.model.fields,field_description:sms.field_sms_tracker__create_uid
 msgid "Created by"
-msgstr "Được tạo bởi"
+msgstr "Tạo bởi"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_account_code__create_date
@@ -421,7 +406,7 @@ msgstr "Được tạo bởi"
 #: model:ir.model.fields,field_description:sms.field_sms_template_reset__create_date
 #: model:ir.model.fields,field_description:sms.field_sms_tracker__create_date
 msgid "Created on"
-msgstr "Được tạo vào"
+msgstr "Tạo vào"
 
 #. module: sms
 #: model:iap.service,unit_name:sms.iap_service_sms
@@ -451,7 +436,7 @@ msgstr "Đã giao"
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_preview_form
 msgid "Discard"
-msgstr "Huỷ bỏ"
+msgstr "Huỷ"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_account_code__display_name
@@ -471,7 +456,7 @@ msgstr "Tên hiển thị"
 #. module: sms
 #: model:ir.model,name:sms.model_mail_followers
 msgid "Document Followers"
-msgstr "Người theo dõi Tài liệu"
+msgstr "Người theo dõi tài liệu"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__res_id
@@ -481,7 +466,7 @@ msgstr "ID tài liệu"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__res_ids
 msgid "Document IDs"
-msgstr "ID tài liệu"
+msgstr "Document ids"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__res_model_description
@@ -491,7 +476,7 @@ msgstr "Mô tả mô hình tài liệu"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__res_model
 msgid "Document Model Name"
-msgstr "Tên Mô hình tài liệu"
+msgstr "Tên model tài liệu"
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__sms_sms__failure_type__sms_duplicate
@@ -506,7 +491,7 @@ msgstr "Sửa đối tác"
 #. module: sms
 #: model:ir.model,name:sms.model_mail_thread
 msgid "Email Thread"
-msgstr "Luồng email"
+msgstr "Luồng Email"
 
 #. module: sms
 #. odoo-javascript
@@ -542,7 +527,7 @@ msgstr "Loại lỗi"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_mail_notification__failure_type
 msgid "Failure type"
-msgstr "Loại thất bại"
+msgstr "Kiểu thất bại"
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_res_partner__phone_sanitized
@@ -550,12 +535,13 @@ msgid ""
 "Field used to store sanitized phone number. Helps speeding up searches and "
 "comparisons."
 msgstr ""
-"Trường được sử dụng để chứa số điện thoại được làm sạch. Giúp tăng tốc tìm "
-"kiếm và so sánh. "
+"Trường được sử dụng để lưu trữ số điện thoại đã qua xử lý. Giúp tăng tốc tìm"
+" kiếm và so sánh."
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_sms_template__template_fs
-msgid "File from where the template originates. Used to reset broken template."
+msgid ""
+"File from where the template originates. Used to reset broken template."
 msgstr "Tệp từ nơi hình thành mẫu. Được sử dụng để thiết lập lại mẫu bị hỏng."
 
 #. module: sms
@@ -566,7 +552,7 @@ msgstr "Người theo dõi"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_partner_ids
 msgid "Followers (Partners)"
-msgstr "Người theo dõi (Đối tác)"
+msgstr "Người theo dõi (đối tác)"
 
 #. module: sms
 #. odoo-python
@@ -577,12 +563,12 @@ msgstr "Các số sau được nhập chưa chính xác: %s"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_resend__has_insufficient_credit
 msgid "Has Insufficient Credit"
-msgstr "Không đủ tín dụng"
+msgstr "Has insufficient credit"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__has_message
 msgid "Has Message"
-msgstr "Có tin nhắn"
+msgstr "Có thông điệp"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_mail_mail__has_sms_error
@@ -593,7 +579,7 @@ msgstr "Có lỗi SMS"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_resend__has_unregistered_account
 msgid "Has Unregistered Account"
-msgstr "Có tài khoản chưa đăng ký"
+msgstr "Has unregistered account"
 
 #. module: sms
 #: model:ir.model,name:sms.model_iap_account
@@ -618,7 +604,7 @@ msgstr "ID"
 #. module: sms
 #: model:ir.model.fields,help:sms.field_res_partner__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr "Nếu chọn, bạn cần chú ý tới các tin nhắn mới."
+msgstr "Nếu được đánh dấu, các thông điệp mới sẽ cần bạn xem xét."
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_account_analytic_account__message_has_sms_error
@@ -653,16 +639,16 @@ msgstr "Nếu chọn, bạn cần chú ý tới các tin nhắn mới."
 #: model:ir.model.fields,help:sms.field_res_partner__message_has_sms_error
 #: model:ir.model.fields,help:sms.field_res_users__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr "Nếu chọn, một số tin nhắn sẽ có lỗi gửi."
+msgstr "Nếu được đánh dấu, một số thông điệp đã gặp lỗi khi gửi đi."
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_res_partner__phone_sanitized_blacklisted
 msgid ""
-"If the sanitized phone number is on the blacklist, the contact won't receive "
-"mass mailing sms anymore, from any list"
+"If the sanitized phone number is on the blacklist, the contact won't receive"
+" mass mailing sms anymore, from any list"
 msgstr ""
-"Nếu số điện thoại được làm sạch nằm trong danh sách hạn chế, thì liên hệ sẽ "
-"không nhận được sms hàng loạt từ bất kỳ danh sách nào nữa"
+"Nếu số điện thoại được làm sạch nằm trong danh sách đen, thì liên hệ sẽ "
+"không nhận được sms gửi thư hàng loạt nữa, từ bất kỳ danh sách nào"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.mail_resend_message_view_form
@@ -681,9 +667,9 @@ msgid ""
 "distinguish which number is blacklisted             when there is both a "
 "mobile and phone field in a model."
 msgstr ""
-"Cho biết số điện thoại được làm sạch trong danh sách hạn chế có phải là số "
-"di động hay không. Giúp phân biệt số nào bị hạn chế             khi có cả "
-"trường di động và trường điện thoại bàn trong một mô hình."
+"Cho biết số điện thoại được xử lý trong danh sách đen có phải là số di động "
+"hay không. Giúp phân biệt số nào nằm trong danh sách đen             khi có "
+"cả trường di động và trường điện thoại trong đối tượng."
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_res_partner__phone_blacklisted
@@ -692,16 +678,16 @@ msgid ""
 "distinguish which number is blacklisted             when there is both a "
 "mobile and phone field in a model."
 msgstr ""
-"Cho biết số điện thoại được làm sạch trong danh sách hạn chế có phải là số "
-"điện thoại bàn hay không. Giúp phân biệt số nào bị hạn chế             khi "
-"có cả trường di động và trường điện thoại bàn trong một mô hình."
+"Cho biết số điện thoại đã được xử lý trong danh sách đen có phải là số điện "
+"thoại hay không. Giúp phân biệt số nào nằm trong danh sách đen             "
+"khi có cả trường di động và điện thoại trong một đối tượng."
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_sms_composer__comment_single_recipient
 msgid "Indicates if the SMS composer targets a single specific recipient"
 msgstr ""
-"Cho biết liệu trình soạn thảo SMS có nhắm mục tiêu đến một người nhận cụ thể "
-"hay không"
+"Cho biết liệu trình soạn thảo SMS có nhắm mục tiêu đến một người nhận cụ thể"
+" hay không"
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__mail_notification__failure_type__sms_credit
@@ -730,12 +716,12 @@ msgstr ""
 #. odoo-python
 #: code:addons/sms/wizard/sms_composer.py:0
 msgid "Invalid recipient number. Please update it."
-msgstr "Số người nhận không hợp lệ. Hãy cập nhật lại."
+msgstr "Số điện thoại người nhận không hợp lệ. Vui lòng cập nhật lại."
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_is_follower
 msgid "Is Follower"
-msgstr "Là người theo dõi"
+msgstr "Đang theo dõi"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__recipient_single_valid
@@ -790,7 +776,7 @@ msgstr "Liên kết SMS với các mô hình theo dõi thư/sms"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_sms__mail_message_id
 msgid "Mail Message"
-msgstr "Nội dung email"
+msgstr "Mail message"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_tracker__mail_notification_id
@@ -800,7 +786,7 @@ msgstr "Thông báo thư"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_ir_model__is_mail_thread_sms
 msgid "Mail Thread SMS"
-msgstr "SMS luồng thư"
+msgstr "Mail thread SMS"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_sms__to_delete
@@ -813,12 +799,12 @@ msgstr "Được đánh dấu để xoá"
 #: model:ir.model.fields,field_description:sms.field_sms_resend__mail_message_id
 #: model_terms:ir.ui.view,arch_db:sms.sms_tsms_view_form
 msgid "Message"
-msgstr "Tin nhắn"
+msgstr "Thông điệp"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_has_error
 msgid "Message Delivery error"
-msgstr "Lỗi gửi tin nhắn"
+msgstr "Có lỗi gửi thông điệp"
 
 #. module: sms
 #: model:ir.model,name:sms.model_mail_notification
@@ -828,18 +814,18 @@ msgstr "Thông báo thông điệp"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_ids
 msgid "Messages"
-msgstr "Tin nhắn"
+msgstr "Thông điệp"
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__mail_notification__failure_type__sms_number_missing
 #: model:ir.model.fields.selection,name:sms.selection__sms_sms__failure_type__sms_number_missing
 msgid "Missing Number"
-msgstr "Thiếu số điện thoại"
+msgstr "Số bị thiếu"
 
 #. module: sms
 #: model:ir.model,name:sms.model_ir_model
 msgid "Models"
-msgstr "Mô hình"
+msgstr "Mẫu"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_template__name
@@ -893,7 +879,7 @@ msgstr "Số"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__number_field_name
 msgid "Number Field"
-msgstr "Trường số"
+msgstr "Number field"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_needaction_counter
@@ -908,38 +894,38 @@ msgstr "Số lượng lỗi"
 #. module: sms
 #: model:ir.model.fields,help:sms.field_res_partner__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr "Số tin nhắn cần xử lý"
+msgstr "Số thông điệp cần có hành động"
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_res_partner__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr "Số tin nhắn bị gửi lỗi"
+msgstr "Số thông điệp có lỗi khi gửi đi"
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_sms_composer__res_ids_count
 msgid ""
-"Number of recipients that will receive the SMS if sent in mass mode, without "
-"applying the Active Domain value"
+"Number of recipients that will receive the SMS if sent in mass mode, without"
+" applying the Active Domain value"
 msgstr ""
 "Số người nhận sẽ nhận được SMS nếu được gửi ở chế độ hàng loạt khi không áp "
-"dụng giá trị Miền hoạt động"
+"dụng giá trị miền hoạt động"
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__sms_sms__failure_type__sms_optout
 msgid "Opted Out"
-msgstr "Hủy tham gia"
+msgstr "Hủy đăng ký nhận tin"
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_sms_template__lang
 msgid ""
 "Optional translation language (ISO code) to select when sending out an "
 "email. If not set, the english version will be used. This should usually be "
-"a placeholder expression that provides the appropriate language, e.g. "
-"{{ object.partner_id.lang }}."
+"a placeholder expression that provides the appropriate language, e.g. {{ "
+"object.partner_id.lang }}."
 msgstr ""
-"Ngôn ngữ dịch tuỳ chọn (mã ISO) để chọn khi gửi email. Nếu không đặt, phiên "
-"bản tiếng Anh sẽ được sử dụng. Đây luôn là biểu thức phần giữ chỗ cung cấp "
-"ngôn ngữ thích hợp, VD: {{ object.partner_id.lang }}."
+"Tùy chọn ngôn ngữ dịch (mã ISO) khi gửi đi email. Nếu không đặt, phiên bản "
+"tiếng Anh sẽ được sử dụng. Đây thường là một biểu thức giữ chỗ cung cấp ngôn"
+" ngữ phù hợp, ví dụ: {{ object.partner_id.lang }}."
 
 #. module: sms
 #: model:ir.model,name:sms.model_sms_sms
@@ -954,7 +940,7 @@ msgstr "Đối tác"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__phone_sanitized_blacklisted
 msgid "Phone Blacklisted"
-msgstr "Số điện thoại hạn chế"
+msgstr "Số điện thoại đã vào sổ đen"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_account_phone__phone_number
@@ -968,18 +954,18 @@ msgid ""
 "Phone number of the recipient. If changed, it will be recorded on "
 "recipient's profile."
 msgstr ""
-"Số điện thoại của người nhận. Nếu thay đổi sẽ được ghi lại trong hồ sơ người "
-"nhận."
+"Số điện thoại của người nhận. Nếu thay đổi sẽ được ghi lại trong hồ sơ người"
+" nhận."
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__phone_mobile_search
 msgid "Phone/Mobile"
-msgstr "Điện thoại/di động"
+msgstr "Di động/Điện thoại"
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__sms_composer__composition_mode__comment
 msgid "Post on a document"
-msgstr "Đưa vào tài liệu"
+msgstr "Đăng vào tài liệu"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_preview_form
@@ -1025,7 +1011,7 @@ msgstr "Tên người nhận"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__recipient_single_number_itf
 msgid "Recipient Number"
-msgstr "Số người nhận"
+msgstr "Recipient number"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_resend__recipient_ids
@@ -1035,12 +1021,12 @@ msgstr "Người nhận"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__numbers
 msgid "Recipients (Numbers)"
-msgstr "Người nhận (Số)"
+msgstr "Recipients (numbers)"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__recipient_single_description
 msgid "Recipients (Partners)"
-msgstr "Người nhận (Đối tác)"
+msgstr "Recipients (partners)"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_template_preview__resource_ref
@@ -1079,7 +1065,7 @@ msgstr "Bị từ chối"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_template__model
 msgid "Related Document Model"
-msgstr "Mô hình tài liệu liên quan"
+msgstr "Model tài liệu liên quan"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_view_form
@@ -1193,7 +1179,7 @@ msgstr "Công cụ mã xác minh"
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_has_sms_error
 #: model:ir.model.fields,field_description:sms.field_res_users__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr "Lỗi gửi SMS"
+msgstr "Có lỗi gửi SMS"
 
 #. module: sms
 #. odoo-javascript
@@ -1215,18 +1201,18 @@ msgstr "ID SMS"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_mail_notification__sms_number
 msgid "SMS Number"
-msgstr "Số SMS"
+msgstr "SMS number"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_preview_form
 msgid "SMS Preview"
-msgstr "Xem trước SMS"
+msgstr "SMS preview"
 
 #. module: sms
 #. odoo-javascript
 #: code:addons/sms/static/src/components/sms_widget/fields_sms_widget.xml:0
 msgid "SMS Pricing"
-msgstr "Giá SMS"
+msgstr "SMS pricing"
 
 #. module: sms
 #: model:ir.model,name:sms.model_sms_resend
@@ -1236,7 +1222,7 @@ msgstr "Gửi lại SMS"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_sms__state
 msgid "SMS Status"
-msgstr "Trạng thái SMS"
+msgstr "SMS status"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_ir_actions_server__sms_template_id
@@ -1284,7 +1270,7 @@ msgstr "Nội dung SMS"
 #. odoo-python
 #: code:addons/sms/models/ir_actions_server.py:0
 msgid "SMS template model of %(action_name)s does not match action model."
-msgstr "Mô hình mẫu SMS của %(action_name)s không khớp với mô hình tác vụ."
+msgstr "Mô hình mẫu SMS của %(action_name)s không khớp với mô hình hành động."
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_sms__sms_tracker_id
@@ -1299,19 +1285,19 @@ msgstr "Uuid SMS"
 #. module: sms
 #: model:ir.actions.server,name:sms.ir_cron_sms_scheduler_action_ir_actions_server
 msgid "SMS: SMS Queue Manager"
-msgstr "SMS: Trình quản lý hàng đợi SMS"
+msgstr "SMS: Quản lý hàng đợi SMS"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__phone_sanitized
 #: model:ir.model.fields,field_description:sms.field_sms_composer__sanitized_numbers
 msgid "Sanitized Number"
-msgstr "Số đã làm sạch "
+msgstr "Số đã xử lý / làm sạch"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_sms_view_search
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_view_search
 msgid "Search SMS Templates"
-msgstr "Tìm kiếm mẫu SMS"
+msgstr "Search SMS templates"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.mail_resend_message_view_form
@@ -1408,7 +1394,7 @@ msgstr "Đã gửi"
 #. module: sms
 #: model:ir.model,name:sms.model_ir_actions_server
 msgid "Server Action"
-msgstr "Tác vụ phía máy chủ"
+msgstr "Tác vụ phía Máy chủ"
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__mail_notification__failure_type__sms_server
@@ -1437,13 +1423,13 @@ msgid ""
 "Sidebar action to make this template available on records of the related "
 "document model"
 msgstr ""
-"Tác vụ thanh bên để mẫu này khả dụng trong bản ghi của mô hình tài liệu liên "
-"quan"
+"Tác vụ thanh bên để mẫu này khả dụng trong bản ghi của mô hình tài liệu liên"
+" quan"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__comment_single_recipient
 msgid "Single Mode"
-msgstr "Chế độ đơn"
+msgstr "Single mode"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_account_sender_view_form
@@ -1453,17 +1439,17 @@ msgstr "Tạm bỏ qua"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_resend_recipient__sms_resend_id
 msgid "Sms Resend"
-msgstr "Gửi lại SMS"
+msgstr "Sms resend"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_template_preview__sms_template_id
 msgid "Sms Template"
-msgstr "Mẫu SMS"
+msgstr "Sms template"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__recipient_single_number
 msgid "Stored Recipient Number"
-msgstr "Số người nhận được lưu trữ"
+msgstr "Stored recipient number"
 
 #. module: sms
 #. odoo-python
@@ -1484,7 +1470,7 @@ msgstr "Tên tệp mẫu"
 #. module: sms
 #: model:ir.actions.act_window,name:sms.sms_template_preview_action
 msgid "Template Preview"
-msgstr "Xem trước Mẫu"
+msgstr "Xem trước mẫu"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_template_preview__lang
@@ -1494,7 +1480,7 @@ msgstr "Ngôn ngữ mẫu xem trước"
 #. module: sms
 #: model:ir.actions.act_window,name:sms.sms_template_action
 msgid "Templates"
-msgstr "Mẫu"
+msgstr "Các mẫu"
 
 #. module: sms
 #. odoo-python
@@ -1572,8 +1558,8 @@ msgstr "Đây là tên sẽ được hiển thị là người gửi tin nhắn 
 msgid ""
 "This phone number is blacklisted for SMS Marketing. Click to unblacklist."
 msgstr ""
-"Số điện thoại này được đưa vào danh sách hạn chế SMS Marketing. Bấm để loại "
-"khỏi danh sách hạn chế. "
+"Số điện thoại này được đưa vào danh sách đen cho SMS Marketing. Nhấp để bỏ "
+"danh sách đen."
 
 #. module: sms
 #. odoo-python
@@ -1602,27 +1588,21 @@ msgid ""
 "- 'Update a Record': update the values of a record\n"
 "- 'Create Activity': create an activity (Discuss)\n"
 "- 'Send Email': post a message, a note or send an email (Discuss)\n"
-"- 'Send SMS': send SMS, log them on documents (SMS)- 'Add/Remove Followers': "
-"add or remove followers to a record (Discuss)\n"
+"- 'Send SMS': send SMS, log them on documents (SMS)- 'Add/Remove Followers': add or remove followers to a record (Discuss)\n"
 "- 'Create Record': create a new record with new values\n"
 "- 'Execute Code': a block of Python code that will be executed\n"
-"- 'Send Webhook Notification': send a POST request to an external system, "
-"also known as a Webhook\n"
-"- 'Execute Existing Actions': define an action that triggers several other "
-"server actions\n"
+"- 'Send Webhook Notification': send a POST request to an external system, also known as a Webhook\n"
+"- 'Execute Existing Actions': define an action that triggers several other server actions\n"
 msgstr ""
 "Loại tác vụ máy chủ. Các giá trị sau đây khả dụng:\n"
 "- 'Cập nhật bản ghi': cập nhật giá trị của bản ghi\n"
 "- 'Tạo hoạt động': tạo một hoạt động (Thảo luận)\n"
 "- 'Gửi email': gửi tin nhắn, ghi chú hoặc email (Thảo luận)\n"
-"- 'Gửi SMS': gửi SMS, thêm chúng vào tài liệu (SMS)- 'Thêm/Xóa người theo "
-"dõi': thêm hoặc xóa người theo dõi vào/khỏi một bản ghi (Thảo luận)\n"
+"- 'Gửi SMS': gửi SMS, thêm chúng vào tài liệu (SMS)- 'Thêm/Xóa người theo dõi': thêm hoặc xóa người theo dõi vào/khỏi một bản ghi (Thảo luận)\n"
 "- 'Tạo bản ghi': tạo một bản ghi mới với các giá trị mới\n"
 "- 'Thực thi mã': một khối mã Python sẽ được thực thi\n"
-"- 'Gửi thông báo Webhook': gửi yêu cầu POST tới hệ thống bên ngoài, hay còn "
-"gọi là Webhook\n"
-"- 'Thực thi tác vụ hiện có': xác định một tác vụ kích hoạt một số tác vụ máy "
-"chủ khác\n"
+"- 'Gửi thông báo Webhook': gửi yêu cầu POST tới hệ thống bên ngoài, hay còn gọi là Webhook\n"
+"- 'Thực thi tác vụ hiện có': xác định một tác vụ kích hoạt một số tác vụ máy chủ khác\n"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_sms__uuid
@@ -1648,7 +1628,7 @@ msgstr "Tài khoản chưa đăng ký"
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__template_id
 msgid "Use Template"
-msgstr "Sử dụng mẫu"
+msgstr "Use template"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__mass_use_blacklist
@@ -1664,14 +1644,12 @@ msgid ""
 "'comment': generated by user input e.g. through discuss or composer\n"
 "'email_outgoing': generated by a mailing\n"
 "'notification': generated by system e.g. tracking messages\n"
-"'auto_comment': generated by automated notification mechanism e.g. "
-"acknowledgment\n"
+"'auto_comment': generated by automated notification mechanism e.g. acknowledgment\n"
 "'user_notification': generated for a specific recipient"
 msgstr ""
 "Được sử dụng để phân loại trình tạo tin nhắn\n"
 "'email': được tạo bởi một email đến, VD: cổng thư\n"
-"'bình luận': được tạo bởi thông tin người dùng nhập vào, VD: thông qua thảo "
-"luận hoặc trình soạn thảo\n"
+"'bình luận': được tạo bởi thông tin người dùng nhập vào, VD: thông qua thảo luận hoặc trình soạn thảo\n"
 "'email_outgoing': được tạo bằng cách gửi thư\n"
 "'thông báo': được tạo bởi hệ thống, VD: theo dõi tin nhắn\n"
 "'auto_comment': được tạo bởi cơ chế thông báo tự động, VD: báo nhận\n"
@@ -1698,7 +1676,8 @@ msgstr "Cảnh báo"
 #: code:addons/sms/tools/sms_api.py:0
 msgid "We were not able to find your account in our database."
 msgstr ""
-"Chúng tôi không tìm thấy tài khoản của bạn trong cơ sở dữ liệu của chúng tôi."
+"Chúng tôi không tìm thấy tài khoản của bạn trong cơ sở dữ liệu của chúng "
+"tôi."
 
 #. module: sms
 #. odoo-python
@@ -1713,12 +1692,12 @@ msgstr ""
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__website_message_ids
 msgid "Website Messages"
-msgstr "Thông báo trên trang web"
+msgstr "Thông báo Website"
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_res_partner__website_message_ids
 msgid "Website communication history"
-msgstr "Lịch sử trao đổi qua trang web"
+msgstr "Lịch sử thông tin liên lạc website"
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_ir_model__is_mail_thread_sms
@@ -1731,13 +1710,14 @@ msgid ""
 "Will automatically be deleted, while notifications will not be deleted in "
 "any case."
 msgstr ""
-"Sẽ tự động bị xóa, còn thông báo sẽ không bị xóa trong bất kỳ trường hợp nào."
+"Sẽ tự động bị xóa, còn thông báo sẽ không bị xóa trong bất kỳ trường hợp "
+"nào."
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__mail_notification__failure_type__sms_number_format
 #: model:ir.model.fields.selection,name:sms.selection__sms_sms__failure_type__sms_number_format
 msgid "Wrong Number Format"
-msgstr "Định dạng số sai"
+msgstr "Số không đúng định dạng"
 
 #. module: sms
 #. odoo-python
@@ -1791,15 +1771,11 @@ msgstr ""
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_account_sender_view_form
 msgid ""
-"Your sender name must be between 3 and 11 characters long and only contain "
-"alphanumeric characters.\n"
-"                        It must fit your company name, and you aren't "
-"allowed to modify it once you registered one, choose it carefully."
+"Your sender name must be between 3 and 11 characters long and only contain alphanumeric characters.\n"
+"                        It must fit your company name, and you aren't allowed to modify it once you registered one, choose it carefully."
 msgstr ""
-"Tên người gửi của bạn phải dài từ 3 đến 11 ký tự và chỉ được chứa các ký tự "
-"chữ và số.\n"
-"Tên này phải phù hợp với tên công ty của bạn và bạn không được phép sửa đổi "
-"tên sau khi đã đăng ký, vậy nên hãy chọn tên thật cẩn thận."
+"Tên người gửi của bạn phải dài từ 3 đến 11 ký tự và chỉ được chứa các ký tự chữ và số.\n"
+"Tên này phải phù hợp với tên công ty của bạn và bạn không được phép sửa đổi tên sau khi đã đăng ký, vậy nên hãy chọn tên thật cẩn thận."
 
 #. module: sms
 #. odoo-python
