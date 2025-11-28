@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 import functools
+import logging
+import traceback
 
 from odoo import _
 from odoo.exceptions import AccessError
 from odoo.http import Controller, route, request, Response
+
+_logger = logging.getLogger(__name__)
 
 
 class ImportModule(Controller):
@@ -20,4 +24,5 @@ class ImportModule(Controller):
                 return request.env['ir.module.module']._import_zipfile(mod_file, force=force == '1')[0]
             raise AccessError(_("Only administrators can upload a module"))
         except Exception as e:
+            _logger.error(traceback.format_exc())
             return Response(response=str(e), status=500)
