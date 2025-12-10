@@ -276,6 +276,84 @@ class TestLeaveRequests(TestHrHolidaysCommon):
         })
         leave_wizard.action_generate_time_off()
 
+    @users('Titus')
+    def test_create_conflicting_group_leave_without_hr_right(self):
+        employee_1, employee_2 = self.env['hr.employee'].sudo().create([
+            {
+                'name': 'Emp1',
+                'leave_manager_id': self.user_responsible_id,
+            }, {
+                'name': 'Emp2',
+                'leave_manager_id': self.user_responsible_id,
+            },
+        ])
+        leave_wizard = self.env['hr.leave.generate.multi.wizard'].create({
+            'holiday_status_id': self.holidays_type_1.id,
+            'date_from': date(2019, 5, 6),
+            'date_to': date(2019, 5, 8),
+            'employee_ids': (employee_1 + employee_2).ids,
+        })
+        leave_wizard.action_generate_time_off()
+        leave_wizard = self.env['hr.leave.generate.multi.wizard'].create({
+            'holiday_status_id': self.holidays_type_1.id,
+            'date_from': date(2019, 5, 7),
+            'date_to': date(2019, 5, 9),
+            'employee_ids': (employee_1 + employee_2).ids,
+        })
+        leave_wizard.action_generate_time_off()
+
+    @users('Titus')
+    def test_create_group_leave_form_allocation_mode_without_hr_right(self):
+        employee_1, employee_2, employee_3 = self.env['hr.employee'].sudo().create([
+            {
+                'name': 'Emp1',
+                'leave_manager_id': self.user_responsible_id,
+            }, {
+                'name': 'Emp2',
+                'leave_manager_id': self.user_responsible_id,
+            }, {
+                'name': 'Emp3',
+            },
+        ])
+        leave_wizard = self.env['hr.leave.generate.multi.wizard'].create({
+            'holiday_status_id': self.holidays_type_1.id,
+            'date_from': date(2019, 5, 6),
+            'date_to': date(2019, 5, 6),
+            'allocation_mode': 'employee',
+        })
+        leave_wizard.action_generate_time_off()
+        generated_leaves = self.env['hr.leave'].search([
+            ('employee_id', 'in', (employee_1 + employee_2 + employee_3).ids),
+            ('holiday_status_id', '=', self.holidays_type_1.id),
+        ])
+        self.assertEqual(len(generated_leaves), 2, "Only 2 leaves should be generated")
+
+    @users('Titus')
+    def test_create_differnt_calendars_group_leave_without_hr_right(self):
+        flexible_calendar = self.env['resource.calendar'].sudo().create({
+            'name': 'flexible calendar',
+            'flexible_hours': True,
+            'full_time_required_hours': 21,
+            'hours_per_day': 3,
+        })
+        employee_1, employee_2 = self.env['hr.employee'].sudo().create([
+            {
+                'name': 'Emp1',
+                'leave_manager_id': self.user_responsible_id,
+            }, {
+                'name': 'Emp2',
+                'leave_manager_id': self.user_responsible_id,
+                'resource_calendar_id': flexible_calendar.id,
+            },
+        ])
+        leave_wizard = self.env['hr.leave.generate.multi.wizard'].create({
+            'holiday_status_id': self.holidays_type_1.id,
+            'date_from': date(2019, 5, 6),
+            'date_to': date(2019, 5, 8),
+            'employee_ids': (employee_1 + employee_2).ids,
+        })
+        leave_wizard.action_generate_time_off()
+
     @mute_logger('odoo.models.unlink', 'odoo.addons.mail.models.mail_mail')
     def test_allocation_request(self):
         """ Create an allocation request """
@@ -2029,3 +2107,11 @@ class TestLeaveRequests(TestHrHolidaysCommon):
 
         # Assert the manager can approve the leave request assign to portal employee
         leave.with_user(self.user_hrmanager_id).action_approve()
+
+    def test_set_employee_on_leave_req_without_start_date(self):
+        """Test setting the employee on a leave request without a start date."""
+        leave_req_form = Form(self.env['hr.leave'].with_user(self.user_hrmanager_id))
+        leave_req_form.request_date_from = False
+        leave_req_form.employee_id = self.employee_responsible
+
+        self.assertFalse(leave_req_form.can_approve)

@@ -227,7 +227,10 @@ class ProductProduct(models.Model):
             return self.standard_price
         if (product_value and last_in and product_value.date > last_in.date) or not last_in:
             return product_value.value
-        return last_in._get_value(at_date=date) / last_in._get_valued_qty()
+        valued_qty = last_in._get_valued_qty()
+        if not valued_qty:
+            return self.standard_price
+        return last_in._get_value(at_date=date) / valued_qty
 
     def _get_value_from_lots(self):
         lots = self.env['stock.lot'].search([
@@ -395,6 +398,9 @@ class ProductProduct(models.Model):
             fifo_stack_size = lot.product_qty
         else:
             fifo_stack_size = self._with_valuation_context().with_context(to_date=at_date).qty_available
+        if self.env.context.get('fifo_qty_already_processed'):
+            # When validating multiple moves at the same time, the qty_available won't be up to date yet
+            fifo_stack_size -= self.env.context['fifo_qty_already_processed']
         if self.uom_id.compare(fifo_stack_size, 0) <= 0:
             return fifo_stack, 0
 

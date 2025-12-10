@@ -60,6 +60,7 @@ export class Message extends Record {
         },
     });
     composer = fields.One("Composer", { inverse: "message", onDelete: (r) => r.delete() });
+    composerAsReplyToMessage = fields.One("Composer", { inverse: "replyToMessage" });
     date = fields.Datetime();
     /** @type {string} */
     default_subject;
@@ -320,7 +321,7 @@ export class Message extends Record {
     }
 
     get hasTextContent() {
-        return !this.isBodyEmpty;
+        return !this.isBodyEmpty || this.edited;
     }
 
     isEmpty = fields.Attr(false, {
