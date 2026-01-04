@@ -184,12 +184,12 @@ export class CalendarCommonRenderer extends Component {
         return `[data-event-id="${event.id}"]`;
     }
     highlightEvent(event, className) {
-        for (const el of this.fc.el.querySelectorAll(this.computeEventSelector(event))) {
+        for (const el of this.fc.api.el.querySelectorAll(this.computeEventSelector(event))) {
             el.classList.add(className);
         }
     }
     unhighlightEvent(event, className) {
-        for (const el of this.fc.el.querySelectorAll(this.computeEventSelector(event))) {
+        for (const el of this.fc.api.el.querySelectorAll(this.computeEventSelector(event))) {
             el.classList.remove(className);
         }
     }
@@ -252,8 +252,7 @@ export class CalendarCommonRenderer extends Component {
     onEventContent(arg) {
         const { event } = arg;
         if (event.start && event.end) {
-            const dateFmt = (date) =>
-                luxon.DateTime.fromJSDate(date).toFormat(this.timeFormat);
+            const dateFmt = (date) => luxon.DateTime.fromJSDate(date).toFormat(this.timeFormat);
             arg.timeText = `${dateFmt(event.start)} - ${dateFmt(event.end)}`;
         }
         const record = this.props.model.records[event.id];

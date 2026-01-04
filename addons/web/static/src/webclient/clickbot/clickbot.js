@@ -386,9 +386,9 @@ async function testViews() {
                 triggerClick(target, `${viewType} view switcher`);
             }
         }, 250);
-        await waitForCondition(() => {
-            return document.querySelector(`.o_switch_view.o_${viewType}.active`) !== null;
-        });
+        await waitForCondition(
+            () => document.querySelector(`.o_switch_view.o_${viewType}.active`) !== null
+        );
         await testStudio();
         await testFilters();
     }
@@ -494,6 +494,7 @@ async function _clickEverywhere(xmlId, light, currentState) {
     const startTime = performance.now();
     try {
         if (xmlId) {
+            state.xmlId = xmlId;
             state.app = xmlId;
             await testApp();
         } else {

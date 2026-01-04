@@ -57,7 +57,9 @@ export class MessageReactionMenu extends Component {
     }
 
     getEmojiShortcode(reaction) {
-        return this.store.emojiLoader.loaded?.emojiValueToShortcodes?.[reaction.content][0] ?? "?";
+        return (
+            this.store.emojiLoader.loaded?.emojiValueToShortcodes?.[reaction.content]?.[0] ?? "?"
+        );
     }
 
     get contentClass() {
