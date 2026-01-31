@@ -3,6 +3,7 @@ import base64
 import binascii
 from datetime import time
 import logging
+import math
 import re
 from io import BytesIO
 
@@ -186,7 +187,10 @@ class FloatConverter(models.AbstractModel):
         if 'decimal_precision' in options:
             precision = self.env['decimal.precision'].precision_get(options['decimal_precision'])
         elif options.get('precision') is None:
-            precision = 6
+            int_digits = int(math.log10(abs(value))) + 1 if value != 0 else 1
+            max_dec_digits = max(15 - int_digits, 0)
+            # We display maximum 6 decimal digits or the number of significant decimal digits if it's lower
+            precision = min(6, max_dec_digits)
             min_precision = min_precision or 1
         else:
             precision = options['precision']
@@ -209,8 +213,10 @@ class FloatConverter(models.AbstractModel):
             _, precision = record._fields[field_name].get_digits(record.env) or (None, None)
             options = dict(options, precision=precision)
         if 'min_precision' not in options:
-            min_precision = record._fields[field_name].get_min_display_digits(record.env)
-            options = dict(options, min_precision=min_precision)
+            field = record._fields[field_name]
+            if hasattr(field, 'get_min_display_digits'):
+                min_precision = field.get_min_display_digits(record.env)
+                options = dict(options, min_precision=min_precision)
         return super(FloatConverter, self).record_to_html(record, field_name, options)
 
 
