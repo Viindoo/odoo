@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-import base64
 from datetime import timedelta
 from freezegun import freeze_time
 
@@ -67,14 +66,15 @@ class TestAccountFrFec(AccountTestInvoicingCommon):
         cls.invoice_a.action_post()
 
     def test_generate_fec_sanitize_pieceref(self):
-        self.wizard.generate_fec()
         expected_content = (
             "JournalCode|JournalLib|EcritureNum|EcritureDate|CompteNum|CompteLib|CompAuxNum|CompAuxLib|PieceRef|PieceDate|EcritureLib|Debit|Credit|EcritureLet|DateLet|ValidDate|Montantdevise|Idevise\r\n"
-            "INV|Customer Invoices|INV/2021/00001|20210502|701100|Ventes de produits finis (ou groupe) A|||-|20210502|Hello Darkness|0,00| 000000000001437,12|||20210502|-000000000001437,12|EUR\r\n"
-            "INV|Customer Invoices|INV/2021/00001|20210502|701100|Ventes de produits finis (ou groupe) A|||-|20210502|my old friend|0,00| 000000000001676,64|||20210502|-000000000001676,64|EUR\r\n"
-            "INV|Customer Invoices|INV/2021/00001|20210502|701100|Ventes de produits finis (ou groupe) A|||-|20210502|/|0,00| 000000000003353,28|||20210502|-000000000003353,28|EUR\r\n"
+            "INV|Customer Invoices|INV/2021/00001|20210502|701000|Ventes de produits finis|||-|20210502|Hello Darkness|0,00| 000000000001437,12|||20210502|-000000000001437,12|EUR\r\n"
+            "INV|Customer Invoices|INV/2021/00001|20210502|701000|Ventes de produits finis|||-|20210502|my old friend|0,00| 000000000001676,64|||20210502|-000000000001676,64|EUR\r\n"
+            "INV|Customer Invoices|INV/2021/00001|20210502|701000|Ventes de produits finis|||-|20210502|/|0,00| 000000000003353,28|||20210502|-000000000003353,28|EUR\r\n"
             "INV|Customer Invoices|INV/2021/00001|20210502|445710|TVA collectée|||-|20210502|TVA 20,0%|0,00| 000000000001293,41|||20210502|-000000000001293,41|EUR\r\n"
             f"INV|Customer Invoices|INV/2021/00001|20210502|411100|Clients - Ventes de biens ou de prestations de services|{self.partner_a.id}|partner_a|-|20210502|INV/2021/00001| 000000000007760,45|0,00|||20210502| 000000000007760,45|EUR"
         )
-        content = base64.b64decode(self.wizard.fec_data).decode()
+        data_generator = self.wizard.with_context(fec_test_mode=True)._get_fec_stream()
+        content_bytes = b''.join(list(data_generator))
+        content = content_bytes.decode('utf-8')
         self.assertEqual(expected_content, content)

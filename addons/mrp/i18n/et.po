@@ -22,16 +22,17 @@
 # Katrin Kampura, 2023
 # Mihkel avalah, 2023
 # Eneli Õigus <enelioigus@gmail.com>, 2024
-# Stevin Lilla, 2024
 # Leaanika Randmets, 2024
+# Siim Raasuke, 2024
+# Stevin Lilla, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-08 20:34+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Leaanika Randmets, 2024\n"
+"Last-Translator: Stevin Lilla, 2025\n"
 "Language-Team: Estonian (https://app.transifex.com/odoo/teams/41243/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1520,6 +1521,8 @@ msgid ""
 "Create and confirm Manufacturing Orders this many days in advance, to have enough time to replenish components or manufacture semi-finished products.\n"
 "Note that security lead times will also be considered when appropriate."
 msgstr ""
+"Looge ja kinnitage tootmistellimused mitu päeva ette, et Teil oleks piisavalt aega komponentide varumiseks või pooltoodete valmistamiseks.\n"
+"Pane tähele, et turvalisuse tarneajad võetakse samuti arvesse, kui see on asjakohane."
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.view_mrp_production_backorder_form
@@ -3842,6 +3845,7 @@ msgstr "Toodetud"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_stock_assign_serial__produced_qty
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_workorder_tree_editable_view
 msgid "Produced Quantity"
 msgstr "Toodetud ühikud"
 
@@ -4113,7 +4117,6 @@ msgstr "Koguseosa"
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_bom_line_view_form
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_tree_view
-#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_workorder_tree_editable_view
 #: model_terms:ir.ui.view,arch_db:mrp.report_mrp_bom
 #, python-format
 msgid "Quantity"
@@ -4160,6 +4163,11 @@ msgstr "Kogus, mida on võimalik toota praeguse komponentide laoseisuga"
 #, python-format
 msgid "Quantity:"
 msgstr "Kogus:"
+
+#. module: mrp
+#: model:ir.model,name:mrp.model_stock_quant
+msgid "Quants"
+msgstr "Koguseosad"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_workorder__move_raw_ids
@@ -4238,6 +4246,11 @@ msgid "Related attachment"
 msgstr "Seotud manus"
 
 #. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_workorder_tree_editable_view
+msgid "Remaining Quantity"
+msgstr ""
+
+#. module: mrp
 #. odoo-javascript
 #: code:addons/mrp/static/src/widgets/mrp_workorder_popover.xml:0
 #, python-format
@@ -4307,18 +4320,19 @@ msgid "Resupply lead time."
 msgstr "Juurdetellimise viiteaeg."
 
 #. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/stock_quant.py:0
+#, python-format
+msgid "Return to Inventory"
+msgstr "Tagasta lattu"
+
+#. module: mrp
 #. odoo-javascript
 #: code:addons/mrp/static/src/components/bom_overview_table/mrp_bom_overview_table.xml:0
 #: model_terms:ir.ui.view,arch_db:mrp.report_mrp_bom
 #, python-format
 msgid "Route"
 msgstr "Marsruut"
-
-#. module: mrp
-#: code:addons/mrp/models/stock_quant.py:0
-#, python-format
-msgid "Return to Inventory"
-msgstr "Tagasta lattu"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_workcenter__routing_line_ids
@@ -4508,7 +4522,7 @@ msgstr "Serial Mass Produce"
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.view_mrp_consumption_warning_form
 msgid "Set Quantities & Validate"
-msgstr ""
+msgstr "Määra kogused ja kinnita"
 
 #. module: mrp
 #: model:ir.model.fields.selection,name:mrp.selection__mrp_routing_workcenter__time_mode__manual
@@ -4989,6 +5003,8 @@ msgid ""
 "The current configuration is incorrect because it would create a cycle "
 "between these products: %s."
 msgstr ""
+"Praegune konfiguratsioon on vale, kuna see looks tsükli nende toodete vahel:"
+" %s."
 
 #. module: mrp
 #. odoo-python
@@ -6400,6 +6416,7 @@ msgid "You should provide a lot number for the final product."
 msgstr "Te peaksite lisama lõpptootele partiinumbri."
 
 #. module: mrp
+#. odoo-python
 #: code:addons/mrp/models/stock_quant.py:0
 #, python-format
 msgid ""

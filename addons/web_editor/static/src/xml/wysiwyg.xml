@@ -173,14 +173,14 @@
                 <a href="#" class="mx-1 o_we_copy_link text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy Link">
                     <i class="fa fa-clone"/>
                 </a>
-                <a href="#" class="mx-1 o_we_edit_link text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Link">
+                <a href="#" t-att-hidden="widget.isDocument ? true : undefined" class="mx-1 o_we_edit_link text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Link">
                     <i class="fa fa-edit"/>
                 </a>
-                <a href="#" class="ms-1 o_we_remove_link text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove Link">
+                <a href="#" t-att-hidden="widget.isDocument ? true : undefined" class="ms-1 o_we_remove_link text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove Link">
                     <i class="fa fa-chain-broken"/>
                 </a>
             </div>
-            <a href="#" target="_blank" class="o_we_full_url mt-1 text-muted d-none" t-esc="widget.href" title="Open in a new tab"/>
+            <a href="#" t-att-hidden="widget.isDocument ? true : undefined" target="_blank" class="o_we_full_url mt-1 text-muted d-none" t-esc="widget.href" title="Open in a new tab"/>
         </div>
     </div>
     <we-customizeblock-option t-name="wysiwyg.widgets.linkTools">
@@ -345,7 +345,7 @@
     <div t-name="wysiwyg.widgets.crop" class="o_we_crop_widget" contenteditable="false">
         <div class="o_we_cropper_wrapper">
             <img class="o_we_cropper_img"/>
-            <div class="o_we_crop_buttons text-center mt16 position-fixed o_we_no_overlay" contenteditable="false">
+            <div class="o_we_crop_buttons text-center mt16 o_we_no_overlay" contenteditable="false">
                 <div class="btn-group btn-group-toggle" title="Aspect Ratio" data-bs-toggle="buttons">
                     <t t-foreach="widget.aspectRatios" t-as="ratio">
                         <t t-set="is_active" t-value="ratio === widget.aspectRatio"/>

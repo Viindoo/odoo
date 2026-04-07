@@ -35,14 +35,16 @@
 # Jarmo Kortetjärvi <jarmo.kortetjarvi@gmail.com>, 2023
 # Larissa Manderfeld, 2023
 # Ossi Mantylahti <ossi.mantylahti@obs-solutions.fi>, 2024
+# Wil Odoo, 2025
+# Jessica Jakara, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:32+0000\n"
+"POT-Creation-Date: 2025-06-13 18:36+0000\n"
 "PO-Revision-Date: 2022-09-22 05:54+0000\n"
-"Last-Translator: Ossi Mantylahti <ossi.mantylahti@obs-solutions.fi>, 2024\n"
+"Last-Translator: Jessica Jakara, 2025\n"
 "Language-Team: Finnish (https://app.transifex.com/odoo/teams/41243/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1372,8 +1374,12 @@ msgstr "Täydennä yrityksesi tiedot"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with DHL"
-msgstr "Laske toimituskulut ja lähetä DHL:llä"
+msgid ""
+"Compute shipping costs and ship with DHL<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"Laske toimituskulut ja lähetä DHL:llä<br/>\n"
+"                                      <strong>(siirry kohtaan Aloitussivu&gt;Sovellukset asentaaksesi)"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1382,8 +1388,12 @@ msgstr "Laske kuljetuskustannukset ja lähetä Easypostilla"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with FedEx"
-msgstr "Laske toimituskulut ja lähetä FedEx:llä"
+msgid ""
+"Compute shipping costs and ship with FedEx<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"Laske toimituskulut ja lähetä FedExillä<br/>\n"
+"                                    <strong>(siirry kohtaan Aloitussivu&gt;Sovellukset asentaaksesi)</strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1392,13 +1402,21 @@ msgstr "Laske toimituskulut ja lähetä Sendcloudilla"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with UPS"
-msgstr "Laske toimituskulut ja lähetä UPS:llä"
+msgid ""
+"Compute shipping costs and ship with UPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"Laske toimituskulut ja lähetä UPS:llä<br/>\n"
+"                                 <strong>(siirry kohtaan Aloitussivu&gt;Sovellukset asentaaksesi)</strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with USPS"
-msgstr "Laske toimituskulut ja lähetä USPS:llä"
+msgid ""
+"Compute shipping costs and ship with USPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"Laske toimituskulut ja lähetä USPS:llä<br/>\n"
+"                                 <strong>(siirry kohtaan Aloitussivu&gt;Sovellukset asentaaksesi)</strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1643,6 +1661,11 @@ msgstr "Mukauta hintatarjousten ulkoasua."
 #, python-format
 msgid "Customize your quotes and orders."
 msgstr "Muokkaa tarjouksia ja tilauksia."
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid "DHL Connector"
+msgstr "DHL-liitin"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_dhl
@@ -1995,6 +2018,7 @@ msgstr "Lisärivi, jossa %s"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_fedex
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "FedEx Connector"
 msgstr "FedEx Connector"
 
@@ -4125,6 +4149,11 @@ msgid "Tags"
 msgstr "Tunnisteet"
 
 #. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
+msgid "Tax 15%"
+msgstr "Vero 15%"
+
+#. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__tax_country_id
 msgid "Tax Country"
 msgstr "Veromaa"
@@ -4276,13 +4305,13 @@ msgstr "Kiinteä summa ennakkolaskutettavaksi, ilman veroja."
 #: code:addons/sale/models/product_template.py:0
 #, python-format
 msgid ""
-"The following products cannot be restricted to the company %s because they have already been used in quotations or sales orders in another company:\n"
-"%s\n"
+"The following products cannot be restricted to the company %(company)s because they have already been used in quotations or sales orders in another company:\n"
+"%(used_products)s\n"
 "You can archive these products and recreate them with your company restriction instead, or leave them as shared product."
 msgstr ""
-"Seuraavia tuotteita ei voi rajata yritykselle %s niitä on jo käytössä tarjouksilla tai tilauksilla toisella yrityksellä:\n"
-"%s\n"
-"Voit arkistoida nämä tuotteet ja luoda nämä uudelleen yritysrajauksen kanssa, tai jättää tuotteet jaetuiksi yritysten välillä."
+"Seuraavia tuotteita ei voida rajoittaa yritykseen %(company)s, koska niitä on jo käytetty tarjouksissa tai myyntitilauksissa toisessa yrityksessä:\n"
+"%(used_products)s\n"
+"Voit arkistoida nämä tuotteet ja luoda ne uudelleen yritysrajoituksella tai jättää ne jaetuiksi tuotteiksi."
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_res_config_settings__automatic_invoice
@@ -4618,11 +4647,13 @@ msgstr "Poikkeusaktiviteetin tyyppi tietueella."
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_ups
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "UPS Connector"
 msgstr "UPS-liitin"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_usps
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "USPS Connector"
 msgstr "USPS-liitin"
 
@@ -4752,14 +4783,6 @@ msgstr "Variantin taulukkotieto"
 
 #. module: sale
 #. odoo-python
-#: code:addons/sale/models/sale_order.py:0
-#, python-format
-msgid "View Order"
-msgstr "Näytä tilaus"
-
-#. module: sale
-#. odoo-python
-#: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #, python-format

@@ -10,15 +10,16 @@
 # Dung Nguyen Thi <dungnt@trobz.com>, 2022
 # Nancy Momoland <thanh.np2502@gmail.com>, 2023
 # Martin Trigaux, 2023
-# Thi Huong Nguyen, 2024
+# Wil Odoo, 2025
+# Thi Huong Nguyen, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Thi Huong Nguyen, 2024\n"
+"Last-Translator: Thi Huong Nguyen, 2025\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -79,7 +80,7 @@ msgstr "\"%s\" yêu cầu truy cập micro"
 #: code:addons/mail/static/src/models/channel_member_list_category_view.js:0
 #, python-format
 msgid "%(categoryText)s - %(memberCount)s"
-msgstr ""
+msgstr "%(categoryText)s - %(memberCount)s"
 
 #. module: mail
 #. odoo-python
@@ -801,7 +802,7 @@ msgstr "<span class=\"d-block w-75 py-2\">Màu nút</span>"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.res_config_settings_view_form
 msgid "<span class=\"d-block w-75 py-2\">Header Color</span>"
-msgstr "<span class=\"d-block w-75 py-2\">Màu lề trên</span>"
+msgstr "<span class=\"d-block w-75 py-2\">Màu header</span>"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.res_config_settings_view_form
@@ -1740,7 +1741,7 @@ msgstr "Tự động xóa"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_channel_view_form
 msgid "Auto Subscribe Groups"
-msgstr "Nhóm nhận tin tự động"
+msgstr "Tự động đăng ký nhóm"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_channel__group_ids
@@ -1753,9 +1754,22 @@ msgid "Auto subscription"
 msgstr "Tự động đăng ký nhận tin"
 
 #. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__mail_compose_message__message_type__auto_comment
+#: model:ir.model.fields.selection,name:mail.selection__mail_message__message_type__auto_comment
+msgid "Automated Targeted Notification"
+msgstr "Thông báo được nhắm mục tiêu tự động"
+
+#. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity__automated
 msgid "Automated activity"
 msgstr "Hoạt động tự động"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/models/message.js:0
+#, python-format
+msgid "Automated message"
+msgstr "Tin nhắn tự động"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_activity_type__triggered_next_type_id
@@ -2174,7 +2188,7 @@ msgstr "CC"
 #: model:ir.model.fields,field_description:mail.field_mail_activity__chaining_type
 #: model:ir.model.fields,field_description:mail.field_mail_activity_type__chaining_type
 msgid "Chaining Type"
-msgstr "Loại xâu chuỗi"
+msgstr "Loại chuỗi"
 
 #. module: mail
 #. odoo-javascript
@@ -2407,7 +2421,7 @@ msgstr "Đóng cửa sổ trò chuyện"
 #: code:addons/mail/static/src/components/chat_window_header/chat_window_header.xml:0
 #, python-format
 msgid "Close conversation"
-msgstr "Đóng hội thoại"
+msgstr "Đóng cuộc trò chuyện"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__mail_channel_member__fold_state__closed
@@ -2632,14 +2646,14 @@ msgstr "Trạng thái gom/đóng hội thoại"
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_channel_member__is_minimized
 msgid "Conversation is minimized"
-msgstr "Hội thoại được thu nhỏ"
+msgstr "Cuộc trò chuyện được thu nhỏ"
 
 #. module: mail
 #. odoo-javascript
 #: code:addons/mail/static/src/components/messaging_menu/messaging_menu.xml:0
 #, python-format
 msgid "Conversations"
-msgstr "Hội thoại"
+msgstr "Cuộc trò chuyện"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_thread_blacklist__message_bounce
@@ -2897,12 +2911,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:mail.mail_activity_view_search
 #, python-format
 msgid "Deadline"
-msgstr "Hạn chót"
+msgstr "Thời hạn"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.message_activity_assigned
 msgid "Deadline:"
-msgstr "Hạn chót:"
+msgstr "Thời hạn:"
 
 #. module: mail
 #. odoo-python
@@ -3973,12 +3987,12 @@ msgstr "Tìm kiếm hoặc tạo mới một kênh..."
 #: code:addons/mail/static/src/models/discuss_sidebar_category.js:0
 #, python-format
 msgid "Find or start a conversation..."
-msgstr "Tìm hoặc tạo kênh trò chuyện..."
+msgstr "Tìm hoặc tạo một cuộc trò chuyện..."
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__mail_channel_member__fold_state__folded
 msgid "Folded"
-msgstr "Đóng vào"
+msgstr "Thu gọn"
 
 #. module: mail
 #. odoo-javascript
@@ -4022,12 +4036,12 @@ msgstr "Form người theo dõi"
 #: code:addons/mail/static/src/components/composer/composer.xml:0
 #, python-format
 msgid "Followers of"
-msgstr "Những người dõi theo"
+msgstr "Người theo dõi"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__mail_alias__alias_contact__followers
 msgid "Followers only"
-msgstr "Chỉ những người dõi theo"
+msgstr "Chỉ những người theo dõi"
 
 #. module: mail
 #. odoo-javascript
@@ -4331,13 +4345,13 @@ msgstr "Có lỗi"
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_res_config_settings__primary_color
 msgid "Header Color"
-msgstr "Màu tiêu đề"
+msgstr "Màu header"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_mail__headers
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_form
 msgid "Headers"
-msgstr "Tiêu đề"
+msgstr "Header"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_bounce_catchall
@@ -4746,20 +4760,20 @@ msgstr "Cuộc gọi đến..."
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.res_config_settings_view_form
 msgid "Incoming Email Servers"
-msgstr "Máy chủ Nhận Email"
+msgstr "Máy chủ thư đến"
 
 #. module: mail
 #: model:ir.model,name:mail.model_fetchmail_server
 #: model_terms:ir.ui.view,arch_db:mail.view_email_server_form
 #: model_terms:ir.ui.view,arch_db:mail.view_email_server_search
 msgid "Incoming Mail Server"
-msgstr "Máy chủ nhận thư"
+msgstr "Máy chủ thư đến"
 
 #. module: mail
 #: model:ir.actions.act_window,name:mail.action_email_server_tree
 #: model:ir.ui.menu,name:mail.menu_action_fetchmail_server_tree
 msgid "Incoming Mail Servers"
-msgstr "Máy chủ nhận Mail"
+msgstr "Máy chủ thư đến"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_activity__automated
@@ -4901,7 +4915,7 @@ msgstr "Mời theo dõi"
 #: code:addons/mail/static/src/components/channel_invitation_form/channel_invitation_form.xml:0
 #, python-format
 msgid "Invite people"
-msgstr "Mời tham gia"
+msgstr "Mời mọi người"
 
 #. module: mail
 #. odoo-javascript
@@ -4937,7 +4951,7 @@ msgstr "Là người dùng hiện tại hoặc tác giả khách mời"
 #: model:ir.model.fields,field_description:mail.field_mail_compose_message__is_mail_template_editor
 #: model:ir.model.fields,field_description:mail.field_mail_composer_mixin__is_mail_template_editor
 msgid "Is Editor"
-msgstr "Là biên tập"
+msgstr "Là trình chỉnh sửa"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_blacklist__message_is_follower
@@ -6335,7 +6349,7 @@ msgstr "Tắt tiếng"
 #: model:ir.model.fields,field_description:mail.field_res_partner__my_activity_date_deadline
 #: model:ir.model.fields,field_description:mail.field_res_users__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr "Hạn chót hoạt động"
+msgstr "Thời hạn hoạt động"
 
 #. module: mail
 #. odoo-javascript
@@ -7020,6 +7034,14 @@ msgid "Open Document"
 msgstr "Mở tài liệu"
 
 #. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#, python-format
+msgid "Open Link"
+msgstr "Mở liên kết"
+
+#. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_alias_form
 msgid "Open Parent Document"
 msgstr "Mở tài liệu cha"
@@ -7673,9 +7695,9 @@ msgid ""
 "document type. This will create new documents for new conversations, or "
 "attach follow-up emails to the existing conversations (documents)."
 msgstr ""
-"Xử lý từng email đến như là một phần của một cuộc hội thoại ứng với kiểu tài"
-" liệu này. Việc này sẽ tạo các tài liệu mới cho các cuộc hội thoại mới, hoặc"
-" đính kèm các follow-up email và cuộc hội thoại (tài liệu) hiện có."
+"Xử lý từng email đến như là một phần của một cuộc trò chuyện ứng với kiểu "
+"tài liệu này. Việc này sẽ tạo các tài liệu mới cho các cuộc trò chuyện mới, "
+"hoặc đính kèm các follow-up email và cuộc trò chuyện (tài liệu) hiện có."
 
 #. module: mail
 #. odoo-javascript
@@ -8342,7 +8364,7 @@ msgstr "Ấn định một hoạt động"
 #: model:ir.model.fields,field_description:mail.field_mail_template__scheduled_date
 #: model:ir.model.fields,field_description:mail.field_mail_template_preview__scheduled_date
 msgid "Scheduled Date"
-msgstr "Ngày dự kiến"
+msgstr "Ngày đã lên lịch"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_message_schedule_view_form
@@ -8398,7 +8420,7 @@ msgstr "Tìm kiếm nhóm"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_email_server_search
 msgid "Search Incoming Mail Servers"
-msgstr "Tìm các máy chủ nhận email"
+msgstr "Tìm máy chủ thư đến"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_channel_rtc_session_view_search
@@ -8886,7 +8908,7 @@ msgstr "Bắt đầu cuộc gọi video"
 #: code:addons/mail/static/src/models/discuss_sidebar_category.js:0
 #, python-format
 msgid "Start a conversation"
-msgstr "Bắt đầu cuộc hội thoại"
+msgstr "Bắt đầu cuộc trò chuyện"
 
 #. module: mail
 #. odoo-javascript
@@ -9293,7 +9315,7 @@ msgstr " "
 #: code:addons/mail/models/ir_actions_server.py:0
 #, python-format
 msgid "The 'Due Date In' value can't be negative."
-msgstr "The 'Due Date In' value can't be negative."
+msgstr "Giá trị 'Ngày đến hạn vào' phải lớn hơn 0."
 
 #. module: mail
 #. odoo-javascript
@@ -9683,7 +9705,7 @@ msgstr "Đến (Đối tác)"
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_mail__to_delete
 msgid "To Delete"
-msgstr ""
+msgstr "Chờ xóa"
 
 #. module: mail
 #: model:mail.activity.type,name:mail.mail_activity_data_todo
@@ -10088,7 +10110,7 @@ msgstr "Bỏ tắt tiếng"
 #: code:addons/mail/static/src/components/discuss_sidebar_category_item/discuss_sidebar_category_item.xml:0
 #, python-format
 msgid "Unpin Conversation"
-msgstr "Hủy ghim cuộc hội thoại"
+msgstr "Hủy ghim cuộc trò chuyện"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_channel_member__message_unread_counter
@@ -10609,7 +10631,7 @@ msgstr "Chỉ có mình bạn trong kênh này."
 #: code:addons/mail/models/mail_channel.py:0
 #, python-format
 msgid "You are in a private conversation with <b>@%s</b>."
-msgstr "Bạn đang trong một cuộc hội thoại riêng tư với <b>@%s</b>."
+msgstr "Bạn đang trong một cuộc trò chuyện riêng tư với <b>@%s</b>."
 
 #. module: mail
 #. odoo-python
@@ -10744,21 +10766,11 @@ msgstr ""
 " khi bạn gửi email dùng mẫu này"
 
 #. module: mail
-#: code:addons/mail/models/ir_attachment.py:0
-#, python-format
-msgid ""
-"You may not unlink or modify the content of attachments from other people's "
-"messages"
-msgstr ""
-"Bạn không được hủy liên kết hoặc sửa đổi nội dung tệp đính kèm khỏi nội dung"
-" của người khác"
-
-#. module: mail
 #. odoo-javascript
 #: code:addons/mail/static/src/models/messaging_notification_handler.js:0
 #, python-format
 msgid "You unpinned your conversation with %s."
-msgstr "Bạn đã bỏ ghim cuộc hội thoại với %s."
+msgstr "Bạn đã bỏ ghim cuộc trò chuyện với %s."
 
 #. module: mail
 #. odoo-javascript
@@ -14937,7 +14949,7 @@ msgstr "mây có tuyết"
 #: code:addons/mail/static/src/models_data/emoji_data.js:0
 #, python-format
 msgid "clover"
-msgstr "cỏ ba lá"
+msgstr "cỏ bốn lá"
 
 #. module: mail
 #. odoo-javascript
@@ -16045,7 +16057,7 @@ msgstr "khiêu vũ"
 #: code:addons/mail/static/src/models_data/emoji_data.js:0
 #, python-format
 msgid "danger"
-msgstr "nguy hiểm"
+msgstr "cảnh báo"
 
 #. module: mail
 #. odoo-javascript

@@ -3,23 +3,21 @@
 # 	* hr
 # 
 # Translators:
-# Noma Yuki, 2022
 # Yoshi Tashiro (Quartile) <tashiro@roomsfor.hk>, 2022
 # Norimichi Sugimoto <norimichi.sugimoto@tls-ltd.co.jp>, 2022
-# Shigekazu N. <shigekazu.noka@gmail.com>, 2022
 # Andy Yiu, 2023
 # Martin Trigaux, 2023
-# Wil Odoo, 2024
 # Ryoko Tsuda <ryoko@quartile.co>, 2024
-# Junko Augias, 2024
+# Wil Odoo, 2025
+# Junko Augias, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-02-10 08:26+0000\n"
 "PO-Revision-Date: 2022-09-22 05:46+0000\n"
-"Last-Translator: Junko Augias, 2024\n"
+"Last-Translator: Junko Augias, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -66,7 +64,7 @@ msgstr "'バッジ印刷 - %s' % (object.name).replace('/', '')"
 #: model_terms:hr.job,job_details:hr.job_marketing
 #: model_terms:hr.job,job_details:hr.job_trainee
 msgid "1 Onsite Interview"
-msgstr "1 オンサイトインタビュー"
+msgstr "1 オンサイト面接"
 
 #. module: hr
 #: model_terms:hr.job,job_details:hr.job_ceo
@@ -343,7 +341,7 @@ msgstr "<span class=\"text-muted small\">プロセス</span>"
 #: model_terms:hr.job,job_details:hr.job_marketing
 #: model_terms:hr.job,job_details:hr.job_trainee
 msgid "<span class=\"text-muted small\">Time to Answer</span>"
-msgstr "<span class=\"text-muted small\">回答時間</span>"
+msgstr "<span class=\"text-muted small\">回答までの時間</span>"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
@@ -364,7 +362,7 @@ msgstr "<span>新規従業員</span>"
 #: model_terms:hr.job,website_description:hr.job_marketing
 #: model_terms:hr.job,website_description:hr.job_trainee
 msgid "A full-time position <br>Attractive salary package."
-msgstr "フルタイム雇用 <br>高給パッケージ"
+msgstr "フルタイム雇用 <br>高待遇"
 
 #. module: hr
 #: model:ir.model.constraint,message:hr.constraint_hr_employee_user_uniq
@@ -631,7 +629,7 @@ msgstr "出勤/POS"
 #. module: hr
 #: model:ir.model.fields.selection,name:hr.selection__mail_alias__alias_contact__employees
 msgid "Authenticated Employees"
-msgstr "認証された従業員"
+msgstr "認証済み従業員"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.mail_channel_view_form_
@@ -722,6 +720,11 @@ msgid "Bank Account Number"
 msgstr "銀行口座番号"
 
 #. module: hr
+#: model:ir.model,name:hr.model_res_partner_bank
+msgid "Bank Accounts"
+msgstr "銀行口座"
+
+#. module: hr
 #: model:ir.model,name:hr.model_base
 msgid "Base"
 msgstr "ベース"
@@ -734,17 +737,17 @@ msgstr "IPアドレスに基づく"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_config_settings__module_hr_attendance
 msgid "Based on attendances"
-msgstr "勤怠レコードで判断"
+msgstr "出退勤に基づいて"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_config_settings__hr_presence_control_email
 msgid "Based on number of emails sent"
-msgstr "送信されたEメールの数に基づく"
+msgstr "送信されたEメールの数に基づいて"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_config_settings__hr_presence_control_login
 msgid "Based on user status in system"
-msgstr "ユーザのシステム上のステータスに基づく"
+msgstr "ユーザのシステム上のステータスに基づいて"
 
 #. module: hr
 #: model:ir.model,name:hr.model_hr_employee_base
@@ -1902,14 +1905,14 @@ msgstr "遅れた活動"
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_tree
 msgid "Launch Plan"
-msgstr "ローンチプラン"
+msgstr "プランを開始"
 
 #. module: hr
 #. odoo-python
 #: code:addons/hr/wizard/hr_plan_wizard.py:0
 #, python-format
 msgid "Launch Plans"
-msgstr "ローンチプラン"
+msgstr "プランを開始"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_ceo
@@ -2071,7 +2074,7 @@ msgstr "自分の部門"
 #: code:addons/hr/static/src/user_menu/my_profile.js:0
 #, python-format
 msgid "My Profile"
-msgstr "個人設定"
+msgstr "マイプロフィール"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.hr_employee_public_view_search
@@ -2143,7 +2146,7 @@ msgstr "歓迎"
 #: model_terms:hr.job,website_description:hr.job_marketing
 #: model_terms:hr.job,website_description:hr.job_trainee
 msgid "No dumb managers, no stupid tools to use, no rigid working hours"
-msgstr "愚かなマネージャーはいませんし、お馬鹿なツールは使いませんし、労働時間の強制拘束もありません"
+msgstr "自由でフラットな職場環境、使いやすいツール、柔軟な勤務時間"
 
 #. module: hr
 #. odoo-python
@@ -2297,7 +2300,7 @@ msgstr "他の担当者"
 #: model_terms:hr.job,website_description:hr.job_marketing
 #: model_terms:hr.job,website_description:hr.job_trainee
 msgid "Our Product"
-msgstr "当社プロダクト"
+msgstr "当社製品"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__pin
@@ -2621,15 +2624,11 @@ msgid "Register Departure"
 msgstr "退職届け"
 
 #. module: hr
+#. odoo-python
+#: code:addons/hr/models/hr_employee_base.py:0
 #: model:ir.model.fields,field_description:hr.field_hr_employee__related_contact_ids
 #: model:ir.model.fields,field_description:hr.field_hr_employee_base__related_contact_ids
 #: model:ir.model.fields,field_description:hr.field_hr_employee_public__related_contact_ids
-msgid "Related Contact"
-msgstr ""
-
-#. module: hr
-#. odoo-python
-#: code:addons/hr/models/hr_employee_base.py:0
 #, python-format
 msgid "Related Contacts"
 msgstr "関連連絡先"
@@ -3312,7 +3311,7 @@ msgstr "勤務先Eメール"
 #: model_terms:ir.ui.view,arch_db:hr.res_users_view_form_profile
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Work Information"
-msgstr "職場関連情報"
+msgstr "勤務情報"
 
 #. module: hr
 #: model:ir.model,name:hr.model_hr_work_location

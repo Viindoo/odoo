@@ -6,15 +6,16 @@
 # Martin Trigaux, 2022
 # Vo Thanh Thuy, 2022
 # Nancy Momoland <thanh.np2502@gmail.com>, 2023
-# Thi Huong Nguyen, 2024
+# Wil Odoo, 2025
+# Thi Huong Nguyen, 2025
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0+e\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-15 12:50+0000\n"
+"POT-Creation-Date: 2025-02-10 08:27+0000\n"
 "PO-Revision-Date: 2022-09-22 05:45+0000\n"
-"Last-Translator: Thi Huong Nguyen, 2024\n"
+"Last-Translator: Thi Huong Nguyen, 2025\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -244,7 +245,7 @@ msgid ""
 "Cancelling a delivery may not be undoable. Are you sure you want to "
 "continue?"
 msgstr ""
-"Bạn có thể không hoàn tác được việc huỷ một phiếu xuất kho. Bạn có chắc muốn"
+"Bạn có thể không hoàn tác được việc huỷ một lệnh giao hàng. Bạn có chắc muốn"
 " tiếp tục không?"
 
 #. module: delivery
@@ -387,7 +388,7 @@ msgstr "Đồ thuật lựa chọn gói vận chuyển"
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_choose_delivery_package__delivery_package_type_id
 msgid "Delivery Package Type"
-msgstr "Loại gói giao hàng"
+msgstr "Loại kiện hàng giao hàng"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_choose_delivery_carrier__delivery_price
@@ -440,7 +441,7 @@ msgstr "Mô tả"
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.vpicktree_view_tree
 msgid "Destination"
-msgstr "Đích"
+msgstr "Điểm đến"
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_delivery_carrier_form
@@ -515,6 +516,20 @@ msgstr ""
 #: model:ir.model.fields.selection,name:delivery.selection__delivery_carrier__invoice_policy__estimated
 msgid "Estimated cost"
 msgstr "Phí dự kiến"
+
+#. module: delivery
+#. odoo-python
+#: code:addons/delivery/models/stock_picking.py:0
+#, python-format
+msgid "Exception occurred with respect to carrier on the transfer"
+msgstr "Ngoại lệ xảy ra đối với đơn vị vận chuyển khi chuyển hàng"
+
+#. module: delivery
+#. odoo-python
+#: code:addons/delivery/models/stock_picking.py:0
+#, python-format
+msgid "Exception:"
+msgstr "Ngoại lệ:"
 
 #. module: delivery
 #: model:ir.model.fields,help:delivery.field_sale_order__carrier_id
@@ -679,6 +694,13 @@ msgid "Manage delivery zip prefixes"
 msgstr "Quản lý tiền tố zip giao hàng"
 
 #. module: delivery
+#. odoo-python
+#: code:addons/delivery/models/stock_picking.py:0
+#, python-format
+msgid "Manual actions might be needed."
+msgstr "Có thể cần thao tác thủ công."
+
+#. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_carrier__margin
 msgid "Margin"
 msgstr "Biên lợi nhuận"
@@ -832,9 +854,14 @@ msgid "Product"
 msgstr "Sản phẩm"
 
 #. module: delivery
+#: model:ir.model,name:delivery.model_product_category
+msgid "Product Category"
+msgstr "Danh mục sản phẩm"
+
+#. module: delivery
 #: model:ir.model,name:delivery.model_stock_move_line
 msgid "Product Moves (Stock Move Line)"
-msgstr "Luân chuyển sản phẩm (Chi tiết phiếu kho)"
+msgstr "Luân chuyển sản phẩm (chi tiết phiếu kho)"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_sale_order_line__product_qty
@@ -1004,7 +1031,7 @@ msgstr ""
 #: model:ir.model.fields,help:delivery.field_product_template__hs_code
 msgid ""
 "Standardized code for international shipping and goods declaration. At the "
-"moment, only used for the FedEx shipping provider."
+"moment, only used for FedEx and USPS shipping providers."
 msgstr ""
 "Mã tiêu chuẩn cho vận chuyển quốc tế và khai báo hàng hóa. Hiện tại, chỉ sử "
 "dụng nhà cung cấp vận chuyển FedEx."
@@ -1017,12 +1044,12 @@ msgstr "Bang/Tỉnh"
 #. module: delivery
 #: model:ir.model,name:delivery.model_stock_move
 msgid "Stock Move"
-msgstr "Dịch chuyển kho"
+msgstr "Điều chuyển tồn kho"
 
 #. module: delivery
 #: model:ir.model,name:delivery.model_stock_package_type
 msgid "Stock package type"
-msgstr "Kiểu đóng gói kho"
+msgstr "Loại kiện hàng tồn kho"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_carrier__supports_shipping_insurance
@@ -1065,8 +1092,8 @@ msgid ""
 "The package cannot be created because the total weight of the products in "
 "the picking is 0.0 %s"
 msgstr ""
-"Không thể tạo kiện hàng vì tổng khối lượng của các sản phẩm trong phiếu lấy "
-"hàng là 0,0 %s"
+"Không thể tạo kiện hàng vì tổng khối lượng của các sản phẩm trong phiếu xuất"
+" kho là 0,0 %s"
 
 #. module: delivery
 #: model:ir.model.fields,help:delivery.field_delivery_carrier__get_return_label_from_portal
@@ -1108,8 +1135,8 @@ msgid ""
 "The weight of your package is higher than the maximum weight authorized for "
 "this package type. Please choose another package type."
 msgstr ""
-"Khối lượng của đơn hàng vượt quá khối lượng cho phép của loại gói hàng. Hãy "
-"chọn một loại khác."
+"Khối lượng của kiện hàng vượt quá khối lượng cho phép của loại kiện hàng "
+"này. Hãy chọn một loại kiện hàng khác."
 
 #. module: delivery
 #. odoo-python
@@ -1278,6 +1305,7 @@ msgstr ""
 "\n"
 
 #. module: delivery
+#. odoo-python
 #: code:addons/delivery/models/product_category.py:0
 #, python-format
 msgid ""
@@ -1288,6 +1316,7 @@ msgstr ""
 "sản phẩm của đơn vị vận chuyển."
 
 #. module: delivery
+#. odoo-python
 #: code:addons/delivery/models/stock_picking.py:0
 #, python-format
 msgid ""
@@ -1297,7 +1326,8 @@ msgid ""
 msgstr ""
 "Bạn không thể đóng gói sản phẩm vào cùng một kiện hàng khi chúng được vận "
 "chuyển bởi các hãng vận chuyển khác nhau (nghĩa là hãy kiểm tra để đảm bảo "
-"tất cả điều chuyển của chúng đã được chỉ định cho cùng một hãng vận chuyển)."
+"tất cả lệnh chuyển hàng của chúng đã được chỉ định cho cùng một hãng vận "
+"chuyển)."
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.delivery_tracking_url_warning_form

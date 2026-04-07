@@ -14,10 +14,9 @@
 # Ofir Blum <ofir.blum@gmail.com>, 2022
 # Adi Sharashov <Adi@laylinetech.com>, 2022
 # Jonathan Spier, 2022
-# Lilach Gilliam <lilach.gilliam@gmail.com>, 2022
 # Martin Trigaux, 2022
 # שהאב חוסיין <shhab89@gmail.com>, 2022
-# hed shefer <hed@laylinetech.com>, 2022
+# Hed Shefer <hed@laylinetech.com>, 2022
 # ExcaliberX <excaliberx@gmail.com>, 2022
 # Yihya Hugirat <hugirat@gmail.com>, 2022
 # david danilov, 2022
@@ -30,14 +29,19 @@
 # yael terner, 2023
 # Roy Sayag, 2024
 # Ha Ketem <haketem@gmail.com>, 2024
+# Uri Segman, 2024
+# Lilach Gilliam <lilach.gilliam@gmail.com>, 2025
+# tomerlayline, 2025
+# or balmas, 2025
+# Yoram Lavi, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-06-13 18:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:55+0000\n"
-"Last-Translator: Ha Ketem <haketem@gmail.com>, 2024\n"
+"Last-Translator: Yoram Lavi, 2025\n"
 "Language-Team: Hebrew (https://app.transifex.com/odoo/teams/41243/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -114,6 +118,9 @@ msgid ""
 "The quantity done for the product %s doesn't respect the rounding precision defined on the unit of measure %s.\n"
 "Please change the quantity done or the rounding precision of your unit of measure."
 msgstr ""
+"\n"
+"הכמות שבוצעה עבור המוצר %sאינה תואמת את דיוק העיגול שהוגדר ליחידת המידה%s.\n"
+"אנא שנה את הכמות שבוצעה או את דיוק העיגול של יחידת המידה."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking__state
@@ -129,6 +136,16 @@ msgid ""
 " * Done: The transfer has been processed.\n"
 " * Cancelled: The transfer has been cancelled."
 msgstr ""
+"טיוטה (Draft): ההעברה לא אושרה עדיין. לא חלה הזמנה על המלאי.\n"
+"ממתין לפעולה נוספת (Waiting another operation): ההעברה ממתינה לפעולה אחרת לפני שהיא תהיה מוכנה.\n"
+"ממתין (Waiting): ההעברה ממתינה לזמינות של מוצרים מסוימים.\n"
+"(א) מדיניות המשלוח היא \"בהקדם האפשרי\": לא ניתן להזמין שום מוצר.\n"
+"(ב) מדיניות המשלוח היא \"כשהמוצרים כולם מוכנים\": לא כל המוצרים יכולים להיות מוזמנים.\n"
+"מוכן (Ready): ההעברה מוכנה לעיבוד.\n"
+"(א) מדיניות המשלוח היא \"בהקדם האפשרי\": לפחות מוצר אחד הוזמן.\n"
+"(ב) מדיניות המשלוח היא \"כשהמוצרים כולם מוכנים\": כל המוצרים הוזמנו.\n"
+"בוצע (Done): ההעברה הושלמה.\n"
+"בוטל (Cancelled): ההעברה בוטלה."
 
 #. module: stock
 #. odoo-python
@@ -144,20 +161,22 @@ msgid ""
 " When different than 0, inventory count date for products stored at this "
 "location will be automatically set at the defined frequency."
 msgstr ""
+"כאשר הערך שונה מ-0, תאריך ספירת המלאי עבור מוצרים המאוחסנים במיקום זה יוגדר "
+"אוטומטית בתדירות שהוגדרה."
 
 #. module: stock
 #. odoo-python
 #: code:addons/stock/models/stock_warehouse.py:0
 #, python-format
 msgid "%(name)s (copy)(%(id)s)"
-msgstr ""
+msgstr "%(name)s(העתק)(%(id)s)"
 
 #. module: stock
 #. odoo-python
 #: code:addons/stock/models/stock_warehouse.py:0
 #, python-format
 msgid "%(warehouse)s: Supply Product from %(supplier)s"
-msgstr ""
+msgstr "%(warehouse)s: ספק מוצר מ %(supplier)s"
 
 #. module: stock
 #. odoo-python
@@ -194,7 +213,7 @@ msgstr "&gt;"
 #. module: stock
 #: model:ir.actions.report,print_report_name:stock.action_report_inventory
 msgid "'Count Sheet'"
-msgstr ""
+msgstr "'דף ספירה'"
 
 #. module: stock
 #: model:ir.actions.report,print_report_name:stock.action_report_delivery
@@ -220,7 +239,7 @@ msgstr "'סוג-פעולה - %s' % object.name"
 #. module: stock
 #: model:ir.actions.report,print_report_name:stock.action_report_picking_packages
 msgid "'Packages - %s' % (object.name)"
-msgstr ""
+msgstr "'חבילות-%s' % (object.name)"
 
 #. module: stock
 #: model:ir.actions.report,print_report_name:stock.action_report_picking
@@ -234,7 +253,7 @@ msgstr ""
 #: code:addons/stock/models/stock_lot.py:0
 #, python-format
 msgid "(copy of) %s"
-msgstr ""
+msgstr "(עותק של) %s"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_move__state
@@ -267,6 +286,13 @@ msgid ""
 "* Production: Virtual counterpart location for production operations: this location consumes the components and produces finished products\n"
 "* Transit Location: Counterpart location that should be used in inter-company or inter-warehouses operations"
 msgstr ""
+"מיקום ספק (Vendor Location): מיקום וירטואלי המייצג את מיקום המקור למוצרים שמגיעים מהספקים שלך.\n"
+"תצוגה (View): מיקום וירטואלי המשמש ליצירת מבנה היררכי למחסן שלך, שמאגד מיקומי משנה. לא ניתן לאחסן בו מוצרים ישירות.\n"
+"מיקום פנימי (Internal Location): מיקומים פיזיים בתוך המחסנים שלך.\n"
+"מיקום לקוח (Customer Location): מיקום וירטואלי המייצג את יעד המשלוח של מוצרים שנשלחים ללקוחותיך.\n"
+"אובדן מלאי (Inventory Loss): מיקום וירטואלי המשמש כנגדי לפעולות מלאי שמטרתן תיקון רמות המלאי (ספירות פיזיות).\n"
+"ייצור (Production): מיקום וירטואלי נגדי לפעולות ייצור: מיקום זה צורך את הרכיבים ומייצר את המוצרים הסופיים.\n"
+"מיקום מעבר (Transit Location): מיקום נגדי שיש להשתמש בו בפעולות בין חברות או בין מחסנים."
 
 #. module: stock
 #. odoo-python
@@ -308,7 +334,7 @@ msgstr "חודש אחד"
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_orderpoint_snooze__predefined_date__week
 msgid "1 Week"
-msgstr ""
+msgstr "שבוע  1"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__lot_label_layout__print_format__4x12
@@ -894,7 +920,7 @@ msgstr "כל ההעברות"
 #: code:addons/stock/static/src/views/search/stock_report_search_panel.xml:0
 #, python-format
 msgid "All Warehouses"
-msgstr ""
+msgstr "כל המחסנים"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__procurement_group__move_type__one
@@ -916,7 +942,7 @@ msgstr "כל תנועות ההחזרה"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
 msgid "Allocation"
-msgstr ""
+msgstr "Allocation"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_storage_category__allow_new_product
@@ -1404,6 +1430,11 @@ msgid ""
 "(Chicago) in its entirety and does not include any costs relating to the "
 "legislation of the country in which the client is located."
 msgstr ""
+"מדינות מסוימות גובות ניכוי מס במקור על סכום החשבוניות, בהתאם לחקיקה הפנימית "
+"שלהן. כל ניכוי מס במקור ישולם על ידי הלקוח לרשויות המס המקומיות. בשום מקרה "
+"לא תישא החברה בעלויות הנובעות מהחקיקה המקומית של מדינה כלשהי. לכן, סכום "
+"החשבונית יהיה חייב במלואו לחברה, ואינו כולל כל עלות הקשורה לחקיקה של המדינה "
+"בה נמצא הלקוח."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_return_picking__move_dest_exists
@@ -1487,7 +1518,7 @@ msgstr "בחר תבנית תוויות"
 #: code:addons/stock/models/stock_picking.py:0
 #, python-format
 msgid "Choose Type of Labels To Print"
-msgstr ""
+msgstr "בחר סוג תוויות להדפסה"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_quantity_history__inventory_datetime
@@ -1505,7 +1536,7 @@ msgstr "בחר איתור יעד"
 #. module: stock
 #: model:ir.model,name:stock.model_lot_label_layout
 msgid "Choose the sheet layout to print lot labels"
-msgstr ""
+msgstr "בחר תצורת דף על מנת להדפיס תוויות אצווה"
 
 #. module: stock
 #: model:ir.model,name:stock.model_product_label_layout
@@ -1515,7 +1546,7 @@ msgstr "בחר את פריסת הגיליון כדי להדפיס את התוו�
 #. module: stock
 #: model:ir.model,name:stock.model_picking_label_type
 msgid "Choose whether to print product or lot/sn labels"
-msgstr ""
+msgstr "בחר האם להדפיס את המוצר או את המספר האצווה/הסידורי שלו."
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_stock_quantity_history
@@ -1590,8 +1621,10 @@ msgstr "חשב עלויות משלוח"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
-msgid "Compute shipping costs and ship with DHL"
-msgstr "חשב עלויות המשלוח ושלח באמצעות  DHL"
+msgid ""
+"Compute shipping costs and ship with DHL<br/>\n"
+"                                        <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
@@ -1600,23 +1633,29 @@ msgstr "חשב עלויות המשלוח ושלח באמצעות Easypost"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
-msgid "Compute shipping costs and ship with FedEx"
-msgstr "חשב עלויות המשלוח ושלח באמצעות FedEx"
-
-#. module: stock
-#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
-msgid "Compute shipping costs and ship with Sendcloud"
+msgid ""
+"Compute shipping costs and ship with FedEx<br/>\n"
+"                                        <strong>(please go to Home&gt;Apps to install)</strong>"
 msgstr ""
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
-msgid "Compute shipping costs and ship with UPS"
-msgstr "חשב עלויות המשלוח ושלח באמצעות UPS"
+msgid "Compute shipping costs and ship with Sendcloud"
+msgstr "חישוב עלויות משלוח ושלח עם Sendcloud"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
-msgid "Compute shipping costs and ship with USPS"
-msgstr "חשב עלויות המשלוח ושלח באמצעות USPS"
+msgid ""
+"Compute shipping costs and ship with UPS<br/>\n"
+"                                        <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+
+#. module: stock
+#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
+msgid ""
+"Compute shipping costs and ship with USPS<br/>\n"
+"                                        <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
@@ -1626,7 +1665,7 @@ msgstr "חשב עלויות המשלוח ושלח באמצעות bpost"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_move__reservation_date
 msgid "Computes when a move should be reserved"
-msgstr ""
+msgstr "מחשב מתי יש לשמור תנועה"
 
 #. module: stock
 #: model:ir.model,name:stock.model_res_config_settings
@@ -1660,14 +1699,14 @@ msgstr "מאושר"
 #. module: stock
 #: model:ir.model,name:stock.model_stock_inventory_conflict
 msgid "Conflict in Inventory"
-msgstr ""
+msgstr "התנגשות במלאי"
 
 #. module: stock
 #. odoo-python
 #: code:addons/stock/models/stock_quant.py:0
 #, python-format
 msgid "Conflict in Inventory Adjustment"
-msgstr ""
+msgstr "התנגשות בהתאמת מלאי"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_inventory_conflict__quant_to_fix_ids
@@ -1796,7 +1835,7 @@ msgstr "כמות ליקוטים ממתינים"
 #: model:ir.actions.report,name:stock.action_report_inventory
 #, python-format
 msgid "Count Sheet"
-msgstr ""
+msgstr "דף ספירה"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_quant__inventory_quantity
@@ -2062,6 +2101,11 @@ msgid "Cyclic Counting"
 msgstr "ספירה מחזורית"
 
 #. module: stock
+#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
+msgid "DHL Connector"
+msgstr ""
+
+#. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_dhl
 msgid "DHL Express Connector"
 msgstr "DHL Expressחיבור ל"
@@ -2080,7 +2124,7 @@ msgstr "תאריך"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_move_form
 msgid "Date Processing"
-msgstr ""
+msgstr "מעבד נתונים"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_move__date_deadline
@@ -2107,7 +2151,7 @@ msgstr "תאריך שבו התרחשה או בוטלה ההעברה."
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_location__next_inventory_date
 msgid "Date for next planned inventory based on cyclic schedule."
-msgstr ""
+msgstr "תאריך עבור ספירת המלאי המתוכננת הבאה על פי לוח זמנים מחזורי."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_picking__date_done
@@ -2117,7 +2161,7 @@ msgstr "תאריך ההעברה "
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_location__last_inventory_date
 msgid "Date of the last inventory at this location."
-msgstr ""
+msgstr "תאריך של מלאי אחרון במיקום זה."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__reservation_date
@@ -2142,6 +2186,8 @@ msgid ""
 "Day of the month when the annual inventory should occur. If zero or negative, then the first day of the month will be selected instead.\n"
 "        If greater than the last day of a month, then the last day of the month will be selected instead."
 msgstr ""
+"היום בחודש שבו על המלאי השנתי להתבצע. אם הערך הוא אפס או שלילי, ייבחר יום הראשון של החודש במקום זאת.\n"
+"       אם הערך גדול מהיום האחרון של החודש, ייבחר היום האחרון של החודש במקום זאת."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_picking_type__reservation_days_before
@@ -2167,14 +2213,14 @@ msgstr "תאריך יעד"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_internal_search
 msgid "Deadline exceed or/and by the scheduled"
-msgstr ""
+msgstr "המועד התאחר או/ו לפי המתוכנן"
 
 #. module: stock
 #. odoo-python
 #: code:addons/stock/models/stock_move.py:0
 #, python-format
 msgid "Deadline updated due to delay on %s"
-msgstr ""
+msgstr "מועד אחרון עודכן עקב עיכוב ב-%s"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__res_company__annual_inventory_month__12
@@ -2273,7 +2319,7 @@ msgstr "עיכוב תאריך התראה"
 #: code:addons/stock/models/stock_rule.py:0
 #, python-format
 msgid "Delay on %s"
-msgstr ""
+msgstr "עיכוב על %s"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_warehouse__delivery_steps__ship_only
@@ -2371,7 +2417,7 @@ msgstr "מספר הזמנות משלוח"
 #: code:addons/stock/models/stock_lot.py:0
 #, python-format
 msgid "Delivery orders of %s"
-msgstr ""
+msgstr "הזמנות משלוח של %s"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__product_uom_qty
@@ -2387,6 +2433,8 @@ msgid ""
 "of the product in this packaging: whether it will be bought, manufactured, "
 "replenished on order, etc."
 msgstr ""
+"בהתאם למודולים המותקנים, זה יאפשר לך להגדיר את מסלול המוצר באריזה זו: האם "
+"ייקנה, ייצור, יחודש בהזמנה וכו'."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_product_product__route_ids
@@ -2550,12 +2598,12 @@ msgstr "בטל"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_inventory_conflict_form_view
 msgid "Discard and manually resolve the conflict"
-msgstr ""
+msgstr "למחוק ולפתור את הקונפליקט ידנית"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__display_assign_serial
 msgid "Display Assign Serial"
-msgstr ""
+msgstr "הצג הקצאת מספר סידורי"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__display_clear_serial
@@ -2686,7 +2734,7 @@ msgstr "תנועות טיוטה"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.duplicated_sn_warning
 msgid "Duplicated SN Warning"
-msgstr ""
+msgstr "אזהרת מספר סידורי כפול"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_quant__sn_duplicated
@@ -2703,7 +2751,7 @@ msgstr "חיבור ל Easypost"
 #: code:addons/stock/models/stock_orderpoint.py:0
 #, python-format
 msgid "Edit Product"
-msgstr ""
+msgstr "ערוך מוצר"
 
 #. module: stock
 #. odoo-python
@@ -2713,6 +2761,8 @@ msgid ""
 "Editing quantities in an Inventory Adjustment location is forbidden,those "
 "locations are used as counterpart when correcting the quantities."
 msgstr ""
+"עריכת כמויות במיקום התאמת מלאי אסורה, מיקומים אלו משמשים כנגד בעת תיקון "
+"הכמויות."
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
@@ -2729,12 +2779,12 @@ msgstr "אישור דוא\"ל"
 #: model:ir.model.fields,field_description:stock.field_res_company__stock_move_email_validation
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__stock_move_email_validation
 msgid "Email Confirmation picking"
-msgstr ""
+msgstr "אישור בדוא\"ל עבור ליקוט"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_company__stock_mail_confirmation_template_id
 msgid "Email Template confirmation picking"
-msgstr ""
+msgstr "תבנית אימייל לאישור ליקוט"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_res_company__stock_mail_confirmation_template_id
@@ -2833,7 +2883,7 @@ msgstr "צפוי"
 #: model_terms:ir.ui.view,arch_db:stock.report_reception_body
 #, python-format
 msgid "Expected Delivery:"
-msgstr ""
+msgstr "מועד אספקה משוער:"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_product_expiry
@@ -2862,6 +2912,7 @@ msgstr "פברואר"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_fedex
+#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
 msgid "FedEx Connector"
 msgstr "חיבור ל FedEx"
 
@@ -2975,6 +3026,10 @@ msgid ""
 "In a context with a single Warehouse, this includes goods stored in the Stock Location of this Warehouse, or any of its children.\n"
 "Otherwise, this includes goods stored in any Stock Location with 'internal' type."
 msgstr ""
+"כמות תחזית (מחושבת ככמות במלאי - כמות מוזמנת)\n"
+"בהקשר עם מיקום מלאי אחד, זה כולל סחורות המאוחסנות במיקום זה, או באחד מהמיקומים שלו.\n"
+"בהקשר עם מחסן אחד, זה כולל סחורות המאוחסנות במיקום המלאי של מחסן זה, או באחד מהמיקומים שלו.\n"
+"במקרים אחרים, זה כולל סחורות המאוחסנות בכל מיקום מלאי מסוג 'פנימי'."
 
 #. module: stock
 #. odoo-javascript
@@ -3060,14 +3115,14 @@ msgstr "תבנית"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_replenishment_option__free_qty
 msgid "Free Qty"
-msgstr ""
+msgstr "כמות פנויה"
 
 #. module: stock
 #. odoo-javascript
 #: code:addons/stock/static/src/stock_forecasted/forecasted_details.xml:0
 #, python-format
 msgid "Free Stock"
-msgstr ""
+msgstr "מלאי פנוי"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_product_product__free_qty
@@ -3250,7 +3305,7 @@ msgstr "הגובה חייב להיות חיובי"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_warehouse_orderpoint__snoozed_until
 msgid "Hidden until next scheduler."
-msgstr ""
+msgstr "מוסתר עד לתזמון הבא"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_picking__hide_picking_type
@@ -3275,7 +3330,7 @@ msgstr "היסטוריה"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking_type__reservation_method
 msgid "How products in transfers of this operation type should be reserved."
-msgstr ""
+msgstr "איך יש לשמור את המוצרים בהעברות מסוג פעולה זו"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_lot_label_layout__id
@@ -3352,7 +3407,7 @@ msgstr ""
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_storage_category__allow_new_product__same
 msgid "If all products are same"
-msgstr ""
+msgstr "אם כל המוצרים זהים"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_lot__message_needaction
@@ -3408,7 +3463,7 @@ msgstr ""
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_storage_category__allow_new_product__empty
 msgid "If the location is empty"
-msgstr ""
+msgstr "אם המיקום הוא ריק"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
@@ -3422,7 +3477,7 @@ msgstr ""
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_quant__sn_duplicated
 msgid "If the same SN is in another Quant"
-msgstr ""
+msgstr "אם אותו מספר סידורי נמצא בכמות אחרת"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking__show_reserved
@@ -3441,6 +3496,8 @@ msgid ""
 "If this checkbox is ticked, Odoo will automatically show the reception "
 "report (if there are moves to allocate to) when validating."
 msgstr ""
+"אם תיבה זו מסומנת, אודו יראה אוטומטית את דוח הקבלה (אם יש העברות שצריך "
+"להקצות להן) כאשר יאומת."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking_type__print_label
@@ -3546,7 +3603,7 @@ msgstr "ייבא"
 #: code:addons/stock/models/stock_quant.py:0
 #, python-format
 msgid "Import Template for Inventory Adjustments"
-msgstr ""
+msgstr "תבנית ייבוא עבור התאמות מלאי"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_warehouse__in_type_id
@@ -3583,7 +3640,7 @@ msgstr "תאריך כניסה"
 #: code:addons/stock/static/src/stock_forecasted/forecasted_details.xml:0
 #, python-format
 msgid "Incoming Draft Transfer"
-msgstr ""
+msgstr "העברות טיוטה נכנסות"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_location__incoming_move_line_ids
@@ -3624,7 +3681,7 @@ msgstr "איתור קליטה"
 #: code:addons/stock/models/res_company.py:0
 #, python-format
 msgid "Inter-warehouse transit"
-msgstr ""
+msgstr "העברה בין מחסנים"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_move_line_view_search
@@ -3674,7 +3731,7 @@ msgstr "סוג פנימי"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_location__child_internal_location_ids
 msgid "Internal locations among descendants"
-msgstr ""
+msgstr "מיקומים פנימיים בין צאצאים"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_lot__ref
@@ -3712,7 +3769,7 @@ msgstr ""
 #, python-format
 msgid ""
 "Invalid rule's configuration, the following rule causes an endless loop: %s"
-msgstr ""
+msgstr "קונפיגורציה שגויה של הכלל, הכלל הבא גורם ללולאת אינסוף:%s"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_quant__inventory_quantity_auto_apply
@@ -3766,7 +3823,7 @@ msgstr "התאמות מלאי"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_inventory
 msgid "Inventory Count Sheet"
-msgstr ""
+msgstr "גיליון ספירת מלאי"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_request_count__inventory_date
@@ -3801,7 +3858,7 @@ msgstr "הפסד מלאי"
 #: code:addons/stock/static/src/stock_forecasted/forecasted_details.xml:0
 #, python-format
 msgid "Inventory On Hand"
-msgstr ""
+msgstr "מלאי בהישג יד"
 
 #. module: stock
 #: model:ir.actions.act_window,name:stock.stock_picking_type_action
@@ -3885,7 +3942,7 @@ msgstr "מאחר"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking__has_deadline_issue
 msgid "Is late or will be late depending on the deadline and scheduled date"
-msgstr ""
+msgstr "מאחר או יהיה באיחור בהתאם לדדליין ולתאריך המתוכנן"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__is_quantity_done_editable
@@ -3980,13 +4037,13 @@ msgstr "שמור כמות שנספרה "
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_inventory_conflict_form_view
 msgid "Keep Difference"
-msgstr ""
+msgstr "שמור על הפרש"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_inventory_conflict_form_view
 msgid ""
 "Keep the <strong>Counted Quantity</strong> (the Difference will be updated)"
-msgstr ""
+msgstr "שמור את ה<strong>כמות שנמדדה</strong> (ההפרש יתעדכן)"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_inventory_conflict_form_view
@@ -3994,11 +4051,13 @@ msgid ""
 "Keep the <strong>Difference</strong> (the Counted Quantity will be updated "
 "to reflect the same difference as when you counted)"
 msgstr ""
+"שמור את <strong>ההפרש</strong> (הכמות שנספרה תעודכן לשקף את אותו הפרש כפי "
+"שספרת)"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_picking_label_type__label_type
 msgid "Labels to print"
-msgstr ""
+msgstr "תוויות להדפסה"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_move_line_view_search
@@ -4023,7 +4082,7 @@ msgstr "תאריך ספירה אחרון"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_lot__last_delivery_partner_id
 msgid "Last Delivery Partner"
-msgstr ""
+msgstr "ספק משלוח אחרון"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_location__last_inventory_date
@@ -4184,7 +4243,7 @@ msgstr "עדכון אחרון ב"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_quant__last_count_date
 msgid "Last time the Quantity was Updated"
-msgstr ""
+msgstr "הפעם האחרונה שבה כמות עודכנה"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_picking__products_availability_state__late
@@ -4206,7 +4265,7 @@ msgstr "העברות באיחור"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking__products_availability
 msgid "Latest product availability status of the picking"
-msgstr ""
+msgstr "הסטטוס העדכני של זמינות המוצר לליקוט"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_warehouse_orderpoint__lead_days_date
@@ -4224,7 +4283,7 @@ msgstr "זמן אספקה "
 #: code:addons/stock/static/src/widgets/json_widget.xml:0
 #, python-format
 msgid "Lead Times"
-msgstr ""
+msgstr "זמני אספקה"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_request_count__set_count__empty
@@ -4257,7 +4316,7 @@ msgstr "האורך חייב להיות חיובי"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_package_type__length_uom_name
 msgid "Length unit of measure label"
-msgstr ""
+msgstr "תווית יחידת מידה לאורך"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_location__company_id
@@ -4377,14 +4436,19 @@ msgid "Lot"
 msgstr "אצווה"
 
 #. module: stock
+#: model:ir.model,name:stock.model_report_stock_label_lot_template_view
+msgid "Lot Label Report"
+msgstr "דו\"ח תווית אצווה"
+
+#. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__picking_label_type__label_type__lots
 msgid "Lot/SN Labels"
-msgstr ""
+msgstr "תוויות אצווה\\מספר סידורי"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_stock_move_line_kanban
 msgid "Lot/SN:"
-msgstr ""
+msgstr "אצווה\\מס' סידורי:"
 
 #. module: stock
 #: model:ir.model,name:stock.model_stock_lot
@@ -4455,7 +4519,7 @@ msgstr "אצוות גלויות"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_stock_track_confirmation
 msgid "Lots or serial numbers were not provided for tracked products"
-msgstr ""
+msgstr "מספרי אצווה או מספרים סידוריים לא סופקו עבור מוצרים במעקב"
 
 #. module: stock
 #: model:ir.actions.act_window,name:stock.action_production_lot_form
@@ -4472,6 +4536,8 @@ msgid ""
 "Lots/Serial numbers help you tracking the path followed by your products.\n"
 "            From their traceability report you will see the full history of their use, as well as their composition."
 msgstr ""
+"מספרי אצווה/מספרים סידוריים עוזרים לך לעקוב אחר המוצרים שלך.\n"
+"מדוח העקיבות שלהם תוכלו לראות את ההיסטוריה המלאה של השימוש בהם, כמו גם את הרכבם."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_warehouse__mto_pull_id
@@ -4599,13 +4665,15 @@ msgid ""
 "Maximum number of days before scheduled date that priority picking products "
 "should be reserved."
 msgstr ""
+"מספר הימים המקסימלי לפני התאריך המתוזמן שבהם יש לשמור מוצרים בעלי עדיפות "
+"לליקוט."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking_type__reservation_days_before
 msgid ""
 "Maximum number of days before scheduled date that products should be "
 "reserved."
-msgstr ""
+msgstr "מספר הימים המקסימלי לפני התאריך המתוזמן שבהם יש לשמור מוצרים."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_package_type__max_weight
@@ -4812,7 +4880,7 @@ msgstr "מלאי שלילי"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_location__net_weight
 msgid "Net Weight"
-msgstr ""
+msgstr "משקל נטו"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_picking_type__create_backorder__never
@@ -4878,7 +4946,7 @@ msgstr "המלאי הצפוי הבא"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_quant__inventory_date
 msgid "Next date the On Hand Quantity should be counted."
-msgstr ""
+msgstr "בתאריך הבא יש לספור את כמות המלאי הקיימת."
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.exception_on_picking
@@ -4890,7 +4958,7 @@ msgstr "ההעברות הבאות השפיעו:"
 #: code:addons/stock/report/report_stock_reception.py:0
 #, python-format
 msgid "No %s selected or a delivery order selected"
-msgstr ""
+msgstr "לא %sנבחר או הזמנת משלוח נבחרה."
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_backorder_confirmation
@@ -4920,7 +4988,7 @@ msgstr "ללא מעקב "
 #: model_terms:ir.ui.view,arch_db:stock.report_reception_body
 #, python-format
 msgid "No allocation need found."
-msgstr ""
+msgstr "לא נמצא צורך בהקצאה."
 
 #. module: stock
 #. odoo-python
@@ -5097,7 +5165,7 @@ msgstr "מספר תנועות המלאי היוצאות ב-12 החודשים ה�
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_warehouse_orderpoint__days_to_order
 msgid "Numbers of days  in advance that replenishments demands are created."
-msgstr ""
+msgstr "מספר ימים מראש שנוצרות דרישות חידוש."
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__res_company__annual_inventory_month__10
@@ -5128,6 +5196,7 @@ msgid ""
 "On hand quantity which hasn't been reserved on a transfer, in the default "
 "unit of measure of the product"
 msgstr ""
+"כמות זמינה במלאי שלא נשמרה בהעברה, ביחידת המידה המוגדרת כברירת מחדל של המוצר"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.product_template_kanban_stock_view
@@ -5137,12 +5206,12 @@ msgstr "במלאי"
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__lot_label_layout__label_quantity__lots
 msgid "One per lot/SN"
-msgstr ""
+msgstr "אחד לאצווה\\מספר סידורי"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__lot_label_layout__label_quantity__units
 msgid "One per unit"
-msgstr ""
+msgstr "אחד פר יחידה"
 
 #. module: stock
 #. odoo-python
@@ -5273,7 +5342,7 @@ msgstr "הזמן פעם אחת"
 #: code:addons/stock/models/stock_picking.py:0
 #, python-format
 msgid "Order signed"
-msgstr ""
+msgstr "הזמנה נחתמה"
 
 #. module: stock
 #. odoo-python
@@ -5316,7 +5385,7 @@ msgstr "תנועה מקורית "
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__orderpoint_id
 msgid "Original Reordering Rule"
-msgstr ""
+msgstr "כלל מקורי של הזמנה מחדש"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
@@ -5355,7 +5424,7 @@ msgstr " יוצא"
 #: code:addons/stock/static/src/stock_forecasted/forecasted_details.xml:0
 #, python-format
 msgid "Outgoing Draft Transfer"
-msgstr ""
+msgstr "העברה יוצאת מסוג טיוטה"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_location__outgoing_move_line_ids
@@ -5478,7 +5547,7 @@ msgstr "ברקוד חבילה עם תוכן"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_storage_category__package_capacity_ids
 msgid "Package Capacity"
-msgstr ""
+msgstr "קיבולת חבילה"
 
 #. module: stock
 #. odoo-python
@@ -5546,7 +5615,7 @@ msgstr "שימוש בחבילה"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_quant_package__valid_sscc
 msgid "Package name is valid SSCC"
-msgstr ""
+msgstr "שם החבילה הוא SSCC תקף"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_putaway_list
@@ -5690,7 +5759,7 @@ msgstr "סוג ליקוט"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_rule__picking_type_code_domain
 msgid "Picking Type Code Domain"
-msgstr ""
+msgstr "דומיין קוד סוג ליקוט"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.vpicktree
@@ -5712,7 +5781,7 @@ msgstr "העברה מתוכננת"
 #: code:addons/stock/static/src/widgets/stock_rescheduling_popover.xml:0
 #, python-format
 msgid "Planning Issue"
-msgstr ""
+msgstr "בעיות תכנון"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_internal_search
@@ -5833,7 +5902,7 @@ msgstr "קְדִימוּת"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_move__delay_alert_date
 msgid "Process at this date to be on time"
-msgstr ""
+msgstr "עבד בתאריך הזה על מנת להיות בזמן"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
@@ -5961,7 +6030,7 @@ msgstr "דו\"ח תווית מוצר (ZPL)"
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__picking_label_type__label_type__products
 msgid "Product Labels"
-msgstr ""
+msgstr "תוויות מוצר"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.search_product_lot_filter
@@ -5999,7 +6068,7 @@ msgstr "אריזות מוצר"
 #: code:addons/stock/models/stock_quant.py:0
 #, python-format
 msgid "Product Quantity Confirmed"
-msgstr ""
+msgstr "כמות מוצר אושרה"
 
 #. module: stock
 #. odoo-python
@@ -6104,7 +6173,7 @@ msgstr "איתור הייצור"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_location_search
 msgid "Production Locations"
-msgstr ""
+msgstr "מיקומי ייצור"
 
 #. module: stock
 #. odoo-python
@@ -6139,7 +6208,7 @@ msgstr "מוצרים ישמרו תחילה להעברות עם סדר העדיפ
 #: code:addons/stock/models/product.py:0
 #, python-format
 msgid "Products: %(location)s"
-msgstr ""
+msgstr "מוצר:%(location)s"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_rule__group_propagation_option__propagate
@@ -6359,7 +6428,7 @@ msgstr "כמות שמורה "
 #: code:addons/stock/wizard/stock_replenishment_info.py:0
 #, python-format
 msgid "Quantity available too low"
-msgstr ""
+msgstr "כמות זמינה נמוכה מדי"
 
 #. module: stock
 #. odoo-python
@@ -6456,6 +6525,8 @@ msgid ""
 "Quants are auto-deleted when appropriate. If you must manually delete them, "
 "please ask a stock manager to do it."
 msgstr ""
+"הכמויות נמחקות אוטומטיות כאשר נמצאת התאמה. אם אתה חייב למחוק אותן ידנית , "
+"אנא צור קשר עם מנהל המלאי על מנת לבצע זאת."
 
 #. module: stock
 #. odoo-python
@@ -6709,7 +6780,7 @@ msgstr "עיתוד מלאי"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_replenishment_option__replenishment_info_id
 msgid "Replenishment Info"
-msgstr ""
+msgstr "מידע חידוש מלאי "
 
 #. module: stock
 #: model:ir.actions.act_window,name:stock.action_stock_replenishment_info
@@ -6722,7 +6793,7 @@ msgstr "מידע על עיתוד מלאי"
 #: code:addons/stock/models/stock_orderpoint.py:0
 #, python-format
 msgid "Replenishment Information for %s in %s"
-msgstr ""
+msgstr "מידע על חידוש מלאי עבור %s ב-%s"
 
 #. module: stock
 #. odoo-python
@@ -6824,7 +6895,7 @@ msgstr ""
 #: code:addons/stock/models/stock_move_line.py:0
 #, python-format
 msgid "Reserving a negative quantity is not allowed."
-msgstr ""
+msgstr "קבלה של כמות שלילית אינה אפשרית."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_product_product__responsible_id
@@ -6927,7 +6998,7 @@ msgstr "החזר העברה"
 #. module: stock
 #: model:ir.actions.server,name:stock.action_revert_inventory_adjustment
 msgid "Revert Inventory Adjustment"
-msgstr ""
+msgstr "בטל התאמת מלאי"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_replenishment_option__route_id
@@ -6993,7 +7064,7 @@ msgstr ""
 #: code:addons/stock/models/stock_rule.py:0
 #, python-format
 msgid "Rule %s belongs to %s while the route belongs to %s."
-msgstr ""
+msgstr "חוק %s שייך ל%s בזמן שהמסלול שייך ל%s."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_rule__rule_message
@@ -7069,7 +7140,7 @@ msgstr "תנאים ותנאי מכירה סטנדרטיים"
 #: code:addons/stock/static/src/widgets/json_widget.xml:0
 #, python-format
 msgid "Sales History"
-msgstr ""
+msgstr "היסטורית מכירות "
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_product_replenish__date_planned
@@ -7166,7 +7237,7 @@ msgstr "חפש פסולים"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.replenishment_option_tree_view
 msgid "Select Route"
-msgstr ""
+msgstr "בחר מסלול"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_location_route_form_view
@@ -7221,7 +7292,7 @@ msgstr ""
 #: model:mail.template,description:stock.mail_template_data_delivery_confirmation
 msgid ""
 "Sent to the customers when orders are delivered, if the setting is enabled"
-msgstr ""
+msgstr "נשלח ללקוחות כאשר ההזמנות נמסרות, אם ההגדרה מופעלת."
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__res_company__annual_inventory_month__9
@@ -7306,6 +7377,7 @@ msgid ""
 "Serial number (%s) already exists in location(s): %s. Please correct the "
 "serial number encoded."
 msgstr ""
+"מספר סידורי (%s) כבר נמצא במיקום(ים): %s. אנא תקן את מספר הסידורי המוזן."
 
 #. module: stock
 #. odoo-python
@@ -7316,6 +7388,9 @@ msgid ""
 "\n"
 "Please correct this to prevent inconsistent data."
 msgstr ""
+"מספר סידורי (%s) לא נמצא במיקום %s, אבל נמצא במיקום (ים): %s.\n"
+"\n"
+"אנא את זה על מנת למנוע מידע שגוי."
 
 #. module: stock
 #. odoo-python
@@ -7431,7 +7506,7 @@ msgstr ""
 #. module: stock
 #: model:mail.template,name:stock.mail_template_data_delivery_confirmation
 msgid "Shipping: Send by Email"
-msgstr ""
+msgstr "משלוח: נשלח ע\"י אימייל"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_warehouse__code
@@ -7511,7 +7586,7 @@ msgstr "הצד כפתור הגדרת כמויות"
 #: model:ir.model.fields,field_description:stock.field_stock_backorder_confirmation__show_transfers
 #: model:ir.model.fields,field_description:stock.field_stock_immediate_transfer__show_transfers
 msgid "Show Transfers"
-msgstr ""
+msgstr "הצג העברות"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_picking__show_validate
@@ -7780,18 +7855,18 @@ msgstr "דוח כמות מלאי"
 #. module: stock
 #: model:ir.model,name:stock.model_report_stock_report_reception
 msgid "Stock Reception Report"
-msgstr ""
+msgstr "דו\"ח קבלת מלאי"
 
 #. module: stock
 #: model:ir.model,name:stock.model_report_stock_report_product_product_replenishment
 #: model:ir.model,name:stock.model_report_stock_report_product_template_replenishment
 msgid "Stock Replenishment Report"
-msgstr ""
+msgstr "דוח חידוש מלאי"
 
 #. module: stock
 #: model:ir.model,name:stock.model_stock_request_count
 msgid "Stock Request an Inventory Count"
-msgstr ""
+msgstr "בקשת מלאי על ספירת מלאי"
 
 #. module: stock
 #: model:ir.model,name:stock.model_stock_rule
@@ -7852,12 +7927,12 @@ msgstr "דוח כללי מלאי"
 #. module: stock
 #: model:ir.model,name:stock.model_stock_replenishment_info
 msgid "Stock supplier replenishment information"
-msgstr ""
+msgstr "מידע על אספקת מלאי מספק"
 
 #. module: stock
 #: model:ir.model,name:stock.model_stock_replenishment_option
 msgid "Stock warehouse replenishment option"
-msgstr ""
+msgstr "אפשרות לחידוש מחסן מלאי"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__product_template__detailed_type__product
@@ -7974,7 +8049,7 @@ msgstr ""
 msgid ""
 "Technical Field used to decide whether the button \"Allocation\" should be "
 "displayed."
-msgstr ""
+msgstr "שדה טכני המשמש להחלטה אם יש להציג את הכפתור \"הקצאה\"."
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_warehouse
@@ -8047,6 +8122,9 @@ msgid ""
 "order to be valid, any derogation must be expressly agreed to in advance in "
 "writing."
 msgstr ""
+"הלקוח מוותר במפורש על התנאים וההתניות הסטנדרטיים שלו, גם אם נוסחו לאחר תנאי "
+"מכירה סטנדרטיים אלה. כל סטייה מהתנאים תחייב תוקף רק אם סוכמה מראש ובכתב "
+"באופן מפורש."
 
 #. module: stock
 #. odoo-python
@@ -8067,7 +8145,7 @@ msgstr "החברה מוגדרת אוטומטית לפי העדפות המשתמ�
 #: code:addons/stock/models/stock_move.py:0
 #, python-format
 msgid "The deadline has been automatically updated due to a delay on %s."
-msgstr ""
+msgstr "תאריך היעד עודכן אוטומטית עקב עיכוב ב%s."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_rule__delay
@@ -8093,19 +8171,19 @@ msgstr "המלאי החזוי לתאריך"
 #: code:addons/stock/models/stock_orderpoint.py:0
 #, python-format
 msgid "The inter-warehouse transfers have been generated"
-msgstr ""
+msgstr "ההעברות בין המחסנים נוצרו"
 
 #. module: stock
 #. odoo-python
 #: code:addons/stock/models/stock_move_line.py:0
 #, python-format
 msgid "The inventory adjustments have been reverted."
-msgstr ""
+msgstr "התאמות המלאי בוטלו."
 
 #. module: stock
 #: model:ir.model.constraint,message:stock.constraint_stock_location_inventory_freq_nonneg
 msgid "The inventory frequency (days) for a location must be non-negative"
-msgstr ""
+msgstr "תדירות המלאי (ימים) עבור מיקום חייבת להיות לא שלילית"
 
 #. module: stock
 #: model:ir.model.constraint,message:stock.constraint_stock_warehouse_warehouse_name_uniq
@@ -8117,7 +8195,7 @@ msgstr "שם המחסן חייב להיות ייחודי לכל חברה!"
 #: code:addons/stock/wizard/stock_assign_serial_numbers.py:0
 #, python-format
 msgid "The number of Serial Numbers to generate must be greater than zero."
-msgstr ""
+msgstr " מספר המספרים הסידוריים חייב להיות גדול מאפס."
 
 #. module: stock
 #: model_terms:ir.actions.act_window,help:stock.stock_picking_type_action
@@ -8127,6 +8205,10 @@ msgid ""
 "            On the operation type you could e.g. specify if packing is needed by default,\n"
 "            if it should show the customer."
 msgstr ""
+"סוגי הפעולה מאפשרם להקצות לכל מלאי\n"
+"          פעולה יחודית אשר ישפיע על אופן הצגת המידע בהתאם.\n"
+"            לדוגמה, בסוג הפעולה ניתן להגדיר אם יש צורך באריזה כברירת מחדל,\n"
+"            האם הפעולה תוצג ללקוח."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_quant__package_id
@@ -8156,7 +8238,7 @@ msgstr "המוצר אינו זמין בכמות מספקת"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_quant__inventory_quantity
 msgid "The product's counted quantity."
-msgstr ""
+msgstr "הכמות הנספרת של המוצר."
 
 #. module: stock
 #. odoo-python
@@ -8167,6 +8249,8 @@ msgid ""
 "precision defined on the unit of measure \"%s\". Please change the quantity "
 "done or the rounding precision of your unit of measure."
 msgstr ""
+"הכמות שבוצעה עבור המוצר \"%s\" לא תואמת את דיוק העיגול שהוגדר עבור יחידת "
+"המידה \"%s\". אנא שנה את הכמות שבוצעה או את דיוק העיגול של יחידת המידה שלך."
 
 #. module: stock
 #. odoo-python
@@ -8195,7 +8279,7 @@ msgstr ""
 msgid ""
 "The selected Inventory Frequency (Days) creates a date too far into the "
 "future."
-msgstr ""
+msgstr "תדירות המלאי שנבחרה (ימים) יוצרת תאריך רחוק מדי בעתיד."
 
 #. module: stock
 #. odoo-python
@@ -8205,11 +8289,13 @@ msgid ""
 "The serial number has already been assigned: \n"
 " Product: %s, Serial Number: %s"
 msgstr ""
+"המספר הסידורי כבר הוקצה ל:\n"
+"מוצר:%s, מספר סידורי:%s"
 
 #. module: stock
 #: model:ir.model.constraint,message:stock.constraint_stock_warehouse_warehouse_code_uniq
 msgid "The short name of the warehouse must be unique per company!"
-msgstr ""
+msgstr "השם הקצר של המחסן חייב להיות ייחודי לכל חברה!"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_res_partner__property_stock_customer
@@ -8257,7 +8343,7 @@ msgstr ""
 #: code:addons/stock/models/stock_move_line.py:0
 #, python-format
 msgid "There are no inventory adjustments to revert."
-msgstr ""
+msgstr "אין התאמות מלאי לביטול."
 
 #. module: stock
 #: model_terms:ir.actions.act_window,help:stock.stock_move_line_action
@@ -8267,7 +8353,7 @@ msgstr "אין עדיין תנועת מוצר"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.duplicated_sn_warning
 msgid "This SN is already in another location."
-msgstr ""
+msgstr "מספר סידורי זה נמצא במיקום אחר."
 
 #. module: stock
 #. odoo-python
@@ -8332,7 +8418,7 @@ msgstr ""
 msgid ""
 "This location (if it's internal) and all its descendants filtered by "
 "type=Internal."
-msgstr ""
+msgstr "מיקום זה (אם הוא פנימי) וכל הצאצאים שלו, מסוננים לפי סוג = פנימי."
 
 #. module: stock
 #. odoo-python
@@ -8426,6 +8512,7 @@ msgid ""
 "This product's company cannot be changed as long as there are quantities of "
 "it belonging to another company."
 msgstr ""
+"לא ניתן לשנות את החברה של מוצר זה כל עוד יש כמויות שלו השייכות לחברה אחרת."
 
 #. module: stock
 #. odoo-python
@@ -8435,6 +8522,8 @@ msgid ""
 "This product's company cannot be changed as long as there are stock moves of"
 " it belonging to another company."
 msgstr ""
+"לא ניתן לשנות את החברה של מוצר זה כל עוד יש תנועות מלאי שלו השייכים לחברה "
+"אחרת."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_change_product_qty__new_quantity
@@ -8454,7 +8543,7 @@ msgstr "רשומה זו כבר קיימת."
 #: code:addons/stock/report/report_stock_reception.py:0
 #, python-format
 msgid "This report cannot be used for done and not done %s at the same time"
-msgstr ""
+msgstr "לא ניתן להשתמש בדו\"ח זה לביצוע ולא לביצוע %s בו-זמנית"
 
 #. module: stock
 #. odoo-python
@@ -8466,6 +8555,9 @@ msgid ""
 "reference values or assign the existing reference sequence to this operation"
 " type."
 msgstr ""
+"קידומת הרצף הזו כבר נמצאת בשימוש על ידי סוג פעולה אחר. מומלץ לבחור קידומת "
+"ייחודית כדי למנוע בעיות ו/או ערכי ייחוס כפולים, או לשייך את רצף הייחוס הקיים"
+" לסוג הפעולה ."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_product_product__property_stock_production
@@ -8500,7 +8592,7 @@ msgstr ""
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.inventory_warning_reset_view
 msgid "This will discard all unapplied counts, do you want to proceed?"
-msgstr ""
+msgstr "פעולה זו תמחק את כל הספירות שלא הוחלו, האם ברצונך להמשיך?"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_stock_track_confirmation
@@ -8508,12 +8600,14 @@ msgid ""
 "Those products you added are tracked but lots/serials were not defined. Once applied those can't be changed.<br/>\n"
 "                    Apply anyway?"
 msgstr ""
+"המוצרים שהוספת נמצאים במעקב אבל לא הוגדרו מספרי אצווה/סידורים. לאחר לאחר שיתווספו לא יהיה ניתן לשנות אותם.\n"
+"<br/>החל בכל זאת ?"
 
 #. module: stock
 #: model:digest.tip,name:stock.digest_tip_stock_0
 #: model_terms:digest.tip,tip_description:stock.digest_tip_stock_0
 msgid "Tip: Speed up inventory operations with barcodes"
-msgstr ""
+msgstr "טיפ: האיץ את פעולות המלאי עם ברקודים"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move_line__location_dest_id
@@ -8534,7 +8628,7 @@ msgstr "ליישום"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_backorder_confirmation_line__to_backorder
 msgid "To Backorder"
-msgstr ""
+msgstr "להזמנה חוזרת "
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.quant_search_view
@@ -8613,7 +8707,7 @@ msgstr "כמות כוללת"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_stock_quant_tree_editable
 msgid "Total Reserved"
-msgstr ""
+msgstr "סה\"כ שמור"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_product_category__total_route_ids
@@ -8728,7 +8822,7 @@ msgstr "העברות"
 #: code:addons/stock/models/stock_picking.py:0
 #, python-format
 msgid "Transfers %s: Please add some items to move."
-msgstr ""
+msgstr "העברה %s: בבקשה הוסף פריטים להעברה."
 
 #. module: stock
 #: model_terms:ir.actions.act_window,help:stock.action_get_picking_type_operations
@@ -8752,7 +8846,7 @@ msgstr "העברות לקבוצות"
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_internal_search
 msgid ""
 "Transfers that are late on scheduled time or one of pickings will be late"
-msgstr ""
+msgstr "העברות שעברו את הזמן המתוזמן או שאחד מהליקוטים יהיו באיחור."
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_location__usage__transit
@@ -8791,7 +8885,7 @@ msgstr "מופעל ידנית"
 #: code:addons/stock/static/src/stock_forecasted/stock_forecasted.js:0
 #, python-format
 msgid "Try to add some incoming or outgoing transfers."
-msgstr ""
+msgstr "נסה להוסיף כמה העברות נכנסות או יוצאות."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_barcode_rule__type
@@ -8823,11 +8917,13 @@ msgstr "סוג הפעילות החריגה ברשומה."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_ups
+#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
 msgid "UPS Connector"
 msgstr "חיבור ל UPS"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_usps
+#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
 msgid "USPS Connector"
 msgstr "חיבור ל USPS"
 
@@ -8836,7 +8932,7 @@ msgstr "חיבור ל USPS"
 #: code:addons/stock/static/src/components/reception_report_line/stock_reception_report_line.xml:0
 #, python-format
 msgid "Unassign"
-msgstr ""
+msgstr "הסר הקצאה"
 
 #. module: stock
 #. odoo-javascript
@@ -8944,7 +9040,7 @@ msgstr "בטל שמירה"
 #: code:addons/stock/models/stock_move.py:0
 #, python-format
 msgid "Unsafe unit of measure"
-msgstr ""
+msgstr "יחידת מידה לא בטוחה"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__product_uom
@@ -9182,7 +9278,7 @@ msgstr "תחום מחסן"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.replenishment_option_tree_view
 msgid "Warehouse Location"
-msgstr ""
+msgstr "מיקום מחסן"
 
 #. module: stock
 #: model:ir.ui.menu,name:stock.menu_warehouse_config
@@ -9216,7 +9312,7 @@ msgstr "מסלולי מחסן"
 #: code:addons/stock/static/src/stock_forecasted/forecasted_warehouse_filter.xml:0
 #, python-format
 msgid "Warehouse:"
-msgstr ""
+msgstr "מחסן:"
 
 #. module: stock
 #. odoo-javascript
@@ -9260,7 +9356,7 @@ msgstr "אזהרה"
 #: code:addons/stock/models/stock_quant.py:0
 #, python-format
 msgid "Warning Duplicated SN"
-msgstr ""
+msgstr "אזהרת מספר סידורי כפול"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_replenishment_option__warning_message
@@ -9322,7 +9418,7 @@ msgstr "משקל של סוג החבילה"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_storage_category__weight_uom_name
 msgid "Weight unit"
-msgstr ""
+msgstr "יחידת משקל"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_package_type__weight_uom_name
@@ -9345,6 +9441,8 @@ msgid ""
 "When a warehouse is selected for this route, this route should be seen as "
 "the default route when products pass through this warehouse."
 msgstr ""
+"כאשר נבחר מחסן למסלול זה, יש לראות את המסלול הזה כמסלול ברירת המחדל כאשר "
+"מוצרים עוברים במחסן זה."
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_picking__move_type__one
@@ -9356,12 +9454,12 @@ msgstr "כאשר כל המוצרים מוכנים"
 msgid ""
 "When checked, the route will be selectable in the Inventory tab of the "
 "Product form."
-msgstr ""
+msgstr "כאשר מסומן, ניתן יהיה לבחור את המסלול בלשונית המלאי בטופס המוצר."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_route__product_categ_selectable
 msgid "When checked, the route will be selectable on the Product Category."
-msgstr ""
+msgstr "כאשר מסומן, ניתן יהיה לבחור את המסלול בקטגוריית המוצר."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_route__packaging_selectable
@@ -9553,7 +9651,7 @@ msgstr ""
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_inventory_conflict_form_view
 msgid "You can either :"
-msgstr ""
+msgstr "אתה יכול : "
 
 #. module: stock
 #. odoo-python
@@ -9612,7 +9710,7 @@ msgstr ""
 #: code:addons/stock/models/stock_scrap.py:0
 #, python-format
 msgid "You can only enter positive quantities."
-msgstr ""
+msgstr "ניתן להכניס רק כמויות חיוביות."
 
 #. module: stock
 #. odoo-python
@@ -9637,7 +9735,7 @@ msgstr ""
 msgid ""
 "You can't deactivate the multi-location if you have more than once warehouse"
 " by company"
-msgstr ""
+msgstr "לא תוכל לבטל את ריבוי המיקומים אם יש לך יותר ממחסן  אחד פר חברה."
 
 #. module: stock
 #. odoo-python
@@ -9663,7 +9761,7 @@ msgstr ""
 #: code:addons/stock/models/stock_move.py:0
 #, python-format
 msgid "You cannot change a cancelled stock move, create a new line instead."
-msgstr ""
+msgstr "לא ניתן לשנות העברת מלאי שבוטלה, צור שורה חדשה במקום זאת."
 
 #. module: stock
 #. odoo-python
@@ -9678,7 +9776,7 @@ msgstr "אינך יכול לשנות את התאריך המתוזמן בהעבר
 #, python-format
 msgid ""
 "You cannot change the UoM for a stock move that has been set to 'Done'."
-msgstr ""
+msgstr "אינך יכול לשנות את יחידת המידה עבור העברת מלאי שכבר הוגדרה כ'בוצע'."
 
 #. module: stock
 #. odoo-python
@@ -9755,6 +9853,7 @@ msgid ""
 "You cannot pack products into the same package when they are from different "
 "transfers with different operation types."
 msgstr ""
+"לא ניתן לארוז מוצרים לאותה חבילה כשהם מהעברות שונות עם סוגי פעולה שונים."
 
 #. module: stock
 #. odoo-python
@@ -9782,7 +9881,7 @@ msgstr ""
 msgid ""
 "You cannot set a scrap location as the destination location for a "
 "manufacturing type operation."
-msgstr ""
+msgstr "אינך יכול לקבוע מיקום פסולים כמיקום יעד לפעולה מסוג ייצור."
 
 #. module: stock
 #. odoo-python
@@ -9796,7 +9895,7 @@ msgstr "לא ניתן לפצל תנועת טיוטה. נדרש שתהיה מאו
 #: code:addons/stock/models/stock_move.py:0
 #, python-format
 msgid "You cannot split a stock move that has been set to 'Done' or 'Cancel'."
-msgstr ""
+msgstr "לא ניתן לפצל תזוזת מלאי שהוגדרה לסטטוס כ'בוצעה' או 'בוטלה'."
 
 #. module: stock
 #. odoo-python
@@ -9806,6 +9905,7 @@ msgid ""
 "You cannot take products from or deliver products to a location of type "
 "\"view\" (%s)."
 msgstr ""
+"אינך יכול לקחת מוצרים ממיקום או למסור מוצרים למיקום מסוג 'תצוגה' (%s)."
 
 #. module: stock
 #. odoo-python
@@ -9865,6 +9965,8 @@ msgid ""
 "You have product(s) in stock that have lot/serial number tracking enabled. \n"
 "Switch off tracking on all the products before switching off this setting."
 msgstr ""
+"יש לך מוצרים במלאי שהמעקב אחריהם הוא מספרי אצווה/מספרים סידוריים מופעל. \n"
+"כבה את המעקב בכל המוצרים לפני כיבוי הגדרה זו."
 
 #. module: stock
 #. odoo-python
@@ -9885,6 +9987,8 @@ msgid ""
 "You have to select a product unit of measure that is in the same category as"
 " the default unit of measure of the product"
 msgstr ""
+"עליך לבחור יחידת מידה של מוצר שנמצאת באותה קטגוריה של יחידת המידה המוגדרת "
+"כברירת המחדל של המוצר"
 
 #. module: stock
 #. odoo-python
@@ -9937,7 +10041,7 @@ msgstr ""
 #: code:addons/stock/models/stock_picking.py:0
 #, python-format
 msgid "You need to supply a Lot/Serial number for products %s."
-msgstr ""
+msgstr "יש צורך לספק מספר אצווה/ מספר סידורי למוצרים:%s."
 
 #. module: stock
 #: model_terms:res.company,invoice_terms_html:stock.res_company_1
@@ -10007,12 +10111,12 @@ msgstr "המלאי שלך ריק כרגע"
 #: model:ir.model.fields.selection,name:stock.selection__lot_label_layout__print_format__zpl
 #: model:ir.model.fields.selection,name:stock.selection__product_label_layout__print_format__zpl
 msgid "ZPL Labels"
-msgstr ""
+msgstr "מדבקות ZPL"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__product_label_layout__print_format__zplxprice
 msgid "ZPL Labels with price"
-msgstr ""
+msgstr "מדבקות ZPL עם מחיר"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_stock_rule
@@ -10024,7 +10128,7 @@ msgstr "]<br/>מינימום:"
 #: code:addons/stock/static/src/widgets/json_widget.xml:0
 #, python-format
 msgid "below the inventory"
-msgstr ""
+msgstr "מתחת למלאי"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_bpost
@@ -10045,7 +10149,7 @@ msgstr ""
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_type_form
 msgid "days before/"
-msgstr ""
+msgstr "ימים לפני/"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_warehouse
@@ -10091,7 +10195,7 @@ msgstr ""
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_location_route_form_view
 msgid "e.g. Two-steps reception"
-msgstr ""
+msgstr "למשל, קליטה ב2 שלבים"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_warn_insufficient_qty_scrap_form_view
@@ -10120,7 +10224,7 @@ msgstr "הפעל ידנית כדי לרענן את כללי המלאי באופ�
 #: code:addons/stock/static/src/widgets/json_widget.xml:0
 #, python-format
 msgid "minimum of"
-msgstr ""
+msgstr "מינימום של"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.exception_on_picking
@@ -10132,7 +10236,7 @@ msgstr "של"
 #: code:addons/stock/static/src/widgets/stock_rescheduling_popover.xml:0
 #, python-format
 msgid "planned on"
-msgstr ""
+msgstr "מתוכנן ל-"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.exception_on_picking
@@ -10149,7 +10253,7 @@ msgstr "report_stock_quantity_graph"
 #: code:addons/stock/static/src/widgets/json_widget.xml:0
 #, python-format
 msgid "should be replenished"
-msgstr ""
+msgstr "צריך לחדש"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_move__warehouse_id
@@ -10170,7 +10274,7 @@ msgstr ""
 #: code:addons/stock/wizard/stock_replenishment_info.py:0
 #, python-format
 msgid "{0} can only provide {1} {2}, while the quantity to order is {3} {2}."
-msgstr ""
+msgstr "{0} יכול לספק{1}{2} בזמן שהכמות שהוזמנה היא{3}{2}."
 
 #. module: stock
 #: model:mail.template,report_name:stock.mail_template_data_delivery_confirmation

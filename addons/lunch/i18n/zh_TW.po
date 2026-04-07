@@ -5,15 +5,16 @@
 # Translators:
 # 敬雲 林 <chingyun@yuanchih-consult.com>, 2022
 # Martin Trigaux, 2023
-# Tony Ng, 2024
+# Wil Odoo, 2025
+# Tony Ng, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Tony Ng, 2024\n"
+"Last-Translator: Tony Ng, 2025\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/odoo/teams/41243/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -504,12 +505,12 @@ msgstr "該產品是否有額外的功能"
 #. module: lunch
 #: model:ir.model.fields,field_description:lunch.field_lunch_supplier__message_attachment_count
 msgid "Attachment Count"
-msgstr "附件數"
+msgstr "附件數目"
 
 #. module: lunch
 #: model:ir.model.constraint,message:lunch.constraint_lunch_supplier_automatic_email_time_range
 msgid "Automatic Email Sending Time should be between 0 and 12"
-msgstr "自動電子信件發送時間應介於0到12之間"
+msgstr "自動電郵發送時間應介乎 0 至 12 之間"
 
 #. module: lunch
 #: model_terms:ir.ui.view,arch_db:lunch.lunch_supplier_view_form
@@ -594,6 +595,7 @@ msgid "Cancelled"
 msgstr "已取消"
 
 #. module: lunch
+#. odoo-python
 #: code:addons/lunch/models/lunch_supplier.py:0
 #, python-format
 msgid "Cannot send an email to this supplier!"
@@ -818,7 +820,7 @@ msgstr "日期"
 #: model:ir.model.fields,field_description:lunch.field_lunch_supplier__delivery
 #: model:ir.model.fields.selection,name:lunch.selection__lunch_supplier__delivery__delivery
 msgid "Delivery"
-msgstr "交貨"
+msgstr "送貨"
 
 #. module: lunch
 #: model:ir.model.fields,field_description:lunch.field_lunch_cashmove__description
@@ -831,7 +833,7 @@ msgstr "說明"
 #. module: lunch
 #: model_terms:ir.ui.view,arch_db:lunch.lunch_order_view_form
 msgid "Discard"
-msgstr "取消"
+msgstr "捨棄"
 
 #. module: lunch
 #: model:ir.model.fields,field_description:lunch.field_lunch_alert__mode
@@ -1283,7 +1285,7 @@ msgstr "工作餐產品類別"
 #. module: lunch
 #: model:lunch.product,name:lunch.product_salmon
 msgid "Lunch Salmon 20pc"
-msgstr "午餐鮭魚 20pc"
+msgstr "午餐鮭魚 20 件"
 
 #. module: lunch
 #: model:ir.model,name:lunch.model_lunch_supplier
@@ -1517,6 +1519,20 @@ msgid "No cash move yet"
 msgstr "無現金憑證"
 
 #. module: lunch
+#. odoo-javascript
+#: code:addons/lunch/static/src/views/no_content_helper.xml:0
+#, python-format
+msgid "No location found"
+msgstr "找不到有位置"
+
+#. module: lunch
+#. odoo-javascript
+#: code:addons/lunch/static/src/components/lunch_dashboard.xml:0
+#, python-format
+msgid "No lunch location available."
+msgstr "沒有可用的午餐位置。"
+
+#. module: lunch
 #: model_terms:ir.actions.act_window,help:lunch.lunch_order_action_control_suppliers
 msgid "No lunch order yet"
 msgstr "暫無午餐訂單"
@@ -1721,6 +1737,13 @@ msgstr "瑪格麗特比薩"
 #: model:lunch.product,name:lunch.product_vege
 msgid "Pizza Vegetarian"
 msgstr "比薩 素食"
+
+#. module: lunch
+#. odoo-javascript
+#: code:addons/lunch/static/src/views/no_content_helper.xml:0
+#, python-format
+msgid "Please create a location to start ordering."
+msgstr "請建立一個位置，以開始下單。"
 
 #. module: lunch
 #: model_terms:lunch.alert,message:lunch.alert_office_3
@@ -1951,7 +1974,7 @@ msgstr "顯示訂單按鈕"
 #. module: lunch
 #: model:ir.model.fields,field_description:lunch.field_lunch_alert__until
 msgid "Show Until"
-msgstr "顯示直到"
+msgstr "顯示直至"
 
 #. module: lunch
 #: model:lunch.product,name:lunch.product_spicy_tuna
@@ -1962,7 +1985,7 @@ msgstr "辣金槍魚"
 #: model:ir.model.fields,field_description:lunch.field_lunch_supplier__state_id
 #: model_terms:ir.ui.view,arch_db:lunch.lunch_supplier_view_form
 msgid "State"
-msgstr "狀態"
+msgstr "州/省"
 
 #. module: lunch
 #: model:ir.model.fields,field_description:lunch.field_lunch_order__state
@@ -2089,7 +2112,7 @@ msgstr "訂單已傳送。"
 msgid ""
 "The responsible is the person that will order lunch for everyone. It will be"
 " used as the 'from' when sending the automatic email."
-msgstr "負責人是為每個人訂購午餐的人。它將在發送自動電子信件時用作「發件人」。"
+msgstr "負責人是為大家訂午餐的人。發送自動電子郵件時，會將該人列為寄件人。"
 
 #. module: lunch
 #. odoo-python
@@ -2263,7 +2286,7 @@ msgstr "記錄的異常活動的類型。"
 #. module: lunch
 #: model:ir.model.fields,field_description:lunch.field_lunch_supplier__recurrency_end_date
 msgid "Until"
-msgstr "直到"
+msgstr "直至"
 
 #. module: lunch
 #: model:ir.model,name:lunch.model_res_users

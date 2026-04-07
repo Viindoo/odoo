@@ -28,33 +28,28 @@ class AccountEdiXmlCII(models.AbstractModel):
 
     def _export_invoice_constraints(self, invoice, vals):
         constraints = self._invoice_constraints_common(invoice)
+        if invoice.move_type == 'out_invoice':
+            # [BR-DE-1] An Invoice must contain information on "PAYMENT INSTRUCTIONS" (BG-16)
+            # first check that a partner_bank_id exists, then check that there is an account number
+            constraints.update({
+                'seller_payment_instructions_1': self._check_required_fields(
+                    vals['record'], 'partner_bank_id'
+                ),
+                'seller_payment_instructions_2': self._check_required_fields(
+                    vals['record']['partner_bank_id'], 'sanitized_acc_number',
+                    _("The field 'Sanitized Account Number' is required on the Recipient Bank.")
+                ),
+            })
         constraints.update({
             # [BR-08]-An Invoice shall contain the Seller postal address (BG-5).
             # [BR-09]-The Seller postal address (BG-5) shall contain a Seller country code (BT-40).
             'seller_postal_address': self._check_required_fields(
                 vals['record']['company_id']['partner_id']['commercial_partner_id'], 'country_id'
             ),
-            # [BR-DE-9] The element "Buyer post code" (BT-53) must be transmitted. (only mandatory in Germany ?)
-            'buyer_postal_address': self._check_required_fields(
-                vals['record']['commercial_partner_id'], 'zip'
-            ),
-            # [BR-DE-4] The element "Seller post code" (BT-38) must be transmitted. (only mandatory in Germany ?)
-            'seller_post_code': self._check_required_fields(
-                vals['record']['company_id']['partner_id']['commercial_partner_id'], 'zip'
-            ),
             # [BR-CO-26]-In order for the buyer to automatically identify a supplier, the Seller identifier (BT-29),
             # the Seller legal registration identifier (BT-30) and/or the Seller VAT identifier (BT-31) shall be present.
             'seller_identifier': self._check_required_fields(
                 vals['record']['company_id'], ['vat']  # 'siret'
-            ),
-            # [BR-DE-1] An Invoice must contain information on "PAYMENT INSTRUCTIONS" (BG-16)
-            # first check that a partner_bank_id exists, then check that there is an account number
-            'seller_payment_instructions_1': self._check_required_fields(
-                vals['record'], 'partner_bank_id'
-            ),
-            'seller_payment_instructions_2': self._check_required_fields(
-                vals['record']['partner_bank_id'], 'sanitized_acc_number',
-                _("The field 'Sanitized Account Number' is required on the Recipient Bank.")
             ),
             # [BR-DE-6] The element "Seller contact telephone number" (BT-42) must be transmitted.
             'seller_phone': self._check_required_fields(
@@ -74,9 +69,9 @@ class AccountEdiXmlCII(models.AbstractModel):
             # [BR-IG-05]-In an Invoice line (BG-25) where the Invoiced item VAT category code (BT-151) is "IGIC" the
             # invoiced item VAT rate (BT-152) shall be greater than 0 (zero).
             'igic_tax_rate': self._check_non_0_rate_tax(vals)
-                if vals['record']['commercial_partner_id']['country_id']['code'] == 'ES'
-                    and vals['record']['commercial_partner_id']['zip']
-                    and vals['record']['commercial_partner_id']['zip'][:2] in ['35', '38'] else None,
+                if vals['record']['partner_id']['country_id']['code'] == 'ES'
+                    and vals['record']['partner_id']['zip']
+                    and vals['record']['partner_id']['zip'][:2] in ['35', '38'] else None,
         })
         return constraints
 
@@ -277,6 +272,8 @@ class AccountEdiXmlCII(models.AbstractModel):
             bank_detail_node.findtext('{*}PayeePartyCreditorFinancialAccount/{*}IBANID')
             or bank_detail_node.findtext('{*}PayeePartyCreditorFinancialAccount/{*}ProprietaryID')
             for bank_detail_node in bank_detail_nodes
+            if bank_detail_node.findtext('{*}PayeePartyCreditorFinancialAccount/{*}IBANID')
+            or bank_detail_node.findtext('{*}PayeePartyCreditorFinancialAccount/{*}ProprietaryID')
         ]
 
         if bank_details:
@@ -344,6 +341,17 @@ class AccountEdiXmlCII(models.AbstractModel):
         line_nodes = tree.findall('./{*}SupplyChainTradeTransaction/{*}IncludedSupplyChainTradeLineItem')
         if line_nodes is not None:
             for invl_el in line_nodes:
+                # Avoid creating a line if its LineExtensionAmount is missing/empty/zero.
+                line_total_node = invl_el.find('./{*}SpecifiedLineTradeSettlement/{*}SpecifiedTradeSettlementLineMonetarySummation/{*}LineTotalAmount')
+                if line_total_node is None or not (line_total_node.text and line_total_node.text.strip()):
+                    continue
+                try:
+                    if float(line_total_node.text) == 0:
+                        continue
+                except (ValueError, TypeError):
+                    # If the value is not a valid number, skip creating the line.
+                    continue
+
                 invoice_line = invoice.invoice_line_ids.create({'move_id': invoice.id})
                 invl_logs = self._import_fill_invoice_line_form(journal, invl_el, invoice, invoice_line, qty_factor)
                 logs += invl_logs
@@ -405,3 +413,4 @@ class AccountEdiXmlCII(models.AbstractModel):
             if amount_node is not None and float(amount_node.text) < 0:
                 return ('in_refund', 'out_refund'), -1
             return ('in_invoice', 'out_invoice'), 1
+        return None, None

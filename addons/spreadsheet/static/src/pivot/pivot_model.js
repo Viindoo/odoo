@@ -335,7 +335,7 @@ export class SpreadsheetPivotModel extends PivotModel {
     /**
      * Get the label of the last group by of the domain
      *
-     * @param {string[]} domain Domain of the formula
+     * @param {any[]} domain Domain of the formula
      */
     getPivotHeaderValue(domain) {
         const groupFieldString = domain[domain.length - 2];
@@ -344,8 +344,7 @@ export class SpreadsheetPivotModel extends PivotModel {
             const { cols, rows } = this._getColsRowsValuesFromDomain(domain);
             return this._isCol(field) ? cols[cols.length - 1] : rows[rows.length - 1];
         }
-        const groupValueString = domain[domain.length - 1];
-        return groupValueString;
+        return domain[domain.length - 1];
     }
 
     /**
@@ -457,7 +456,10 @@ export class SpreadsheetPivotModel extends PivotModel {
                 }
                 const fOut = FORMATS[aggregateOperator]["out"];
                 // eslint-disable-next-line no-undef
-                const date = moment(value);
+                let date = moment(value);
+                if (aggregateOperator === "week") {
+                    date = date.endOf("week");
+                }
                 return date.isValid() ? date.format(fOut) : false;
             }
             return this._sanitizeValue(group[groupBy]);

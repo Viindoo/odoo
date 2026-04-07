@@ -684,6 +684,7 @@ class IrActionsServer(models.Model):
                     # run context dedicated to a particular active_id
                     run_self = action.with_context(active_ids=[active_id], active_id=active_id)
                     eval_context["env"].context = run_self._context
+                    eval_context['records'] = eval_context['record'] = records.browse(active_id)
                     res = runner(run_self, eval_context=eval_context)
             else:
                 _logger.warning(
@@ -738,8 +739,7 @@ class IrServerObjectLines(models.Model):
 
     @api.constrains('col1', 'evaluation_type')
     def _raise_many2many_error(self):
-        if self.filtered(lambda line: line.col1.ttype == 'many2many' and line.evaluation_type == 'reference'):
-            raise ValidationError(_('many2many fields cannot be evaluated by reference'))
+        pass  # TODO: remove in master
 
     @api.onchange('resource_ref')
     def _set_resource_ref(self):
@@ -749,6 +749,7 @@ class IrServerObjectLines(models.Model):
 
     def eval_value(self, eval_context=None):
         result = {}
+        m2m_exprs = defaultdict(list)
         for line in self:
             expr = line.value
             if line.evaluation_type == 'equation':
@@ -758,6 +759,11 @@ class IrServerObjectLines(models.Model):
                     expr = int(line.value)
                 except Exception:
                     pass
+            elif line.col1.ttype == 'many2many':
+                with contextlib.suppress(Exception):
+                    # if multiple lines target the same column, they need to exist in the same list
+                    expr = m2m_exprs[line.col1]
+                    expr.append(Command.link(int(line.value)))
             elif line.col1.ttype == 'float':
                 with contextlib.suppress(Exception):
                     expr = float(line.value)
@@ -876,14 +882,6 @@ class IrActionsActClient(models.Model):
         for record in self:
             params = record.params
             record.params_store = repr(params) if isinstance(params, dict) else params
-
-    def _get_default_form_view(self):
-        doc = super(IrActionsActClient, self)._get_default_form_view()
-        params = doc.find(".//field[@name='params']")
-        params.getparent().remove(params)
-        params_store = doc.find(".//field[@name='params_store']")
-        params_store.getparent().remove(params_store)
-        return doc
 
 
     def _get_readable_fields(self):

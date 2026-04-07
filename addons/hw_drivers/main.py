@@ -5,6 +5,7 @@ import json
 import platform
 import logging
 import socket
+import subprocess
 from threading import Thread
 import time
 import urllib3
@@ -72,9 +73,8 @@ class Manager(Thread):
                         'Accept': 'text/plain',
                     },
                 )
-            except Exception as e:
-                _logger.error('Could not reach configured server')
-                _logger.error('A error encountered : %s ' % e)
+            except Exception:
+                _logger.exception('Could not reach configured server to send all IoT devices')
         else:
             _logger.warning('Odoo server not set')
 
@@ -84,6 +84,9 @@ class Manager(Thread):
         """
 
         helpers.start_nginx_server()
+        if platform.system() == 'Linux' and not helpers.get_odoo_server_url():
+            self.migrate_config()
+
         _logger.info("IoT Box Image version: %s", helpers.get_version(detailed_version=True))
         if platform.system() == 'Linux' and helpers.get_odoo_server_url():
             helpers.check_git_branch()
@@ -105,8 +108,8 @@ class Manager(Thread):
                 i = interface()
                 i.daemon = True
                 i.start()
-            except Exception as e:
-                _logger.error("Error in %s: %s", str(interface), e)
+            except Exception:
+                _logger.exception("Interface %s could not be started", str(interface))
 
         # Set scheduled actions
         schedule and schedule.every().day.at("00:00").do(helpers.get_certificate_status)
@@ -123,7 +126,18 @@ class Manager(Thread):
                 schedule and schedule.run_pending()
             except Exception:
                 # No matter what goes wrong, the Manager loop needs to keep running
-                _logger.error(format_exc())
+                _logger.exception("Manager loop unexpected error")
+
+    def migrate_config(self):
+        """
+        This is a workaround for new IoT box images (>=24.10) not working correctly after
+        checking out a v16 database. It transforms the new odoo.conf settings into their
+        equivalent config files.
+        """
+        with helpers.writable():
+            subprocess.run(
+                ['/home/pi/odoo/addons/point_of_sale/tools/posbox/configuration/migrate_config.sh'], check=True
+            )
 
 # Must be started from main thread
 if DBusGMainLoop:

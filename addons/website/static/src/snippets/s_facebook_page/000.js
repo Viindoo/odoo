@@ -16,6 +16,11 @@ const FacebookPageWidget = publicWidget.Widget.extend({
         var def = this._super.apply(this, arguments);
         this.previousWidth = 0;
 
+        // Making the snippet non-editable.
+        // TODO adapt xml changes by adding "o_not_editable" class
+        // to s_facebook_page snippet in master.
+        this.el.classList.add("o_not_editable");
+
         const params = _.pick(this.$el[0].dataset, 'href', 'id', 'height', 'tabs', 'small_header', 'hide_cover');
         if (!params.href) {
             return def;
@@ -37,9 +42,11 @@ const FacebookPageWidget = publicWidget.Widget.extend({
     destroy: function () {
         this._super.apply(this, arguments);
         if (this.iframeEl) {
+            this._deactivateEditorObserver();
             this.iframeEl.remove();
+            this._activateEditorObserver();
+            this.resizeObserver.disconnect();
         }
-        this.resizeObserver.disconnect();
     },
 
     //--------------------------------------------------------------------------
@@ -53,7 +60,7 @@ const FacebookPageWidget = publicWidget.Widget.extend({
      * @param {Object} params
     */
     _renderIframe(params) {
-        this.options.wysiwyg && this.options.wysiwyg.odooEditor.observerUnactive();
+        this._deactivateEditorObserver();
 
         params.width = utils.confine(Math.floor(this.$el.width()), 180, 500);
         if (this.previousWidth !== params.width) {
@@ -61,20 +68,32 @@ const FacebookPageWidget = publicWidget.Widget.extend({
             const src = $.param.querystring("https://www.facebook.com/plugins/page.php", params);
             this.iframeEl = Object.assign(document.createElement("iframe"), {
                 src: src,
-                width: params.width,
-                height: params.height,
-                css: {
-                    border: "none",
-                    overflow: "hidden",
-                },
                 scrolling: "no",
-                frameborder: "0",
-                allowTransparency: "true",
             });
+            // TODO: remove, the "scrolling", "frameborder" and
+            // "allowTransparency" attributes in master as they are deprecated.
+            // Also put the width and height as iframe attribute.
+            this.iframeEl.setAttribute("frameborder", "0");
+            this.iframeEl.setAttribute("allowTransparency", "true");
+            this.iframeEl.setAttribute("style", `width: ${params.width}px; height: ${params.height}px; border: none; overflow: hidden;`);
             this.el.replaceChildren(this.iframeEl);
         }
 
+        this._activateEditorObserver();
+    },
+
+    /**
+     * Activates the editor observer if it exists.
+     */
+    _activateEditorObserver() {
         this.options.wysiwyg && this.options.wysiwyg.odooEditor.observerActive();
+    },
+
+    /**
+     * Deactivates the editor observer if it exists.
+     */
+    _deactivateEditorObserver() {
+        this.options.wysiwyg && this.options.wysiwyg.odooEditor.observerUnactive();
     },
 });
 

@@ -6,16 +6,16 @@
 # Benson <Benson.Dr@Gmail.com>, 2022
 # 敬雲 林 <chingyun@yuanchih-consult.com>, 2022
 # Martin Trigaux, 2023
-# Wil Odoo, 2023
-# Tony Ng, 2024
+# Wil Odoo, 2025
+# Tony Ng, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 08:23+0000\n"
+"POT-Creation-Date: 2025-02-10 08:27+0000\n"
 "PO-Revision-Date: 2022-09-22 05:45+0000\n"
-"Last-Translator: Tony Ng, 2024\n"
+"Last-Translator: Tony Ng, 2025\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/odoo/teams/41243/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1264,7 +1264,7 @@ msgstr "加入一些內部備註（待辦事項清單、聯絡資訊⋯）"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__address_search
 msgid "Address"
-msgstr "填寫資料"
+msgstr "地址"
 
 #. module: event
 #: model:res.groups,name:event.group_event_manager
@@ -1358,7 +1358,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:event.field_event_event__message_attachment_count
 #: model:ir.model.fields,field_description:event.field_event_registration__message_attachment_count
 msgid "Attachment Count"
-msgstr "附件數"
+msgstr "附件數目"
 
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.res_config_settings_view_form
@@ -1792,6 +1792,11 @@ msgid "Display Sponsors and Exhibitors on your event pages"
 msgstr "在您的活動頁面上顯示贊助商和參展商"
 
 #. module: event
+#: model:ir.model.fields,field_description:event.field_event_event__date_tz
+msgid "Display Timezone"
+msgstr "顯示時區"
+
+#. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__sequence
 msgid "Display order"
 msgstr "顯示順序"
@@ -1816,7 +1821,7 @@ msgstr "電郵"
 #. module: event
 #: model:ir.model,name:event.model_mail_template
 msgid "Email Templates"
-msgstr "電子信件範本"
+msgstr "電郵範本"
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__date_end
@@ -2479,6 +2484,13 @@ msgid "In Progress"
 msgstr "進行中"
 
 #. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_tz
+msgid ""
+"Indicates the timezone in which the event dates/times will be displayed on "
+"the website."
+msgstr "表示網站所顯示的活動日期/時間所屬的時區。"
+
+#. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__interval_nbr
 #: model:ir.model.fields,field_description:event.field_event_type_mail__interval_nbr
 msgid "Interval"
@@ -2710,7 +2722,7 @@ msgstr "根據活動分類的信件調度"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail_registration__mail_sent
 msgid "Mail Sent"
-msgstr "已經發送的電子信件"
+msgstr "郵件已傳送"
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__message_main_attachment_id
@@ -2731,7 +2743,7 @@ msgstr "標註為確認出席"
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.view_event_registration_form
 msgid "Marketing"
-msgstr "市場行銷"
+msgstr "市場推廣"
 
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.event_event_ticket_view_tree_from_event
@@ -3052,7 +3064,7 @@ msgstr "銷售點（POS），報告自訂介紹。"
 #: model_terms:event.event,description:event.event_0
 #: model_terms:event.event,description:event.event_2
 msgid "Program"
-msgstr "計畫"
+msgstr "計劃"
 
 #. module: event
 #: model_terms:event.event,description:event.event_2
@@ -3154,7 +3166,7 @@ msgstr "調查登記"
 #: code:addons/event/models/event_ticket.py:0
 #, python-format
 msgid "Registration for %s"
-msgstr "報名%s"
+msgstr "報名參加 %s"
 
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.view_event_mail_form
@@ -3529,7 +3541,7 @@ msgid ""
 "The following tickets cannot be deleted while they have one or more registrations linked to them:\n"
 "- %s"
 msgstr ""
-"當下列入場券有一個或多個報名資料連結時，不能刪除它們：\n"
+"以下門票已連結至一項或多項報名註冊，因此無法刪除：\n"
 "- %s"
 
 #. module: event
@@ -3665,7 +3677,6 @@ msgid "Tickets can be printed or scanned directly from your phone."
 msgstr "入場券可以直接從您的手機列印或掃描。"
 
 #. module: event
-#: model:ir.model.fields,field_description:event.field_event_event__date_tz
 #: model:ir.model.fields,field_description:event.field_event_type__default_timezone
 msgid "Timezone"
 msgstr "時區"
@@ -3871,6 +3882,14 @@ msgstr "星期"
 #: model_terms:event.event,description:event.event_0
 msgid "What's new?"
 msgstr "有什麼新內容？"
+
+#. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_begin
+#: model:ir.model.fields,help:event.field_event_registration__event_begin_date
+msgid ""
+"When the event is scheduled to take place (expressed in your local timezone "
+"on the form view)."
+msgstr "活動預定的開始時間（在表單檢視畫面中，會以你當地的時區表示）。"
 
 #. module: event
 #: model:ir.model.fields,help:event.field_event_event__is_ongoing

@@ -10,17 +10,17 @@
 # Konstantins Zabogonskis <inculin4ik@gmail.com>, 2022
 # InfernalLV <karlisdreizis@gmail.com>, 2023
 # Armīns Jeltajevs <armins.jeltajevs@gmail.com>, 2023
-# Will Sensors, 2024
 # Lancelot Semal, 2024
 # ievaputnina <ievai.putninai@gmail.com>, 2024
+# Will Sensors, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:32+0000\n"
+"POT-Creation-Date: 2025-06-13 18:36+0000\n"
 "PO-Revision-Date: 2022-09-22 05:54+0000\n"
-"Last-Translator: ievaputnina <ievai.putninai@gmail.com>, 2024\n"
+"Last-Translator: Will Sensors, 2025\n"
 "Language-Team: Latvian (https://app.transifex.com/odoo/teams/41243/lv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1160,8 +1160,10 @@ msgstr "Aizpildiet sava uzņēmuma datus"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with DHL"
-msgstr "Compute shipping costs and ship with DHL"
+msgid ""
+"Compute shipping costs and ship with DHL<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1170,8 +1172,10 @@ msgstr "Aprēķiniet nosūtīšanas izmaksas un nosūtiet ar Easypost"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with FedEx"
-msgstr "Compute shipping costs and ship with FedEx"
+msgid ""
+"Compute shipping costs and ship with FedEx<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1180,13 +1184,17 @@ msgstr "Aprēķiniet nosūtīšanas izmaksas un nosūtiet sūtījumu ar Sendclou
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with UPS"
-msgstr "Compute shipping costs and ship with UPS"
+msgid ""
+"Compute shipping costs and ship with UPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with USPS"
-msgstr "Compute shipping costs and ship with USPS"
+msgid ""
+"Compute shipping costs and ship with USPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1434,6 +1442,11 @@ msgstr ""
 #, python-format
 msgid "Customize your quotes and orders."
 msgstr "Pielāgojiet savus piedāvājumus un pasūtījumus."
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid "DHL Connector"
+msgstr ""
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_dhl
@@ -1783,6 +1796,7 @@ msgstr "Papildus rinda ar %s"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_fedex
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "FedEx Connector"
 msgstr "FedEx savienotājs"
 
@@ -3915,6 +3929,11 @@ msgid "Tags"
 msgstr "Birkas"
 
 #. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
+msgid "Tax 15%"
+msgstr "15%"
+
+#. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__tax_country_id
 msgid "Tax Country"
 msgstr "Nodokļa valsts"
@@ -4011,6 +4030,8 @@ msgid ""
 "The Sales Order %s linked to the Analytic Account %s is cancelled. You "
 "cannot register an expense on a cancelled Sales Order."
 msgstr ""
+"Ar analītisko kontu %s saistītais pārdošanas rīkojums %s tiek atcelts. "
+"Anulētam pārdošanas rīkojumam nevar reģistrēt izdevumus."
 
 #. module: sale
 #. odoo-python
@@ -4021,6 +4042,9 @@ msgid ""
 "You cannot register an expense on a locked Sales Order. Please create a new "
 "SO linked to this Analytic Account."
 msgstr ""
+"Pārdošanas rīkojums %s, kas saistīts ar analītisko kontu %s, pašlaik ir "
+"bloķēts. Nevar reģistrēt izdevumus bloķētam pārdošanas rīkojumam. Lūdzu, "
+"izveidojiet jaunu SO, kas saistīts ar šo analītisko kontu."
 
 #. module: sale
 #. odoo-python
@@ -4030,6 +4054,8 @@ msgid ""
 "The Sales Order %s linked to the Analytic Account %s must be validated "
 "before registering expenses."
 msgstr ""
+"Pirms izdevumu reģistrēšanas jāapstiprina ar analītisko kontu %s saistītais "
+"pārdošanas rīkojums %s."
 
 #. module: sale
 #. odoo-python
@@ -4059,12 +4085,12 @@ msgstr ""
 #: code:addons/sale/models/product_template.py:0
 #, python-format
 msgid ""
-"The following products cannot be restricted to the company %s because they have already been used in quotations or sales orders in another company:\n"
-"%s\n"
+"The following products cannot be restricted to the company %(company)s because they have already been used in quotations or sales orders in another company:\n"
+"%(used_products)s\n"
 "You can archive these products and recreate them with your company restriction instead, or leave them as shared product."
 msgstr ""
-"Šādus produktus nevar ierobežot attiecībā uz uzņēmumu %s, jo tie jau ir izmantoti citos citos piedāvājumos vai pārdošanas pasūtījumos citā uzņēmumā:\n"
-"%s\n"
+"Šādus produktus nevar ierobežot attiecībā uz uzņēmumu %(company)s, jo tie jau ir izmantoti citos citos piedāvājumos vai pārdošanas pasūtījumos citā uzņēmumā:\n"
+"%(used_products)s\n"
 "Varat arhivēt šos produktus un no jauna izveidot tos ar sava uzņēmuma ierobežojumu vai atstāt tos kā koplietošanas produktus."
 
 #. module: sale
@@ -4398,11 +4424,13 @@ msgstr "Reģistrētās izņēmuma aktivitātes veids."
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_ups
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "UPS Connector"
 msgstr "UPS savienotājs"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_usps
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "USPS Connector"
 msgstr "USPS savienotājs"
 
@@ -4458,7 +4486,7 @@ msgstr "Atbloķēt"
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__amount_untaxed
 msgid "Untaxed Amount"
-msgstr "Neapliekamā Summa"
+msgstr "Summa bez nodokļiem"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_report__untaxed_amount_invoiced
@@ -4532,14 +4560,6 @@ msgstr "Izvēle varianta režģim"
 
 #. module: sale
 #. odoo-python
-#: code:addons/sale/models/sale_order.py:0
-#, python-format
-msgid "View Order"
-msgstr "Skatīt pasūtījumu"
-
-#. module: sale
-#. odoo-python
-#: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #, python-format

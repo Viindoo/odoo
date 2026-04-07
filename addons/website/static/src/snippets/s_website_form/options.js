@@ -2,6 +2,7 @@ odoo.define('website.form_editor', function (require) {
 'use strict';
 
 const core = require('web.core');
+const { escape, sprintf } = require('@web/core/utils/strings');
 const FormEditorRegistry = require('website.form_editor_registry');
 const options = require('web_editor.snippets.options');
 const Dialog = require('web.Dialog');
@@ -158,7 +159,10 @@ const FormEditor = options.Class.extend({
             field.id = generateHTMLId();
         }
         const template = document.createElement('template');
-        template.innerHTML = qweb.render("website.form_field_" + field.type, {field: field}).trim();
+        template.innerHTML = qweb.render(
+            "website.form_field_" + field.type,
+            {field: field, defaultName: escape(_t("Field"))}
+        ).trim();
         if (field.description && field.description !== true) {
             $(template.content.querySelector('.s_website_form_field_description')).replaceWith(field.description);
         }
@@ -459,7 +463,7 @@ options.registry.WebsiteFormEditor = FormEditor.extend({
         if (name === 'field_mark') {
             this._setLabelsMark();
         } else if (name === 'add_field') {
-            const field = this._getCustomField('char', 'Custom Text');
+            const field = this._getCustomField('char', _t("Custom Text"));
             field.formatInfo = data.formatInfo;
             field.formatInfo.requiredMark = this._isRequiredMark();
             field.formatInfo.optionalMark = this._isOptionalMark();
@@ -804,9 +808,15 @@ options.registry.WebsiteFormEditor = FormEditor.extend({
         if (formInfo) {
             const formatInfo = this._getDefaultFormat();
             await formInfo.formFields.forEach(async field => {
-                field.formatInfo = formatInfo;
-                await this._fetchFieldRecords(field);
-                this.$target.find('.s_website_form_submit, .s_website_form_recaptcha').first().before(this._renderField(field));
+                // Create a shallow copy of field to prevent unintended
+                // mutations to the original field stored in FormEditorRegistry
+                const _field = { ...field };
+                _field.formatInfo = formatInfo;
+                await this._fetchFieldRecords(_field);
+                const targetEl = this.$target[0].querySelector(".s_website_form_submit, .s_website_form_recaptcha");
+                if (targetEl) {
+                    targetEl.parentNode.insertBefore(this._renderField(_field), targetEl);
+                }
             });
         }
     },
@@ -1112,7 +1122,21 @@ options.registry.WebsiteFieldEditor = FieldEditor.extend({
      * Apply the we-list on the target and rebuild the input(s)
      */
     renderListItems: async function (previewMode, value, params) {
-        const valueList = JSON.parse(value);
+        let valueList = JSON.parse(value);
+        if (this._getSelect()) {
+            // Default entry only for fields rendered as select.
+            // Remove previous default.
+            valueList = valueList.filter(value => value.id !== "" || value.display_name !== "");
+            // Add default in first position if no default value is set.
+            const hasDefault = valueList.some(value => value.selected);
+            if (valueList.length && !hasDefault) {
+                valueList.unshift({
+                    id: "",
+                    display_name: "",
+                    selected: true,
+                });
+            }
+        }
 
         // Synchronize the possible values with the fields whose visibility
         // depends on the current field
@@ -1193,7 +1217,13 @@ options.registry.WebsiteFieldEditor = FieldEditor.extend({
             case 'toggleRequired':
                 return this.$target[0].classList.contains(params.activeValue) ? params.activeValue : 'false';
             case 'renderListItems':
-                return JSON.stringify(this._getListItems());
+                // TODO In master use a parameter.
+                this.__getListItems_forWidgetState = true;
+                try {
+                    return JSON.stringify(this._getListItems());
+                } finally {
+                    delete this.__getListItems_forWidgetState;
+                }
             case 'setVisibilityDependency':
                 return this.$target[0].dataset.visibilityDependency || '';
         }
@@ -1365,7 +1395,11 @@ options.registry.WebsiteFieldEditor = FieldEditor.extend({
                     const inputsInDependencyContainer = dependencyContainerEl.querySelectorAll('.s_website_form_input');
                     for (const el of inputsInDependencyContainer) {
                         const button = document.createElement('we-button');
-                        button.textContent = el.value;
+                        button.textContent = inputsInDependencyContainer.length === 1
+                            ? el.value
+                            : dependencyContainerEl
+                                .querySelector(`label[for="${el.id}"]`)
+                                .textContent;
                         button.dataset.selectDataAttribute = el.value;
                         selectOptEl.append(button);
                     }
@@ -1397,7 +1431,7 @@ options.registry.WebsiteFieldEditor = FieldEditor.extend({
         const availableFields = this.existingFields.filter(el => !fieldsInForm.includes(el.dataset.existingField));
         if (availableFields.length) {
             const title = document.createElement('we-title');
-            title.textContent = 'Existing fields';
+            title.textContent = _t("Existing fields");
             availableFields.unshift(title);
             availableFields.forEach(option => selectEl.append(option.cloneNode(true)));
         }
@@ -1412,8 +1446,8 @@ options.registry.WebsiteFieldEditor = FieldEditor.extend({
         const type = this._getFieldType();
 
         const list = document.createElement('we-list');
-        const optionText = select ? 'Option' : type === 'selection' ? 'Radio' : 'Checkbox';
-        list.setAttribute('string', `${optionText} List`);
+        const optionText = select ? _t("Option") : type === 'selection' ? _t("Radio") : _t("Checkbox");
+        list.setAttribute('string', sprintf(_t("%s List"), optionText));
         list.dataset.addItemTitle = _.str.sprintf(_t("Add new %s"), optionText);
         list.dataset.renderListItems = '';
 
@@ -1479,7 +1513,7 @@ options.registry.WebsiteFieldEditor = FieldEditor.extend({
             }
         }
         const newInputEl = this.$target[0].querySelector('input');
-        if (newInputEl) {
+        if (newInputEl && dataFillWith) {
             newInputEl.dataset.fillWith = dataFillWith;
         }
     },
@@ -1503,6 +1537,15 @@ options.registry.WebsiteFieldEditor = FieldEditor.extend({
         let options = [];
         if (select) {
             options = [...select.querySelectorAll('option')];
+            if (
+                this.__getListItems_forWidgetState &&
+                options.length &&
+                options[0].value === "" &&
+                options[0].textContent === "" &&
+                options[0].selected === true
+            ) {
+                options.shift();
+            }
         } else if (multipleInputs) {
             options = [...multipleInputs.querySelectorAll('.checkbox input, .radio input')];
         }
@@ -1539,7 +1582,7 @@ options.registry.AddFieldForm = FormEditor.extend({
      * New field is set as active
      */
     addField: async function (previewMode, value, params) {
-        const field = this._getCustomField('char', 'Custom Text');
+        const field = this._getCustomField('char', _t('Custom Text'));
         field.formatInfo = this._getDefaultFormat();
         const fieldEl = this._renderField(field);
         this.$target.find('.s_website_form_submit, .s_website_form_recaptcha').first().before(fieldEl);

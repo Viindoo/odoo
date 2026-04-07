@@ -1,11 +1,11 @@
 import ast
 from collections import defaultdict
-from contextlib import contextmanager
+from contextlib import contextmanager, ExitStack
 from datetime import date, timedelta
 from functools import lru_cache
 
 from odoo import api, fields, models, Command, _
-from odoo.exceptions import ValidationError, UserError
+from odoo.exceptions import ValidationError, UserError, RedirectWarning
 from odoo.tools import frozendict, formatLang, format_date, float_compare, Query
 from odoo.tools.sql import create_index
 from odoo.addons.web.controllers.utils import clean_action
@@ -297,6 +297,7 @@ class AccountMoveLine(models.Model):
         string='Product',
         inverse='_inverse_product_id',
         ondelete='restrict',
+        index=True,
     )
     product_uom_id = fields.Many2one(
         comodel_name='uom.uom',
@@ -456,20 +457,17 @@ class AccountMoveLine(models.Model):
             else:
                 line.currency_id = line.currency_id or line.company_id.currency_id
 
-    @api.depends('product_id')
+    @api.depends('product_id', 'move_id.payment_reference')
     def _compute_name(self):
-        for line in self:
-            if line.display_type == 'payment_term':
-                line.name = line.move_id.payment_reference or ''
-                continue
-            if not line.product_id or line.display_type in ('line_section', 'line_note'):
-                continue
+        def get_name(line):
+            values = []
             if line.partner_id.lang:
                 product = line.product_id.with_context(lang=line.partner_id.lang)
             else:
                 product = line.product_id
+            if not product:
+                return False
 
-            values = []
             if product.partner_ref:
                 values.append(product.partner_ref)
             if line.journal_id.type == 'sale':
@@ -478,7 +476,18 @@ class AccountMoveLine(models.Model):
             elif line.journal_id.type == 'purchase':
                 if product.description_purchase:
                     values.append(product.description_purchase)
-            line.name = '\n'.join(values)
+            return '\n'.join(values) if values else False
+
+        for line in self:
+            if line.display_type == 'payment_term':
+                if not line.name or line._origin.name == line._origin.move_id.payment_reference:
+                    line.name = line.move_id.payment_reference or False
+                continue
+            if not line.product_id or line.display_type in ('line_section', 'line_note'):
+                continue
+
+            if not line.name or line._origin.name == get_name(line._origin):
+                line.name = get_name(line)
 
     def _compute_account_id(self):
         term_lines = self.filtered(lambda line: line.display_type == 'payment_term')
@@ -584,6 +593,7 @@ class AccountMoveLine(models.Model):
                     company_id=line.company_id.id,
                     partner_id=line.partner_id.id,
                     move_type=line.move_id.move_type,
+                    journal_id=line.journal_id.id,
                 )
         for line in self:
             if not line.account_id and line.display_type not in ('line_section', 'line_note'):
@@ -955,7 +965,7 @@ class AccountMoveLine(models.Model):
                 include_caba_tags=line.move_id.always_tax_exigible,
                 fixed_multiplicator=sign,
             )
-            rate = line.amount_currency / line.balance if line.balance else 1
+            rate = line.amount_currency / line.balance if line.balance else line.currency_rate
             line.compute_all_tax_dirty = True
             line.compute_all_tax = {
                 frozendict({
@@ -1175,7 +1185,6 @@ class AccountMoveLine(models.Model):
         # Avoid using api.constrains here as in case of a write on
         # account move and account move line in the same operation, the check would be done
         # before all write are complete, causing a false positive
-        self.flush_recordset()
         for line in self.filtered(lambda x: x.display_type not in ('line_section', 'line_note')):
             account = line.account_id
             journal = line.move_id.journal_id
@@ -1201,7 +1210,7 @@ class AccountMoveLine(models.Model):
 
     @api.constrains('account_id', 'tax_ids', 'tax_line_id', 'reconciled')
     def _check_off_balance(self):
-        for line in self:
+        for line in self.move_id.line_ids:
             if line.account_id.internal_group == 'off_balance':
                 if any(a.internal_group != line.account_id.internal_group for a in line.move_id.line_ids.account_id):
                     raise UserError(_('If you want to use "Off-Balance Sheet" accounts, all the accounts of the journal entry must be of this type'))
@@ -1215,9 +1224,13 @@ class AccountMoveLine(models.Model):
         for line in self:
             account_type = line.account_id.account_type
             if line.move_id.is_sale_document(include_receipts=True):
+                if account_type == 'liability_payable':
+                    raise UserError(_("Account %s is of payable type, but is used in a sale operation.", line.account_id.code))
                 if (line.display_type == 'payment_term') ^ (account_type == 'asset_receivable'):
                     raise UserError(_("Any journal item on a receivable account must have a due date and vice versa."))
             if line.move_id.is_purchase_document(include_receipts=True):
+                if account_type == 'asset_receivable':
+                    raise UserError(_("Account %s is of receivable type, but is used in a purchase operation.", line.account_id.code))
                 if (line.display_type == 'payment_term') ^ (account_type == 'liability_payable'):
                     raise UserError(_("Any journal item on a payable account must have a due date and vice versa."))
 
@@ -1347,7 +1360,7 @@ class AccountMoveLine(models.Model):
     def default_get(self, fields_list):
         defaults = super().default_get(fields_list)
         quick_encode_suggestion = self.env.context.get('quick_encoding_vals')
-        if quick_encode_suggestion:
+        if quick_encode_suggestion and self.env.context.get('default_display_type') not in ('line_section', 'line_note'):
             defaults['account_id'] = quick_encode_suggestion['account_id']
             defaults['price_unit'] = quick_encode_suggestion['price_unit']
             defaults['tax_ids'] = [Command.set(quick_encode_suggestion['tax_ids'])]
@@ -1410,6 +1423,7 @@ class AccountMoveLine(models.Model):
         for line in after:
             if (
                 line.display_type == 'product'
+                and not self.env.is_protected(self._fields['amount_currency'], line)
                 and (not changed('amount_currency') or line not in before)
             ):
                 amount_currency = line.move_id.direction_sign * line.currency_id.round(line.price_subtotal)
@@ -1422,6 +1436,7 @@ class AccountMoveLine(models.Model):
         for line in after:
             if (
                 (changed('amount_currency') or changed('currency_rate') or changed('move_type'))
+                and not self.env.is_protected(self._fields['balance'], line)
                 and (not changed('balance') or (line not in before and not line.balance))
             ):
                 balance = line.company_id.currency_id.round(line.amount_currency / line.currency_rate)
@@ -1438,9 +1453,11 @@ class AccountMoveLine(models.Model):
         container = {'records': self}
         move_container = {'records': moves}
         with moves._check_balanced(move_container),\
+             ExitStack() as exit_stack,\
              moves._sync_dynamic_lines(move_container),\
              self._sync_invoice(container):
             lines = super().create([self._sanitize_vals(vals) for vals in vals_list])
+            exit_stack.enter_context(self.env.protecting([protected for vals, line in zip(vals_list, lines) for protected in self.env['account.move']._get_protected_vals(vals, line)]))
             container['records'] = lines
 
         for line in lines:
@@ -1496,6 +1513,7 @@ class AccountMoveLine(models.Model):
 
         move_container = {'records': self.move_id}
         with self.move_id._check_balanced(move_container),\
+             self.env.protecting(self.env['account.move']._get_protected_vals(vals, self)),\
              self.move_id._sync_dynamic_lines(move_container),\
              self._sync_invoice({'records': self}):
             self = line_to_write
@@ -1542,8 +1560,19 @@ class AccountMoveLine(models.Model):
                                 tracking_value_ids=tracking_value_ids
                             )
 
-
         return result
+
+    def _parse_flush_fnames(self, fnames):
+        if fnames and {'balance', 'amount_currency'} & set(fnames):
+            # flush the amount currency to avoid triggering check_amount_currency_balance_sign
+            fnames = {'balance', 'amount_currency'} | set(fnames)
+        return fnames
+
+    def flush_recordset(self, fnames=None):
+        return super().flush_recordset(self._parse_flush_fnames(fnames))
+
+    def flush_model(self, fnames=None):
+        return super().flush_model(self._parse_flush_fnames(fnames))
 
     def _valid_field_parameter(self, field, name):
         # EXTENDS models
@@ -1632,10 +1661,9 @@ class AccountMoveLine(models.Model):
         query_str, query_param = query.select()
         self.env.cr.execute(f"""
             SELECT account.root_id
-              FROM account_account account,
-                   LATERAL ({query_str}) line
-             WHERE account.company_id IN %s
-        """, query_param + [tuple(self.env.companies.ids)])
+              FROM account_account account
+             WHERE EXISTS ({query_str})
+        """, query_param)
         return {
             root.id: {'id': root.id, 'display_name': root.display_name}
             for root in self.env['account.root'].browse(id for [id] in self.env.cr.fetchall())
@@ -1865,7 +1893,7 @@ class AccountMoveLine(models.Model):
 
         # Computation of the partial exchange difference. You can skip this part using the
         # `no_exchange_difference` context key (when reconciling an exchange difference for example).
-        if not self._context.get('no_exchange_difference'):
+        if not self._context.get('no_exchange_difference') and not self._context.get('no_exchange_difference_no_recursive'):
             exchange_lines_to_fix = self.env['account.move.line']
             amounts_list = []
             if recon_currency == company_currency:
@@ -2421,7 +2449,11 @@ class AccountMoveLine(models.Model):
         # ==== Create partials ====
 
         partial_no_exch_diff = bool(self.env['ir.config_parameter'].sudo().get_param('account.disable_partial_exchange_diff'))
-        sorted_lines_ctx = sorted_lines.with_context(no_exchange_difference=self._context.get('no_exchange_difference') or partial_no_exch_diff)
+        partial_no_exch_diff_no_recursive = self._context.get('no_exchange_difference_no_recursive', False)
+        sorted_lines_ctx = sorted_lines.with_context(
+            no_exchange_difference_no_recursive=partial_no_exch_diff_no_recursive,  # Don't propagate it recursively
+            no_exchange_difference=self._context.get('no_exchange_difference') or partial_no_exch_diff,
+        )
         partials = sorted_lines_ctx._create_reconciliation_partials()
         results['partials'] = partials
         involved_partials += partials
@@ -2435,7 +2467,7 @@ class AccountMoveLine(models.Model):
 
         is_cash_basis_needed = account.company_id.tax_exigibility and account.account_type in ('asset_receivable', 'liability_payable')
         if is_cash_basis_needed and not self._context.get('move_reverse_cancel') and not self._context.get('no_cash_basis'):
-            tax_cash_basis_moves = partials._create_tax_cash_basis_moves()
+            tax_cash_basis_moves = partials.with_context(no_exchange_difference_no_recursive=False)._create_tax_cash_basis_moves()
             results['tax_cash_basis_moves'] = tax_cash_basis_moves
 
         # ==== Check if a full reconcile is needed ====
@@ -2482,7 +2514,7 @@ class AccountMoveLine(models.Model):
                 # Exchange difference for cash basis entries.
                 # If we are fully reversing the entry, no need to fix anything since the journal entry
                 # is exactly the mirror of the source journal entry.
-                if is_cash_basis_needed and not self._context.get('move_reverse_cancel'):
+                if is_cash_basis_needed and not self._context.get('move_reverse_cancel') and not self._context.get('no_cash_basis'):
                     caba_lines_to_reconcile = involved_lines._add_exchange_difference_cash_basis_vals(exchange_diff_vals)
 
                 # Create the exchange difference.
@@ -2544,15 +2576,37 @@ class AccountMoveLine(models.Model):
     # -------------------------------------------------------------------------
 
     def _validate_analytic_distribution(self):
+        lines_with_missing_analytic_distribution = self.env['account.move.line']
         for line in self.filtered(lambda line: line.display_type == 'product'):
-            line._validate_distribution(**{
-                        'product': line.product_id.id,
-                        'account': line.account_id.id,
-                        'business_domain': line.move_id.move_type in ['out_invoice', 'out_refund', 'out_receipt'] and 'invoice'
-                                           or line.move_id.move_type in ['in_invoice', 'in_refund', 'in_receipt'] and 'bill'
-                                           or 'general',
-                        'company_id': line.company_id.id,
-            })
+            try:
+                line._validate_distribution(
+                    company_id=line.company_id.id,
+                    product=line.product_id.id,
+                    account=line.account_id.id,
+                    business_domain=(
+                        'invoice' if line.move_id.is_sale_document(True)
+                        else 'bill' if line.move_id.is_purchase_document(True)
+                        else 'general'
+                    ),
+                )
+            except ValidationError:
+                lines_with_missing_analytic_distribution += line
+        if lines_with_missing_analytic_distribution:
+            msg = _("One or more lines require a 100% analytic distribution.")
+            if len(self.move_id) == 1:
+                raise ValidationError(msg)
+            raise RedirectWarning(
+                message=msg,
+                action={
+                    'view_mode': 'list',
+                    'name': _('Items With Missing Analytic Distribution'),
+                    'res_model': 'account.move.line',
+                    'type': 'ir.actions.act_window',
+                    'domain': [('id', 'in', lines_with_missing_analytic_distribution.ids)],
+                    'views': [(self.env.ref('account.view_move_line_tree').id, 'list')],
+                },
+                button_text=_("See items"),
+            )
 
     def _create_analytic_lines(self):
         """ Create analytic items upon validation of an account.move.line having an analytic distribution.
@@ -2576,6 +2630,8 @@ class AccountMoveLine(models.Model):
                 line_values = self._prepare_analytic_distribution_line(float(distribution), account_id, distribution_on_each_plan)
                 if not self.currency_id.is_zero(line_values.get('amount')):
                     analytic_line_vals.append(line_values)
+
+            self._round_analytic_distribution_line(analytic_line_vals)
         return analytic_line_vals
 
     def _prepare_analytic_distribution_line(self, distribution, account_id, distribution_on_each_plan):
@@ -2609,6 +2665,32 @@ class AccountMoveLine(models.Model):
             'company_id': account.company_id.id or self.company_id.id or self.env.company.id,
             'category': 'invoice' if self.move_id.is_sale_document() else 'vendor_bill' if self.move_id.is_purchase_document() else 'other',
         }
+
+    def _round_analytic_distribution_line(self, analytic_lines_vals):
+        """ Round the analytic lines amount, and cancel the rounding error. """
+        if not analytic_lines_vals:
+            return
+
+        rounding_error = 0
+        for line in analytic_lines_vals:
+            rounded_amount = self.currency_id.round(line['amount'])
+            rounding_error += rounded_amount - line['amount']
+            line['amount'] = rounded_amount
+
+        # distributing the rounding error
+        for line in analytic_lines_vals:
+            if self.currency_id.is_zero(rounding_error):
+                break
+            amt = max(
+                self.currency_id.rounding,
+                abs(self.currency_id.round(rounding_error / len(analytic_lines_vals)))
+            )
+            if rounding_error < 0.0:
+                line['amount'] += amt
+                rounding_error += amt
+            else:
+                line['amount'] -= amt
+                rounding_error -= amt
 
     # -------------------------------------------------------------------------
     # MISC

@@ -31,11 +31,16 @@ class AccountMove(models.Model):
 
     @api.depends('invoice_user_id')
     def _compute_team_id(self):
+        applicable_moves = self.filtered(
+            lambda move:
+                move.is_sale_document(include_receipts=True)
+        )
+
         for ((user_id, company_id), moves) in groupby(
-            self,
+            applicable_moves,
             key=lambda m: (m.invoice_user_id.id, m.company_id.id)
         ):
-            self.concat(*moves).team_id = self.env['crm.team'].with_context(
+            self.env['account.move'].concat(*moves).team_id = self.env['crm.team'].with_context(
                 allowed_company_ids=[company_id]
             )._get_default_team_id(
                 user_id=user_id,
@@ -72,11 +77,7 @@ class AccountMove(models.Model):
         real_invoices = set(other_so_lines.invoice_lines.move_id)
         for dpl in downpayment_lines:
             try:
-                dpl.price_unit = sum(
-                    l.price_unit if l.move_id.move_type == 'out_invoice' else -l.price_unit
-                    for l in dpl.invoice_lines
-                    if l.move_id.state == 'posted' and l.move_id not in real_invoices  # don't recompute with the final invoice
-                )
+                dpl.price_unit = dpl._get_downpayment_line_price_unit(real_invoices)
                 dpl.tax_id = dpl.invoice_lines.tax_ids
             except UserError:
                 # a UserError here means the SO was locked, which prevents changing the taxes

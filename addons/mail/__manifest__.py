@@ -2,7 +2,7 @@
 
 {
     'name': 'Discuss',
-    'version': '1.10',
+    'version': '1.10.1',
     'category': 'Productivity/Discuss',
     'sequence': 145,
     'summary': 'Chat, mail gateway and private channels',

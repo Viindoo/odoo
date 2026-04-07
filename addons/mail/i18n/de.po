@@ -9,15 +9,16 @@
 # Thomas, 2023
 # Chris Egal <sodaswed@web.de>, 2023
 # Martin Trigaux, 2023
-# Larissa Manderfeld, 2024
+# Wil Odoo, 2024
+# Larissa Manderfeld, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Larissa Manderfeld, 2024\n"
+"Last-Translator: Larissa Manderfeld, 2025\n"
 "Language-Team: German (https://app.transifex.com/odoo/teams/41243/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1773,9 +1774,22 @@ msgid "Auto subscription"
 msgstr "Automatisches Abonnement"
 
 #. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__mail_compose_message__message_type__auto_comment
+#: model:ir.model.fields.selection,name:mail.selection__mail_message__message_type__auto_comment
+msgid "Automated Targeted Notification"
+msgstr "Automatische Zielbenachrichtigung"
+
+#. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity__automated
 msgid "Automated activity"
 msgstr "Automatische Aktivität"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/models/message.js:0
+#, python-format
+msgid "Automated message"
+msgstr "Automatische Nachricht"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_activity_type__triggered_next_type_id
@@ -4697,7 +4711,7 @@ msgid ""
 "Instead, it will check for the reply_to in tracking message-id and "
 "redirected accordingly. This has an impact on the generated message-id."
 msgstr ""
-"Wenn wahr, werden die Antworten nicht in den ursprünglichen "
+"Wenn Wahr, werden die Antworten nicht in den ursprünglichen "
 "Diskussionsthread des Dokuments gestellt. Stattdessen wird nach der reply_to"
 " in der Verfolgungsnachricht-ID gesucht und entsprechend weitergeleitet. "
 "Dies hat Auswirkungen auf die generierte Nachrichten-ID."
@@ -7077,6 +7091,14 @@ msgstr "Offen"
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_form
 msgid "Open Document"
 msgstr "Dokument öffnen"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#, python-format
+msgid "Open Link"
+msgstr "Link öffnen"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_alias_form
@@ -9501,7 +9523,7 @@ msgstr "Der interne Benutzer, der für diesen Kontakt verantwortlich ist."
 #: model_terms:ir.ui.view,arch_db:mail.message_notification_limit_email
 msgid "The message below could not be accepted by the address"
 msgstr ""
-"Die untenstehende Nachricht konnte nicht akzeptiert werden von der Adresse"
+"Die unten stehende Nachricht konnte nicht akzeptiert werden von der Adresse"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_alias__alias_model_id
@@ -9522,7 +9544,7 @@ msgid ""
 "<jobs@example.odoo.com>"
 msgstr ""
 "Die Bezeichnung des E-Mail-Alias, z. B. „Jobs“, falls Sie E-Mails für "
-"<jobs@example.odoo.com> erhalten möchten"
+"<jobs@beispiel.odoo.com> erhalten möchten"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_alias__alias_user_id
@@ -10414,7 +10436,7 @@ msgstr ""
 "Bei der Community- und Enterprise-Version ist es erforderlich, zum Senden "
 "und Empfangen von E-Mails Ihren eigenen E-Mail-Server zu verwenden. Online-"
 "Benutzer können bereits von einem einsatzbereiten E-Mail-Server "
-"(@mycompany.odoo.com) profitieren."
+"(@meinunternehmen.odoo.com) profitieren."
 
 #. module: mail
 #. odoo-javascript
@@ -10447,7 +10469,7 @@ msgid ""
 "It should be a comma separated list of domains e.g. example.com,example.org."
 msgstr ""
 "Wert für `mail.catchall.domain.allowed` kann nicht validiert werden.\n"
-"Es sollte eine durch Kommata getrennte Liste von Domains sein, z. B. example.com,example.org."
+"Es sollte eine durch Kommata getrennte Liste von Domains sein, z. B. beispiel.com,beispiel.org."
 
 #. module: mail
 #. odoo-javascript
@@ -10591,7 +10613,7 @@ msgstr "Wochen"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.email_compose_message_wizard_form
 msgid "Welcome to MyCompany!"
-msgstr "Herzlich willkommen bei MyCompany!"
+msgstr "Herzlich willkommen bei MeinUnternehmen!"
 
 #. module: mail
 #. odoo-javascript
@@ -10835,16 +10857,6 @@ msgid ""
 msgstr ""
 "Sie können Anhänge zu dieser Vorlage hinzufügen, die mit allen E-Mails, "
 "basierend auf dieser Vorlage, versandt werden."
-
-#. module: mail
-#: code:addons/mail/models/ir_attachment.py:0
-#, python-format
-msgid ""
-"You may not unlink or modify the content of attachments from other people's "
-"messages"
-msgstr ""
-"Sie dürfen den Inhalt von Anhängen aus den Nachrichten anderer Personen "
-"nicht entkoppeln oder ändernn"
 
 #. module: mail
 #. odoo-javascript
@@ -12269,7 +12281,7 @@ msgstr "Badeanzug"
 #: code:addons/mail/static/src/models_data/emoji_data.js:0
 #, python-format
 msgid "bathroom"
-msgstr "Badzimmer"
+msgstr "Badezimmer"
 
 #. module: mail
 #. odoo-javascript
@@ -17195,7 +17207,7 @@ msgstr "z. B. „Begrüßungs-E-Mail“"
 #: model_terms:ir.ui.view,arch_db:mail.email_template_form
 msgid "e.g. \"Welcome to MyCompany\" or \"Nice to meet you, {{ object.name }}\""
 msgstr ""
-"z. B. „Willkommen bei MyCompany“ oder „Schön, Sie kennenzulernen, {{ "
+"z. B. „Willkommen bei MeinUnternehmen“ oder „Schön, Sie kennenzulernen, {{ "
 "object.name }}“"
 
 #. module: mail
@@ -17242,7 +17254,7 @@ msgstr "z. B. true.true..f"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.email_compose_message_wizard_form
 msgid "e.g: \"info@mycompany.odoo.com\""
-msgstr "z. B.: „info@mycompany.odoo.com“"
+msgstr "z. B.: „info@meinunternehmen.odoo.com“"
 
 #. module: mail
 #. odoo-javascript

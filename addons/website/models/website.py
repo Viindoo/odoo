@@ -1,6 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import base64
+import functools
 import hashlib
 import inspect
 import json
@@ -11,6 +12,7 @@ import requests
 import threading
 
 from collections import defaultdict
+from datetime import datetime
 from functools import reduce
 from lxml import etree, html
 from psycopg2 import sql
@@ -345,7 +347,7 @@ class Website(models.Model):
         :param url: the url to check
         :return: True if the url has to be indexed, False otherwise
         """
-        return get_base_domain(url, True) == get_base_domain(self.domain, True)
+        return get_base_domain(url.lower(), True) == get_base_domain(self.domain.lower(), True)
 
     # ----------------------------------------------------------
     # Configurator
@@ -1088,7 +1090,7 @@ class Website(models.Model):
                 order = View._order
             views = View.with_context(active_test=False).search(domain, order=order)
             if views:
-                view = views.filter_duplicate()
+                view = views.filter_duplicate()[:1]
             else:
                 # we handle the raise below
                 view = self.env.ref(view_id, raise_if_not_found=False)
@@ -1173,9 +1175,12 @@ class Website(models.Model):
 
         for rule in router.iter_rules():
             if 'sitemap' in rule.endpoint.routing and rule.endpoint.routing['sitemap'] is not True:
-                if rule.endpoint.func in sitemap_endpoint_done:
+                endpoint_func = rule.endpoint.func
+                if isinstance(endpoint_func, functools.partial): # follow partial in case of redirect
+                    endpoint_func = endpoint_func.func
+                if endpoint_func.__func__ in sitemap_endpoint_done:
                     continue
-                sitemap_endpoint_done.add(rule.endpoint.func)
+                sitemap_endpoint_done.add(endpoint_func.__func__)
 
                 func = rule.endpoint.routing['sitemap']
                 if func is False:
@@ -1248,8 +1253,12 @@ class Website(models.Model):
             record = {'loc': page['url'], 'id': page['id'], 'name': page['name']}
             if page.view_id and page.view_id.priority != 16:
                 record['priority'] = min(round(page.view_id.priority / 32.0, 1), 1)
-            if page['write_date']:
-                record['lastmod'] = page['write_date'].date()
+            last_updated_date = max(
+                [d for d in (page.write_date, page.view_id.write_date) if isinstance(d, datetime)],
+                default=None,
+            )
+            if last_updated_date:
+                record['lastmod'] = last_updated_date.date()
             yield record
 
     def get_website_page_ids(self):

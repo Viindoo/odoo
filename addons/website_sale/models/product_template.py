@@ -309,8 +309,13 @@ class ProductTemplate(models.Model):
         )
         show_tax_excluded = self.user_has_groups('account.group_show_line_subtotals_tax_excluded')
         tax_display = 'total_excluded' if show_tax_excluded else 'total_included'
-        # The list_price is always the price of one.
-        return taxes.compute_all(price, pricelist.currency_id, 1, product, partner)[tax_display]
+        return taxes.compute_all(
+            price_unit=price,
+            currency=pricelist.currency_id,
+            quantity=1,  # `list_price` is always the price of one
+            product=product.sudo(),  # tax computation may require access to restricted fields
+            partner=partner,
+        )[tax_display]
 
     def _get_image_holder(self):
         """Returns the holder of the image to use as default representation.
@@ -545,11 +550,11 @@ class ProductTemplate(models.Model):
         monetary_options = {'display_currency': mapping['detail']['display_currency']}
         if combination_info['prevent_zero_price_sale']:
             website = self.env['website'].get_current_website()
-            price = website.prevent_zero_price_sale_text
-        else:
-            price = self.env['ir.qweb.field.monetary'].value_to_html(
-                combination_info['price'], monetary_options
-            )
+            return website.prevent_zero_price_sale_text, None
+
+        price = self.env['ir.qweb.field.monetary'].value_to_html(
+            combination_info['price'], monetary_options
+        )
         if combination_info['has_discounted_price']:
             list_price = self.env['ir.qweb.field.monetary'].value_to_html(
                 combination_info['list_price'], monetary_options

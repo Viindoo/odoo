@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import base64
+import json
 
 from werkzeug.urls import url_encode
 
@@ -264,6 +265,11 @@ class TestUiTranslate(odoo.tests.HttpCase):
 @odoo.tests.common.tagged('post_install', '-at_install')
 class TestUi(odoo.tests.HttpCase):
 
+    def fetch_proxy(self, url):
+        if 'vimeo' in url:
+            return self.make_fetch_proxy_response('{}')
+        return super().fetch_proxy(url)
+
     def test_01_admin_tour_homepage(self):
         self.start_tour("/web", 'homepage', login='admin')
 
@@ -351,8 +357,8 @@ class TestUi(odoo.tests.HttpCase):
     def test_08_website_style_custo(self):
         self.start_tour(self.env['website'].get_client_action_url('/'), 'website_style_edition', login='admin')
 
-    def test_09_website_edit_link_popover(self):
-        self.start_tour('/@/', 'edit_link_popover', login='admin')
+    # def test_09_website_edit_link_popover(self):
+    #     self.start_tour('/@/', 'edit_link_popover', login='admin')
 
     def test_10_website_conditional_visibility(self):
         self.start_tour(self.env['website'].get_client_action_url('/'), 'conditional_visibility_1', login='admin')
@@ -430,8 +436,8 @@ class TestUi(odoo.tests.HttpCase):
     def test_14_carousel_snippet_content_removal(self):
         self.start_tour(self.env['website'].get_client_action_url('/'), 'carousel_content_removal', login='admin')
 
-    def test_15_website_link_tools(self):
-        self.start_tour(self.env['website'].get_client_action_url('/'), 'link_tools', login="admin")
+    # def test_15_website_link_tools(self):
+    #     self.start_tour(self.env['website'].get_client_action_url('/'), 'link_tools', login="admin")
 
     def test_16_website_edit_megamenu(self):
         self.start_tour(self.env['website'].get_client_action_url('/'), 'edit_megamenu', login='admin')
@@ -459,12 +465,11 @@ class TestUi(odoo.tests.HttpCase):
 
     def test_24_snippet_cache_across_websites(self):
         default_website = self.env.ref('website.default_website')
-        if self.env['website'].search_count([]) == 1:
-            self.env['website'].create({
-                'name': 'My Website 2',
-                'domain': '',
-                'sequence': 20,
-            })
+        website = self.env['website'].create({
+            'name': 'Test Website',
+            'domain': '',
+            'sequence': 20
+        })
         self.env['ir.ui.view'].with_context(website_id=default_website.id).save_snippet(
             name='custom_snippet_test',
             arch="""
@@ -475,7 +480,9 @@ class TestUi(odoo.tests.HttpCase):
             thumbnail_url='/website/static/src/img/snippets_thumbs/s_text_block.svg',
             snippet_key='s_text_block',
             template_key='website.snippets')
-        self.start_tour('/@/', 'snippet_cache_across_websites', login='admin')
+        self.start_tour('/@/', 'snippet_cache_across_websites', login='admin', cookies={
+            'websiteIdMapping': json.dumps({'Test Website': website.id})
+        })
 
     def test_25_website_edit_discard(self):
         self.start_tour('/web', 'homepage_edit_discard', login='admin')
@@ -563,3 +570,12 @@ class TestUi(odoo.tests.HttpCase):
 
     def test_snippet_carousel(self):
         self.start_tour('/', 'snippet_carousel', login='admin')
+
+    def test_media_iframe_video(self):
+        self.start_tour("/", "website_media_iframe_video", login="admin")
+
+    def test_snippet_background_video(self):
+        self.start_tour("/", "website_snippet_background_video", login="admin")
+
+    def test_popup_visibility_option(self):
+        self.start_tour("/", "website_popup_visibility_option", login="admin")

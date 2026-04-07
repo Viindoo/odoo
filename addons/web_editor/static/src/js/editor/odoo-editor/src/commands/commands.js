@@ -204,7 +204,7 @@ export const editorCommands = {
             block.textContent !== "" && node.textContent !== "" &&
             (
                 block.nodeName === node.nodeName ||
-                ['BLOCKQUOTE', 'PRE', 'DIV'].includes(block.nodeName)
+                block.nodeName === 'DIV'
             )
         );
 
@@ -356,12 +356,6 @@ export const editorCommands = {
                 insertBefore = false;
             } else {
                 currentNode.after(nodeToInsert);
-            }
-            if (
-                ['BLOCKQUOTE', 'PRE'].includes(block.nodeName) &&
-                paragraphRelatedElements.includes(nodeToInsert.nodeName)
-            ) {
-                nodeToInsert = setTagName(nodeToInsert, block.nodeName);
             }
             let convertedList;
             if (
@@ -526,6 +520,7 @@ export const editorCommands = {
             const element = closestElement(node);
             element.style.removeProperty('color');
             element.style.removeProperty('background');
+            element.style.removeProperty('-webkit-text-fill-color');
         }
         textAlignStyles.forEach((textAlign, block) => {
             block.style.setProperty('text-align', textAlign);
@@ -712,11 +707,40 @@ export const editorCommands = {
             return selectedNodes.flatMap(node => {
                 let font = closestElement(node, 'font') || closestElement(node, 'span');
                 const children = font && descendants(font);
-                if (font && (font.nodeName === 'FONT' || (font.nodeName === 'SPAN' && font.style[mode]))) {
+                const hasInlineGradient = font && isColorGradient(font.style["background-image"]);
+                if (
+                    font &&
+                    (font.nodeName === "FONT" || (font.nodeName === "SPAN" && font.style[mode])) &&
+                    (isColorGradient(color) || color === "" || !hasInlineGradient)
+                ) {
                     // Partially selected <font>: split it.
                     const selectedChildren = children.filter(child => selectedNodes.includes(child));
                     if (selectedChildren.length) {
-                        font = splitAroundUntil(selectedChildren, font);
+                        const closestGradientEl = closestElement(node, 'font[style*="background-image"], span[style*="background-image"]');
+                        const isGradientBeingUpdated = closestGradientEl && isColorGradient(color);
+                        const splitnode = isGradientBeingUpdated ? closestGradientEl : font;
+                        font = splitAroundUntil(selectedChildren, splitnode);
+                        if (isGradientBeingUpdated) {
+                            const classRegex = mode === 'color' ?  TEXT_CLASSES_REGEX : BG_CLASSES_REGEX;
+                            // When updating a gradient, remove color applied to
+                            // its descendants.This ensures the gradient remains
+                            // visible without being overwritten by a descendant's color.
+                            for (const node of descendants(font)) {
+                                if (
+                                    node.nodeType === Node.ELEMENT_NODE &&
+                                    (node.style[mode] || classRegex.test(node.className))
+                                ) {
+                                    colorElement(node, "", mode);
+                                    node.style.webkitTextFillColor = "";
+                                }
+                            }
+                        } else if (
+                            mode === "color" &&
+                            (font.style.webkitTextFillColor ||
+                                closestGradientEl && closestGradientEl.classList.contains("text-gradient"))
+                        ) {
+                            font.style.webkitTextFillColor = color;
+                        }
                     } else {
                         font = [];
                     }
@@ -749,8 +773,12 @@ export const editorCommands = {
                         font = previous;
                     } else {
                         // No <font> found: insert a new one.
+                        const isTextGradient = hasInlineGradient && font.classList.contains("text-gradient");
                         font = document.createElement('font');
                         node.after(font);
+                        if (isTextGradient && mode === "color") {
+                            font.style.webkitTextFillColor = color;
+                        }
                     }
                     if (node.textContent) {
                         font.appendChild(node);
@@ -983,7 +1011,7 @@ export const editorCommands = {
             const columns = [];
             for (let i = 0; i < numberOfColumns; i++) {
                 const column = document.createElement('div');
-                column.classList.add(`col-lg-${columnSize}`);
+                column.classList.add(`col-${columnSize}`);
                 row.append(column);
                 columns.push(column);
             }
@@ -1016,7 +1044,7 @@ export const editorCommands = {
                 let lastColumn = columns[columns.length - 1];
                 for (let i = 0; i < diff; i++) {
                     const column = document.createElement('div');
-                    column.classList.add(`col-lg-${columnSize}`);
+                    column.classList.add(`col-${columnSize}`);
                     const p = document.createElement('p');
                     p.append(document.createElement('br'));
                     p.classList.add('oe-hint');
@@ -1030,7 +1058,7 @@ export const editorCommands = {
                 // Remove superfluous columns.
                 const restore = preserveCursor(editor.document);
                 for (const column of columns) {
-                    column.className = column.className.replace(REGEX_BOOTSTRAP_COLUMN, `col$1-${columnSize}`);
+                    column.className = column.className.replace(REGEX_BOOTSTRAP_COLUMN, `col-${columnSize}`);
                 }
                 const contents = [];
                 for (let i = diff; i < 0; i++) {

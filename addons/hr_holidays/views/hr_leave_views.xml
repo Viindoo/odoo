@@ -181,7 +181,7 @@
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('o_leave_kanban_info')]" position='before'>
                 <div class="col-3">
-                    <img t-att-src="kanban_image('hr.employee', 'avatar_128', record.employee_id.raw_value)"
+                    <img t-att-src="kanban_image('hr.employee.public', 'avatar_128', record.employee_id.raw_value)"
                         t-att-title="record.employee_id.value"
                         t-att-alt="record.employee_id.value"
                         class="o_image_64_cover float-start mr4"/>
@@ -700,10 +700,14 @@
             'search_default_active_time_off': 4,
             'hide_employee_name': 1,
             'holiday_status_name_get': False}</field>
-        <field name="domain">['|', ('employee_id.company_id', 'in', allowed_company_ids),
+        <field name="domain">['|', '|', '|', '|', ('employee_id.company_id', 'in', allowed_company_ids),
                                     '&amp;', ('multi_employee', '=', True),
                                     '&amp;', ('state', 'in', ['draft', 'confirm', 'validate1']),
-                                    ('employee_ids.company_id', 'in', allowed_company_ids)]</field>
+                                    ('employee_ids.company_id', 'in', allowed_company_ids),
+                                    '&amp;', ('holiday_type', '=', 'company'),
+                                    ('mode_company_id', 'in', allowed_company_ids),
+                                    ('holiday_type', '=', 'department'),
+                                    ('holiday_type', '=', 'category')]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Meet the time off dashboard.

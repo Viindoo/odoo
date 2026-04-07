@@ -3289,6 +3289,38 @@ class TestMrpOrder(TestMrpCommon):
         self.assertEqual(mo_backorder.workorder_ids[1].date_planned_start, datetime(2023, 3, 1, 12, 0))
         self.assertEqual(mo_backorder.workorder_ids[2].date_planned_start, datetime(2023, 3, 1, 12, 45))
 
+    @freeze_time('2023-03-01 12:00')
+    def test_all_workorders_planned(self):
+        """
+            Test, when writing to a confirmed MO, that all workorders that are expected to be planned are planned.
+        """
+        self.env.user.groups_id += self.env.ref('mrp.group_mrp_routings')
+
+        mo_form = Form(self.env['mrp.production'])
+        mo_form.product_id = self.product_8
+        with mo_form.workorder_ids.new() as workorder:
+            workorder.name = "OP1"
+            workorder.workcenter_id = self.workcenter_2
+        with mo_form.workorder_ids.new() as workorder:
+            workorder.name = "OP2"
+            workorder.workcenter_id = self.workcenter_2
+        mo = mo_form.save()
+        mo.action_confirm()
+
+        mo.workorder_ids[1].button_start()
+        mo.workorder_ids[1].button_finish()
+
+        self.assertTrue(mo.workorder_ids[1].date_planned_start)
+
+        with Form(mo) as mo_form:
+            with mo_form.workorder_ids.new() as workorder:
+                workorder.name = "OP3"
+                workorder.workcenter_id = self.workcenter_2
+            mo = mo_form.save()
+
+        self.assertTrue(mo.workorder_ids[0].date_planned_start)
+        self.assertTrue(mo.workorder_ids[2].date_planned_start)
+
     def test_compute_product_id(self):
         """
             Tests the creation of a production order automatically sets the product when the bom is provided,
@@ -3893,6 +3925,7 @@ class TestMrpOrder(TestMrpCommon):
         will be set too. As if the finish date is not set the planned workorder will not
         be shown in planning gantt view
         """
+        self.env.company.resource_calendar_id.tz = 'Europe/Brussels'
         mo = self.env['mrp.production'].create({
             'product_id': self.product.id,
             'product_uom_id': self.bom_1.product_uom_id.id,
@@ -4051,10 +4084,87 @@ class TestMrpOrder(TestMrpCommon):
 
         # Set a different duration, finish the wo and validate the second bo
         bo_2.workorder_ids.button_start()
-        bo_2.workorder_ids.duration = 100
         bo_2.workorder_ids.button_finish()
+        bo_2.workorder_ids.duration = 100
         self.assertRecordValues(bo_2.workorder_ids, [
             {'qty_produced': 4.0, 'qty_remaining': 0.0, 'duration_expected': 165.0, 'duration': 100.0, 'state': 'done'}
         ])
         bo_2.button_mark_done()
         self.assertRecordValues(bo_2, [{'qty_produced': 4.0, 'state': 'done'}])
+
+    def test_compute_tracked_time_3(self):
+        """
+        Checks that the expected duration calculation is correct when the BoM has a different UoM than the product.
+        """
+        # Change the BoM UoM to be Dozens instead of Units
+        self.bom_4.product_uom_id = self.uom_dozen
+
+        self.env.user.groups_id += self.env.ref('mrp.group_mrp_routings')
+        production_form = Form(self.env['mrp.production'])
+        production_form.bom_id = self.bom_4
+        production = production_form.save()
+        production.action_confirm()
+        production.button_plan()
+        production_form = Form(production)
+        production_form.qty_producing = 1
+        with production_form.workorder_ids.edit(0) as wo:
+            wo.duration = 15  # Complete the work order in 15 minutes
+        production = production_form.save()
+        production.button_mark_done()
+
+        production_form = Form(self.env['mrp.production'])
+        production_form.bom_id = self.bom_4
+        production = production_form.save()
+        self.assertEqual(production.workorder_ids[0].duration_expected, 15)
+
+    def test_child_mo_after_qty_parent_mo_update(self):
+        """
+        Test that all child MOs will be found after the parent MO has been updated.
+        Suppose three manufactured products A, B and C:
+        - Product A (grandparent)-> Bom:
+            - Product B (parent)-> Bom:
+                - Product C (child) -> Bom:
+                    - component
+        (B + C) have the routes MTO + Manufacture
+        so producing one unit of A -> should generate a MO for B and C
+        """
+        warehouse = self.env['stock.warehouse'].search([('company_id', '=', self.env.company.id)], limit=1)
+        mto_route = warehouse.mto_pull_id.route_id
+        manufacture_route = warehouse.manufacture_pull_id.route_id
+        mto_route.active = True
+
+        grandparent, parent, child = self.env['product.product'].create([{
+            'name': n,
+            'type': 'product',
+            'route_ids': [(6, 0, mto_route.ids + manufacture_route.ids)],
+        } for n in ['grandparent', 'parent', 'child']])
+        component = self.env['product.product'].create({
+            'name': 'component',
+            'type': 'consu',
+        })
+
+        self.env['mrp.bom'].create([{
+            'product_tmpl_id': finished_product.product_tmpl_id.id,
+            'product_qty': 1,
+            'type': 'normal',
+            'bom_line_ids': [
+                (0, 0, {'product_id': compo.id, 'product_qty': 1}),
+            ],
+        } for finished_product, compo in [(grandparent, parent), (parent, child), (child, component)]])
+        grandparent_production = self.env['mrp.production'].create({
+            'bom_id': grandparent.bom_ids.id,
+        })
+        grandparent_production.action_confirm()
+        child_production, parent_production = self.env['mrp.production'].search([('product_id', 'in', (parent + child).ids)], order='id desc', limit=2)
+        self.assertTrue(grandparent_production._get_children(), parent_production)
+        self.assertTrue(parent_production._get_children(), child_production)
+        update_quantity_wizard = self.env['change.production.qty'].create({
+            'mo_id': grandparent_production.id,
+            'product_qty': 2,
+        })
+        # Update the quantity to produce of the grandparent to 2, this should create a new MO for both the parent and the child.
+        update_quantity_wizard.change_prod_qty()
+        self.assertEqual(grandparent_production.move_raw_ids.product_uom_qty, 2)
+        child_production_2, parent_production_2 = self.env['mrp.production'].search([('product_id', 'in', (parent + child).ids), ('id', 'not in', [parent_production.id, child_production.id])], order='id desc', limit=2)
+        self.assertEqual(grandparent_production._get_children(), (parent_production | parent_production_2))
+        self.assertEqual(parent_production_2._get_children(), child_production_2)

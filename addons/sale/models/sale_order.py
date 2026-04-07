@@ -589,9 +589,12 @@ class SaleOrder(models.Model):
             show_warning = order.state in ('draft', 'sent') and \
                            order.company_id.account_use_credit_limit
             if show_warning:
-                updated_credit = order.partner_id.commercial_partner_id.credit + (order.amount_total / order.currency_rate)
+                order_sudo = order.sudo()
+                current_credit = order_sudo.partner_id.commercial_partner_id.credit
                 order.partner_credit_warning = self.env['account.move']._build_credit_warning_message(
-                    order, updated_credit)
+                    record=order_sudo,
+                    updated_credit=current_credit + order.amount_total / order.currency_rate,
+                )
 
     @api.depends_context('lang')
     @api.depends('order_line.tax_id', 'order_line.price_unit', 'amount_total', 'amount_untaxed', 'currency_id')
@@ -1262,17 +1265,6 @@ class SaleOrder(models.Model):
                 access_opt['title'] = _("Accept & Pay Quotation")
             elif self.state in ('draft', 'sent'):
                 access_opt['title'] = _("View Quotation")
-
-        # enable followers that have access through portal
-        follower_group = next(group for group in groups if group[0] == 'follower')
-        follower_group[2]['active'] = True
-        follower_group[2]['has_button_access'] = True
-        access_opt = follower_group[2].setdefault('button_access', {})
-        if self.state in ('draft', 'sent'):
-            access_opt['title'] = _("View Quotation")
-        else:
-            access_opt['title'] = _("View Order")
-        access_opt['url'] = self._notify_get_action_link('view', **local_msg_vals)
 
         return groups
 

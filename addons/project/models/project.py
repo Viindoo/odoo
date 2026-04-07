@@ -632,6 +632,11 @@ class Project(models.Model):
         return projects
 
     def write(self, vals):
+        if vals.get('access_token'):
+            self.ensure_one()  # We are not supposed to add a single access token to multiple project
+            if self.privacy_visibility != 'portal':
+                vals['access_token'] = ''
+
         # directly compute is_favorite to dodge allow write access right
         if 'is_favorite' in vals:
             vals.pop('is_favorite')
@@ -782,7 +787,7 @@ class Project(models.Model):
         favorite_projects.write({'favorite_user_ids': [(3, self.env.uid)]})
 
     def action_view_tasks(self):
-        action = self.env['ir.actions.act_window'].with_context({'active_id': self.id})._for_xml_id('project.act_project_project_2_project_task_all')
+        action = self.env['ir.actions.act_window'].with_context(active_id=self.id)._for_xml_id('project.act_project_project_2_project_task_all')
         action['display_name'] = _("%(name)s", name=self.name)
         context = action['context'].replace('active_id', str(self.id))
         context = ast.literal_eval(context)
@@ -1032,6 +1037,9 @@ class Project(models.Model):
                 portal_users = project.message_partner_ids.user_ids.filtered('share')
                 project.message_unsubscribe(partner_ids=portal_users.partner_id.ids)
                 project.tasks._unsubscribe_portal_users()
+                # revoke access_token since the project and its tasks are no longer accessible for portal/public users
+                project.tasks.access_token = ''
+                project.access_token = ''
 
     # ---------------------------------------------------
     # Project sharing
@@ -1100,7 +1108,7 @@ class Task(models.Model):
     @api.model
     def _read_group_stage_ids(self, stages, domain, order):
         search_domain = [('id', 'in', stages.ids)]
-        if 'default_project_id' in self.env.context:
+        if 'default_project_id' in self.env.context and 'project_kanban' in self.env.context:
             search_domain = ['|', ('project_ids', '=', self.env.context['default_project_id'])] + search_domain
 
         stage_ids = stages._search(search_domain, order=order, access_rights_uid=SUPERUSER_ID)
@@ -1452,7 +1460,7 @@ class Task(models.Model):
     def message_subscribe(self, partner_ids=None, subtype_ids=None):
         """ Set task notification based on project notification preference if user follow the project"""
         if not subtype_ids:
-            project_followers = self.project_id.message_follower_ids.filtered(lambda f: f.partner_id.id in partner_ids)
+            project_followers = self.project_id.sudo().message_follower_ids.filtered(lambda f: f.partner_id.id in partner_ids)
             for project_follower in project_followers:
                 project_subtypes = project_follower.subtype_ids
                 task_subtypes = (project_subtypes.mapped('parent_id') | project_subtypes.filtered(lambda sub: sub.internal or sub.default)).ids if project_subtypes else None
@@ -1904,6 +1912,25 @@ class Task(models.Model):
 
         return vals
 
+    def _ensure_fields_write(self, vals, check_group_user=True, defaults=False):
+        # First check if the fields are accessible
+        self._ensure_fields_are_accessible(vals.keys(), operation='write', check_group_user=check_group_user)
+
+        if defaults:
+            vals = {
+                **{
+                    key[8:]: value
+                    for key, value in self.env.context.items()
+                    if key.startswith("default_") and key[8:] in self._fields
+                },
+                **vals
+            }
+
+        for fname, value in vals.items():
+            field = self._fields[fname]
+            if field.type == 'many2one':
+                self.env[field.comodel_name].browse(value).check_access_rule('read')
+
     def _ensure_fields_are_accessible(self, fields, operation='read', check_group_user=True):
         """" ensure all fields are accessible by the current user
 
@@ -2036,7 +2063,7 @@ class Task(models.Model):
         is_superuser = self._uid == SUPERUSER_ID
         for vals in vals_list:
             if is_portal_user:
-                self._ensure_fields_are_accessible(vals.keys(), operation='write', check_group_user=False)
+                self._ensure_fields_write(vals, check_group_user=False, defaults=True)
 
             project_id = vals.get('project_id') or self.env.context.get('default_project_id')
             if not vals.get('parent_id'):
@@ -2109,7 +2136,7 @@ class Task(models.Model):
         portal_can_write = False
         if self.env.user.has_group('base.group_portal') and not self.env.su:
             # Check if all fields in vals are in SELF_WRITABLE_FIELDS
-            self._ensure_fields_are_accessible(vals.keys(), operation='write', check_group_user=False)
+            self._ensure_fields_write(vals, check_group_user=False, defaults=False)
             self.check_access_rights('write')
             self.check_access_rule('write')
             portal_can_write = True
@@ -2540,7 +2567,12 @@ class Task(models.Model):
                     ('partner_id', '=', False), email_domain, ('stage_id.fold', '=', False)
                 ]).write({'partner_id': new_partner[0].id})
         # use the sanitized body of the email from the message thread to populate the task's description
-        if not self.description and message.subtype_id == self._creation_subtype() and self.partner_id == message.author_id:
+        if (
+           not self.description
+           and message.subtype_id == self._creation_subtype()
+           and self.partner_id == message.author_id
+           and msg_vals['message_type'] == 'email'
+        ):
             self.description = message.body
         return super(Task, self)._message_post_after_hook(message, msg_vals)
 
@@ -2614,7 +2646,7 @@ class Task(models.Model):
                 if project._check_project_sharing_access():
                     url = f"/my/projects/{self.parent_id.project_id.id}?task_id={self.parent_id.id}"
                 return {
-                    "name": "Portal Parent Task",
+                    "name": _("Portal Parent Task"),
                     "type": "ir.actions.act_url",
                     "url": url,
                 }
@@ -2655,7 +2687,7 @@ class Task(models.Model):
                 action['res_id'] = subtasks.id
             return action
         return {
-            'name': 'Portal Sub-tasks',
+            'name': _('Portal Sub-tasks'),
             'type': 'ir.actions.act_url',
             'url': f'/my/projects/{self.project_id.id}/task/{self.id}/subtasks' if len(subtasks) > 1 else subtasks.get_portal_url(query_string='project_sharing=1'),
         }
@@ -2790,14 +2822,14 @@ class ProjectTags(models.Model):
     @api.model
     def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
         if 'project_id' in self.env.context:
-            tag_ids = self._name_search()
+            tag_ids = self._name_search(limit=None)
             domain = expression.AND([domain, [('id', 'in', tag_ids)]])
         return super().read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
 
     @api.model
     def search_read(self, domain=None, fields=None, offset=0, limit=None, order=None):
         if 'project_id' in self.env.context:
-            tag_ids = self._name_search()
+            tag_ids = self._name_search(limit=None)
             domain = expression.AND([domain, [('id', 'in', tag_ids)]])
             return self.arrange_tag_list_by_id(super().search_read(domain=domain, fields=fields, offset=offset, limit=limit), tag_ids)
         return super().search_read(domain=domain, fields=fields, offset=offset, limit=limit, order=order)

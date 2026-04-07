@@ -14,15 +14,15 @@ class WebsiteSaleDelivery(WebsiteSale):
     @http.route()
     def shop_payment(self, **post):
         order = request.website.sale_get_order()
-        if order and not order.only_services and (request.httprequest.method == 'POST' or not order.carrier_id):
+        if order and not order.only_services:
             # Update order's carrier_id (will be the one of the partner if not defined)
             # If a carrier_id is (re)defined, redirect to "/shop/payment" (GET method to avoid infinite loop)
             carrier_id = post.get('carrier_id')
-            keep_carrier = post.get('keep_carrier', False)
-            if keep_carrier:
-                keep_carrier = bool(int(keep_carrier))
+            keep_carrier = False
             if carrier_id:
                 carrier_id = int(carrier_id)
+            elif order.carrier_id:  # If a carrier is selected.
+                keep_carrier = True  # Check availability of selected carrier and recompute rate.
             order._check_carrier_quotation(force_carrier_id=carrier_id, keep_carrier=keep_carrier)
             if carrier_id:
                 return request.redirect("/shop/payment")
@@ -41,7 +41,9 @@ class WebsiteSaleDelivery(WebsiteSale):
 
     @http.route(['/shop/carrier_rate_shipment'], type='json', auth='public', methods=['POST'], website=True)
     def cart_carrier_rate_shipment(self, carrier_id, **kw):
-        order = request.website.sale_get_order(force_create=True)
+        order = request.website.sale_get_order()
+        if not order:
+            raise ValidationError(_("Your cart is empty."))
 
         if not int(carrier_id) in order._get_delivery_methods().ids:
             raise UserError(_('It seems that a delivery method is not compatible with your address. Please refresh the page and try again.'))

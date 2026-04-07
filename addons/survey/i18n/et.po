@@ -17,14 +17,15 @@
 # Leaanika Randmets, 2023
 # Eneli Õigus <enelioigus@gmail.com>, 2024
 # Anna, 2024
+# Stevin Lilla, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:55+0000\n"
-"Last-Translator: Anna, 2024\n"
+"Last-Translator: Stevin Lilla, 2025\n"
 "Language-Team: Estonian (https://app.transifex.com/odoo/teams/41243/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -83,6 +84,13 @@ msgstr "% lõpetatud"
 #, python-format
 msgid "%s (copy)"
 msgstr "%s (koopia)"
+
+#. module: survey
+#. odoo-python
+#: code:addons/survey/models/survey_question.py:0
+#, python-format
+msgid "%s Votes"
+msgstr "%s Hääli"
 
 #. module: survey
 #. odoo-python
@@ -879,7 +887,7 @@ msgstr "Mittevastatava küsimuse vastuse punktisumma ei saa olla negatiivne!"
 #. module: survey
 #: model_terms:survey.question,description:survey.survey_demo_quiz_p3
 msgid "An apple a day keeps the doctor away."
-msgstr ""
+msgstr "Üks õun päevas hoiab arsti eemal"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.user_input_session_leaderboard
@@ -1969,6 +1977,11 @@ msgstr "Graafik"
 #: model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
 msgid "Group By"
 msgstr "Grupeeri"
+
+#. module: survey
+#: model:ir.model,name:survey.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP Routing"
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_invite__existing_mode
@@ -3483,6 +3496,11 @@ msgid "Products"
 msgstr "Tooted"
 
 #. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
+msgid "Public share URL"
+msgstr ""
+
+#. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_question_answer__question_id
 #: model:ir.model.fields,field_description:survey.field_survey_user_input_line__question_id
 #: model_terms:ir.ui.view,arch_db:survey.survey_question_answer_view_search
@@ -3968,11 +3986,14 @@ msgid ""
 "Some general information about you. It will be used internally for "
 "statistics only."
 msgstr ""
+"Mõned üldised andmed teie kohta. Seda kasutatakse ettevõttesiseselt ainult "
+"statistika jaoks."
 
 #. module: survey
 #: model_terms:survey.question,description:survey.survey_demo_quiz_p2
 msgid "Some questions about our company. Do you really know us?"
 msgstr ""
+"Mõned küsimused meie ettevõtte kohta. Kui hästi tunnete meie ettevõtet?"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_page_statistics_header
@@ -4602,11 +4623,13 @@ msgid ""
 "This section is about general information about you. Answering them helps "
 "qualifying your answers."
 msgstr ""
+"See osa käsitleb teie kohta üldist teavet. Neile vastamine aitab Teie "
+"vastuseid kvalifitseerida."
 
 #. module: survey
 #: model_terms:survey.question,description:survey.survey_feedback_p2
 msgid "This section is about our eCommerce experience itself."
-msgstr ""
+msgstr "See osa käsitleb meie e-kaubanduse kogemust."
 
 #. module: survey
 #: model_terms:survey.survey,description:survey.survey_demo_quiz
@@ -4620,6 +4643,8 @@ msgid ""
 "This survey allows you to give a feedback about your experience with our products.\n"
 "    Filling it helps us improving your experience."
 msgstr ""
+"See küsitlus võimaldab Teil anda tagasisidet meie toodete kohta.\n"
+"    Selle täitmine aitab meil Teie kasutajakogemust täiustada."
 
 #. module: survey
 #. odoo-python
@@ -4814,6 +4839,11 @@ msgid "Use humor and make jokes"
 msgstr "Kasuta huumorit ja tee nalju"
 
 #. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
+msgid "Use template"
+msgstr "Kasuta malli"
+
+#. module: survey
 #. odoo-javascript
 #: code:addons/survey/static/src/js/tours/survey_tour.js:0
 #, python-format
@@ -4926,11 +4956,13 @@ msgid ""
 "We like to say that the apple doesn't fall far from the tree, so here are "
 "trees."
 msgstr ""
+"Meile meeldib öelda, et õun ei lange puu otsast kaugele, nii et siin on "
+"puud."
 
 #. module: survey
 #: model_terms:survey.question,description:survey.survey_demo_quiz_p5
 msgid "We may be interested by your input."
-msgstr ""
+msgstr "Teie panus võib meile huvi pakkuda."
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_survey__website_message_ids
@@ -5225,6 +5257,8 @@ msgid ""
 "You cannot delete questions from surveys \"%(survey_names)s\" while live "
 "sessions are in progress."
 msgstr ""
+"Te ei saa kustutada küsimused küsimustikus \"%(survey_names)s\" samal ajal "
+"kui live sessioonid on pooleli."
 
 #. module: survey
 #. odoo-python

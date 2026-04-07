@@ -11,15 +11,15 @@
 # Martin Trigaux, 2023
 # Ryoko Tsuda <ryoko@quartile.co>, 2023
 # Yoshi Tashiro (Quartile) <tashiro@roomsfor.hk>, 2023
-# Junko Augias, 2024
+# Junko Augias, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-22 18:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:54+0000\n"
-"Last-Translator: Junko Augias, 2024\n"
+"Last-Translator: Junko Augias, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,7 +58,7 @@ msgstr " - 期日までのタスク"
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__collaborator_count
 msgid "# Collaborators"
-msgstr "# 協力者"
+msgstr "共同作業者数"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__rating_count
@@ -277,7 +277,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:project.selection__project_task__repeat_day__24
 #: model:ir.model.fields.selection,name:project.selection__project_task_recurrence__repeat_day__24
 msgid "24"
-msgstr ""
+msgstr "24"
 
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_task__repeat_day__25
@@ -564,7 +564,7 @@ msgid ""
 "                                </span>"
 msgstr ""
 "<span class=\"o_stat_text\">\n"
-"協力者\n"
+"共同作業者\n"
 "</span>"
 
 #. module: project
@@ -701,12 +701,12 @@ msgstr "1つのタスクはユーザごとに1つの個人ステージしか持�
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.edit_project
 msgid "Accept Emails From"
-msgstr "Eメール受信対象"
+msgstr "メールの受信許可対象"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__access_instruction_message
 msgid "Access Instruction Message"
-msgstr "アクセス指示メッセージ"
+msgstr "アクセス手順メッセージ"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_share_wizard__access_mode
@@ -1063,8 +1063,6 @@ msgid "Assigned to"
 msgstr "担当者"
 
 #. module: project
-#. odoo-python
-#: code:addons/project/controllers/portal.py:0
 #: model:ir.model.fields,field_description:project.field_project_task__user_ids
 #: model:ir.model.fields,field_description:project.field_project_task_burndown_chart_report__user_ids
 #: model:ir.model.fields,field_description:project.field_report_project_task_user__user_ids
@@ -1074,7 +1072,6 @@ msgstr "担当者"
 #: model_terms:ir.ui.view,arch_db:project.project_sharing_project_task_view_tree
 #: model_terms:ir.ui.view,arch_db:project.view_task_project_user_search
 #: model_terms:ir.ui.view,arch_db:project.view_task_search_form
-#, python-format
 msgid "Assignees"
 msgstr "担当者"
 
@@ -1241,7 +1238,7 @@ msgstr "ブロック済"
 #: model:ir.model.fields,field_description:project.field_project_task__depend_on_ids
 #: model_terms:ir.ui.view,arch_db:project.view_task_form2
 msgid "Blocked By"
-msgstr "ブロック者"
+msgstr "ブロック元"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.view_task_search_form
@@ -1385,7 +1382,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:project.field_project_collaborator__partner_id
 #: model_terms:ir.ui.view,arch_db:project.project_collaborator_view_search
 msgid "Collaborator"
-msgstr "協力者"
+msgstr "共同作業者"
 
 #. module: project
 #. odoo-python
@@ -1393,7 +1390,7 @@ msgstr "協力者"
 #: model:ir.model.fields,field_description:project.field_project_project__collaborator_ids
 #, python-format
 msgid "Collaborators"
-msgstr "協力者"
+msgstr "共同作業者"
 
 #. module: project
 #: model:ir.model,name:project.model_project_collaborator
@@ -3492,7 +3489,7 @@ msgstr "活動タイプが見つかりません。作成しましょう！"
 #. module: project
 #: model_terms:ir.actions.act_window,help:project.project_collaborator_action
 msgid "No collaborators found"
-msgstr "協力者が見つかりませんでした"
+msgstr "共同作業者が見つかりませんでした"
 
 #. module: project
 #: model_terms:ir.actions.act_window,help:project.rating_rating_action_project_report
@@ -3643,7 +3640,6 @@ msgid "Off Track"
 msgstr "オフトラック"
 
 #. module: project
-#: model:account.analytic.account,name:project.analytic_office_design
 #: model:project.project,name:project.project_project_1
 msgid "Office Design"
 msgstr "オフィスデザイン"
@@ -3918,6 +3914,20 @@ msgid "Portal Access URL"
 msgstr "ポータルアクセスURL"
 
 #. module: project
+#. odoo-python
+#: code:addons/project/models/project.py:0
+#, python-format
+msgid "Portal Parent Task"
+msgstr ""
+
+#. module: project
+#. odoo-python
+#: code:addons/project/models/project.py:0
+#, python-format
+msgid "Portal Sub-tasks"
+msgstr ""
+
+#. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__portal_user_names
 msgid "Portal User Names"
 msgstr "ポータルユーザ名"
@@ -4039,7 +4049,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:project.project_collaborator_action
 #: model_terms:ir.ui.view,arch_db:project.project_sharing_access_view_tree
 msgid "Project Collaborators"
-msgstr "プロジェクト協力者"
+msgstr "プロジェクト共同作業者"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__project_color
@@ -4358,7 +4368,7 @@ msgstr "到達日"
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_share_wizard__access_mode__read
 msgid "Readonly"
-msgstr "読出のみ"
+msgstr "読み取り専用"
 
 #. module: project
 #. odoo-python
@@ -4467,7 +4477,6 @@ msgid "Related Document Model"
 msgstr "関連ドキュメントモデル"
 
 #. module: project
-#: model:account.analytic.account,name:project.analytic_renovations
 #: model:project.project,name:project.project_project_3
 msgid "Renovations"
 msgstr "リノベーション"
@@ -4559,7 +4568,6 @@ msgid "Research"
 msgstr "研究"
 
 #. module: project
-#: model:account.analytic.account,name:project.analytic_research_development
 #: model:project.project,name:project.project_project_2
 msgid "Research & Development"
 msgstr "研究開発"
@@ -5251,6 +5259,7 @@ msgstr "タスク:"
 #. module: project
 #. odoo-python
 #: code:addons/project/models/project.py:0
+#: code:addons/project/models/project.py:0
 #: model:ir.actions.act_window,name:project.act_project_project_2_project_task_all
 #: model:ir.actions.act_window,name:project.action_view_task
 #: model:ir.actions.act_window,name:project.action_view_task_from_milestone
@@ -5883,23 +5892,23 @@ msgstr "値はTRUEまたはFALSEである必要があります(%sではない)"
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.view_project_kanban
 msgid "View"
-msgstr "ビュー"
+msgstr "見る"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.project_sharing_project_task_view_form
 #: model_terms:ir.ui.view,arch_db:project.view_task_form2
 msgid "View Task"
-msgstr "タスク照会"
+msgstr "タスクを見る"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.project_milestone_view_tree
 msgid "View Tasks"
-msgstr "タスクを表示"
+msgstr "タスクを見る"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__privacy_visibility
 msgid "Visibility"
-msgstr "表示"
+msgstr "可視性"
 
 #. module: project
 #. odoo-javascript

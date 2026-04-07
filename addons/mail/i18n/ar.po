@@ -8,15 +8,16 @@
 # Martin Trigaux, 2022
 # Mustafa J. Kadhem <safi2266@gmail.com>, 2023
 # Niyas Raphy, 2023
-# Malaz Abuidris <msea@odoo.com>, 2024
+# Wil Odoo, 2024
+# Malaz Abuidris <msea@odoo.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Malaz Abuidris <msea@odoo.com>, 2024\n"
+"Last-Translator: Malaz Abuidris <msea@odoo.com>, 2025\n"
 "Language-Team: Arabic (https://app.transifex.com/odoo/teams/41243/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -879,7 +880,7 @@ msgstr ""
 #. module: mail
 #: model:ir.model.constraint,message:mail.constraint_bus_presence_partner_or_guest_exists
 msgid "A bus presence must have a user or a guest."
-msgstr "يجب أن يكون لظهور المستخدم مستخدم أو زائر. "
+msgstr "يجب أن يكون لظهور الناقل مستخدم أو زائر. "
 
 #. module: mail
 #. odoo-javascript
@@ -1748,9 +1749,22 @@ msgid "Auto subscription"
 msgstr "الاشتراك التلقائي "
 
 #. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__mail_compose_message__message_type__auto_comment
+#: model:ir.model.fields.selection,name:mail.selection__mail_message__message_type__auto_comment
+msgid "Automated Targeted Notification"
+msgstr "الإشعارات المستهدفة المؤتمتة "
+
+#. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity__automated
 msgid "Automated activity"
 msgstr "إجراء مؤتمت "
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/models/message.js:0
+#, python-format
+msgid "Automated message"
+msgstr "رسالة مؤتمتة "
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_activity_type__triggered_next_type_id
@@ -6998,6 +7012,14 @@ msgid "Open Document"
 msgstr "فتح المستند "
 
 #. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#, python-format
+msgid "Open Link"
+msgstr "فتح الرابط "
+
+#. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_alias_form
 msgid "Open Parent Document"
 msgstr "فتح المستند الأصلي"
@@ -10705,14 +10727,6 @@ msgid ""
 msgstr ""
 "يمكنك إرفاق ملفات بهذا القالب، لإضافتها إلى جميع رسائل البريد الإلكتروني "
 "التي تم إنشاؤها من هذا القالب"
-
-#. module: mail
-#: code:addons/mail/models/ir_attachment.py:0
-#, python-format
-msgid ""
-"You may not unlink or modify the content of attachments from other people's "
-"messages"
-msgstr "لا يمكنك إلغاء أو تعديل محتوى المرفقات من رسائل الغير "
 
 #. module: mail
 #. odoo-javascript
@@ -32685,7 +32699,7 @@ msgstr "كوب شاي دون مقبض "
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_bounce_catchall
 msgid "team."
-msgstr "فريق."
+msgstr "."
 
 #. module: mail
 #. odoo-javascript

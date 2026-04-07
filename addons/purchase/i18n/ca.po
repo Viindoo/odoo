@@ -12,8 +12,6 @@
 # Manel Fernandez Ramirez <manelfera@outlook.com>, 2022
 # RGB Consulting <odoo@rgbconsulting.com>, 2022
 # Carles Antoli <carlesantoli@hotmail.com>, 2022
-# Quim - eccit <quim@eccit.com>, 2022
-# Harcogourmet, 2022
 # Josep Anton Belchi, 2022
 # Martin Trigaux, 2022
 # Cristian Cruz, 2022
@@ -23,17 +21,20 @@
 # martioodo hola, 2023
 # Albert Parera, 2023
 # Óscar Fonseca <tecnico@pyming.com>, 2023
-# Estudi TIC, 2024
-# Joan Llimiñana, 2024
+# EstudiTIC - estuditic.com <odoo@estuditic.com>, 2024
+# Batista10 - Gestió, 2024
 # Batista10 Serveis informàtics <batista10.info@gmail.com>, 2024
+# Quim - coopdevs <quim.rebull@coopdevs.org>, 2024
+# Harcogourmet, 2024
+# Wil Odoo, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:54+0000\n"
-"Last-Translator: Batista10 Serveis informàtics <batista10.info@gmail.com>, 2024\n"
+"Last-Translator: Wil Odoo, 2025\n"
 "Language-Team: Catalan (https://app.transifex.com/odoo/teams/41243/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,12 +52,6 @@ msgstr ""
 "\n"
 "                (object.state in ('draft', 'sent') and 'Sol · licitud de pressupost - %s' % (object.name) or\n"
 "                'Comanda de compra - %s' % (object.name))"
-
-#. module: purchase
-#: model:ir.model.fields,field_description:purchase.field_res_partner__supplier_invoice_count
-#: model:ir.model.fields,field_description:purchase.field_res_users__supplier_invoice_count
-msgid "# Vendor Bills"
-msgstr "# Factures de proveïdors "
 
 #. module: purchase
 #: model:ir.model.fields,field_description:purchase.field_purchase_report__nbr_lines
@@ -309,7 +304,7 @@ msgstr "<i class=\"fa fa-fw fa-check\"/> <b>Pagat</b>"
 #. module: purchase
 #: model_terms:ir.ui.view,arch_db:purchase.purchase_order_portal_content
 msgid "<i class=\"fa fa-fw fa-check\"/> <b>Reversed</b>"
-msgstr ""
+msgstr "<i class=\"fa fa-fw fa-check\"/> <b>Revertida</b>"
 
 #. module: purchase
 #: model_terms:ir.ui.view,arch_db:purchase.purchase_order_portal_content
@@ -2151,8 +2146,6 @@ msgstr "Termini de temps de compra"
 #: model:ir.model.fields,field_description:purchase.field_account_move_line__purchase_order_id
 #: model:ir.model.fields,field_description:purchase.field_account_payment__purchase_id
 #: model:ir.model.fields,field_description:purchase.field_purchase_bill_union__purchase_order_id
-#: model:ir.model.fields,field_description:purchase.field_res_partner__purchase_warn
-#: model:ir.model.fields,field_description:purchase.field_res_users__purchase_warn
 #: model:ir.model.fields.selection,name:purchase.selection__account_analytic_applicability__business_domain__purchase_order
 #: model:ir.model.fields.selection,name:purchase.selection__purchase_order__state__purchase
 #: model:ir.model.fields.selection,name:purchase.selection__purchase_report__state__purchase
@@ -2228,6 +2221,12 @@ msgid ""
 msgstr ""
 "Modificar l'ordre de modificacio utilitzada quan tu vols una ordre de compra"
 " editable abans de confirmar"
+
+#. module: purchase
+#: model:ir.model.fields,field_description:purchase.field_res_partner__purchase_warn
+#: model:ir.model.fields,field_description:purchase.field_res_users__purchase_warn
+msgid "Purchase Order Warning"
+msgstr "Avís de la comanda de compra"
 
 #. module: purchase
 #. odoo-python
@@ -2829,6 +2828,11 @@ msgid "Tax"
 msgstr "Impost"
 
 #. module: purchase
+#: model_terms:ir.ui.view,arch_db:purchase.report_purchaseorder_document
+msgid "Tax 15%"
+msgstr "Impost 15%"
+
+#. module: purchase
 #: model:ir.model.fields,field_description:purchase.field_purchase_order__tax_country_id
 msgid "Tax Country"
 msgstr "País dels impostos"
@@ -3195,7 +3199,6 @@ msgstr "Factura de proveïdor "
 #. module: purchase
 #: model:ir.actions.act_window,name:purchase.act_res_partner_2_supplier_invoices
 #: model_terms:ir.ui.view,arch_db:purchase.purchase_order_form
-#: model_terms:ir.ui.view,arch_db:purchase.res_partner_view_purchase_account_buttons
 #: model_terms:ir.ui.view,arch_db:purchase.view_purchase_bill_union_filter
 msgid "Vendor Bills"
 msgstr "Factures de proveïdors "

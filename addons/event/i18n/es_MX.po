@@ -6,18 +6,18 @@
 # Braulio D. López Vázquez <bdl@odoo.com>, 2022
 # Aimée Mendoza Sánchez, 2023
 # Iran Villalobos López, 2023
-# Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2024
 # Martin Trigaux, 2024
 # Lucia Pacheco, 2024
-# Fernanda Alvarez, 2024
+# Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2025
+# Fernanda Alvarez, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 08:23+0000\n"
+"POT-Creation-Date: 2025-02-10 08:27+0000\n"
 "PO-Revision-Date: 2022-09-22 05:45+0000\n"
-"Last-Translator: Fernanda Alvarez, 2024\n"
+"Last-Translator: Fernanda Alvarez, 2025\n"
 "Language-Team: Spanish (Mexico) (https://app.transifex.com/odoo/teams/41243/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1857,6 +1857,11 @@ msgstr ""
 "Muestre a los patrocinadores y expositores en las páginas de sus eventos"
 
 #. module: event
+#: model:ir.model.fields,field_description:event.field_event_event__date_tz
+msgid "Display Timezone"
+msgstr "Mostrar zona horaria"
+
+#. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__sequence
 msgid "Display order"
 msgstr "Orden de visualización"
@@ -2513,8 +2518,7 @@ msgstr "Icono que indica una actividad de excepción."
 #: model:ir.model.fields,help:event.field_event_event__message_needaction
 #: model:ir.model.fields,help:event.field_event_registration__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
-"Si se encuentra seleccionado, hay nuevos mensajes que requieren su atención."
+msgstr "Si está seleccionado, hay nuevos mensajes que requieren tu atención."
 
 #. module: event
 #: model:ir.model.fields,help:event.field_event_event__message_has_error
@@ -2522,7 +2526,7 @@ msgstr ""
 #: model:ir.model.fields,help:event.field_event_registration__message_has_error
 #: model:ir.model.fields,help:event.field_event_registration__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr "Si se encuentra seleccionado, algunos mensajes tienen error de envío."
+msgstr "Si está seleccionado, algunos mensajes tienen error de envío."
 
 #. module: event
 #: model:ir.model.fields,help:event.field_event_event__start_sale_datetime
@@ -2569,6 +2573,15 @@ msgstr "Información importante del boleto"
 #, python-format
 msgid "In Progress"
 msgstr "En progreso"
+
+#. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_tz
+msgid ""
+"Indicates the timezone in which the event dates/times will be displayed on "
+"the website."
+msgstr ""
+"Indica en qué zona horaria se mostrarán las fechas y horas del evento en el "
+"sitio web."
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__interval_nbr
@@ -3179,7 +3192,7 @@ msgstr ""
 #. module: event
 #: model:ir.model.fields,field_description:event.field_res_config_settings__module_website_event_track_quiz
 msgid "Quiz on Tracks"
-msgstr "Cuestionarios sobre las grabaciones"
+msgstr "Encuesta en las sesiones"
 
 #. module: event
 #. odoo-python
@@ -3393,7 +3406,7 @@ msgstr "Venda entradas en su sitio web"
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.res_config_settings_view_form
 msgid "Sell tickets with sales orders"
-msgstr "Venda entradas con órdenes de venta"
+msgstr "Venda boletos con órdenes de venta"
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__notification_type
@@ -3666,7 +3679,7 @@ msgid ""
 "The following tickets cannot be deleted while they have one or more registrations linked to them:\n"
 "- %s"
 msgstr ""
-"Los siguientes boletos no pueden borrarse mientras tengan uno o más registros vinculados a ellos:\n"
+"No podrá eliminar los siguientes boletos mientras tengan uno o más registros vinculados a ellos:\n"
 "- %s"
 
 #. module: event
@@ -3818,7 +3831,6 @@ msgstr ""
 "Los boletos pueden imprimirse o escanearse directamente desde su teléfono."
 
 #. module: event
-#: model:ir.model.fields,field_description:event.field_event_event__date_tz
 #: model:ir.model.fields,field_description:event.field_event_type__default_timezone
 msgid "Timezone"
 msgstr "Zona horaria"
@@ -4024,7 +4036,7 @@ msgstr "Mensajes del sitio web"
 #: model:ir.model.fields,help:event.field_event_event__website_message_ids
 #: model:ir.model.fields,help:event.field_event_registration__website_message_ids
 msgid "Website communication history"
-msgstr "Historial de comunicaciones del sitio web"
+msgstr "Historial de comunicación del sitio web"
 
 #. module: event
 #: model:ir.model.fields.selection,name:event.selection__event_mail__interval_unit__weeks
@@ -4036,6 +4048,16 @@ msgstr "Semanas"
 #: model_terms:event.event,description:event.event_0
 msgid "What's new?"
 msgstr "¿Qué hay de nuevo?"
+
+#. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_begin
+#: model:ir.model.fields,help:event.field_event_registration__event_begin_date
+msgid ""
+"When the event is scheduled to take place (expressed in your local timezone "
+"on the form view)."
+msgstr ""
+"La fecha en la que está previsto que se realizará el evento (expresado en su"
+" zona horaria actual en la vista de formulario)."
 
 #. module: event
 #: model:ir.model.fields,help:event.field_event_event__is_ongoing

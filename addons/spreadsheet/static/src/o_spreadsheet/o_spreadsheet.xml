@@ -148,10 +148,12 @@
           <button class="o-add-button" t-on-click="setCustomColor">Add</button>
         </div>
       </div>
-      <div class="o-separator"/>
-      <div class="o-buttons">
-        <button t-on-click="resetColor" class="o-cancel">Reset</button>
-      </div>
+      <t t-if="!props.disableNoColor">
+        <div class="o-separator"/>
+        <div class="o-buttons">
+          <button t-on-click="resetColor" class="o-cancel">Reset</button>
+        </div>
+      </t>
     </div>
   </t>
 
@@ -175,7 +177,7 @@
   </t>
 
   <t t-name="o-spreadsheet-Composer" owl="1">
-    <div class="o-composer-container">
+    <div class="o-composer-container" t-att-active="props.focus !== 'inactive'">
       <div
         t-att-class="{ 'o-composer': true, 'text-muted': env.model.getters.isReadonly(), 'unfocusable': env.model.getters.isReadonly() }"
         t-att-style="props.inputStyle"
@@ -725,36 +727,44 @@
           <div class="dragging-resizer" t-if="state.isResizing"/>
         </div>
       </t>
-      <t
-        t-foreach="env.model.getters.getHiddenRowsGroups(env.model.getters.getActiveSheetId())"
-        t-as="hiddenItem"
-        t-key="hiddenItem_index">
-        <t t-if="!hiddenItem.includes(0)">
-          <div
-            class="o-unhide"
-            t-att-data-index="hiddenItem_index"
-            t-attf-style="top:{{unhideStyleValue(hiddenItem[0]) - 17}}px;"
-            t-on-click="() => this.unhide(hiddenItem)">
-            <t t-call="o-spreadsheet-Icon.TRIANGLE_UP"/>
-          </div>
-        </t>
+      <div
+        t-if="env.model.getters.getHiddenRowsGroups(sheetId).length"
+        class="pe-none overflow-hidden flex-shrink-0 position-relative h-100">
+        <t t-set="viewportZone" t-value="env.model.getters.getActiveMainViewport()"/>
         <t
-          t-if="!hiddenItem.includes(env.model.getters.getNumberRows(env.model.getters.getActiveSheetId())-1)">
-          <div
-            class="o-unhide"
-            t-att-data-index="hiddenItem_index"
-            t-attf-style="top:{{unhideStyleValue(hiddenItem[0]) + 3}}px;"
-            t-on-click="() => this.unhide(hiddenItem)">
-            <t t-call="o-spreadsheet-Icon.TRIANGLE_DOWN"/>
-          </div>
+          t-foreach="env.model.getters.getHiddenRowsGroups(sheetId)"
+          t-as="hiddenItem"
+          t-key="hiddenItem_index">
+          <t
+            t-if="env.model.getters.isVisibleInViewport(sheetId, viewportZone.left, hiddenItem[0]-1)">
+            <div
+              class="o-unhide pe-auto"
+              t-att-data-index="hiddenItem_index"
+              t-att-data-direction="'up'"
+              t-attf-style="top:{{unhideStyleValue(hiddenItem[0]) - 17}}px;"
+              t-on-click="() => this.unhide(hiddenItem)">
+              <t t-call="o-spreadsheet-Icon.TRIANGLE_UP"/>
+            </div>
+          </t>
+          <t
+            t-if="env.model.getters.isVisibleInViewport(sheetId,viewportZone.left, hiddenItem[hiddenItem.length-1]+1)">
+            <div
+              class="o-unhide pe-auto"
+              t-att-data-index="hiddenItem_index"
+              t-att-data-direction="'down'"
+              t-attf-style="top:{{unhideStyleValue(hiddenItem[0]) + 3}}px;"
+              t-on-click="() => this.unhide(hiddenItem)">
+              <t t-call="o-spreadsheet-Icon.TRIANGLE_DOWN"/>
+            </div>
+          </t>
         </t>
-      </t>
+      </div>
     </div>
   </t>
 
   <t t-name="o-spreadsheet-ColResizer" owl="1">
     <div
-      class="o-col-resizer"
+      class="o-col-resizer d-flex"
       t-on-mousemove.self="onMouseMove"
       t-on-mouseleave="onMouseLeave"
       t-on-mousedown.self.prevent="select"
@@ -782,30 +792,38 @@
           <div class="dragging-resizer" t-if="state.isResizing"/>
         </div>
       </t>
-      <t
-        t-foreach="env.model.getters.getHiddenColsGroups(env.model.getters.getActiveSheetId())"
-        t-as="hiddenItem"
-        t-key="hiddenItem_index">
-        <t t-if="!hiddenItem.includes(0)">
-          <div
-            class="o-unhide"
-            t-att-data-index="hiddenItem_index"
-            t-attf-style="left:{{unhideStyleValue(hiddenItem[0]) - 17}}px; margin-right:6px;"
-            t-on-click="() => this.unhide(hiddenItem)">
-            <t t-call="o-spreadsheet-Icon.TRIANGLE_LEFT"/>
-          </div>
-        </t>
+      <div
+        t-if="env.model.getters.getHiddenColsGroups(sheetId).length"
+        class="pe-none overflow-hidden flex-shrink-0 position-relative w-100">
+        <t t-set="viewportZone" t-value="env.model.getters.getActiveMainViewport()"/>
         <t
-          t-if="!hiddenItem.includes(env.model.getters.getNumberCols(env.model.getters.getActiveSheetId())-1)">
-          <div
-            class="o-unhide"
-            t-att-data-index="hiddenItem_index"
-            t-attf-style="left:{{unhideStyleValue(hiddenItem[0]) + 3}}px;"
-            t-on-click="() => this.unhide(hiddenItem)">
-            <t t-call="o-spreadsheet-Icon.TRIANGLE_RIGHT"/>
-          </div>
+          t-foreach="env.model.getters.getHiddenColsGroups(sheetId)"
+          t-as="hiddenItem"
+          t-key="hiddenItem_index">
+          <t
+            t-if="env.model.getters.isVisibleInViewport(sheetId, hiddenItem[0]-1, viewportZone.top)">
+            <div
+              class="o-unhide pe-auto"
+              t-att-data-index="hiddenItem_index"
+              t-att-data-direction="'left'"
+              t-attf-style="left:{{unhideStyleValue(hiddenItem[0]) - 17}}px; margin-right:6px;"
+              t-on-click="() => this.unhide(hiddenItem)">
+              <t t-call="o-spreadsheet-Icon.TRIANGLE_LEFT"/>
+            </div>
+          </t>
+          <t
+            t-if="env.model.getters.isVisibleInViewport(sheetId, hiddenItem[hiddenItem.length-1]+1, viewportZone.top)">
+            <div
+              class="o-unhide pe-auto"
+              t-att-data-index="hiddenItem_index"
+              t-att-data-direction="'right'"
+              t-attf-style="left:{{unhideStyleValue(hiddenItem[0]) + 3}}px;"
+              t-on-click="() => this.unhide(hiddenItem)">
+              <t t-call="o-spreadsheet-Icon.TRIANGLE_RIGHT"/>
+            </div>
+          </t>
         </t>
-      </t>
+      </div>
     </div>
   </t>
 
@@ -2405,6 +2423,7 @@ https://fontawesome.com/license -->
             dropdownDirection="'left'"
             onColorPicked="(color) => this.setColorScaleColor(thresholdType, color)"
             currentColor="getThresholdColor(threshold)"
+            disableNoColor="true"
           />
         </div>
       </div>
@@ -2911,7 +2930,7 @@ https://fontawesome.com/license -->
 
   <t t-name="o-spreadsheet-Spreadsheet" owl="1">
     <div
-      class="o-spreadsheet"
+      class="o-spreadsheet h-100 w-100"
       t-on-keydown="(ev) => !env.isDashboard() and this.onKeydown(ev)"
       t-att-style="getStyle()">
       <t t-if="env.isDashboard()">
@@ -3239,7 +3258,7 @@ https://fontawesome.com/license -->
   </t>
 </odoo>
 <!--
-  __info__.version = '16.0.52';
-  __info__.date = '2024-09-05T12:00:05.863Z';
-  __info__.hash = '2d666d7';
+  __info__.version = '16.0.75';
+  __info__.date = '2025-07-11T11:47:49.434Z';
+  __info__.hash = 'c6d8a41';
 -->

@@ -7,15 +7,18 @@
 # Martin Trigaux, 2022
 # Cécile Collart <cco@odoo.com>, 2022
 # Jolien De Paepe, 2024
-# Manon Rondou, 2024
+# Manon Rondou, 2025
+# Larissa Manderfeld, 2025
+# Wil Odoo, 2025
+# Jonathan Quique <jqu@odoo.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:55+0000\n"
-"Last-Translator: Manon Rondou, 2024\n"
+"Last-Translator: Jonathan Quique <jqu@odoo.com>, 2025\n"
 "Language-Team: French (https://app.transifex.com/odoo/teams/41243/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -74,6 +77,13 @@ msgstr "% terminé"
 #, python-format
 msgid "%s (copy)"
 msgstr "%s (copie)"
+
+#. module: survey
+#. odoo-python
+#: code:addons/survey/models/survey_question.py:0
+#, python-format
+msgid "%s Votes"
+msgstr "%s Votes"
 
 #. module: survey
 #. odoo-python
@@ -308,7 +318,7 @@ msgstr ""
 "    <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
 "        Cher <t t-out=\"object.partner_id.name or 'participant'\">participant</t><br><br>\n"
 "        <t t-if=\"object.survey_id.certification\">\n"
-"            Vous avez été invité(e) à passer une nouvelle cetification.\n"
+"            Vous avez été invité(e) à passer une nouvelle certification.\n"
 "        </t>\n"
 "        <t t-else=\"\">\n"
 "            Nous avons lancé un sondage et votre retour serait apprécié.\n"
@@ -1852,7 +1862,7 @@ msgstr "Europe"
 #. module: survey
 #: model:survey.question.answer,value:survey.survey_demo_quiz_p4_q5_sug3
 msgid "European Yew"
-msgstr "Juif européen"
+msgstr "If européen"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
@@ -2035,6 +2045,11 @@ msgstr "Graphique"
 #: model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
 msgid "Group By"
 msgstr "Regrouper par"
+
+#. module: survey
+#: model:ir.model,name:survey.model_ir_http
+msgid "HTTP Routing"
+msgstr "Routage HTTP"
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_invite__existing_mode
@@ -3558,6 +3573,11 @@ msgid "Products"
 msgstr "Produits"
 
 #. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
+msgid "Public share URL"
+msgstr "URL de partage public"
+
+#. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_question_answer__question_id
 #: model:ir.model.fields,field_description:survey.field_survey_user_input_line__question_id
 #: model_terms:ir.ui.view,arch_db:survey.survey_question_answer_view_search
@@ -4919,6 +4939,11 @@ msgid "Use humor and make jokes"
 msgstr "Utilisez l'humour et faites des blagues"
 
 #. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
+msgid "Use template"
+msgstr "Utiliser un modèle"
+
+#. module: survey
 #. odoo-javascript
 #: code:addons/survey/static/src/js/tours/survey_tour.js:0
 #, python-format
@@ -5552,7 +5577,7 @@ msgstr "pages"
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_fill_form_done
 msgid "review your answers"
-msgstr "consultez vos réponses"
+msgstr "consulter vos réponses"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_closed_expired

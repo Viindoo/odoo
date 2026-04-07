@@ -3,18 +3,19 @@
 # 	* sale
 # 
 # Translators:
-# Martin Trigaux, 2023
-# Mads Søndergaard, 2023
 # lhmflexerp <lhm@flexerp.dk>, 2023
 # Sanne Kristensen <sanne@vkdata.dk>, 2024
+# Mads Søndergaard, 2025
+# Wil Odoo, 2025
+# Martin Trigaux, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:32+0000\n"
+"POT-Creation-Date: 2025-06-13 18:36+0000\n"
 "PO-Revision-Date: 2022-09-22 05:54+0000\n"
-"Last-Translator: Sanne Kristensen <sanne@vkdata.dk>, 2024\n"
+"Last-Translator: Martin Trigaux, 2025\n"
 "Language-Team: Danish (https://app.transifex.com/odoo/teams/41243/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1135,8 +1136,10 @@ msgstr "Færdiggør din virksomheds data"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with DHL"
-msgstr "Beregn fragtomkostninger og send med DHL"
+msgid ""
+"Compute shipping costs and ship with DHL<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1145,8 +1148,10 @@ msgstr "Udregn leveringsomkostninger og afsend med Easypost"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with FedEx"
-msgstr "Beregn fragtomkostninger og send med FedEx"
+msgid ""
+"Compute shipping costs and ship with FedEx<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1155,13 +1160,17 @@ msgstr "Beregn fragtomkostninger og send med Sendcloud"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with UPS"
-msgstr "Beregn fragtomkostninger og send med UPS"
+msgid ""
+"Compute shipping costs and ship with UPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with USPS"
-msgstr "Beregn fragtomkostninger og send med USPS"
+msgid ""
+"Compute shipping costs and ship with USPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1406,6 +1415,11 @@ msgstr "Tilpas udseendet på dine tilbud."
 #, python-format
 msgid "Customize your quotes and orders."
 msgstr "Tilpas dine tilbud og ordre."
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid "DHL Connector"
+msgstr ""
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_dhl
@@ -1758,6 +1772,7 @@ msgstr "Ekstra linje med %s"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_fedex
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "FedEx Connector"
 msgstr "FedEx forbinder"
 
@@ -3886,6 +3901,11 @@ msgid "Tags"
 msgstr "Tags"
 
 #. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
+msgid "Tax 15%"
+msgstr "Moms 15%"
+
+#. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__tax_country_id
 msgid "Tax Country"
 msgstr "Skatteland"
@@ -4037,12 +4057,12 @@ msgstr "Den faste mængde der faktureres på forhånd, uden moms."
 #: code:addons/sale/models/product_template.py:0
 #, python-format
 msgid ""
-"The following products cannot be restricted to the company %s because they have already been used in quotations or sales orders in another company:\n"
-"%s\n"
+"The following products cannot be restricted to the company %(company)s because they have already been used in quotations or sales orders in another company:\n"
+"%(used_products)s\n"
 "You can archive these products and recreate them with your company restriction instead, or leave them as shared product."
 msgstr ""
-"De følgende produkter kan ikke begrænses til virksomheden %s, fordi de allerede er blevet brugt i tilbud eller salgsordre i en anden virksomhed:\n"
-"%s\n"
+"De følgende produkter kan ikke begrænses til virksomheden %(company)s, fordi de allerede er blevet brugt i tilbud eller salgsordre i en anden virksomhed:\n"
+"%(used_products)s\n"
 "Du kan arkivere disse produkter og genoprette dem med din virksomheds begrænsning i stedet, eller lade dem være som delte produkter."
 
 #. module: sale
@@ -4077,7 +4097,7 @@ msgstr "Ordren er ikke i en tilstand der påkræver kundens underskrift."
 #: code:addons/sale/models/sale_order_line.py:0
 #, python-format
 msgid "The ordered quantity has been updated."
-msgstr "Ordre mængden er blevet opdaget."
+msgstr "Ordre mængden er blevet opdateret."
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_sale_order__reference
@@ -4377,11 +4397,13 @@ msgstr "Type af undtagelsesaktivitet registreret "
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_ups
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "UPS Connector"
 msgstr "UPS Forbinder"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_usps
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "USPS Connector"
 msgstr "USPS Forbinder"
 
@@ -4510,14 +4532,6 @@ msgstr "Variant gitter bidrag"
 
 #. module: sale
 #. odoo-python
-#: code:addons/sale/models/sale_order.py:0
-#, python-format
-msgid "View Order"
-msgstr "Se ordre"
-
-#. module: sale
-#. odoo-python
-#: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #, python-format

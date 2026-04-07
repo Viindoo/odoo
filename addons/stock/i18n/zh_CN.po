@@ -10,20 +10,21 @@
 # 226408 台北 <226408@so8d.com>, 2022
 # 徐 文郁 (info@ro-cd.com), 2022
 # digitalliuzg8888, 2022
-# Raymond Yu <cl_yu@hotmail.com>, 2023
 # Emily Jia <eji@odoo.com>, 2023
 # Ryan <ouyang.em@gmail.com>, 2023
 # 何彬 <vnsoft.he@gmail.com>, 2023
 # Jeffery CHEN <jeffery9@gmail.com>, 2023
 # Chloe Wang, 2024
+# Raymond Yu <cl_yu@hotmail.com>, 2024
+# Wil Odoo, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-06-13 18:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:55+0000\n"
-"Last-Translator: Chloe Wang, 2024\n"
+"Last-Translator: Wil Odoo, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/odoo/teams/41243/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1622,8 +1623,10 @@ msgstr "计算运输成本"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
-msgid "Compute shipping costs and ship with DHL"
-msgstr "计算运输成本并用DHL装运"
+msgid ""
+"Compute shipping costs and ship with DHL<br/>\n"
+"                                        <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
@@ -1632,8 +1635,10 @@ msgstr "计算运输成本并用Easypost装运"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
-msgid "Compute shipping costs and ship with FedEx"
-msgstr "计算运输成本并用FedEX装运"
+msgid ""
+"Compute shipping costs and ship with FedEx<br/>\n"
+"                                        <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
@@ -1642,13 +1647,17 @@ msgstr "计算运费并使用 Sendcloud 发货"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
-msgid "Compute shipping costs and ship with UPS"
-msgstr "计算运输成本并用UPS装运"
+msgid ""
+"Compute shipping costs and ship with UPS<br/>\n"
+"                                        <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
-msgid "Compute shipping costs and ship with USPS"
-msgstr "计算运输成本并用USPS装运"
+msgid ""
+"Compute shipping costs and ship with USPS<br/>\n"
+"                                        <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
@@ -1767,7 +1776,7 @@ msgstr "计量单位转换只能基于转换比例对同一个类别进行转换
 #. module: stock
 #: model:ir.actions.server,name:stock.stock_quant_stock_move_line_desynchronization
 msgid "Correct inconsistencies for reservation"
-msgstr ""
+msgstr "纠正保留不一致的地方"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_location__posx
@@ -1869,8 +1878,9 @@ msgid ""
 "                            products later. Do not create a backorder if you will not\n"
 "                            process the remaining products."
 msgstr ""
-"如果您需要将剩余货物发货，则需要创建欠单。如无需继续发货，则不需要创建欠单。\n"
-"处理剩余货物"
+"如果您希望稍后再处理剩余的产品，\n"
+"                            请创建延期订单。如果不处理剩余产品，\n"
+"                            则不创建延期订单。"
 
 #. module: stock
 #: model_terms:ir.actions.act_window,help:stock.stock_picking_type_action
@@ -2084,6 +2094,11 @@ msgstr "客户位置"
 #: model_terms:ir.ui.view,arch_db:stock.view_location_form
 msgid "Cyclic Counting"
 msgstr "循环计数"
+
+#. module: stock
+#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
+msgid "DHL Connector"
+msgstr ""
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_dhl
@@ -2889,6 +2904,7 @@ msgstr "二月"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_fedex
+#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
 msgid "FedEx Connector"
 msgstr "FedEx 连接器"
 
@@ -2914,7 +2930,7 @@ msgstr "第一 SN"
 #: code:addons/stock/models/stock_quant.py:0
 #, python-format
 msgid "Fix discrepancies"
-msgstr ""
+msgstr "修正差异"
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_rule__group_propagation_option__fixed
@@ -3936,6 +3952,11 @@ msgid ""
 "The correction will remove the reservation of the impacted operations on all companies.\n"
 "If the error persists, or you see this message appear often, please submit a Support Ticket at https://www.odoo.com/help"
 msgstr ""
+"预订的 %s 产品数量不可能超过您的库存量。\n"
+"\n"
+"您可以点击下面的按钮修正差异。\n"
+"更正后将删除所有公司受影响操作的预订。\n"
+"如果错误仍然存在，或经常出现此信息，请提交支持工单，地址为 https://www.odoo.com/help"
 
 #. module: stock
 #. odoo-python
@@ -3945,6 +3966,8 @@ msgid ""
 "It is not possible to unreserve more products of %s than you have in stock.\n"
 "Please contact your system administrator to rectify this issue."
 msgstr ""
+"无法取消比库存更多的 %s 产品预订。\n"
+"请联系您的系统管理员以解决此问题。"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking__move_type
@@ -4393,6 +4416,11 @@ msgid "Lot"
 msgstr "批次"
 
 #. module: stock
+#: model:ir.model,name:stock.model_report_stock_label_lot_template_view
+msgid "Lot Label Report"
+msgstr "批次标签报告"
+
+#. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__picking_label_type__label_type__lots
 msgid "Lot/SN Labels"
 msgstr "批号/序号 标签"
@@ -4400,7 +4428,7 @@ msgstr "批号/序号 标签"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_stock_move_line_kanban
 msgid "Lot/SN:"
-msgstr "批号/序列号"
+msgstr "批号/序列号："
 
 #. module: stock
 #: model:ir.model,name:stock.model_stock_lot
@@ -4937,7 +4965,7 @@ msgstr "不追溯"
 #: model_terms:ir.ui.view,arch_db:stock.report_reception_body
 #, python-format
 msgid "No allocation need found."
-msgstr "无需预留库存"
+msgstr "未发现分配需求。"
 
 #. module: stock
 #. odoo-python
@@ -8826,11 +8854,13 @@ msgstr "记录的异常活动类型。"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_ups
+#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
 msgid "UPS Connector"
 msgstr "UPS 连接器"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_usps
+#: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
 msgid "USPS Connector"
 msgstr "USPS 连接器"
 
@@ -9596,7 +9626,7 @@ msgstr "你只能删除草稿或者取消的移动。"
 #: code:addons/stock/models/stock_scrap.py:0
 #, python-format
 msgid "You can only enter positive quantities."
-msgstr "只能输入正数"
+msgstr "只能输入正数。"
 
 #. module: stock
 #. odoo-python
@@ -9719,7 +9749,7 @@ msgstr "您不能在同一调拨中多次调拨同一包裹内容，或将同一
 msgid ""
 "You cannot pack products into the same package when they are from both "
 "immediate and planned transfers."
-msgstr ""
+msgstr "当产品同时来自即时转移和计划转移时，您不能将产品打包到同一包装中。"
 
 #. module: stock
 #. odoo-python
@@ -9874,7 +9904,7 @@ msgstr "您每次只能退回一次拣货。"
 #: code:addons/stock/models/stock_picking.py:0
 #, python-format
 msgid "You might want to update the locations of this transfer's operations"
-msgstr "您可能希望更新此调拨操作的位置。"
+msgstr "您可能希望更新此调拨操作的位置"
 
 #. module: stock
 #. odoo-python

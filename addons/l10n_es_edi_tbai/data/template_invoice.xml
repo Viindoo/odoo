@@ -96,7 +96,6 @@
                     </FacturaRectificativa>
                     <FacturasRectificadasSustituidas>
                         <IDFacturaRectificadaSustituida>
-                            <!-- NOTE: could support issuing a single credit note for multiple invoices (optional) -->
                             <t t-set="seq_and_num" t-value="credit_note_invoice._get_l10n_es_tbai_sequence_and_number()"/>
                             <SerieFactura t-out="seq_and_num[0]"/>
                             <NumFactura t-out="seq_and_num[1]"/>
@@ -106,7 +105,7 @@
                 </t>
             </CabeceraFactura>
             <DatosFactura t-if="is_emission">
-                <DescripcionFactura t-out="invoice.invoice_origin or 'manual'"/>
+                <DescripcionFactura t-out="invoice.invoice_origin and invoice.invoice_origin[:250] or 'manual'"/>
                 <DetallesFactura>
                     <IDDetalleFactura t-foreach="invoice_lines" t-as="line_values">
                         <t t-set="line" t-value="line_values['line']"/>
@@ -167,7 +166,6 @@
                                 <CuotaImpuesto t-out="format_float(detalle['CuotaRepercutida'])"/>
                                 <TipoRecargoEquivalencia t-if="detalle.get('TipoRecargoEquivalencia')" t-out="format_float(detalle['TipoRecargoEquivalencia'])"/>
                                 <CuotaRecargoEquivalencia t-if="detalle.get('CuotaRecargoEquivalencia')" t-out="format_float(detalle['CuotaRecargoEquivalencia'])"/>
-                                <OperacionEnRecargoDeEquivalenciaORegimenSimplificado t-out="'S' if is_simplified else 'N'"/>
                             </DetalleIVA>
                         </DesgloseIVA>
                     </DetalleNoExenta>
@@ -184,7 +182,7 @@
             <NoSujeta t-if="desglose.get('NoSujeta')">
                 <t t-set="no_sujeta" t-value="desglose['NoSujeta']"/>
                 <DetalleNoSujeta>
-                    <Causa>RL</Causa>
+                    <Causa t-out="nosujeto_causa"/>
                     <!-- NOTE: Causa should be 
                         'OT' if 'the' ClaveRegimenIvaOpTrascendencia == 10
                         'RL' if 'some' ClaveRegimenIvaOpTrascendencia == 08

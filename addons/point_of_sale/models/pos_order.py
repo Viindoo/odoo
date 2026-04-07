@@ -13,7 +13,7 @@ import re
 
 from odoo import api, fields, models, tools, _
 from odoo.tools import float_is_zero, float_round, float_repr, float_compare
-from odoo.exceptions import ValidationError, UserError
+from odoo.exceptions import ValidationError, UserError, AccessError
 from odoo.osv.expression import AND
 import base64
 
@@ -146,7 +146,7 @@ class PosOrder(models.Model):
                 # do not hide transactional errors, the order(s) won't be saved!
                 raise
             except Exception as e:
-                _logger.error('Could not fully process the POS Order: %s', tools.ustr(e))
+                _logger.error('Could not fully process the POS Order: %s', tools.ustr(e), exc_info=True)
             pos_order._create_order_picking()
             pos_order._compute_total_cost_in_real_time()
 
@@ -180,14 +180,14 @@ class PosOrder(models.Model):
         order.amount_paid = sum(order.payment_ids.mapped('amount'))
 
         if not draft and not float_is_zero(pos_order['amount_return'], prec_acc):
-            cash_payment_method = pos_session.payment_method_ids.filtered('is_cash_count')[:1]
+            cash_payment_method = order.payment_ids.payment_method_id.filtered("is_cash_count")[:1] or pos_session.payment_method_ids.filtered('is_cash_count')[:1]
             if not cash_payment_method:
                 raise UserError(_("No cash statement found for this session. Unable to record returned cash."))
             return_payment_vals = {
                 'name': _('return'),
                 'pos_order_id': order.id,
                 'amount': -pos_order['amount_return'],
-                'payment_date': fields.Datetime.now(),
+                'payment_date': order.date_order,
                 'payment_method_id': cash_payment_method.id,
                 'is_change': True,
             }
@@ -210,11 +210,11 @@ class PosOrder(models.Model):
         invoice_lines = []
         for line in self.lines:
             invoice_lines.append((0, None, self._prepare_invoice_line(line)))
-            if line.order_id.pricelist_id.discount_policy == 'without_discount' and float_compare(line.price_subtotal_incl, line.product_id.lst_price * line.qty, precision_rounding=self.currency_id.rounding) < 0:
+            if line.order_id.pricelist_id.discount_policy == 'without_discount' and float_compare(line.price_unit, line.product_id.lst_price, precision_rounding=self.currency_id.rounding) < 0:
                 invoice_lines.append((0, None, {
                     'name': _('Price discount from %s -> %s',
-                              float_repr(line.product_id.lst_price * line.qty, self.currency_id.decimal_places),
-                              float_repr(line.price_subtotal_incl, self.currency_id.decimal_places)),
+                              float_repr(line.product_id.lst_price, self.currency_id.decimal_places),
+                              float_repr(line.price_unit, self.currency_id.decimal_places)),
                     'display_type': 'line_note',
                 }))
             if line.customer_note:
@@ -1104,7 +1104,7 @@ class PosOrder(models.Model):
             'lines': [[0, 0, line] for line in order.lines.export_for_ui()],
             'statement_ids': [[0, 0, payment] for payment in order.payment_ids.export_for_ui()],
             'name': order.pos_reference,
-            'uid': re.search('([0-9-]){14}', order.pos_reference).group(0),
+            'uid': re.search('([0-9-]){14,}', order.pos_reference).group(0),
             'amount_paid': order.amount_paid,
             'amount_total': order.amount_total,
             'amount_tax': order.amount_tax,
@@ -1143,7 +1143,14 @@ class PosOrder(models.Model):
             `export_as_JSON` of models.Order. This is useful for back-and-forth communication
             between the pos frontend and backend.
         """
-        return self.mapped(self._export_for_ui) if self else []
+        results = []
+        for order in self:
+            try:
+                results.append(self._export_for_ui(order))
+            except AccessError:
+                # Skip the order in case of AccessError
+                continue
+        return results
 
 
 class PosOrderLine(models.Model):

@@ -122,7 +122,7 @@ _LOCALE2WIN32 = {
     'sv_SE': 'Swedish_Sweden',
     'ta_IN': 'English_Australia',
     'th_TH': 'Thai_Thailand',
-    'tr_TR': 'Turkish_Turkey',
+    'tr_TR': 'Turkish_Türkiye',
     'uk_UA': 'Ukrainian_Ukraine',
     'vi_VN': 'Vietnamese_Viet Nam',
     'tlh_TLH': 'Klingon',
@@ -153,10 +153,11 @@ TRANSLATED_ELEMENTS = {
 
 # Which attributes must be translated. This is a dict, where the value indicates
 # a condition for a node to have the attribute translatable.
+# ⚠ Note that it implicitly includes their t-attf-* equivalent.
 TRANSLATED_ATTRS = dict.fromkeys({
     'string', 'add-label', 'help', 'sum', 'avg', 'confirm', 'placeholder', 'alt', 'title', 'aria-label',
     'aria-keyshortcuts', 'aria-placeholder', 'aria-roledescription', 'aria-valuetext',
-    'value_label', 'data-tooltip', 'data-editor-message', 'label',
+    'value_label', 'data-tooltip', 'data-editor-message', 'label', 'cancel-label', 'confirm-label',
 }, lambda e: True)
 
 def translate_attrib_value(node):
@@ -174,6 +175,19 @@ TRANSLATED_ATTRS.update(
     text=lambda e: (e.tag == 'field' and e.attrib.get('widget', '') == 'url'),
     **{f't-attf-{attr}': cond for attr, cond in TRANSLATED_ATTRS.items()},
 )
+
+# This should match the list provided to OWL (see translatableAttributes).
+OWL_TRANSLATED_ATTRS = {
+    "alt",
+    "aria-label",
+    "aria-placeholder",
+    "aria-roledescription",
+    "aria-valuetext",
+    "data-tooltip",
+    "label",
+    "placeholder",
+    "title",
+}
 
 avoid_pattern = re.compile(r"\s*<!DOCTYPE", re.IGNORECASE | re.MULTILINE | re.UNICODE)
 space_pattern = re.compile(r"[\s\uFEFF]*")  # web_editor uses \uFEFF as ZWNBSP
@@ -292,12 +306,53 @@ def parse_xml(text):
 def serialize_xml(node):
     return etree.tostring(node, method='xml', encoding='unicode')
 
+
+MODIFIER_ATTRS = {"invisible", "readonly", "required", "column_invisible", "attrs", "states"}
+def xml_term_adapter(term_en):
+    """
+    Returns an `adapter(term)` function that will ensure the modifiers are copied
+    from the base `term_en` to the translated `term` when the XML structure of
+    both terms match. `term_en` and any input `term` to the adapter must be valid
+    XML terms. Using the adapter only makes sense if `term_en` contains some tags
+    from TRANSLATED_ELEMENTS.
+    """
+    orig_node = parse_xml(f"<div>{term_en}</div>")
+
+    def same_struct_iter(left, right):
+        if left.tag != right.tag or len(left) != len(right):
+            raise ValueError("Non matching struct")
+        yield left, right
+        left_iter = left.iterchildren()
+        right_iter = right.iterchildren()
+        for lc, rc in zip(left_iter, right_iter):
+            yield from same_struct_iter(lc, rc)
+        if next(left_iter, None) is not None or next(right_iter, None) is not None:
+            raise ValueError("Non matching struct")
+
+    def adapter(term):
+        new_node = parse_xml(f"<div>{term}</div>")
+        try:
+            for orig_n, new_n in same_struct_iter(orig_node, new_node):
+                removed_attrs = [k for k in new_n.attrib if k in MODIFIER_ATTRS and k not in orig_n.attrib]
+                for k in removed_attrs:
+                    del new_n.attrib[k]
+                keep_attrs = {k: v for k, v in orig_n.attrib.items()}
+                new_n.attrib.update(keep_attrs)
+        except ValueError:  # non-matching structure
+            return None
+
+        # remove tags <div> and </div> from result
+        return serialize_xml(new_node)[5:-6]
+
+    return adapter
+
+
 _HTML_PARSER = etree.HTMLParser(encoding='utf8')
 
 def parse_html(text):
     try:
         parse = html.fragment_fromstring(text, parser=_HTML_PARSER)
-    except TypeError as e:
+    except (etree.ParserError, TypeError) as e:
         raise UserError(_("Error while parsing view:\n\n%s") % e) from e
     return parse
 
@@ -367,11 +422,20 @@ def get_text_content(term):
     content = html.fromstring(term).text_content()
     return " ".join(content.split())
 
+def is_text(term):
+    """ Return whether the term has only text. """
+    return len(html.fromstring(f"<_>{term}</_>")) == 0
+
 xml_translate.get_text_content = get_text_content
 html_translate.get_text_content = get_text_content
 
 xml_translate.term_converter = xml_term_converter
 html_translate.term_converter = html_term_converter
+
+xml_translate.is_text = is_text
+html_translate.is_text = is_text
+
+xml_translate.term_adapter = xml_term_adapter
 
 def translate_sql_constraint(cr, key, lang):
     cr.execute("""
@@ -880,7 +944,7 @@ def _extract_translatable_qweb_terms(element, callback):
             # component nodes
             is_component = el.tag[0].isupper() or "t-component" in el.attrib or "t-set-slot" in el.attrib
             for attr in el.attrib:
-                if (not is_component and attr in TRANSLATED_ATTRS) or (is_component and attr.endswith(".translate")):
+                if (not is_component and attr in OWL_TRANSLATED_ATTRS) or (is_component and attr.endswith(".translate")):
                     _push(callback, el.attrib[attr], el.sourceline)
             _extract_translatable_qweb_terms(el, callback)
         _push(callback, el.tail, el.sourceline)
@@ -1581,7 +1645,7 @@ def _get_translation_upgrade_queries(cr, field):
         """
         migrate_queries.append(cr.mogrify(query, [Model._name, translation_name]).decode())
 
-        query = "DELETE FROM _ir_translation WHERE type = 'model' AND name = %s"
+        query = "DELETE FROM _ir_translation WHERE type = 'model' AND state = 'translated' AND name = %s"
         cleanup_queries.append(cr.mogrify(query, [translation_name]).decode())
 
     # upgrade model_terms translation: one update per field per record
@@ -1655,7 +1719,7 @@ def _get_translation_upgrade_queries(cr, field):
             query = f'UPDATE "{Model._table}" SET "{field.name}" = %s WHERE id = %s'
             migrate_queries.append(cr.mogrify(query, [Json(new_values), id_]).decode())
 
-        query = "DELETE FROM _ir_translation WHERE type = 'model_terms' AND name = %s"
+        query = "DELETE FROM _ir_translation WHERE type = 'model_terms' AND state = 'translated' AND name = %s"
         cleanup_queries.append(cr.mogrify(query, [translation_name]).decode())
 
     return migrate_queries, cleanup_queries

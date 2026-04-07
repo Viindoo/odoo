@@ -17,7 +17,7 @@ class IrAttachment(models.Model):
     image_src = fields.Char(compute='_compute_image_src')
     image_width = fields.Integer(compute='_compute_image_size')
     image_height = fields.Integer(compute='_compute_image_size')
-    original_id = fields.Many2one('ir.attachment', string="Original (unoptimized, unresized) attachment")
+    original_id = fields.Many2one('ir.attachment', string="Original (unoptimized, unresized) attachment", index='btree_not_null')
 
     def _compute_local_url(self):
         for attachment in self:
@@ -30,7 +30,7 @@ class IrAttachment(models.Model):
     def _compute_image_src(self):
         for attachment in self:
             # Only add a src for supported images
-            if attachment.mimetype not in SUPPORTED_IMAGE_MIMETYPES:
+            if not attachment.mimetype or attachment.mimetype.split(';')[0] not in SUPPORTED_IMAGE_MIMETYPES:
                 attachment.image_src = False
                 continue
 

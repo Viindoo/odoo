@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from odoo import http
+from odoo import _, http
+from odoo.exceptions import ValidationError
+
 from odoo.addons.payment import utils as payment_utils
 from odoo.addons.website_sale_delivery.controllers.main import WebsiteSaleDelivery
 from odoo.http import request
@@ -21,7 +23,10 @@ class WebsiteSaleLoyaltyDelivery(WebsiteSaleDelivery):
 
         if free_shipping_lines:
             currency = order.currency_id
-            amount_free_shipping = sum(free_shipping_lines.mapped('price_subtotal'))
+            if request.env.user.has_group('account.group_show_line_subtotals_tax_excluded'):
+                amount_free_shipping = sum(free_shipping_lines.mapped('price_subtotal'))
+            else:
+                amount_free_shipping = sum(free_shipping_lines.mapped('price_total'))
             result.update({
                 'new_amount_delivery_discounted': Monetary.value_to_html(order.amount_delivery + amount_free_shipping, {'display_currency': currency}),
                 'new_amount_delivery_discount': Monetary.value_to_html(amount_free_shipping, {'display_currency': currency}),
@@ -39,7 +44,9 @@ class WebsiteSaleLoyaltyDelivery(WebsiteSaleDelivery):
     @http.route()
     def cart_carrier_rate_shipment(self, carrier_id, **kw):
         Monetary = request.env['ir.qweb.field.monetary']
-        order = request.website.sale_get_order(force_create=True)
+        order = request.website.sale_get_order()
+        if not order:
+            raise ValidationError(_("Your cart is empty."))
         free_shipping_lines = order._get_free_shipping_lines()
         # Avoid computing carrier price delivery is free (coupon). It means if
         # the carrier has error (eg 'delivery only for Belgium') it will show

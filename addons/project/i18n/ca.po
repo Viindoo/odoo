@@ -7,9 +7,9 @@
 # Sandra Franch <sandra.franch@upc.edu>, 2022
 # Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2022
 # José Cabrera Lozano <jose.cabrera@edukative.es>, 2022
-# Josep Sànchez <papapep@gmx.com>, 2022
+# Josep Sànchez <papapep@pinatell.net>, 2022
 # Susanna Pujol, 2022
-# AncesLatino2004, 2022
+# 7b9408628f00af852f513eb4f12c005b_f9c6891, 2022
 # eriiikgt, 2022
 # oscaryuu, 2022
 # Jonatan Gk, 2022
@@ -24,19 +24,20 @@
 # marcescu, 2022
 # Josep Anton Belchi, 2022
 # M Palau <mpalau@tda.ad>, 2022
-# Quim - eccit <quim@eccit.com>, 2022
+# Quim - coopdevs <quim.rebull@coopdevs.org>, 2022
 # Ivan Espinola, 2023
 # Martin Trigaux, 2023
-# Óscar Fonseca <tecnico@pyming.com>, 2023
 # Albert Parera, 2023
+# Óscar Fonseca <tecnico@pyming.com>, 2024
+# Noemi Pla, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-22 18:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:54+0000\n"
-"Last-Translator: Albert Parera, 2023\n"
+"Last-Translator: Noemi Pla, 2025\n"
 "Language-Team: Catalan (https://app.transifex.com/odoo/teams/41243/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -428,6 +429,68 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
+"<div>\n"
+"    <t t-set=\"access_token\" t-value=\"object._rating_get_access_token()\"></t>\n"
+"    <t t-set=\"partner\" t-value=\"object._rating_get_partner()\"></t>\n"
+"    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"width:100%; margin:0px auto;\">\n"
+"    <tbody>\n"
+"        <tr><td valign=\"top\" style=\"font-size: 13px;\">\n"
+"            <t t-if=\"partner.name\">\n"
+"                Hola, <t t-out=\"partner.name or ''\">Brandon Freeman</t>:<br><br>\n"
+"            </t>\n"
+"            <t t-else=\"\">\n"
+"                Hola:<br><br>\n"
+"            </t>\n"
+"            Si us plau, li demanem que dediqui uns minuts a valorar els nostres serveis relacionats amb la tasca de «<strong t-out=\"object.name or ''\">Planificació i pressupost</strong>»\n"
+"            <t t-if=\"object._rating_get_operator().name\">\n"
+"                assignada a <strong t-out=\"object._rating_get_operator().name or ''\">Mitchell Admin</strong>.<br>\n"
+"            </t>\n"
+"            <t t-else=\"\">\n"
+"                .<br>\n"
+"            </t>\n"
+"        </td></tr>\n"
+"        <tr><td style=\"text-align: center;\">\n"
+"            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" summary=\"o_mail_notification\" style=\"width:100%; margin: 32px 0px 32px 0px;\">\n"
+"                <tr><td style=\"font-size: 13px;\">\n"
+"                    <strong>Ens agradaria conèixer la seva opinió sobre els nostres serveis</strong><br>\n"
+"                    <span style=\"font-size: 12px; opacity: 0.5; color: #454748;\">(faci clic en una d'aquestes caretes somrients)</span>\n"
+"                </td></tr>\n"
+"                <tr><td style=\"font-size: 13px;\">\n"
+"                    <table style=\"width:100%;text-align:center;margin-top:2rem;\">\n"
+"                        <tr>\n"
+"                            <td>\n"
+"                                <a t-attf-href=\"/rate/{{ access_token }}/5\">\n"
+"                                    <img alt=\"Satisfied\" src=\"/rating/static/src/img/rating_5.png\" title=\"Satisfied\">\n"
+"                                </a>\n"
+"                            </td>\n"
+"                            <td>\n"
+"                                <a t-attf-href=\"/rate/{{ access_token }}/3\">\n"
+"                                    <img alt=\"Okay\" src=\"/rating/static/src/img/rating_3.png\" title=\"Okay\">\n"
+"                                </a>\n"
+"                            </td>\n"
+"                            <td>\n"
+"                                <a t-attf-href=\"/rate/{{ access_token }}/1\">\n"
+"                                    <img alt=\"Dissatisfied\" src=\"/rating/static/src/img/rating_1.png\" title=\"Dissatisfied\">\n"
+"                                </a>\n"
+"                            </td>\n"
+"                        </tr>\n"
+"                    </table>\n"
+"                </td></tr>\n"
+"            </table>\n"
+"        </td></tr>\n"
+"        <tr><td valign=\"top\" style=\"font-size: 13px;\">\n"
+"            Agraïm els seus comentaris. Ens ajuden a millorar.\n"
+"            <t t-if=\"object.project_id.rating_status == 'stage'\">\n"
+"                <br><br><span style=\"margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;\">Aquesta enquesta ha estat envidada perquè la tasca ha passat a l'etapa de <b t-out=\"object.stage_id.name or ''\">En procés</b></span>\n"
+"            </t>\n"
+"            <t t-if=\"object.project_id.rating_status == 'periodic'\">\n"
+"                <br><span style=\"margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;\">Aquesta enquesta de satisfacció s'envia <b t-out=\"object.project_id.rating_status_period or ''\">setmanalment</b> sempre que la tasca estigui en l'etapa de <b t-out=\"object.stage_id.name or ''\">En procés</b>.</span>\n"
+"            </t>\n"
+"        </td></tr>\n"
+"    </tbody>\n"
+"    </table>\n"
+"</div>\n"
+"            "
 
 #. module: project
 #: model:mail.template,body_html:project.project_done_email_template
@@ -964,7 +1027,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:project.view_task_project_user_search
 #: model_terms:ir.ui.view,arch_db:project.view_task_search_form
 msgid "Ancestor Task"
-msgstr "Tasca d'avantpassat"
+msgstr "Tasca pare"
 
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_task__repeat_month__april
@@ -1081,8 +1144,6 @@ msgid "Assigned to"
 msgstr "Assignat a"
 
 #. module: project
-#. odoo-python
-#: code:addons/project/controllers/portal.py:0
 #: model:ir.model.fields,field_description:project.field_project_task__user_ids
 #: model:ir.model.fields,field_description:project.field_project_task_burndown_chart_report__user_ids
 #: model:ir.model.fields,field_description:project.field_report_project_task_user__user_ids
@@ -1092,7 +1153,6 @@ msgstr "Assignat a"
 #: model_terms:ir.ui.view,arch_db:project.project_sharing_project_task_view_tree
 #: model_terms:ir.ui.view,arch_db:project.view_task_project_user_search
 #: model_terms:ir.ui.view,arch_db:project.view_task_search_form
-#, python-format
 msgid "Assignees"
 msgstr "Assignats"
 
@@ -2797,7 +2857,7 @@ msgstr "Usuaris interns convidats"
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_project__privacy_visibility__portal
 msgid "Invited portal users and all internal users"
-msgstr "Usuaris portal convidats i tots els usuaris interns"
+msgstr "Usuaris del portal convidats i tots els usuaris interns"
 
 #. module: project
 #. odoo-javascript
@@ -3555,7 +3615,7 @@ msgstr "Pròximes Recurrències"
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.portal_tasks_list
 msgid "No Customer"
-msgstr ""
+msgstr "Sense client"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.portal_tasks_list
@@ -3740,7 +3800,6 @@ msgid "Off Track"
 msgstr "Fora de termini"
 
 #. module: project
-#: model:account.analytic.account,name:project.analytic_office_design
 #: model:project.project,name:project.project_project_1
 msgid "Office Design"
 msgstr "Disseny d'oficina"
@@ -4024,6 +4083,20 @@ msgid "Portal Access URL"
 msgstr "L'URL del portal d'accés"
 
 #. module: project
+#. odoo-python
+#: code:addons/project/models/project.py:0
+#, python-format
+msgid "Portal Parent Task"
+msgstr ""
+
+#. module: project
+#. odoo-python
+#: code:addons/project/models/project.py:0
+#, python-format
+msgid "Portal Sub-tasks"
+msgstr ""
+
+#. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__portal_user_names
 msgid "Portal User Names"
 msgstr "Noms d'usuari del portal"
@@ -4036,7 +4109,7 @@ msgid ""
 "Portal users will be removed from the followers of the project and its "
 "tasks."
 msgstr ""
-"Els usuaris portuaris seran retirats dels seguidors del projecte i de les "
+"Els usuaris de portal s'eliminaran com a seguidors del projecte i de les "
 "seves tasques."
 
 #. module: project
@@ -4579,7 +4652,6 @@ msgid "Related Document Model"
 msgstr "Model de document relacionat"
 
 #. module: project
-#: model:account.analytic.account,name:project.analytic_renovations
 #: model:project.project,name:project.project_project_3
 msgid "Renovations"
 msgstr "Renovacions"
@@ -4671,7 +4743,6 @@ msgid "Research"
 msgstr "Recerca"
 
 #. module: project
-#: model:account.analytic.account,name:project.analytic_research_development
 #: model:project.project,name:project.project_project_2
 msgid "Research & Development"
 msgstr "Recerca i desenvolupament"
@@ -5377,6 +5448,7 @@ msgstr "Tasca:"
 
 #. module: project
 #. odoo-python
+#: code:addons/project/models/project.py:0
 #: code:addons/project/models/project.py:0
 #: model:ir.actions.act_window,name:project.act_project_project_2_project_task_all
 #: model:ir.actions.act_window,name:project.action_view_task

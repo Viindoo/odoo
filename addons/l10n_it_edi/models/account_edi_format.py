@@ -431,19 +431,20 @@ class AccountEdiFormat(models.Model):
         return super()._update_invoice_from_xml_tree(filename, tree, invoice)
 
     def _decode_p7m_to_xml(self, filename, content):
-        decoded_content = remove_signature(content)
-        if not decoded_content:
-            return None
+        def parse_xml(parser, filename, content):
+            try:
+                return etree.fromstring(content, parser)
+            except (etree.ParseError, ValueError) as e:
+                _logger.info("XML parsing of %s failed: %s", filename, e)
 
-        try:
-            # Some malformed XML are accepted by FatturaPA, this expends compatibility
-            parser = etree.XMLParser(recover=True)
-            xml_tree = etree.fromstring(decoded_content, parser)
-        except Exception as e:
-            _logger.exception("Error when converting the xml content to etree: %s", e)
-            return None
-        if xml_tree is None or len(xml_tree) == 0:
-            return None
+        parser = etree.XMLParser(recover=True, resolve_entities=False)
+        xml_tree = parse_xml(parser, filename, content)
+        if xml_tree is None:
+            # The file may have a Cades signature, trying to remove it
+            xml_tree = parse_xml(parser, filename, remove_signature(content))
+            if xml_tree is None:
+                _logger.info("Italian EDI invoice file %s cannot be decoded.", filename)
+                return None
 
         return xml_tree
 
@@ -967,7 +968,7 @@ class AccountEdiFormat(models.Model):
             return {
                 'post': self._post_fattura_pa,
                 'post_batching': lambda move: (move.move_type, bool(move.l10n_it_edi_transaction)),
-                'batching_limit': 50,
+                'batching_limit': 20,
             }
 
     def _l10n_it_edi_export_invoice_as_xml(self, invoice):
@@ -1214,7 +1215,7 @@ class AccountEdiFormat(models.Model):
 
     def _get_proxy_identification(self, company):
         if self.code != 'fattura_pa':
-            return super()._get_proxy_identification()
+            return super()._get_proxy_identification(company)
 
         if not company.l10n_it_codice_fiscale:
             raise UserError(_('Please fill your codice fiscale to be able to receive invoices from FatturaPA'))

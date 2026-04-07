@@ -10,15 +10,16 @@
 # Ryanto The <ry.the77@gmail.com>, 2022
 # Martin Trigaux, 2022
 # Edi Santoso <repopamor@gmail.com>, 2023
-# Abe Manyo, 2024
+# Wil Odoo, 2025
+# Abe Manyo, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Abe Manyo, 2024\n"
+"Last-Translator: Abe Manyo, 2025\n"
 "Language-Team: Indonesian (https://app.transifex.com/odoo/teams/41243/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,14 +63,14 @@ msgstr ""
 #: code:addons/mail/static/src/models/rtc.js:0
 #, python-format
 msgid "\"%s\" requires microphone access"
-msgstr ""
+msgstr "\"%s\" membutuhkan akses mikrofon"
 
 #. module: mail
 #. odoo-javascript
 #: code:addons/mail/static/src/models/channel_member_list_category_view.js:0
 #, python-format
 msgid "%(categoryText)s - %(memberCount)s"
-msgstr ""
+msgstr "%(categoryText)s - %(memberCount)s"
 
 #. module: mail
 #. odoo-python
@@ -87,7 +88,7 @@ msgstr ""
 #: code:addons/mail/static/src/models/notification_request_view.js:0
 #, python-format
 msgid "%(odoobotName)s has a request"
-msgstr ""
+msgstr "%(odoobotName)s memiliki sebuah permintaan"
 
 #. module: mail
 #. odoo-python
@@ -1745,9 +1746,22 @@ msgid "Auto subscription"
 msgstr "Subskripsi otomatis"
 
 #. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__mail_compose_message__message_type__auto_comment
+#: model:ir.model.fields.selection,name:mail.selection__mail_message__message_type__auto_comment
+msgid "Automated Targeted Notification"
+msgstr "Notifikasi Otomatis Terarah"
+
+#. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity__automated
 msgid "Automated activity"
 msgstr "Kegiatan Otomatis"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/models/message.js:0
+#, python-format
+msgid "Automated message"
+msgstr "Pesan otomatis"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_activity_type__triggered_next_type_id
@@ -4492,7 +4506,7 @@ msgid ""
 "ID of the parent record holding the alias (example: project holding the task"
 " creation alias)"
 msgstr ""
-"ID dari catatan induk alias (contoh: proyek yang menahan pembuatan alias "
+"ID dari catatan induk alias (contoh: project yang menahan pembuatan alias "
 "tugas)"
 
 #. module: mail
@@ -7004,6 +7018,8 @@ msgstr ""
 #, python-format
 msgid "Only users belonging to the \"%s\" group can modify dynamic templates."
 msgstr ""
+"Hanya user yang berasal dari kelompok \"%s\" dapat memodifikasi templat "
+"dinamik. "
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__mail_channel_member__fold_state__open
@@ -7017,6 +7033,14 @@ msgstr "Terbuka"
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_form
 msgid "Open Document"
 msgstr "Buka Dokumen"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#, python-format
+msgid "Open Link"
+msgstr "Buka Tautan"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_alias_form
@@ -7310,7 +7334,7 @@ msgid ""
 "(parent_model) and task (model))"
 msgstr ""
 "Model induk dengan alias. Model yang memiliki referensi alias ini tidak "
-"selalu berarti model yang diberikan oleh alias_model_id (contoh: proyek "
+"selalu berarti model yang diberikan oleh alias_model_id (contoh: project "
 "(parent_model) dan tugas (model))"
 
 #. module: mail
@@ -7321,7 +7345,7 @@ msgid ""
 "to task-related subtypes."
 msgstr ""
 "Subtipe induk, digunakan untuk subskripsi otomatis. Kolom ini tidak "
-"dinamakan dengan benar. Contoh pada proyek, parent_id dari subtipe proyek "
+"dinamakan dengan benar. Contoh pada project, parent_id dari subtipe project "
 "mengacu pada subtipe yang terkait dengan tugas."
 
 #. module: mail
@@ -8453,14 +8477,14 @@ msgstr "Cari: %s"
 #: code:addons/mail/static/src/models/message_seen_indicator.js:0
 #, python-format
 msgid "Seen by %s"
-msgstr ""
+msgstr "Dilihat oleh %s"
 
 #. module: mail
 #. odoo-javascript
 #: code:addons/mail/static/src/models/message_seen_indicator.js:0
 #, python-format
 msgid "Seen by %s and %s"
-msgstr ""
+msgstr "Dilihat oleh %s dan %s"
 
 #. module: mail
 #. odoo-javascript
@@ -8877,7 +8901,7 @@ msgstr "Mulai Call"
 #: code:addons/mail/static/src/components/thread_view_topbar/thread_view_topbar.xml:0
 #, python-format
 msgid "Start a Video Call"
-msgstr ""
+msgstr "Mulai Panggilan Video"
 
 #. module: mail
 #. odoo-javascript
@@ -9426,7 +9450,7 @@ msgid ""
 msgstr ""
 "Model (Jenis Dokumen Odoo) di mana alias ini dikaitkan. Email masuk yang "
 "tidak menjawab catatan yang sudah ada akan menyebabkan pembuatan rekor baru "
-"model ini (misalnya tugas proyek)"
+"model ini (misalnya tugas project)"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_alias__alias_name
@@ -10734,16 +10758,6 @@ msgid ""
 msgstr ""
 "Anda dapat melampirkan file pada contoh ini, yang akan ditambahkan ke semua "
 "email yang dibuat melalui contoh ini"
-
-#. module: mail
-#: code:addons/mail/models/ir_attachment.py:0
-#, python-format
-msgid ""
-"You may not unlink or modify the content of attachments from other people's "
-"messages"
-msgstr ""
-"Anda tidak dapat memutuskan link atau memodifikasi konten lampiran dari "
-"pesan orang lain"
 
 #. module: mail
 #. odoo-javascript
@@ -17304,7 +17318,7 @@ msgstr "electric plug"
 #: code:addons/mail/static/src/models_data/emoji_data.js:0
 #, python-format
 msgid "electrician"
-msgstr "electrician"
+msgstr "teknisi listrik"
 
 #. module: mail
 #. odoo-javascript

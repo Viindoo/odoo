@@ -4,12 +4,16 @@
 import json
 import logging
 from datetime import datetime
+
+from psycopg2 import DatabaseError
 from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_decode, url_encode, url_parse
 
 from odoo import fields, http, SUPERUSER_ID, tools, _
+from odoo.exceptions import AccessError, MissingError, UserError, ValidationError
 from odoo.fields import Command
 from odoo.http import request
+
 from odoo.addons.base.models.ir_qweb_fields import nl2br
 from odoo.addons.http_routing.models.ir_http import slug
 from odoo.addons.payment import utils as payment_utils
@@ -17,7 +21,6 @@ from odoo.addons.payment.controllers import portal as payment_portal
 from odoo.addons.payment.controllers.post_processing import PaymentPostProcessing
 from odoo.addons.website.controllers.main import QueryURL
 from odoo.addons.website.models.ir_http import sitemap_qs2dom
-from odoo.exceptions import AccessError, MissingError, ValidationError
 from odoo.addons.portal.controllers.portal import _build_url_w_params
 from odoo.addons.website.controllers import main
 from odoo.addons.website.controllers.form import WebsiteForm
@@ -27,6 +30,7 @@ from odoo.tools import lazy
 from odoo.tools.json import scriptsafe as json_scriptsafe
 
 _logger = logging.getLogger(__name__)
+psycopg2_errors_LockNotAvailable = '55P03'
 
 
 class TableCompute(object):
@@ -154,6 +158,16 @@ class Website(main.Website):
             'symbol': request.website.currency_id.symbol,
             'position': request.website.currency_id.position,
         }
+
+    @http.route()
+    def change_lang(self, lang, **kwargs):
+        order_sudo = request.website.sale_get_order()
+        request.env.add_to_compute(
+            order_sudo.order_line._fields['name'],
+            order_sudo.order_line.with_context(lang=lang),
+        )
+        return super().change_lang(lang, **kwargs)
+
 
 class WebsiteSale(http.Controller):
     _express_checkout_route = '/shop/express_checkout'
@@ -315,6 +329,9 @@ class WebsiteSale(http.Controller):
         attributes_ids = {v[0] for v in attrib_values}
         attrib_set = {v[1] for v in attrib_values}
 
+        if attrib_list:
+            post['attrib'] = attrib_list
+
         keep = QueryURL('/shop', **self._shop_get_query_url_kwargs(category and int(category), search, min_price, max_price, **post))
 
         now = datetime.timestamp(datetime.now())
@@ -337,8 +354,6 @@ class WebsiteSale(http.Controller):
         url = "/shop"
         if search:
             post["search"] = search
-        if attrib_list:
-            post['attrib'] = attrib_list
 
         options = self._get_search_options(
             category=category,
@@ -497,7 +512,7 @@ class WebsiteSale(http.Controller):
             if not product_product:
                 product_product = request.env['product.product'].browse(
                     product_template.create_product_variant(combination_ids))
-        if product_template.has_configurable_attributes and product_product:
+        if product_template.has_configurable_attributes and product_product and not all(pa.create_variant == 'no_variant' for pa in product_template.attribute_line_ids.attribute_id):
             product_product.write({
                 'product_variant_image_ids': image_create_data
             })
@@ -1286,6 +1301,7 @@ class WebsiteSale(http.Controller):
         ], limit=1)
         state = request.env["res.country.state"].search([
             ('code', '=', address.pop('state')),
+            ('country_id', '=', country.id),
         ], limit=1)
         address.update(country_id=country, state_id=state)
 
@@ -1791,6 +1807,15 @@ class PaymentPortal(payment_portal.PaymentPortal):
         if order_sudo.state == "cancel":
             raise ValidationError(_("The order has been canceled."))
 
+        try:  # prevent concurrent payments by putting a database-level lock on the SO
+            request.env.cr.execute(
+                f'SELECT 1 FROM sale_order WHERE id = {order_sudo.id} FOR NO KEY UPDATE NOWAIT'
+            )
+        except DatabaseError as e:
+            if e.pgcode != psycopg2_errors_LockNotAvailable:
+                raise
+            raise UserError(_("Payment is already being processed."))
+
         kwargs.update({
             'reference_prefix': None,  # Allow the reference to be computed based on the order
             'partner_id': order_sudo.partner_invoice_id.id,
@@ -1800,8 +1825,14 @@ class PaymentPortal(payment_portal.PaymentPortal):
         if not kwargs.get('amount'):
             kwargs['amount'] = order_sudo.amount_total
 
-        if tools.float_compare(kwargs['amount'], order_sudo.amount_total, precision_rounding=order_sudo.currency_id.rounding):
+        compare_amounts = order_sudo.currency_id.compare_amounts
+        if compare_amounts(kwargs['amount'], order_sudo.amount_total):
             raise ValidationError(_("The cart has been updated. Please refresh the page."))
+        amount_paid = sum(
+            tx.amount for tx in order_sudo.transaction_ids if tx.state in ('authorized', 'done')
+        )
+        if compare_amounts(amount_paid, order_sudo.amount_total) == 0:
+            raise UserError(_("The cart has already been paid. Please refresh the page."))
 
         tx_sudo = self._create_transaction(
             custom_create_values={'sale_order_ids': [Command.set([order_id])]}, **kwargs,
@@ -1827,7 +1858,9 @@ class CustomerPortal(portal.CustomerPortal):
     @http.route('/my/orders/reorder_modal_content', type='json', auth='public', website=True)
     def _get_saleorder_reorder_content_modal(self, order_id, access_token):
         try:
-            sale_order = self._document_check_access('sale.order', order_id, access_token=access_token)
+            sale_order = self._document_check_access(
+                'sale.order', order_id, access_token=access_token,
+            ).with_user(request.env.user).sudo()
         except (AccessError, MissingError):
             return request.redirect('/my')
 

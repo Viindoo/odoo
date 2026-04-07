@@ -7,16 +7,16 @@
 # Martin Trigaux, 2022
 # Luca Carlo, 2023
 # Wil Odoo, 2024
-# Marianna Ciofani, 2024
 # Sergio Zanchetta <primes2h@gmail.com>, 2024
+# Marianna Ciofani, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:32+0000\n"
+"POT-Creation-Date: 2025-05-08 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:55+0000\n"
-"Last-Translator: Sergio Zanchetta <primes2h@gmail.com>, 2024\n"
+"Last-Translator: Marianna Ciofani, 2025\n"
 "Language-Team: Italian (https://app.transifex.com/odoo/teams/41243/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -163,7 +163,7 @@ msgid ""
 "A boolean; if TRUE, empty cells selected in the text arguments won't be "
 "included in the result."
 msgstr ""
-"Un boleano; se VERO, le celle vuote selezionate negli argomenti del testo "
+"Un booleano; se TRUE, le celle vuote selezionate negli argomenti del testo "
 "non saranno incluse nei risultati."
 
 #. module: spreadsheet
@@ -1198,15 +1198,15 @@ msgstr "Risale a un numero di mesi prima/dopo un'altra data."
 #, python-format
 msgid "Date after a number of workdays (specifying weekends)."
 msgstr ""
-"Data successiva ad un certo numero di giorni lavorativi (specificando i fine"
-" settimana)."
+"Data dopo ad un certo numero di giorni lavorativi (specificando i fine "
+"settimana)."
 
 #. module: spreadsheet
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "Date after a number of workdays."
-msgstr "Data successiva ad un numero di giorni lavorativi."
+msgstr "Data dopo un certo numero di giorni lavorativi."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -4011,6 +4011,20 @@ msgstr "La base (%s) deve essere compresa tra 2 e 36 inclusi."
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
+msgid "The base (%s) must be strictly positive."
+msgstr "La base (%s) deve essere strettamente positiva."
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
+#, python-format
+msgid "The base must be different from 1."
+msgstr "La base deve essere diversa da 1."
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
+#, python-format
 msgid "The baseline value is invalid"
 msgstr "Il valore di riferimento non è valido"
 
@@ -4361,7 +4375,7 @@ msgstr ""
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "The future_value (%s) must be strictly positive."
-msgstr "Il valore futuro (%s) deve essere strettmente positivo."
+msgstr "Il future_value (%s) deve essere strettamente positivo."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -4453,6 +4467,13 @@ msgstr "La vita (%s) deve essere strettamente positiva."
 #, python-format
 msgid "The logarithm of a number, base e (euler's number)."
 msgstr "Logaritmo di un numero, base e (numero di Eulero)."
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
+#, python-format
+msgid "The logarithm of a number, for a given base."
+msgstr "Il logaritmo di un numero per una determinata base."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -5158,6 +5179,7 @@ msgstr "Il valore (%s) deve essere positivo o nullo."
 #. module: spreadsheet
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "The value (%s) must be strictly positive."
 msgstr "Il valore (%s) deve essere strettamente positivo."
@@ -5256,7 +5278,7 @@ msgstr ""
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "The weekend (%s) must be different from '1111111'."
-msgstr "Il fine settimana (%s) deve essere diverso da '1111111'."
+msgstr "Il fine settimana (%s) deve essere diverso da \"1111111\"."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -5749,7 +5771,7 @@ msgstr "Quando il valore è inferiore"
 #, python-format
 msgid "When weekend is a string (%s) it must be composed of \"0\" or \"1\"."
 msgstr ""
-"Quando il fine settimana è una stringa (%s) deve essere composta da \"0\" o "
+"Quando il fine settimana è una stringa (%s) deve essere composto da \"0\" o "
 "\"1\"."
 
 #. module: spreadsheet
@@ -5870,7 +5892,7 @@ msgstr "Non è possibile unire celle all'interno di un filtro esistente."
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "You cannot create overlapping filters."
-msgstr "Non è possibile creare filtri che coincidono."
+msgstr "Impossibile creare filtri sovrapposti."
 
 #. module: spreadsheet
 #. odoo-javascript

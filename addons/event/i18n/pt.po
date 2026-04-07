@@ -17,15 +17,16 @@
 # Martin Trigaux, 2022
 # Manuela Silva <mmsrs@sky.com>, 2023
 # Vasco Rodrigues, 2024
-# Rita Bastos, 2024
+# Peter Lawrence Romão <peterromao@yahoo.co.uk>, 2025
+# Rita Bastos, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 08:23+0000\n"
+"POT-Creation-Date: 2025-02-10 08:27+0000\n"
 "PO-Revision-Date: 2022-09-22 05:45+0000\n"
-"Last-Translator: Rita Bastos, 2024\n"
+"Last-Translator: Rita Bastos, 2025\n"
 "Language-Team: Portuguese (https://app.transifex.com/odoo/teams/41243/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1865,6 +1866,11 @@ msgid "Display Sponsors and Exhibitors on your event pages"
 msgstr "Apresenta Patrocinadores ou Expositores na tua página de eventos."
 
 #. module: event
+#: model:ir.model.fields,field_description:event.field_event_event__date_tz
+msgid "Display Timezone"
+msgstr "Exibir fuso horário"
+
+#. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__sequence
 msgid "Display order"
 msgstr "Ordem de exibição"
@@ -2272,7 +2278,7 @@ msgstr "Exemplo de Crachá Dobrável"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_stage__fold
 msgid "Folded in Kanban"
-msgstr "Arquivado em Kanban"
+msgstr "Recolhido em Kanban"
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__message_follower_ids
@@ -2577,6 +2583,15 @@ msgstr "Informação importante sobre o bilhete"
 #, python-format
 msgid "In Progress"
 msgstr "Em Progresso"
+
+#. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_tz
+msgid ""
+"Indicates the timezone in which the event dates/times will be displayed on "
+"the website."
+msgstr ""
+"Indica o fuso horário em que as datas/horários do evento serão exibidos no "
+"site."
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__interval_nbr
@@ -3826,7 +3841,6 @@ msgstr ""
 "telemóvel."
 
 #. module: event
-#: model:ir.model.fields,field_description:event.field_event_event__date_tz
 #: model:ir.model.fields,field_description:event.field_event_type__default_timezone
 msgid "Timezone"
 msgstr "Fuso Horário"
@@ -4045,6 +4059,14 @@ msgstr "Semanas"
 #: model_terms:event.event,description:event.event_0
 msgid "What's new?"
 msgstr "O que há de novo?"
+
+#. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_begin
+#: model:ir.model.fields,help:event.field_event_registration__event_begin_date
+msgid ""
+"When the event is scheduled to take place (expressed in your local timezone "
+"on the form view)."
+msgstr ""
 
 #. module: event
 #: model:ir.model.fields,help:event.field_event_event__is_ongoing

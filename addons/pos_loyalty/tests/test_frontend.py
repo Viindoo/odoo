@@ -9,7 +9,7 @@ from odoo import Command
 
 
 @tagged("post_install", "-at_install")
-class TestUi(TestPointOfSaleHttpCommon):
+class TestPoSLoyaltyCommon(TestPointOfSaleHttpCommon):
 
     @classmethod
     def setUpClass(cls):
@@ -130,6 +130,10 @@ class TestUi(TestPointOfSaleHttpCommon):
             program.write({'name': name})
             programs[name] = program
         return programs
+
+
+@tagged("post_install", "-at_install")
+class TestUi(TestPoSLoyaltyCommon):
 
     def test_pos_loyalty_tour_basic(self):
         """PoS Loyalty Basic Tour"""
@@ -946,6 +950,81 @@ class TestUi(TestPointOfSaleHttpCommon):
 
         self.main_pos_config.open_ui()
         self.start_tour('/pos/web?config_id=%d' % self.main_pos_config.id, 'PosLoyaltySpecificDiscountWithFreeProductTour', login='accountman')
+
+    def test_2_discounts_specific_global(self):
+        LoyaltyProgram = self.env['loyalty.program']
+        (LoyaltyProgram.search([])).write({'pos_ok': False})
+
+        product_category = self.env['product.category'].create({
+            'name': 'Discount category',
+        })
+
+        self.product_a = self.env['product.product'].create({
+            'name': 'Test Product A',
+            'type': 'product',
+            'list_price': 5,
+            'available_in_pos': True,
+            'taxes_id': False,
+        })
+        self.product_b = self.env['product.product'].create({
+            'name': 'Test Product B',
+            'type': 'product',
+            'list_price': 5,
+            'available_in_pos': True,
+            'taxes_id': False,
+            'categ_id': product_category.id,
+        })
+
+        self.env['loyalty.program'].create({
+            'name': 'Discount 10%',
+            'program_type': 'promotion',
+            'trigger': 'auto',
+            'applies_on': 'current',
+            'rule_ids': [(0, 0, {
+                'reward_point_mode': 'order',
+                'reward_point_amount': 1,
+                'minimum_amount': 1,
+                'minimum_qty': 5,
+            })],
+            'reward_ids': [(0, 0, {
+                'reward_type': 'discount',
+                'required_points': 1,
+                'discount': 10,
+                'discount_mode': 'percent',
+                'discount_applicability': 'order',
+            })],
+            'pos_config_ids': [Command.link(self.main_pos_config.id)],
+        })
+
+        self.env['loyalty.program'].create({
+            'name': 'Discount on category',
+            'program_type': 'promotion',
+            'trigger': 'auto',
+            'applies_on': 'current',
+            'rule_ids': [(0, 0, {
+                'reward_point_mode': 'order',
+                'reward_point_amount': 1,
+                'minimum_amount': 1,
+                'minimum_qty': 1,
+            })],
+            'reward_ids': [(0, 0, {
+                'reward_type': 'discount',
+                'required_points': 1,
+                'discount': 10,
+                'discount_mode': 'percent',
+                'discount_applicability': 'specific',
+                'discount_product_category_id': product_category.id,
+            })],
+            'pos_config_ids': [Command.link(self.main_pos_config.id)],
+        })
+
+        self.main_pos_config.open_ui()
+        self.start_tour(
+            '/pos/web?config_id=%d' % self.main_pos_config.id,
+            'PosLoyalty2DiscountsSpecificGlobal',
+            login='accountman',
+        )
+
     def test_point_per_money_spent(self):
         """Test the point per $ spent feature"""
         LoyaltyProgram = self.env['loyalty.program']
@@ -2072,4 +2151,34 @@ class TestUi(TestPointOfSaleHttpCommon):
             "/pos/web?config_id=%d" % self.main_pos_config.id,
             "PosLoyaltyRewardProductTag",
             login="accountman"
+        )
+
+    def test_loyalty_on_order_with_fixed_tax(self):
+
+        self.env['loyalty.program'].search([('id', '!=', self.auto_promo_program_next.id)]).write({'active': False})
+        self.auto_promo_program_next.coupon_ids = [Command.create({
+            'code': '563412',
+            'points': 10
+        })]
+
+        fixed_tax = self.env['account.tax'].create({
+            'name': 'Fixed Tax',
+            'amount_type': 'fixed',
+            'amount': 50,
+        })
+        self.env["product.product"].create(
+            {
+                "name": "Product A",
+                "type": "product",
+                "list_price": 15,
+                "available_in_pos": True,
+                "taxes_id": [Command.link(fixed_tax.id)],
+            }
+        )
+
+        self.main_pos_config.open_ui()
+        self.start_tour(
+            "/pos/web?config_id=%d" % self.main_pos_config.id,
+            "test_loyalty_on_order_with_fixed_tax",
+            login="accountman",
         )

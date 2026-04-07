@@ -16,15 +16,16 @@
 # Khwunchai Jaengsawang <khwunchai.j@ku.th>, 2022
 # Martin Trigaux, 2022
 # Wichanon Jamwutthipreecha, 2022
-# Rasareeyar Lappiam, 2024
+# Rasareeyar Lappiam, 2025
+# Wil Odoo, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Rasareeyar Lappiam, 2024\n"
+"Last-Translator: Wil Odoo, 2025\n"
 "Language-Team: Thai (https://app.transifex.com/odoo/teams/41243/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,14 +69,14 @@ msgstr ""
 #: code:addons/mail/static/src/models/rtc.js:0
 #, python-format
 msgid "\"%s\" requires microphone access"
-msgstr ""
+msgstr "\"%s\" ต้องมีการเข้าถึงไมโครโฟน"
 
 #. module: mail
 #. odoo-javascript
 #: code:addons/mail/static/src/models/channel_member_list_category_view.js:0
 #, python-format
 msgid "%(categoryText)s - %(memberCount)s"
-msgstr ""
+msgstr "%(categoryText)s - %(memberCount)s"
 
 #. module: mail
 #. odoo-python
@@ -93,7 +94,7 @@ msgstr ""
 #: code:addons/mail/static/src/models/notification_request_view.js:0
 #, python-format
 msgid "%(odoobotName)s has a request"
-msgstr ""
+msgstr "%(odoobotName)s มีคำขอ"
 
 #. module: mail
 #. odoo-python
@@ -185,7 +186,7 @@ msgstr ""
 #: code:addons/mail/static/src/models/messaging_notification_handler.js:0
 #, python-format
 msgid "%s from %s"
-msgstr ""
+msgstr "%s จาก %s"
 
 #. module: mail
 #. odoo-javascript
@@ -1734,9 +1735,22 @@ msgid "Auto subscription"
 msgstr "สมัครสมาชิกอัตโนมัติ"
 
 #. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__mail_compose_message__message_type__auto_comment
+#: model:ir.model.fields.selection,name:mail.selection__mail_message__message_type__auto_comment
+msgid "Automated Targeted Notification"
+msgstr "การแจ้งเตือนที่กำหนดเป้าหมายอัตโนมัติ"
+
+#. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity__automated
 msgid "Automated activity"
 msgstr "Automated activity"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/models/message.js:0
+#, python-format
+msgid "Automated message"
+msgstr "ข้อความอัตโนมัติ"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_activity_type__triggered_next_type_id
@@ -6957,6 +6971,7 @@ msgstr ""
 #, python-format
 msgid "Only users belonging to the \"%s\" group can modify dynamic templates."
 msgstr ""
+"เฉพาะผู้ใช้ที่อยู่ในกลุ่ม \"%s\" เท่านั้นที่สามารถแก้ไขเทมเพลตแบบไดนามิกได้"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__mail_channel_member__fold_state__open
@@ -6970,6 +6985,14 @@ msgstr "เปิด"
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_form
 msgid "Open Document"
 msgstr "เปิดเอกสาร"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#, python-format
+msgid "Open Link"
+msgstr "ลิงก์ที่เปิด"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_alias_form
@@ -7741,7 +7764,7 @@ msgstr "วันที่อ่าน"
 #: code:addons/mail/static/src/components/message/message.js:0
 #, python-format
 msgid "Read Less"
-msgstr ""
+msgstr "อ่านน้อยลง"
 
 #. module: mail
 #. odoo-javascript
@@ -8401,14 +8424,14 @@ msgstr "ค้นหา: %s"
 #: code:addons/mail/static/src/models/message_seen_indicator.js:0
 #, python-format
 msgid "Seen by %s"
-msgstr ""
+msgstr "มองเห็นโดย %s"
 
 #. module: mail
 #. odoo-javascript
 #: code:addons/mail/static/src/models/message_seen_indicator.js:0
 #, python-format
 msgid "Seen by %s and %s"
-msgstr ""
+msgstr "มองเห็นโดย %s และ %s"
 
 #. module: mail
 #. odoo-javascript
@@ -10663,15 +10686,6 @@ msgid ""
 "from this template"
 msgstr ""
 "คุณสามารถแนบไฟล์เข้ากับเทมเพลตนี้เพื่อเพิ่มลงในอีเมลทั้งหมดที่สร้างจากเทมเพลตนี้ได้"
-
-#. module: mail
-#: code:addons/mail/models/ir_attachment.py:0
-#, python-format
-msgid ""
-"You may not unlink or modify the content of attachments from other people's "
-"messages"
-msgstr ""
-"คุณไม่สามารถยกเลิกการเชื่อมโยงหรือแก้ไขเนื้อหาของไฟล์แนบจากข้อความของบุคคลอื่น"
 
 #. module: mail
 #. odoo-javascript

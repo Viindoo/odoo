@@ -7,8 +7,8 @@
 # 江口和志 <sandwhale1010@gmail.com>, 2022
 # Andy Yiu, 2023
 # Ryoko Tsuda <ryoko@quartile.co>, 2023
-# Junko Augias, 2023
 # Wil Odoo, 2024
+# Junko Augias, 2025
 # 
 msgid ""
 msgstr ""
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-06 13:32+0000\n"
 "PO-Revision-Date: 2022-09-22 05:55+0000\n"
-"Last-Translator: Wil Odoo, 2024\n"
+"Last-Translator: Junko Augias, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -283,7 +283,7 @@ msgstr "ウェーブ転送を作成できません"
 #. module: stock_picking_batch
 #: model_terms:ir.ui.view,arch_db:stock_picking_batch.stock_picking_batch_form
 msgid "Check Availability"
-msgstr "利用可能確認"
+msgstr "在庫を確認"
 
 #. module: stock_picking_batch
 #. odoo-python
@@ -708,7 +708,7 @@ msgstr "割り当てボタンを表示"
 #. module: stock_picking_batch
 #: model:ir.model.fields,field_description:stock_picking_batch.field_stock_picking_batch__show_check_availability
 msgid "Show Check Availability"
-msgstr "チェックの可用性を表示"
+msgstr "在庫確認ボタンを表示"
 
 #. module: stock_picking_batch
 #: model:ir.model.fields,field_description:stock_picking_batch.field_stock_picking_batch__show_clear_qty_button
@@ -728,7 +728,7 @@ msgstr "数量設定ボタンを表示"
 #. module: stock_picking_batch
 #: model:ir.model.fields,field_description:stock_picking_batch.field_stock_picking_batch__show_validate
 msgid "Show Validate Button"
-msgstr "検証ボタンを表示"
+msgstr "確認ボタンを表示"
 
 #. module: stock_picking_batch
 #: model_terms:ir.ui.view,arch_db:stock_picking_batch.stock_picking_batch_filter
@@ -784,7 +784,7 @@ msgstr "在庫移動"
 #. module: stock_picking_batch
 #: model:ir.model,name:stock_picking_batch.model_stock_package_destination
 msgid "Stock Package Destination"
-msgstr "ストックパッケージの宛先"
+msgstr "在庫梱包の宛先"
 
 #. module: stock_picking_batch
 #: model:ir.model.fields,field_description:stock_picking_batch.field_stock_picking_batch__move_line_ids
@@ -810,7 +810,7 @@ msgid ""
 "\n"
 "Incompatibilities: %s"
 msgstr ""
-"以下の転送はバッチ転送に追加できません。%s即時転送でない場合は、その状態とオペレーションタイプを確認して下さい。\n"
+"以下の転送は一括転送に追加できません。%s即時転送でない場合は、その状態とオペレーションタイプを確認して下さい。\n"
 "\n"
 "互換性なし:%s"
 
@@ -913,9 +913,16 @@ msgid "Type of the exception activity on record."
 msgstr "記録上の例外アクティビティのタイプ。"
 
 #. module: stock_picking_batch
+#. odoo-python
+#: code:addons/stock_picking_batch/models/stock_picking.py:0
+#, python-format
+msgid "Unassigned responsible from %s"
+msgstr "未割当担当者 %s"
+
+#. module: stock_picking_batch
 #: model_terms:ir.ui.view,arch_db:stock_picking_batch.stock_picking_batch_form
 msgid "Validate"
-msgstr "検証"
+msgstr "確認"
 
 #. module: stock_picking_batch
 #: model:ir.model,name:stock_picking_batch.model_stock_warehouse
@@ -963,7 +970,7 @@ msgstr "確認して、バッチをドラフト状態で作成して下さい。
 #: code:addons/stock_picking_batch/models/stock_picking_batch.py:0
 #, python-format
 msgid "You cannot delete Done batch transfers."
-msgstr "完了済のバッチ転送を削除することはできません。"
+msgstr "完了済の一括転送を削除することはできません。"
 
 #. module: stock_picking_batch
 #. odoo-python

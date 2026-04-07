@@ -107,7 +107,7 @@ class MailThread(models.AbstractModel):
         'Number of errors', compute='_compute_message_has_error',
         help="Number of messages with delivery error")
     message_attachment_count = fields.Integer('Attachment Count', compute='_compute_message_attachment_count', groups="base.group_user")
-    message_main_attachment_id = fields.Many2one(string="Main Attachment", comodel_name='ir.attachment', copy=False)
+    message_main_attachment_id = fields.Many2one(string="Main Attachment", comodel_name='ir.attachment', copy=False, index='btree_not_null')
 
     @api.depends('message_follower_ids')
     def _compute_message_partner_ids(self):
@@ -767,6 +767,10 @@ class MailThread(models.AbstractModel):
                     followers
                 'partners': check that author_id id set
 
+        Note that this method also updates 'author_id' of message_dict as route
+        links an incoming message to a record and linking email to partner is
+        better done in a record's context.
+
         :param message: an email.message instance
         :param message_dict: dictionary of values that will be given to
                              mail_message.create()
@@ -900,45 +904,65 @@ class MailThread(models.AbstractModel):
         LOOP_THRESHOLD = int(get_param('mail.gateway.loop.threshold', 20))
 
         create_date_limit = self.env.cr.now() - datetime.timedelta(minutes=LOOP_MINUTES)
+        author_id = message_dict.get('author_id')
 
         # Search only once per model
-        models = {
-            self.env[model]
-            for model, thread_id, *__ in routes or []
-            if not thread_id  # Reply to an existing thread
-        }
+        model_res_ids = dict()
+        for model, thread_id, *__ in routes or []:
+            model_res_ids.setdefault(model, list()).append(thread_id)
 
-        for model in models:
+        for model_name, thread_ids in model_res_ids.items():
+            model = self.env[model_name]
             if not hasattr(model, '_detect_loop_sender_domain'):
                 continue
 
-            domain = model._detect_loop_sender_domain(email_from_normalized)
-            if not domain:
-                continue
+            loop_new, loop_update = False, False
+            search_new = 0 in thread_ids  # route creating new records = thread_id = 0
+            doc_ids = list(filter(None, thread_ids))  # route updating records = thread_id set
 
-            mail_incoming_messages_count = model.sudo().search_count(
-                expression.AND([
-                    [('create_date', '>', create_date_limit)],
-                    domain,
-                ]),
-            )
+            # search records created by email -> alias creating new records
+            if search_new:
+                base_domain = model._detect_loop_sender_domain(email_from_normalized)
+                if base_domain:
+                    mail_new_count = model.sudo().search_count(
+                        expression.AND([
+                            [('create_date', '>=', create_date_limit)],
+                            base_domain,
+                        ]),
+                    )
+                    loop_new = mail_new_count >= LOOP_THRESHOLD
 
-            if mail_incoming_messages_count >= LOOP_THRESHOLD:
-                _logger.info('Email address %s created too many <%s>.', email_from, model)
+            # search messages linked to email -> alias updating records
+            if doc_ids and not loop_new:
+                base_msg_domain = [('model', '=', model._name), ('res_id', 'in', doc_ids), ('create_date', '>=', create_date_limit)]
+                if author_id:
+                    msg_domain = expression.AND([[('author_id', '=', author_id)], base_msg_domain])
+                else:
+                    msg_domain = expression.AND([[('email_from', 'in', [email_from, email_from_normalized])], base_msg_domain])
+                mail_update_groups = self.env['mail.message'].sudo()._read_group_raw(msg_domain, ['res_id'], ['res_id'])
+                if mail_update_groups:
+                    loop_update = any(
+                        group['res_id_count'] >= LOOP_THRESHOLD
+                        for group in mail_update_groups
+                    )
 
+            if loop_new or loop_update:
+                if loop_new:
+                    _logger.info('--> ignored mail from %s to %s with Message-Id %s: created too many <%s>',
+                                message_dict.get('email_from'), message_dict.get('to'), message_dict.get('message_id'), model)
+                if loop_update:
+                    _logger.info('--> ignored mail from %s to %s with Message-Id %s: too much replies on same <%s>',
+                                message_dict.get('email_from'), message_dict.get('to'), message_dict.get('message_id'), model)
                 body = self.env['ir.qweb']._render(
                     'mail.message_notification_limit_email',
                     {'email': message_dict.get('to')},
                     minimal_qcontext=True,
                     raise_if_not_found=False,
                 )
-
-                # Add a reference with a tag, to be able to ignore response to this email
-                references = (
-                    message_dict.get('message_id', '') + ' '
-                    + tools.generate_tracking_message_id('loop-detection-bounce-email')
-                )
-                self._routing_create_bounce_email(email_from, body, message, references=references)
+                self._routing_create_bounce_email(
+                    email_from, body, message,
+                    # add a reference with a tag, to be able to ignore response to this email
+                    references=f'{message_dict["message_id"]} {tools.generate_tracking_message_id("loop-detection-bounce-email")}')
                 return True
 
         return False
@@ -946,8 +970,8 @@ class MailThread(models.AbstractModel):
     @api.model
     def _detect_loop_headers(self, msg_dict):
         """Return True if the email must be ignored based on its headers."""
-        if ('-loop-detection-bounce-email@' in msg_dict.get('references', '')
-           or '-loop-detection-bounce-email@' in msg_dict.get('in_reply_to', '')):
+        references = tools.unfold_references(msg_dict['references']) + [msg_dict['in_reply_to']]
+        if references and any('-loop-detection-bounce-email@' in ref for ref in references):
             _logger.info('Email is a reply to the bounce notification, ignoring it.')
             return True
 
@@ -1003,11 +1027,7 @@ class MailThread(models.AbstractModel):
 
         # compute references to find if message is a reply to an existing thread
         thread_references = message_dict['references'] or message_dict['in_reply_to']
-        msg_references = [
-            re.sub(r'[\r\n\t ]+', r'', ref)  # "Unfold" buggy references
-            for ref in tools.mail_header_msgid_re.findall(thread_references)
-            if 'reply_to' not in ref
-        ]
+        msg_references = [r.strip() for r in tools.unfold_references(thread_references) if 'reply_to' not in r]
         mail_messages = self.env['mail.message'].sudo().search([('message_id', 'in', msg_references)], limit=1, order='id desc, message_id')
         is_a_reply = bool(mail_messages)
         reply_model, reply_thread_id = mail_messages.model, mail_messages.res_id
@@ -1090,7 +1110,11 @@ class MailThread(models.AbstractModel):
                 body = self.env['ir.qweb']._render('mail.mail_bounce_catchall', {
                     'message': message,
                 })
-                self._routing_create_bounce_email(email_from, body, message, references=message_id, reply_to=self.env.company.email)
+                self._routing_create_bounce_email(
+                    email_from, body, message,
+                    # add a reference with a tag, to be able to ignore response to this email
+                    references=f'{message_id} {tools.generate_tracking_message_id("loop-detection-bounce-email")}',
+                    reply_to=self.env.company.email)
                 return []
 
             dest_aliases = self.env['mail.alias'].search([('alias_name', 'in', rcpt_tos_valid_localparts)])
@@ -1131,7 +1155,11 @@ class MailThread(models.AbstractModel):
             body = self.env['ir.qweb']._render('mail.mail_bounce_catchall', {
                 'message': message,
             })
-            self._routing_create_bounce_email(email_from, body, message, references=message_id, reply_to=self.env.company.email)
+            self._routing_create_bounce_email(
+                email_from, body, message,
+                # add a reference with a tag, to be able to ignore response to this email
+                references=f'{message_id} {tools.generate_tracking_message_id("loop-detection-bounce-email")}',
+                reply_to=self.env.company.email)
             return []
 
         # ValueError if no routes found and if no bounce occurred
@@ -1186,7 +1214,8 @@ class MailThread(models.AbstractModel):
 
             post_params = dict(subtype_id=subtype_id, partner_ids=partner_ids, **message_dict)
             # remove computational values not stored on mail.message and avoid warnings when creating it
-            for x in ('from', 'to', 'cc', 'recipients', 'references', 'in_reply_to', 'bounced_email', 'bounced_message', 'bounced_msg_id', 'bounced_partner'):
+            for x in ('from', 'to', 'cc', 'recipients', 'references', 'in_reply_to', 'x_odoo_message_id',
+                      'bounced_email', 'bounced_message', 'bounced_msg_id', 'bounced_partner'):
                 post_params.pop(x, None)
             new_msg = False
             if thread._name == 'mail.thread':  # message with parent_id not linked to record
@@ -1254,9 +1283,12 @@ class MailThread(models.AbstractModel):
             return False
 
         if self._detect_loop_headers(msg_dict):
+            _logger.info('Ignored mail from %s to %s with Message-Id %s: reply to a bounce notification detected by headers',
+                             msg_dict.get('email_from'), msg_dict.get('to'), msg_dict.get('message_id'))
             return
 
-        # find possible routes for the message
+        # find possible routes for the message; note this also updates notably
+        # 'author_id' of msg_dict
         routes = self.message_route(message, msg_dict, model, thread_id, custom_values)
         if self._detect_loop_sender(message, msg_dict, routes):
             return
@@ -1405,6 +1437,9 @@ class MailThread(models.AbstractModel):
                 if part.get_content_type() == 'binary/octet-stream':
                     _logger.warning("Message containing an unexpected Content-Type 'binary/octet-stream', assuming 'application/octet-stream'")
                     part.replace_header('Content-Type', 'application/octet-stream')
+                if part.get_content_type() == '*/*':
+                    _logger.warning("Message containing an unexpected Content-Type '*/*', assuming 'application/octet-stream'")
+                    part.replace_header('Content-Type', 'application/octet-stream')
                 if part.get_content_type() == 'multipart/alternative':
                     alternative = True
                 if part.get_content_type() == 'multipart/mixed':
@@ -1413,8 +1448,8 @@ class MailThread(models.AbstractModel):
                     continue  # skip container
 
                 filename = part.get_filename()  # I may not properly handle all charsets
-                if part.get_content_type() == 'text/xml' and not part.get_param('charset'):
-                    # for text/xml with omitted charset, the charset is assumed to be ASCII by the `email` module
+                if part.get_content_type().startswith('text/') and not part.get_param('charset'):
+                    # for text/* with omitted charset, the charset is assumed to be ASCII by the `email` module
                     # although the payload might be in UTF8
                     part.set_charset('utf-8')
                 encoding = part.get_content_charset()  # None if attachment
@@ -1609,7 +1644,7 @@ class MailThread(models.AbstractModel):
                 order='create_date DESC, id DESC',
                 limit=1)
         if msg_dict['references'] and not parent_ids:
-            references_msg_id_list = tools.mail_header_msgid_re.findall(msg_dict['references'])
+            references_msg_id_list = tools.unfold_references(msg_dict['references'])
             parent_ids = self.env['mail.message'].search(
                 [('message_id', 'in', [x.strip() for x in references_msg_id_list])],
                 order='create_date DESC, id DESC',
@@ -1944,7 +1979,8 @@ class MailThread(models.AbstractModel):
                 # keep cid and name list synced with attachement_values_list length to match ids latter
                 cid_list.append(cid)
                 name_list.append(name)
-            new_attachments = self.env['ir.attachment'].sudo().create(attachement_values_list)
+            AttachmentSudo = self.env['ir.attachment'].sudo().with_context(clean_context(self._context))
+            new_attachments = AttachmentSudo.create(attachement_values_list)
             cid_mapping = {}
             name_mapping = {}
             for counter, new_attachment in enumerate(new_attachments):
@@ -2778,14 +2814,29 @@ class MailThread(models.AbstractModel):
         mail_subject = message.subject or (message.record_name and 'Re: %s' % message.record_name) # in cache, no queries
         # Replace new lines by spaces to conform to email headers requirements
         mail_subject = ' '.join((mail_subject or '').splitlines())
-        # compute references: set references to the parent and add current message just to
+        # compute references: set references to parents likely to be sent and add current message just to
         # have a fallback in case replies mess with Messsage-Id in the In-Reply-To (e.g. amazon
         # SES SMTP may replace Message-Id and In-Reply-To refers an internal ID not stored in Odoo)
         message_sudo = message.sudo()
-        if message_sudo.parent_id:
-            references = f'{message_sudo.parent_id.message_id} {message_sudo.message_id}'
-        else:
-            references = message_sudo.message_id
+        ancestors = self.env['mail.message'].sudo().search(
+            [
+                ('model', '=', message_sudo.model), ('res_id', '=', message_sudo.res_id),
+                ('id', '!=', message_sudo.id),
+                ('subtype_id', '!=', False),  # filters out logs
+                ('message_id', '!=', False),  # ignore records that somehow don't have a message_id (non ORM created)
+            ], limit=32, order='id DESC',  # take 32 last, hoping to find public discussions in it
+        )
+
+        # filter out internal messages, to fetch 'public discussion' first
+        outgoing_types = ('comment', 'auto_comment', 'email', 'email_outgoing')
+        history_ancestors = ancestors.sorted(lambda m: (
+            not m.is_internal and not m.subtype_id.internal,
+            m.message_type in outgoing_types,
+            m.message_type != 'user_notification',  # user notif -> avoid if possible
+        ), reverse=True)  # False before True unless reverse
+        # order from oldest to newest
+        ancestors = history_ancestors[:3].sorted('id')
+        references = ' '.join(m.message_id for m in (ancestors + message_sudo))
         # prepare notification mail values
         base_mail_values = {
             'mail_message_id': message.id,
@@ -3004,31 +3055,17 @@ class MailThread(models.AbstractModel):
 
     def _notify_get_action_link(self, link_type, **kwargs):
         """ Prepare link to an action: view document, follow document, ... """
-        params = {
-            'model': kwargs.get('model', self._name),
-            'res_id': kwargs.get('res_id', self.ids and self.ids[0] or False),
-        }
-        # keep only accepted parameters:
-        # - action (deprecated), token (assign), access_token (view)
-        # - auth_signup: auth_signup_token and auth_login
-        # - portal: pid, hash
-        params.update(dict(
-            (key, value)
-            for key, value in kwargs.items()
-            if key in ('action', 'token', 'access_token', 'auth_signup_token',
-                       'auth_login', 'pid', 'hash')
-        ))
+        params = self._notify_get_action_link_params(link_type, **kwargs)
 
         if link_type in ['view', 'assign', 'follow', 'unfollow']:
             base_link = '/mail/%s' % link_type
         elif link_type == 'controller':
             controller = kwargs.get('controller')
-            params.pop('model')
             base_link = '%s' % controller
         else:
             return ''
 
-        if link_type not in ['view']:
+        if link_type != 'view':
             token = self._notify_encode_link(base_link, params)
             params['token'] = token
 
@@ -3037,6 +3074,28 @@ class MailThread(models.AbstractModel):
             link = self[0].get_base_url() + link
 
         return link
+
+    def _notify_get_action_link_params(self, link_type, **kwargs):
+        """ Parameters management for '_notify_get_action_link' """
+        params = {
+            'model': kwargs.get('model', self._name),
+            'res_id': kwargs.get('res_id', self.ids[0] if self else False),
+        }
+        # keep only accepted parameters:
+        # - action (deprecated), token (assign), access_token (view)
+        # - auth_signup: auth_signup_token and auth_login
+        # - portal: pid, hash
+        params.update({
+            key: value
+            for key, value in kwargs.items()
+            if key in ('action', 'token', 'access_token', 'auth_signup_token',
+                       'auth_login', 'pid', 'hash')
+        })
+        if link_type == 'controller':
+            params.pop('model')
+        elif link_type not in ['view', 'assign', 'follow', 'unfollow']:
+            return {}
+        return params
 
     # ------------------------------------------------------
     # FOLLOWERS API
@@ -3410,7 +3469,9 @@ class MailThread(models.AbstractModel):
                 'display_name': follower.display_name,
                 'email': follower.email,
                 'is_active': follower.is_active,
-                'partner': follower.partner_id.mail_partner_format()[follower.partner_id],
+                # sudo: res.partner - can read partners of found followers, in particular allows
+                # by-passing multi-company ACL for portal partners
+                'partner': follower.partner_id.sudo().mail_partner_format()[follower.partner_id],
             } for follower in self.message_follower_ids]
         if 'suggestedRecipients' in request_list:
             res['suggestedRecipients'] = self._message_get_suggested_recipients()[self.id]

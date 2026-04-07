@@ -641,6 +641,9 @@ class AccountJournal(models.Model):
                         'company_id': company.id,
                         'partner_id': company.partner_id.id,
                     })
+            # Since 'default_account_id' isn't visible on MISC (general) journals, any existing value should be cleared to prevent side effects.
+            if vals.get('type') == 'general':
+                vals['default_account_id'] = False
             if 'currency_id' in vals:
                 if journal.bank_account_id:
                     journal.bank_account_id.currency_id = vals['currency_id']
@@ -796,11 +799,6 @@ class AccountJournal(models.Model):
                 name = "%s (%s)" % (name, journal.currency_id.name)
             res += [(journal.id, name)]
         return res
-
-    def action_archive(self):
-        if self.env['account.payment.method.line'].search_count([('journal_id', '=', self.id)], limit=1):
-            raise ValidationError(_("This journal is associated with a payment method. You cannot archive it"))
-        return super().action_archive()
 
     def action_configure_bank_journal(self):
         """ This function is called by the "configure" button of bank journals,

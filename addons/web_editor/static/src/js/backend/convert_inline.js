@@ -36,7 +36,8 @@ export const TABLE_ATTRIBUTES = {
 };
 // Cancel tables default styles.
 export const TABLE_STYLES = {
-    'border-collapse': 'collapse',
+    'border-collapse': 'separate',
+    'border-spacing': '0px',
     'text-align': 'inherit',
     'font-size': 'unset',
     'line-height': 'inherit',
@@ -171,7 +172,7 @@ function bootstrapToTable(editable) {
         masonryRow.parentElement.style.setProperty('height', '100%');
     }
 
-    const containers = editable.querySelectorAll('.container, .container-fluid, .o_fake_table');
+    const containers = editable.querySelectorAll('.container, .container-fluid, .o_fake_table, .o_text_columns');
     // Capture the widths of the containers before manipulating it.
     for (const container of containers) {
         container.setAttribute('o-temp-width', _getWidth(container));
@@ -267,8 +268,10 @@ function bootstrapToTable(editable) {
                 } else if (gridIndex + columnSize === 12) {
                     // Finish the row.
                     currentCol = grid[gridIndex];
-                    _applyColspan(currentCol, columnSize, containerWidth);
-                    currentRow.append(...grid.filter(td => td.getAttribute('colspan')));
+                    if (currentCol) {
+                        _applyColspan(currentCol, columnSize, containerWidth);
+                    }
+                    currentRow.append(...grid.filter(td => td.getAttribute('colspan')));    
                     if (columnIndex !== bootstrapColumns.length - 1) {
                         // The row was filled before we handled all of its
                         // columns. Create a new one and start again from there.
@@ -281,7 +284,9 @@ function bootstrapToTable(editable) {
                 } else {
                     // Fill the row with what was in the grid before it
                     // overflowed.
-                    _applyColspan(grid[gridIndex], 12 - gridIndex, containerWidth);
+                    if (grid[gridIndex]) {
+                        _applyColspan(grid[gridIndex], 12 - gridIndex, containerWidth);
+                    }
                     currentRow.append(...grid.filter(td => td.getAttribute('colspan')));
                     // Start a new row that starts with the current col.
                     const previousRow = currentRow;
@@ -365,6 +370,7 @@ function cardToTable(editable) {
                 col.append(child);
             }
             const subTable = _createTable();
+            subTable.style.height = '100%';
             const superRow = document.createElement('tr');
             const superCol = document.createElement('td');
             row.append(col);
@@ -443,6 +449,8 @@ function classToStyle($editable, cssRules) {
                 style = `${key}:${value};${style}`;
             }
         };
+
+        style = correctBorderAttributes(style);
         if (_.isEmpty(style)) {
             writes.push(() => { node.removeAttribute('style'); });
         } else {
@@ -670,6 +678,15 @@ function enforceImagesResponsivity(editable) {
         image.removeAttribute('height');
     }
 }
+
+function fixSNumbersSnippet(editable) {
+    [...editable.querySelectorAll(".s_numbers")].forEach((numbersSnippet) => {
+        const row = numbersSnippet.querySelector(".container > .row");
+        if (row) {
+            row.classList.add("d-flex", "align-items-stretch");
+        }
+    });
+}
 /**
  * Convert the contents of an editable area (as a JQuery element) into content
  * that is widely compatible with email clients. If no CSS Rules are given, they
@@ -716,7 +733,7 @@ async function toInline($editable, cssRules, $iframe) {
     for (const imgTop of editable.querySelectorAll('.card-img-top')) {
         imgTop.style.setProperty('height', _getHeight(imgTop) + 'px');
     }
-
+    fixSNumbersSnippet(editable);
     attachmentThumbnailToLinkImg($editable);
     fontToImg($editable);
     await svgToPng($editable);
@@ -1400,7 +1417,14 @@ function _createColumnGrid() {
  * @returns {Comment}
  */
 function _createMso(content='') {
-    return document.createComment(`[if mso]>${content}<![endif]`)
+    // We remove comments having opposite condition from the one we will insert
+    // We remove comment tags having the same condition
+    const showRegex = /<!--\[if\s+mso\]>([\s\S]*?)<!\[endif\]-->/g;
+    const hideRegex = /<!--\[if\s+!mso\]>([\s\S]*?)<!\[endif\]-->/g;
+    let contentToInsert = content;
+    contentToInsert = contentToInsert.replace(showRegex, (matchedContent, group) => group);
+    contentToInsert = contentToInsert.replace(hideRegex, "");
+    return document.createComment(`[if mso]>${contentToInsert}<![endif]`);
 }
 /**
  * Return a table element, with its default styles and attributes, as well as
@@ -1702,6 +1726,61 @@ function _normalizeStyle(style) {
     return wrapper;
 }
 
+/**
+ * Corrects the `border-style` attribute in the provided inline style string.
+ * This is specifically for Outlook, which displays borders even when their widths are set to 0px.
+ * If all border widths are 0, the function updates `border-style` to `none`.
+ *
+ * @param {string} style - The inline style string to correct.
+ * @returns {string} - The corrected inline style string.
+ */
+function correctBorderAttributes(style) {
+    const stylesObject = style
+        .replace(/\s+/g, " ")
+        .split(";")
+        .reduce((styles, styleString) => {
+            const [attribute, value] = styleString.split(":").map((str) => str.trim());
+            if (attribute) {
+                styles[attribute] = value;
+            }
+            return styles;
+        }, {});
+
+    const BORDER_WIDTHS_ATTRIBUTES = [
+        "border-bottom-width",
+        "border-left-width",
+        "border-right-width",
+        "border-top-width",
+    ];
+
+    const isBorderStyleApplied = BORDER_WIDTHS_ATTRIBUTES.some(
+        (attribute) => attribute in stylesObject
+    );
+
+    if (!isBorderStyleApplied) {
+        return style;
+    }
+
+    const totalBorderWidth = BORDER_WIDTHS_ATTRIBUTES.reduce((totalWidth, attribute) => {
+        const widthValue = stylesObject[attribute] || "0px";
+        const numericWidth = parseFloat(widthValue.replace("px", "")) || 0;
+        return totalWidth + numericWidth;
+    }, 0);
+
+    if (totalBorderWidth === 0) {
+        let correctedStyle = style.trim();
+        if (correctedStyle.slice(-1) != ';') {
+            correctedStyle += ';';
+        }
+        correctedStyle = correctedStyle.replace(
+            /(;|^)\s*border-style\s*:[^;]*(;|$)|$/, '$1border-style:none$2'
+        );
+        return correctedStyle;
+    }
+
+    return style;
+}
+
 export default {
     addTables: addTables,
     attachmentThumbnailToLinkImg: attachmentThumbnailToLinkImg,
@@ -1715,4 +1794,5 @@ export default {
     normalizeColors: normalizeColors,
     normalizeRem: normalizeRem,
     toInline: toInline,
+    createMso: _createMso,
 };

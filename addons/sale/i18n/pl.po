@@ -29,7 +29,7 @@
 # Dariusz Żbikowski <darek@krokus.com.pl>, 2022
 # Zdzisław Krajewski <zdzichucb@gmail.com>, 2022
 # Maksym <ms@myodoo.pl>, 2022
-# Piotr Strębski <strebski@gmail.com>, 2022
+# Piotr Strebski <strebski@gmail.com>, 2022
 # Łukasz Grzenkowicz <lukasz.grzenkowicz@gmail.com>, 2022
 # Grażyna Grzelak <grazyna.grzelak@openglobe.pl>, 2023
 # Grzegorz Grzelak <grzegorz.grzelak@openglobe.pl>, 2023
@@ -40,14 +40,16 @@
 # Larissa Manderfeld, 2024
 # Damian Ratus, 2024
 # Paweł Wodyński <pw@myodoo.pl>, 2024
+# Marta Wacławek, 2024
+# Wil Odoo, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:32+0000\n"
+"POT-Creation-Date: 2025-06-13 18:36+0000\n"
 "PO-Revision-Date: 2022-09-22 05:54+0000\n"
-"Last-Translator: Paweł Wodyński <pw@myodoo.pl>, 2024\n"
+"Last-Translator: Wil Odoo, 2025\n"
 "Language-Team: Polish (https://app.transifex.com/odoo/teams/41243/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1380,8 +1382,10 @@ msgstr "Uzupełnij dane Twojej firmy"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with DHL"
-msgstr "Oblicz koszty wysyłki i prześlij kurierem DHL"
+msgid ""
+"Compute shipping costs and ship with DHL<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1390,8 +1394,10 @@ msgstr "Oblicz koszty wysyłki i prześlij kurierem Easypost"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with FedEx"
-msgstr "Oblicz koszty wysyłki i prześlij kurierem FedEx"
+msgid ""
+"Compute shipping costs and ship with FedEx<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1400,13 +1406,17 @@ msgstr "Oblicz koszty wysyłki oraz wyślij za pomocą Sendcloud"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with UPS"
-msgstr "Oblicz koszty wysyłki i prześlij kurierem UPS"
+msgid ""
+"Compute shipping costs and ship with UPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with USPS"
-msgstr "Oblicz koszty wysyłki i prześlij kurierem USPS"
+msgid ""
+"Compute shipping costs and ship with USPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1649,6 +1659,11 @@ msgstr "Dostosuj wygląd swoich ofert."
 #, python-format
 msgid "Customize your quotes and orders."
 msgstr "Dostosuj ofertę i zamówienia"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid "DHL Connector"
+msgstr ""
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_dhl
@@ -2001,6 +2016,7 @@ msgstr "Dodatkowa pozycja z %s"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_fedex
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "FedEx Connector"
 msgstr "Łącznik FedEx"
 
@@ -4143,6 +4159,11 @@ msgid "Tags"
 msgstr "Tagi"
 
 #. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
+msgid "Tax 15%"
+msgstr "Podatek 15%"
+
+#. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__tax_country_id
 msgid "Tax Country"
 msgstr "Kraj podatku"
@@ -4294,12 +4315,12 @@ msgstr "Ilość do zafakturowania z góry, wyłączając podatki"
 #: code:addons/sale/models/product_template.py:0
 #, python-format
 msgid ""
-"The following products cannot be restricted to the company %s because they have already been used in quotations or sales orders in another company:\n"
-"%s\n"
+"The following products cannot be restricted to the company %(company)s because they have already been used in quotations or sales orders in another company:\n"
+"%(used_products)s\n"
 "You can archive these products and recreate them with your company restriction instead, or leave them as shared product."
 msgstr ""
-"Następujące produkty nie mogą być zastrzeżone dla firmy %sz powodu wcześniejszego użycia w ofertach lub zamówieniach sprzedaży dla innej firmy.\n"
-"%s Możesz zarchiwizować te produkty i odtworzyć je z ograniczeniem firmowym lub pozostawić je jako produkt współdzielony."
+"Następujące produkty nie mogą być zastrzeżone dla firmy %(company)sz powodu wcześniejszego użycia w ofertach lub zamówieniach sprzedaży dla innej firmy.\n"
+"%(used_products)s Możesz zarchiwizować te produkty i odtworzyć je z ograniczeniem firmowym lub pozostawić je jako produkt współdzielony."
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_res_config_settings__automatic_invoice
@@ -4441,7 +4462,7 @@ msgid ""
 msgstr ""
 "Jest to data dostawy obiecana klientowi. Jeśli zostanie ustawiona, "
 "zamówienie dostawy zostanie zaplanowane na podstawie tej daty, a nie czasu "
-"realizacji sygnału produktu."
+"realizacji leadu produktu."
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_account_bank_statement_line__medium_id
@@ -4633,11 +4654,13 @@ msgstr "Typ wyjątku działania na rekordzie."
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_ups
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "UPS Connector"
 msgstr "Łącznik UPS"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_usps
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "USPS Connector"
 msgstr "Łącznik USPS"
 
@@ -4767,14 +4790,6 @@ msgstr "Wariant Grid Entry"
 
 #. module: sale
 #. odoo-python
-#: code:addons/sale/models/sale_order.py:0
-#, python-format
-msgid "View Order"
-msgstr "Zobacz zamówienie"
-
-#. module: sale
-#. odoo-python
-#: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #, python-format

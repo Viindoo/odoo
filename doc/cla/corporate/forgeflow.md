@@ -21,3 +21,5 @@ Hector Villarreal hector.villarreal@forgeflow.com https://github.com/HviorForgeF
 Bernat Puig bernat.puig@forgeflow.com https://github.com/BernatPForgeFlow
 Joan Sisquella joan.sisquella@forgeflow.com https://github.com/JoanSForgeFlow
 Laura Cazorla laura.cazorla@forgeflow.com https://github.com/LauraCForgeFlow
+Arnau Cruz arnau.cruz@forgeflow.com https://github.com/ArnauCForgeFlow
+Marina Alapont marina.alapont@forgeflow.com https://github.com/MarinaAForgeFlow

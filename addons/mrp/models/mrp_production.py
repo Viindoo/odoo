@@ -263,8 +263,13 @@ class MrpProduction(models.Model):
 
     @api.depends('procurement_group_id.mrp_production_ids')
     def _compute_mrp_production_backorder(self):
+        data = self._read_group([('procurement_group_id', 'in', self.procurement_group_id.ids)], ['procurement_group_id'], ['procurement_group_id'])
+        count_data = {
+            item['procurement_group_id'][0]: item['procurement_group_id_count']
+            for item in data
+        }
         for production in self:
-            production.mrp_production_backorder_count = len(production.procurement_group_id.mrp_production_ids)
+            production.mrp_production_backorder_count = count_data.get(production.procurement_group_id.id, 0)
 
     @api.depends('company_id', 'bom_id')
     def _compute_picking_type_id(self):
@@ -731,10 +736,16 @@ class MrpProduction(models.Model):
                 if production.date_deadline:
                     updated_values['date_deadline'] = production.date_deadline
                 if 'date' in updated_values or 'date_deadline' in updated_values:
-                    production.move_finished_ids = [
+                    vals_to_update = [
                         Command.update(m.id, updated_values) for m in production.move_finished_ids
                         if m.state != 'done'
+                        and (
+                            ('date' in updated_values and m.date != updated_values['date'])
+                            or ('date_deadline' in updated_values and m.date_deadline != updated_values['date_deadline'])
+                        )
                     ]
+                    if vals_to_update:
+                        production.move_finished_ids = vals_to_update
                 continue
             # delete to remove existing moves from database and clear to remove new records
             production.move_finished_ids = [Command.delete(m) for m in production.move_finished_ids.ids]
@@ -923,9 +934,9 @@ class MrpProduction(models.Model):
             action['domain'] = [('id', 'in', self.picking_ids.ids)]
         elif self.picking_ids:
             action['res_id'] = self.picking_ids.id
-            action['views'] = [(self.env.ref('stock.view_picking_form').id, 'form')]
-            if 'views' in action:
-                action['views'] += [(state, view) for state, view in action['views'] if view != 'form']
+            picking_form = self.env.ref('stock.view_picking_form', False)
+            picking_form_view = [(picking_form and picking_form.id or False, 'form')]
+            action['views'] = picking_form_view + [(state, view) for state, view in action.get('views', []) if view != 'form']
         action['context'] = dict(self._context, default_origin=self.name)
         return action
 
@@ -1195,7 +1206,9 @@ class MrpProduction(models.Model):
         self.ensure_one()
         procurement_moves = self.procurement_group_id.stock_move_ids
         child_moves = procurement_moves.move_orig_ids
-        return (procurement_moves | child_moves).created_production_id.procurement_group_id.mrp_production_ids.filtered(lambda p: p.origin != self.origin) - self
+        return ((procurement_moves | child_moves).created_production_id.procurement_group_id.mrp_production_ids\
+                | child_moves.production_id)\
+                .filtered(lambda p: p.origin != self.origin) - self
 
     def _get_sources(self):
         self.ensure_one()
@@ -1400,7 +1413,7 @@ class MrpProduction(models.Model):
         for workorder in final_workorders:
             workorder._plan_workorder(replan)
 
-        workorders = self.workorder_ids.filtered(lambda w: w.state not in ['done', 'cancel'])
+        workorders = self.workorder_ids.filtered(lambda w: w.state not in ['done', 'cancel'] and w.leave_id)
         if not workorders:
             return
 
@@ -1843,7 +1856,7 @@ class MrpProduction(models.Model):
             # Adapt quantities produced
             for workorder in production.workorder_ids:
                 initial_workorder_remaining_qty.append(max(initial_qty - workorder.qty_reported_from_previous_wo - workorder.qty_produced, 0))
-                if workorder.production_id.id not in self.env.context.get('mo_ids_to_backorder', []):
+                if workorder.production_id.id not in (self.env.context.get('mo_ids_to_backorder') or []):
                     workorder.qty_produced = min(workorder.qty_produced, workorder.qty_production)
             workorders_len = len(production.workorder_ids)
             for index, workorder in enumerate(bo.workorder_ids):

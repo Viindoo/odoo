@@ -403,6 +403,10 @@ class HrExpense(models.Model):
         if any(attachment.res_id or attachment.res_model != 'hr.expense' for attachment in attachments):
             raise UserError(_("Invalid attachments!"))
 
+        employee = self.env.user.employee_id
+        if not employee or employee.company_id != self.env.company:
+            raise ValidationError(_("The current user has no related employee, or the related employee does not belong to this company."))
+
         product = self.env['product.product'].search([('can_be_expensed', '=', True)])
         if product:
             product = product.filtered(lambda p: p.default_code == "EXP_GEN")[:1] or product[0]
@@ -445,7 +449,7 @@ class HrExpense(models.Model):
                 raise UserError(_('You cannot delete a posted or approved expense.'))
 
     def write(self, vals):
-        if 'state' in vals and (not self.user_has_groups('hr_expense.group_hr_expense_manager') and vals['state'] != 'submit' and
+        if 'state' in vals and (not self.user_has_groups('hr_expense.group_hr_expense_manager') and vals['state'] not in ('draft', 'reported') and
         any(expense.state == 'draft' for expense in self)):
             raise UserError(_("You don't have the rights to bypass the validation process of this expense."))
         expense_to_previous_sheet = {}
@@ -1160,7 +1164,7 @@ class HrExpenseSheet(models.Model):
     def write(self, vals):
         if 'state' in vals:
             # Avoid user with write access on expense sheet in draft state to bypass the validation process
-            if not self.user_has_groups('hr_expense.group_hr_expense_manager') and self.state == 'draft' and vals['state'] != 'submit':
+            if vals['state'] != 'submit' and not self.user_has_groups('hr_expense.group_hr_expense_manager') and any(e.state == 'draft' for e in self):
                 raise UserError(_("You don't have the rights to bypass the validation process of this expense report."))
             elif vals['state'] == 'approve':
                 self._check_can_approve()
@@ -1212,8 +1216,11 @@ class HrExpenseSheet(models.Model):
         if any(sheet.state != 'approve' for sheet in self):
             raise UserError(_("You can only generate accounting entry for approved expense(s)."))
 
-        if any(not sheet.journal_id for sheet in self):
-            raise UserError(_("Specify expense journal to generate accounting entries."))
+        if any(not sheet.journal_id for sheet in self if sheet.payment_mode == 'own_account'):
+            raise UserError(_("Please specify an expense journal in order to generate accounting entries."))
+
+        if any(not sheet.bank_journal_id for sheet in self if sheet.payment_mode == 'company_account'):
+            raise UserError(_("Please specify a bank journal in order to generate accounting entries."))
 
         if not self.employee_id.sudo().address_home_id:
             raise UserError(_("The private address of the employee is required to post the expense report. Please add it on the employee form."))
@@ -1330,13 +1337,17 @@ class HrExpenseSheet(models.Model):
 
     def _prepare_bill_vals(self):
         self.ensure_one()
+        move_vals = self._prepare_move_vals()
+        if self.employee_id.sudo().bank_account_id:
+            move_vals['partner_bank_id'] = self.employee_id.sudo().bank_account_id.id
         return {
-            **self._prepare_move_vals(),
+            **move_vals,
             # force the name to the default value, to avoid an eventual 'default_name' in the context
             # to set it to '' which cause no number to be given to the account.move when posted.
             'journal_id': self.journal_id.id,
             'move_type': 'in_invoice',
-            'partner_id': self.employee_id.sudo().address_home_id.commercial_partner_id.id,
+            'partner_id': self.employee_id.sudo().address_home_id.id,
+            'commercial_partner_id': self.employee_id.user_partner_id.id,
             'currency_id': self.currency_id.id,
             'line_ids':[Command.create(expense._prepare_move_line_vals()) for expense in self.expense_line_ids],
         }
@@ -1544,7 +1555,7 @@ class HrExpenseSheet(models.Model):
             'context': {
                 'active_model': 'account.move',
                 'active_ids': self.account_move_id.ids,
-                'default_partner_bank_id': self.employee_id.sudo().bank_account_id.id if len(self.employee_id.sudo().bank_account_id.ids) <= 1 else None,
+                'default_partner_bank_id': self.account_move_id.partner_bank_id.id,
             },
             'target': 'new',
             'type': 'ir.actions.act_window',

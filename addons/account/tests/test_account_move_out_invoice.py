@@ -1794,6 +1794,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
         bank1 = self.env['res.partner.bank'].create({
             'acc_number': 'BE43798822936101',
             'partner_id': self.partner_a.id,
+            "allow_out_payment": True,
         })
 
         move_reversal = self.env['account.move.reversal'].with_context(active_model="account.move", active_ids=self.invoice.ids).create({
@@ -2833,6 +2834,162 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             {'state': 'posted', 'date': fields.Date.from_string('2019-01-16')},
         ])
 
+    @freeze_time("2017-01-01")
+    def test_out_invoice_change_to_future_period_accrual_1(self):
+        move = self.env['account.move'].create({
+            'move_type': 'out_invoice',
+            'date': '2017-01-01',
+            'partner_id': self.partner_a.id,
+            'invoice_date': fields.Date.from_string('2017-01-01'),
+            'currency_id': self.currency_data['currency'].id,
+            'invoice_payment_term_id': self.pay_terms_a.id,
+            'invoice_line_ids': [
+                (0, None, {
+                    'name': self.product_line_vals_1['name'],
+                    'product_id': self.product_line_vals_1['product_id'],
+                    'product_uom_id': self.product_line_vals_1['product_uom_id'],
+                    'quantity': self.product_line_vals_1['quantity'],
+                    'price_unit': self.product_line_vals_1['price_unit'],
+                    'tax_ids': self.product_line_vals_1['tax_ids'],
+                }),
+                (0, None, {
+                    'name': self.product_line_vals_2['name'],
+                    'product_id': self.product_line_vals_2['product_id'],
+                    'product_uom_id': self.product_line_vals_2['product_uom_id'],
+                    'quantity': self.product_line_vals_2['quantity'],
+                    'price_unit': self.product_line_vals_2['price_unit'],
+                    'tax_ids': self.product_line_vals_2['tax_ids'],
+                }),
+            ]
+        })
+        move.action_post()
+
+        wizard = self.env['account.automatic.entry.wizard']\
+            .with_context(active_model='account.move.line', active_ids=move.invoice_line_ids.ids).create({
+            'action': 'change_period',
+            'date': '2018-01-01',
+            'percentage': 60,
+            'journal_id': self.company_data['default_journal_misc'].id,
+            'expense_accrual_account': self.env['account.account'].create({
+                'name': 'Accrual Expense Account',
+                'code': '234567',
+                'account_type': 'expense',
+                'reconcile': True,
+            }).id,
+            'revenue_accrual_account': self.env['account.account'].create({
+                'name': 'Accrual Revenue Account',
+                'code': '765432',
+                'account_type': 'expense',
+                'reconcile': True,
+            }).id,
+        })
+        wizard_res = wizard.do_action()
+
+        self.assertInvoiceValues(move, [
+            {
+                **self.product_line_vals_1,
+                'currency_id': self.currency_data['currency'].id,
+                'amount_currency': -1000.0,
+                'debit': 0.0,
+                'credit': 500.0,
+            },
+            {
+                **self.product_line_vals_2,
+                'currency_id': self.currency_data['currency'].id,
+                'amount_currency': -200.0,
+                'debit': 0.0,
+                'credit': 100.0,
+            },
+            {
+                **self.tax_line_vals_1,
+                'currency_id': self.currency_data['currency'].id,
+                'amount_currency': -180.0,
+                'debit': 0.0,
+                'credit': 90.0,
+            },
+            {
+                **self.tax_line_vals_2,
+                'currency_id': self.currency_data['currency'].id,
+                'amount_currency': -30.0,
+                'debit': 0.0,
+                'credit': 15.0,
+            },
+            {
+                **self.term_line_vals_1,
+                'currency_id': self.currency_data['currency'].id,
+                'name': 'INV/2017/00001',
+                'amount_currency': 1410.0,
+                'debit': 705.0,
+                'credit': 0.0,
+                'date_maturity': fields.Date.from_string('2017-01-01'),
+            },
+        ], {
+            **self.move_vals,
+            'currency_id': self.currency_data['currency'].id,
+            'date': fields.Date.from_string('2017-01-01'),
+            'payment_reference': 'INV/2017/00001',
+        })
+
+        accrual_lines = self.env['account.move'].browse(wizard_res['domain'][0][2]).line_ids.sorted('date')
+        self.assertRecordValues(accrual_lines, [
+            {
+                'amount_currency': 600.0,
+                'debit': 300.0,
+                'credit': 0.0,
+                'account_id': self.product_line_vals_1['account_id'],
+                'reconciled': False
+            },
+            {
+                'amount_currency': -600.0,
+                'debit': 0.0,
+                'credit': 300.0,
+                'account_id': wizard.revenue_accrual_account.id,
+                'reconciled': False
+            },
+            {
+                'amount_currency': 120.0,
+                'debit': 60.0,
+                'credit': 0.0,
+                'account_id': self.product_line_vals_2['account_id'],
+                'reconciled': False
+            },
+            {
+                'amount_currency': -120.0,
+                'debit': 0.0,
+                'credit': 60.0,
+                'account_id': wizard.revenue_accrual_account.id,
+                'reconciled': False
+            },
+            {
+                'amount_currency': -600.0,
+                'debit': 0.0,
+                'credit': 300.0,
+                'account_id': self.product_line_vals_1['account_id'],
+                'reconciled': False
+            },
+            {
+                'amount_currency': 600.0,
+                'debit': 300.0,
+                'credit': 0.0,
+                'account_id': wizard.revenue_accrual_account.id,
+                'reconciled': False
+            },
+            {
+                'amount_currency': -120.0,
+                'debit': 0.0,
+                'credit': 60.0,
+                'account_id': self.product_line_vals_2['account_id'],
+                'reconciled': False
+            },
+            {
+                'amount_currency': 120.0,
+                'debit': 60.0,
+                'credit': 0.0,
+                'account_id': wizard.revenue_accrual_account.id,
+                'reconciled': False
+            },
+        ])
+
     def test_out_invoice_multi_date_change_period_accrual(self):
         dates = ['2017-01-01', '2017-01-01', '2017-02-01']
         values = []
@@ -3745,6 +3902,32 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
         move.journal_id = second_journal
         self.assertEqual(move.currency_id, self.currency_data['currency'])
 
+    def test_invoice_currency_mismatch_account_currency(self):
+        """
+        Test that an invoice cannot be posted if the invoice currency does not match the currency on the receivable/payable account.
+        """
+        # Create a receivable account with a specific currency (EUR)
+        receivable_account = self.company_data['default_account_receivable'].copy()
+        receivable_account.currency_id = self.currency_data['currency']  # Gold
+
+        move = self.env['account.move'].create({
+            'move_type': 'out_invoice',
+            'partner_id': self.partner_a.id,
+            'currency_id': self.currency_data['currency'].id,  # EUR
+            'invoice_line_ids': [
+                Command.create({
+                    'product_id': self.product_a.id,
+                    'quantity': 1.0,
+                    'account_id': receivable_account.id,
+                    'tax_ids': [],
+                })
+            ]
+        })
+
+        # Try to change the currency to one that conflicts with account's fixed currency
+        with self.assertRaisesRegex(UserError, "The account selected on your journal entry forces to provide a secondary currency"):
+            move.currency_id = self.company_data['currency']
+
     @freeze_time('2023-01-01')
     def test_change_first_journal_move_sequence(self):
         """Invoice name should not be reset when posting the invoice"""
@@ -3998,6 +4181,30 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
         for line in move.line_ids:
             self.assertEqual(line.date, move.date)
 
+    def test_before_initial_rate(self):
+        def invoice():
+            return self.init_invoice(
+                move_type='out_invoice',
+                invoice_date='1900-01-01',
+                partner=self.partner_a,
+                amounts=[1000.0],
+                taxes=[],
+                currency=currency,
+            )
+
+        currency = self.currency_data['currency']
+        self.assertRecordValues(invoice(), [{
+            'amount_total': 1000.0,
+            'amount_total_signed': 1000.0,
+        }])
+        currency.rate_ids[-1].unlink()  # the setup creates a rate of 1 far in the past
+        self.assertRecordValues(invoice(), [{
+            'amount_total': 1000.0,
+            'amount_total_signed': 333.33,
+        }])
+
+
+
     def test_on_quick_encoding_non_accounting_lines(self):
         """ Ensure that quick encoding values are only applied to accounting lines) """
 
@@ -4009,3 +4216,68 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
         with move_form.invoice_line_ids.new() as invoice_line_form:
             invoice_line_form.display_type = 'line_section'
         move_form.save()
+
+    def test_out_invoice_partner_context(self):
+        """No line should take the partner of the context instead of the one specified in the create vals."""
+        move = self.env['account.move'].with_context(default_partner_id=self.partner_b.id).create({
+            'move_type': 'out_invoice',
+            'partner_id': self.partner_a.id,
+            'invoice_date': '2017-01-01',
+            'invoice_line_ids': [Command.create({
+                'price_unit': 1000.0,
+            })],
+        })
+        self.assertEqual(move.line_ids.partner_id, self.partner_a)
+
+    def test_out_invoice_bank_partner(self):
+        """ Check the bank partner is recomputed on invoice company change on new invoice """
+        company_1 = self.company_data['company']
+        company_2 = self.company_data_2['company']
+        bank = self.env["res.partner.bank"].create({
+            "bank_name": "FAKE",
+            "acc_number": "1234567890",
+            "partner_id": company_1.partner_id.id,
+            "allow_out_payment": True,
+        })
+        bank_2 = self.env["res.partner.bank"].create({
+            "bank_name": "FAKE 2",
+            "acc_number": "1234567890",
+            "partner_id": company_2.partner_id.id,
+            "allow_out_payment": True,
+        })
+        invoice_new = self.env["account.move"].with_context(default_move_type="out_invoice").new({
+            "company_id": company_1.id,
+            "partner_id": self.partner_a.id,
+        })
+        self.assertEqual(
+            company_1.partner_id,
+            invoice_new.bank_partner_id
+        )
+        self.assertEqual(
+            bank,
+            invoice_new.partner_bank_id
+        )
+        invoice_new.company_id = company_2
+        self.assertEqual(
+            company_2.partner_id,
+            invoice_new.bank_partner_id
+        )
+        self.assertEqual(
+            bank_2,
+            invoice_new.partner_bank_id
+        )
+
+    def test_narration_preserved_when_use_invoice_terms_disabled(self):
+        """ Ensure narration is preserved when partner changes and invoice terms are disabled. """
+        self.env['ir.config_parameter'].sudo().set_param('account.use_invoice_terms', False)
+        invoice = self.invoice.copy({
+            'narration': 'Manually written terms by user',
+        })
+        invoice.write({
+            'partner_id': self.partner_b.id,
+        })
+        self.assertEqual(
+            invoice.narration,
+            "<p>Manually written terms by user</p>",
+            "Narration should be preserved after partner change when invoice terms are disabled"
+        )

@@ -118,9 +118,10 @@ odoo.define('pos_sale.tour', function (require) {
     ProductScreen.do.confirmOpeningPopup();
     ProductScreen.do.clickQuotationButton();
     ProductScreen.do.selectFirstOrder();
-    ProductScreen.check.totalAmountIs(32.2); // 3.5 * 8 * 1.15
-    ProductScreen.do.clickOrderline("Product A", 0.5);
+    ProductScreen.check.totalAmountIs(28.98); // 3.5 * 8 * 1.15 * 90%
+    ProductScreen.do.clickOrderline("Product A", '0.5');
     ProductScreen.check.checkOrderlinesNumber(4);
+    ProductScreen.check.selectedOrderlineHas('Product A', '0.5', '4.14');
 
     Tour.register('PosSettleOrderNotGroupable', { test: true, url: '/pos/ui' }, getSteps());
 
@@ -170,4 +171,31 @@ odoo.define('pos_sale.tour', function (require) {
     ProductScreen.check.selectedOrderlineHas('Test service product', '1.00', '50.00');
 
     Tour.register('PosSettleDraftOrder', { test: true, url: '/pos/ui' }, getSteps());
+
+    startSteps();
+
+    ProductScreen.do.confirmOpeningPopup();
+    ProductScreen.do.clickQuotationButton();
+    ProductScreen.do.selectFirstOrder();
+    ProductScreen.do.clickPayButton();
+    PaymentScreen.do.clickShipLaterButton()
+    PaymentScreen.do.clickPaymentMethod('Bank');
+    PaymentScreen.check.remainingIs('0.0');
+    PaymentScreen.do.clickValidate();
+    ReceiptScreen.check.isShown();
+
+    Tour.register('PosSettleOrderShipLater', { test: true, url: '/pos/ui' }, getSteps());
+
+    startSteps();
+
+    ProductScreen.do.confirmOpeningPopup();
+    ProductScreen.do.clickQuotationButton();
+    ProductScreen.do.downPaymentFirstOrder();
+    ProductScreen.check.selectedOrderlineHas('Down Payment', '1', '10.00');
+    ProductScreen.do.clickPayButton();
+    PaymentScreen.do.clickPaymentMethod('Cash');
+    PaymentScreen.do.clickValidate();
+    ReceiptScreen.do.clickNextOrder();
+
+    Tour.register('PoSDownPaymentAmount', { test: true, url: '/pos/ui' }, getSteps());
 });

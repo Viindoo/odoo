@@ -12,15 +12,16 @@
 # Martin Trigaux, 2023
 # Ryoko Tsuda <ryoko@quartile.co>, 2023
 # Tatsuki Kanda, 2023
-# Junko Augias, 2024
+# Wil Odoo, 2025
+# Junko Augias, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Junko Augias, 2024\n"
+"Last-Translator: Junko Augias, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,7 +72,7 @@ msgstr "\"%s\"はマイクへのアクセスが必要です。"
 #: code:addons/mail/static/src/models/channel_member_list_category_view.js:0
 #, python-format
 msgid "%(categoryText)s - %(memberCount)s"
-msgstr ""
+msgstr "%(categoryText)s - %(memberCount)s"
 
 #. module: mail
 #. odoo-python
@@ -961,7 +962,7 @@ msgstr "ATM sign"
 #: code:addons/mail/static/src/components/call_invite_request_popup/call_invite_request_popup.xml:0
 #, python-format
 msgid "Accept"
-msgstr "受理"
+msgstr "参加"
 
 #. module: mail
 #. odoo-python
@@ -1654,7 +1655,7 @@ msgstr "オーストラリア"
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__mail_alias__alias_contact__partners
 msgid "Authenticated Partners"
-msgstr "許可された取引先"
+msgstr "認証済み取引先"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_compose_message__author_id
@@ -1707,9 +1708,22 @@ msgid "Auto subscription"
 msgstr "自動サブスクリプション"
 
 #. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__mail_compose_message__message_type__auto_comment
+#: model:ir.model.fields.selection,name:mail.selection__mail_message__message_type__auto_comment
+msgid "Automated Targeted Notification"
+msgstr "自動ターゲット通知"
+
+#. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity__automated
 msgid "Automated activity"
 msgstr "自動化されたアクティビティ"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/models/message.js:0
+#, python-format
+msgid "Automated message"
+msgstr "自動メッセージ"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_activity_type__triggered_next_type_id
@@ -2010,7 +2024,7 @@ msgstr "再送可能"
 #: model:ir.model.fields,field_description:mail.field_mail_activity__can_write
 #: model:ir.model.fields,field_description:mail.field_mail_template__can_write
 msgid "Can Write"
-msgstr "書ける"
+msgstr "書込可"
 
 #. module: mail
 #. odoo-python
@@ -2463,7 +2477,7 @@ msgstr "独自の電子メールサーバーを構成する"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_blacklist_remove_view_form
 msgid "Confirm"
-msgstr "確認"
+msgstr "確定"
 
 #. module: mail
 #. odoo-javascript
@@ -2472,7 +2486,7 @@ msgstr "確認"
 #: code:addons/mail/static/src/components/link_preview_delete_confirm_view/link_preview_delete_confirm_view.xml:0
 #, python-format
 msgid "Confirmation"
-msgstr "確認"
+msgstr "削除の確認"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__fetchmail_server__state__done
@@ -3198,7 +3212,7 @@ msgstr "完了して次を起動"
 #: model_terms:ir.ui.view,arch_db:mail.mail_activity_view_form_popup
 #, python-format
 msgid "Done & Schedule Next"
-msgstr "完了 & 次をスケジュール"
+msgstr "完了して次をスケジュール"
 
 #. module: mail
 #. odoo-javascript
@@ -3257,7 +3271,7 @@ msgstr "期日"
 #: code:addons/mail/static/src/models/activity_list_view_item.js:0
 #, python-format
 msgid "Due in %s days"
-msgstr "%sで期日"
+msgstr "期日まであと%s日"
 
 #. module: mail
 #. odoo-javascript
@@ -4452,7 +4466,7 @@ msgstr "例外的なアクティビティを示唆するアイコン"
 #: model:ir.model.fields,help:mail.field_mail_followers__res_id
 #: model:ir.model.fields,help:mail.field_mail_wizard_invite__res_id
 msgid "Id of the followed resource"
-msgstr "追従するリソースのID"
+msgstr "フォロー対象レコードのID"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_channel_rtc_session_view_form
@@ -4519,7 +4533,7 @@ msgid ""
 "the email will be send as soon as possible. Unless a timezone is specified, "
 "it is considered as being in UTC timezone."
 msgstr ""
-"設定されている場合、キューマネジャーは日付の後に電子メールを送信します。 "
+"設定されている場合、送信予約管理機能は日付の後に電子メールを送信します。 "
 "設定されていない場合、Eメールはできるだけ早く送信されます。タイムゾーンは指定されない限り、UTCタイムゾーンとみなされます。 "
 
 #. module: mail
@@ -4528,8 +4542,7 @@ msgid ""
 "If set, the queue manager will send the email after the date. If not set, "
 "the email will be send as soon as possible. You can use dynamic expression."
 msgstr ""
-"設定されている場合、キューマネジャーは日付の後に電子メールを送信します。 "
-"設定されていない場合、Eメールはできるだけ早く送信されます。ダイナミックエクスプレッションを使用可能です。 "
+"送信日時が設定されている場合、送信予約管理機能はその日時以降にEメールを送信します。設定されていない場合は、可能な限り早く送信されます。また、動的な式を使用することもできます。"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_alias__alias_bounced_content
@@ -4776,7 +4789,7 @@ msgstr "招待URL"
 #: code:addons/mail/wizard/mail_wizard_invite.py:0
 #, python-format
 msgid "Invitation to follow %(document_model)s: %(document_name)s"
-msgstr "%(document_model)sをフォローするための招待:%(document_name)s"
+msgstr "%(document_model)sへのフォロー招待:%(document_name)s"
 
 #. module: mail
 #. odoo-javascript
@@ -4826,7 +4839,7 @@ msgstr "現在のユーザかゲスト著者か"
 #: model:ir.model.fields,field_description:mail.field_mail_compose_message__is_mail_template_editor
 #: model:ir.model.fields,field_description:mail.field_mail_composer_mixin__is_mail_template_editor
 msgid "Is Editor"
-msgstr "編集者であり"
+msgstr "編集者である"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_blacklist__message_is_follower
@@ -5688,13 +5701,13 @@ msgstr "既存のmail.messageを知らせるメールが作成されました"
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_ir_mail_server__mail_template_ids
 msgid "Mail template using this mail server"
-msgstr "このメールサーバを使用するめーるテンプレート"
+msgstr "このメールサーバを使用するメールテンプレート"
 
 #. module: mail
 #: model:ir.actions.server,name:mail.ir_cron_mail_scheduler_action_ir_actions_server
 #: model:ir.cron,cron_name:mail.ir_cron_mail_scheduler_action
 msgid "Mail: Email Queue Manager"
-msgstr "メール: Eメールキューマネジャー"
+msgstr "メール: メール送信予約管理機能"
 
 #. module: mail
 #: model:ir.actions.server,name:mail.ir_cron_mail_gateway_action_ir_actions_server
@@ -6862,7 +6875,7 @@ msgstr ""
 #: code:addons/mail/models/mail_render_mixin.py:0
 #, python-format
 msgid "Only users belonging to the \"%s\" group can modify dynamic templates."
-msgstr ""
+msgstr " \"%s\" に属するユーザだけがダイナミックテンプレートを修正できます。"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__mail_channel_member__fold_state__open
@@ -6876,6 +6889,14 @@ msgstr "オープン"
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_form
 msgid "Open Document"
 msgstr "ドキュメントを開く"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#, python-format
+msgid "Open Link"
+msgstr "リンクを開く"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_alias_form
@@ -8165,7 +8186,7 @@ msgstr "活動をスケジュール"
 #: code:addons/mail/models/mail_activity.py:0
 #, python-format
 msgid "Schedule an Activity"
-msgstr "ある活動をスケジュール　"
+msgstr "活動をスケジュール　"
 
 #. module: mail
 #. odoo-javascript
@@ -8173,7 +8194,7 @@ msgstr "ある活動をスケジュール　"
 #: code:addons/mail/static/src/xml/web_kanban_activity.xml:0
 #, python-format
 msgid "Schedule an activity"
-msgstr "アクティビティをスケジュールする"
+msgstr "活動をスケジュール"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_template__scheduled_date
@@ -8184,7 +8205,7 @@ msgstr "計画日"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_message_schedule_view_form
 msgid "Scheduled Message"
-msgstr "予定されたメッセージ"
+msgstr "送信予約済メッセージ"
 
 #. module: mail
 #: model:ir.actions.act_window,name:mail.mail_message_schedule_action
@@ -8704,7 +8725,7 @@ msgstr "コール開始"
 #: code:addons/mail/static/src/components/thread_view_topbar/thread_view_topbar.xml:0
 #, python-format
 msgid "Start a Video Call"
-msgstr ""
+msgstr "ビデオコールを開始"
 
 #. module: mail
 #. odoo-javascript
@@ -9265,7 +9286,7 @@ msgstr ""
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_template_preview__scheduled_date
 msgid "The queue manager will send the email after the date"
-msgstr "キューマネージャーは、日付の後に電子メールを送信します"
+msgstr "メールは送信予約管理機能により、指定日時を過ぎると自動送信されます。"
 
 #. module: mail
 #. odoo-python
@@ -9681,7 +9702,7 @@ msgstr "トリトン"
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_resend_partner__resend
 msgid "Try Again"
-msgstr "もう一度試す"
+msgstr "再試行"
 
 #. module: mail
 #. odoo-javascript
@@ -9941,7 +9962,7 @@ msgstr "ファイルをアップロード"
 #: code:addons/mail/static/src/xml/web_kanban_activity.xml:0
 #, python-format
 msgid "Upload file"
-msgstr "ファイルをアップロードする"
+msgstr "ファイルをアップロード"
 
 #. module: mail
 #. odoo-javascript
@@ -10171,7 +10192,7 @@ msgstr "動画設定"
 #: model:ir.model,name:mail.model_ir_ui_view
 #, python-format
 msgid "View"
-msgstr "ビュー"
+msgstr "見る"
 
 #. module: mail
 #. odoo-python
@@ -10516,14 +10537,6 @@ msgid ""
 "You may attach files to this template, to be added to all emails created "
 "from this template"
 msgstr "このテンプレートにファイルを添付できます。（このテンプレートを使って作られた全てのEメールに添付）"
-
-#. module: mail
-#: code:addons/mail/models/ir_attachment.py:0
-#, python-format
-msgid ""
-"You may not unlink or modify the content of attachments from other people's "
-"messages"
-msgstr "他人のメッセージの添付ファイルのリンクを解除したり、その内容を変更したりすることはできません。"
 
 #. module: mail
 #. odoo-javascript
@@ -11634,7 +11647,7 @@ msgstr "プリン"
 #: code:addons/mail/static/src/models_data/emoji_data.js:0
 #, python-format
 msgid "bakery"
-msgstr "パン屋"
+msgstr "ベーカリー"
 
 #. module: mail
 #. odoo-javascript

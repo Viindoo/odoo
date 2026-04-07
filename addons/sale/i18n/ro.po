@@ -9,16 +9,18 @@
 # Foldi Robert <foldirobert@nexterp.ro>, 2022
 # Martin Trigaux, 2022
 # Cozmin Candea <office@terrabit.ro>, 2023
-# Dorin Hongu <dhongu@gmail.com>, 2024
-# Corina Calin, 2024
+# Dorin Hongu <dhongu@gmail.com>, 2025
+# Corina Calin, 2025
+# Wil Odoo, 2025
+# Larisa_nexterp, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:32+0000\n"
+"POT-Creation-Date: 2025-06-13 18:36+0000\n"
 "PO-Revision-Date: 2022-09-22 05:54+0000\n"
-"Last-Translator: Corina Calin, 2024\n"
+"Last-Translator: Larisa_nexterp, 2025\n"
 "Language-Team: Romanian (https://app.transifex.com/odoo/teams/41243/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1141,8 +1143,12 @@ msgstr "Completați datele companiei dvs."
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with DHL"
-msgstr "Calculați costurile de transport și expediați cu DHL"
+msgid ""
+"Compute shipping costs and ship with DHL<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"Calculați costurile de transport și expediați cu DHL<br/>\n"
+"                                    <strong>(vă rugăm să mergeți la Acasă&gt;Aplicații pentru instalare)</strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1151,8 +1157,12 @@ msgstr "Calculați costurile de transport și expediați cu Easypost"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with FedEx"
-msgstr "Calculați costurile de transport și expediați cu FedEx"
+msgid ""
+"Compute shipping costs and ship with FedEx<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"Calculați costurile de transport și expediați cu FedEx<br/>\n"
+"                                    <strong>(vă rugăm să mergeți la Acasă&gt;Aplicații pentru instalare)</strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1161,13 +1171,21 @@ msgstr "Calculați costurile de transport și expediați cu Sendcloud"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with UPS"
-msgstr "Calculați costurile de transport și expediați cu UPS"
+msgid ""
+"Compute shipping costs and ship with UPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"Calculați costurile de transport și expediați cu UPS<br/>\n"
+"                                    <strong>(vă rugăm să mergeți la Acasă&gt;Aplicații pentru instalare)</strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
-msgid "Compute shipping costs and ship with USPS"
-msgstr "Calculați costurile de transport și expediați cu USPS"
+msgid ""
+"Compute shipping costs and ship with USPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"Calculați costurile de transport și expediați cu USPS<br/>\n"
+"                                    <strong>(vă rugăm să mergeți la Acasă&gt;Aplicații pentru instalare)</strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -1413,6 +1431,11 @@ msgid "Customize your quotes and orders."
 msgstr "Personalizați-vă ofertele și comenzile."
 
 #. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid "DHL Connector"
+msgstr "Conector DHL"
+
+#. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_dhl
 msgid "DHL Express Connector"
 msgstr "Conector DHL Express"
@@ -1625,7 +1648,7 @@ msgstr "Produs cu plata în avans"
 #: code:addons/sale/wizard/sale_make_invoice_advance.py:0
 #, python-format
 msgid "Down Payment: %s (Draft)"
-msgstr ""
+msgstr "Plată în avans: %s (Ciornă)"
 
 #. module: sale
 #. odoo-python
@@ -1763,6 +1786,7 @@ msgstr "Linie extra cu %s"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_fedex
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "FedEx Connector"
 msgstr "Conector FedEx"
 
@@ -3904,6 +3928,11 @@ msgid "Tags"
 msgstr "Etichete"
 
 #. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
+msgid "Tax 15%"
+msgstr "TVA 15%"
+
+#. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__tax_country_id
 msgid "Tax Country"
 msgstr "Țara taxei"
@@ -4055,12 +4084,12 @@ msgstr "Valoare fixă ​​care trebuie facturată în avans, fără taxe."
 #: code:addons/sale/models/product_template.py:0
 #, python-format
 msgid ""
-"The following products cannot be restricted to the company %s because they have already been used in quotations or sales orders in another company:\n"
-"%s\n"
+"The following products cannot be restricted to the company %(company)s because they have already been used in quotations or sales orders in another company:\n"
+"%(used_products)s\n"
 "You can archive these products and recreate them with your company restriction instead, or leave them as shared product."
 msgstr ""
-"Următoarele produse nu pot fi limitate la companie%s deoarece au fost deja utilizate în oferte sau comenzi de vânzare în altă companie:\n"
-"%s\n"
+"Următoarele produse nu pot fi restricționate la companie%(company)s deoarece au fost deja utilizate în oferte sau comenzi de vânzare în altă companie:\n"
+"%(used_products)s\n"
 "Puteți arhiva aceste produse și le puteți recrea cu restricția companiei dvs. sau le puteți lăsa ca produs comun."
 
 #. module: sale
@@ -4399,11 +4428,13 @@ msgstr "Tipul activității de excepție din înregistrare."
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_ups
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "UPS Connector"
 msgstr "Conector UPS"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_res_config_settings__module_delivery_usps
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "USPS Connector"
 msgstr "Conector USPS"
 
@@ -4534,14 +4565,6 @@ msgstr "Varianta Intrare Grilă"
 
 #. module: sale
 #. odoo-python
-#: code:addons/sale/models/sale_order.py:0
-#, python-format
-msgid "View Order"
-msgstr "Vizualizare comandă"
-
-#. module: sale
-#. odoo-python
-#: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #: code:addons/sale/models/sale_order.py:0
 #, python-format

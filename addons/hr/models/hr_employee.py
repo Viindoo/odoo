@@ -278,7 +278,7 @@ class HrEmployeePrivate(models.Model):
         else:
             self_sudo = self
 
-        if self_sudo.check_access_rights('read', raise_exception=False):
+        if self_sudo.user_has_groups('hr.group_hr_user'):
             return super(HrEmployeePrivate, self).get_formview_id(access_uid=access_uid)
         # Hardcode the form view for public employee
         return self.env.ref('hr.hr_employee_public_view_form').id
@@ -291,7 +291,7 @@ class HrEmployeePrivate(models.Model):
         else:
             self_sudo = self
 
-        if not self_sudo.check_access_rights('read', raise_exception=False):
+        if not self_sudo.user_has_groups('hr.group_hr_user'):
             res['res_model'] = 'hr.employee.public'
 
         return res
@@ -423,7 +423,7 @@ class HrEmployeePrivate(models.Model):
             employee_fields_to_empty = self._get_employee_m2o_to_empty_on_archived_employees()
             user_fields_to_empty = self._get_user_m2o_to_empty_on_archived_employees()
             employee_domain = [[(field, 'in', archived_employees.ids)] for field in employee_fields_to_empty]
-            user_domain = [[(field, 'in', archived_employees.user_id.ids) for field in user_fields_to_empty]]
+            user_domain = [[(field, 'in', archived_employees.user_id.ids)] for field in user_fields_to_empty]
             employees = self.env['hr.employee'].search(expression.OR(employee_domain + user_domain))
             for employee in employees:
                 for field in employee_fields_to_empty:

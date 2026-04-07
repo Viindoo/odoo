@@ -9,11 +9,12 @@
 # ExcaliberX <excaliberx@gmail.com>, 2022
 # Amit Spilman <amit@laylinetech.com>, 2022
 # Yihya Hugirat <hugirat@gmail.com>, 2022
-# hed shefer <hed@laylinetech.com>, 2022
+# Hed Shefer <hed@laylinetech.com>, 2022
 # ZVI BLONDER <ZVIBLONDER@gmail.com>, 2022
 # NoaFarkash, 2022
 # yael terner, 2023
 # Ha Ketem <haketem@gmail.com>, 2024
+# or balmas, 2025
 # 
 msgid ""
 msgstr ""
@@ -21,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-06 13:31+0000\n"
 "PO-Revision-Date: 2022-09-22 05:44+0000\n"
-"Last-Translator: Ha Ketem <haketem@gmail.com>, 2024\n"
+"Last-Translator: or balmas, 2025\n"
 "Language-Team: Hebrew (https://app.transifex.com/odoo/teams/41243/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -136,6 +137,9 @@ msgid ""
 "                        Wait a moment for it to be processed. If the refund is still pending in a\n"
 "                        few minutes, please check your payment provider configuration."
 msgstr ""
+"<strong>אזהרה! </strong>קיים החזר כספי ממתין עבור תשלום זה.                                                      אנא המתן מספר רגעים עד לסיום העיבוד. \n"
+"אם ההחזר עדיין ממתין\n"
+"                                    לאחר מספר דקות, בדוק את הגדרות ספק התשלומים שלך."
 
 #. module: account_payment
 #. odoo-python
@@ -308,6 +312,8 @@ msgid ""
 "Note that tokens from providers set to only authorize transactions (instead "
 "of capturing the amount) are not available."
 msgstr ""
+"שימו לב כי אסימוני תשלום מספקים שהוגדרו לאשר עסקאות בלבד (ולא לגבות את "
+"הסכום) אינם זמינים."
 
 #. module: account_payment
 #: model_terms:ir.ui.view,arch_db:account_payment.portal_my_invoices_payment
@@ -355,7 +361,7 @@ msgstr "אמצעי תשלום"
 #: model:ir.model,name:account_payment.model_payment_provider
 #: model:ir.model.fields,field_description:account_payment.field_account_payment_method_line__payment_provider_id
 msgid "Payment Provider"
-msgstr ""
+msgstr "ספק תשלום"
 
 #. module: account_payment
 #: model:ir.ui.menu,name:account_payment.payment_provider_menu
@@ -440,7 +446,7 @@ msgstr "הגדרה"
 #. module: account_payment
 #: model:ir.model.fields,field_description:account_payment.field_account_payment__payment_token_id
 msgid "Saved Payment Token"
-msgstr ""
+msgstr "אסימון תשלום נשמר"
 
 #. module: account_payment
 #: model:ir.model.fields,field_description:account_payment.field_account_payment_register__payment_token_id
@@ -461,14 +467,14 @@ msgstr "סטטוס"
 #: model:ir.model.fields,field_description:account_payment.field_account_payment__suitable_payment_token_ids
 #: model:ir.model.fields,field_description:account_payment.field_account_payment_register__suitable_payment_token_ids
 msgid "Suitable Payment Token"
-msgstr ""
+msgstr "אסימון תשלום מתאים"
 
 #. module: account_payment
 #. odoo-python
 #: code:addons/account_payment/controllers/payment.py:0
 #, python-format
 msgid "The access token is invalid."
-msgstr ""
+msgstr "האסימון גישה אינו חוקי."
 
 #. module: account_payment
 #. odoo-python
@@ -481,7 +487,7 @@ msgstr "סכום הזיכוי צריך להיות מספר חיובי ולא י�
 #. module: account_payment
 #: model:ir.model.fields,help:account_payment.field_payment_provider__journal_id
 msgid "The journal in which the successful transactions are posted."
-msgstr ""
+msgstr "היומן שבו נרשמות העסקאות המוצלחות."
 
 #. module: account_payment
 #. odoo-python
@@ -490,7 +496,7 @@ msgstr ""
 msgid ""
 "The payment related to the transaction with reference %(ref)s has been "
 "posted: %(link)s"
-msgstr ""
+msgstr "התשלום הקשור לעסקה עם הפניה%(ref)s נרשם: %(link)s"
 
 #. module: account_payment
 #. odoo-python
@@ -498,12 +504,12 @@ msgstr ""
 #: code:addons/account_payment/controllers/payment.py:0
 #, python-format
 msgid "The provided parameters are invalid."
-msgstr ""
+msgstr "הפרמטרים שסופקו אינם תקינים."
 
 #. module: account_payment
 #: model:ir.model.fields,help:account_payment.field_account_payment__source_payment_id
 msgid "The source payment of related refund payments"
-msgstr ""
+msgstr "תשלום מקור של תשלומי החזר הקשורים"
 
 #. module: account_payment
 #: model_terms:ir.ui.view,arch_db:account_payment.portal_invoice_error
@@ -552,7 +558,7 @@ msgstr "תמיכה בסוג זיכוי"
 #: model:ir.model.fields,field_description:account_payment.field_account_payment__use_electronic_payment_method
 #: model:ir.model.fields,field_description:account_payment.field_account_payment_register__use_electronic_payment_method
 msgid "Use Electronic Payment Method"
-msgstr ""
+msgstr "השתמש באמצעי תשלום אלקטרוני"
 
 #. module: account_payment
 #: model_terms:ir.ui.view,arch_db:account_payment.account_invoice_view_form_inherit_payment
@@ -567,6 +573,8 @@ msgid ""
 "You can't delete a payment method that is linked to a provider in the enabled or test state.\n"
 "Linked providers(s): %s"
 msgstr ""
+"לא ניתן למחוק אמצעי תשלום שמקושר לספק שנמצא במצב פעיל או מצב בדיקה.\n"
+"ספקים מקושרים:%s"
 
 #. module: account_payment
 #. odoo-python
@@ -576,3 +584,5 @@ msgid ""
 "You must first deactivate a payment provider before deleting its journal.\n"
 "Linked providers: %s"
 msgstr ""
+"עליך קודם להשבית ספק תשלום לפני מחיקת יומן שלו.\n"
+"ספקים מקושרים: %s"

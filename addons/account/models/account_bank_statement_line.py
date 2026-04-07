@@ -227,6 +227,7 @@ class AccountBankStatementLine(models.Model):
                 """,
                 [max_index, journal.id] + extra_params,
             )
+            pending_items = self
             for st_line_id, amount, is_anchor, balance_start, state in self._cr.fetchall():
                 if is_anchor:
                     current_running_balance = balance_start
@@ -234,6 +235,10 @@ class AccountBankStatementLine(models.Model):
                     current_running_balance += amount
                 if record_by_id.get(st_line_id):
                     record_by_id[st_line_id].running_balance = current_running_balance
+                    pending_items -= record_by_id[st_line_id]
+            # Lines manually deleted from the form view still require to have a value set here, as the field is computed and non-stored.
+            for item in pending_items:
+                item.running_balance = item.running_balance
 
     @api.depends('date', 'sequence')
     def _compute_internal_index(self):
@@ -430,8 +435,6 @@ class AccountBankStatementLine(models.Model):
 
     def _find_or_create_bank_account(self):
         self.ensure_one()
-        if str2bool(self.env['ir.config_parameter'].sudo().get_param("account.skip_create_bank_account_on_reconcile")):
-            return self.env['res.partner.bank']
 
         # There is a sql constraint on res.partner.bank ensuring an unique pair <partner, account number>.
         # Since it's not dependent of the company, we need to search on others company too to avoid the creation
@@ -442,13 +445,15 @@ class AccountBankStatementLine(models.Model):
             ('acc_number', '=', self.account_number),
             ('partner_id', '=', self.partner_id.id),
         ])
-        if not bank_account:
+        if not bank_account and not str2bool(
+                self.env['ir.config_parameter'].sudo().get_param("account.skip_create_bank_account_on_reconcile")
+        ):
             bank_account = self.env['res.partner.bank'].create({
                 'acc_number': self.account_number,
                 'partner_id': self.partner_id.id,
                 'journal_id': None,
             })
-        return bank_account.filtered(lambda x: x.company_id in (False, self.company_id))
+        return bank_account.filtered(lambda x: x.company_id.id in (False, self.company_id.id)).sudo(False)
 
     def _get_amounts_with_currencies(self):
         """

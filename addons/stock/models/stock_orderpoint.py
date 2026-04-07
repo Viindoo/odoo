@@ -12,6 +12,7 @@ from odoo import SUPERUSER_ID, _, api, fields, models, registry
 from odoo.addons.stock.models.stock_rule import ProcurementException
 from odoo.exceptions import RedirectWarning, UserError, ValidationError
 from odoo.osv import expression
+from odoo.sql_db import BaseCursor
 from odoo.tools import float_compare, frozendict, split_every
 
 _logger = logging.getLogger(__name__)
@@ -250,7 +251,7 @@ class StockWarehouseOrderpoint(models.Model):
         return self.action_replenish()
 
     @api.depends('product_id', 'location_id', 'product_id.stock_move_ids', 'product_id.stock_move_ids.state',
-                 'product_id.stock_move_ids.date', 'product_id.stock_move_ids.product_uom_qty')
+                 'product_id.stock_move_ids.date', 'product_id.stock_move_ids.product_uom_qty', 'product_id.seller_ids.delay')
     def _compute_qty(self):
         orderpoints_contexts = defaultdict(lambda: self.env['stock.warehouse.orderpoint'])
         for orderpoint in self:
@@ -270,7 +271,8 @@ class StockWarehouseOrderpoint(models.Model):
                 orderpoint.qty_on_hand = products_qty[orderpoint.product_id.id]['qty_available']
                 orderpoint.qty_forecast = products_qty[orderpoint.product_id.id]['virtual_available'] + products_qty_in_progress[orderpoint.id]
 
-    @api.depends('qty_multiple', 'product_min_qty', 'product_max_qty', 'visibility_days', 'product_id', 'location_id')
+    @api.depends('qty_multiple', 'product_min_qty', 'product_max_qty', 'visibility_days', 'product_id', 'location_id',
+                 'product_id.seller_ids.delay')
     def _compute_qty_to_order(self):
         for orderpoint in self:
             if not orderpoint.product_id or not orderpoint.location_id:
@@ -393,8 +395,10 @@ class StockWarehouseOrderpoint(models.Model):
 
         # recompute virtual_available with lead days
         today = fields.datetime.now().replace(hour=23, minute=59, second=59)
-        for (days, loc), product_ids in ploc_per_day.items():
-            products = self.env['product.product'].browse(product_ids)
+        product_ids = set()
+        location_ids = set()
+        for (days, loc), prod_ids in ploc_per_day.items():
+            products = self.env['product.product'].browse(prod_ids)
             qties = products.with_context(
                 location=loc.id,
                 to_date=today + relativedelta.relativedelta(days=days)
@@ -402,13 +406,14 @@ class StockWarehouseOrderpoint(models.Model):
             for (product, qty) in zip(products, qties):
                 if float_compare(qty['virtual_available'], 0, precision_rounding=product.uom_id.rounding) < 0:
                     to_refill[(qty['id'], loc.id)] = qty['virtual_available']
+                    product_ids.add(qty['id'])
+                    location_ids.add(loc.id)
             products.invalidate_recordset()
         if not to_refill:
             return action
 
         # Remove incoming quantity from other origin than moves (e.g RFQ)
-        product_ids, location_ids = zip(*to_refill)
-        qty_by_product_loc, dummy = self.env['product.product'].browse(product_ids)._get_quantity_in_progress(location_ids=location_ids)
+        qty_by_product_loc = self.env['product.product'].browse(list(product_ids))._get_quantity_in_progress(location_ids=list(location_ids))[0]
         rounding = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         # Group orderpoint by product-location
         orderpoint_by_product_location = self.env['stock.warehouse.orderpoint']._read_group(
@@ -533,6 +538,7 @@ class StockWarehouseOrderpoint(models.Model):
 
         for orderpoints_batch_ids in split_every(1000, self.ids):
             if use_new_cursor:
+                assert isinstance(self._cr, BaseCursor)
                 cr = registry(self._cr.dbname).cursor()
                 self = self.with_env(self.env(cr=cr))
             try:

@@ -121,6 +121,9 @@ export default class PivotUIPlugin extends spreadsheet.UIPlugin {
             case "REFRESH_ALL_DATA_SOURCES":
                 this._refreshOdooPivots();
                 break;
+            case "UPDATE_ODOO_PIVOT_DOMAIN":
+                this._addDomain(cmd.pivotId);
+                break;
             case "ADD_GLOBAL_FILTER":
             case "EDIT_GLOBAL_FILTER":
             case "REMOVE_GLOBAL_FILTER":
@@ -136,6 +139,7 @@ export default class PivotUIPlugin extends spreadsheet.UIPlugin {
                             "ADD_GLOBAL_FILTER",
                             "EDIT_GLOBAL_FILTER",
                             "REMOVE_GLOBAL_FILTER",
+                            "UPDATE_ODOO_PIVOT_DOMAIN",
                         ].includes(command.type)
                     )
                 ) {
@@ -291,9 +295,12 @@ export default class PivotUIPlugin extends spreadsheet.UIPlugin {
                                 break;
                             }
                         }
+                        // A group by value of "none"
+                        if (value === false) break;
                         if (JSON.stringify(currentValue) !== `[${value}]`) {
                             transformedValue = [value];
                         }
+
                         break;
                     case "text":
                         if (currentValue !== value) {

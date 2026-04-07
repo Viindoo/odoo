@@ -10,7 +10,7 @@
 # ExcaliberX <excaliberx@gmail.com>, 2022
 # ilan kl <ilan@qaroads.co.il>, 2022
 # שהאב חוסיין <shhab89@gmail.com>, 2022
-# hed shefer <hed@laylinetech.com>, 2022
+# Hed Shefer <hed@laylinetech.com>, 2022
 # Amit Spilman <amit@laylinetech.com>, 2022
 # דודי מלכה <Dudimalka6@gmail.com>, 2022
 # Martin Trigaux, 2022
@@ -20,14 +20,15 @@
 # Lilach Gilliam <lilach.gilliam@gmail.com>, 2024
 # ZVI BLONDER <ZVIBLONDER@gmail.com>, 2024
 # Yihya Hugirat <hugirat@gmail.com>, 2024
+# or balmas, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:32+0000\n"
+"POT-Creation-Date: 2025-02-10 08:27+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Yihya Hugirat <hugirat@gmail.com>, 2024\n"
+"Last-Translator: or balmas, 2025\n"
 "Language-Team: Hebrew (https://app.transifex.com/odoo/teams/41243/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -170,6 +171,7 @@ msgid ""
 "A transaction with reference %(ref)s has been initiated to save a new "
 "payment method (%(provider_name)s)"
 msgstr ""
+"עסקה עם מזהה%(ref)s בוצעה כדי לשמור אמצעי תשלום חדש(%(provider_name)s)"
 
 #. module: payment
 #. odoo-python
@@ -261,7 +263,7 @@ msgstr "התרחבה שגיאה במהלך עיבוד התשלום הזה."
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.transaction_status
 msgid "An error occurred during the processing of your payment."
-msgstr ""
+msgstr "שגיאת אירעה שגיאה במהלך עיבוד התשלום שלך."
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.payment_provider_onboarding_wizard_form
@@ -760,7 +762,7 @@ msgstr "מ"
 #. module: payment
 #: model:ir.model.fields.selection,name:payment.selection__payment_provider__support_refund__full_only
 msgid "Full Only"
-msgstr ""
+msgstr "רק במלואו"
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.payment_link_wizard_view_form
@@ -965,7 +967,7 @@ msgstr "עדכון אחרון ב"
 msgid ""
 "Making a request to the provider is not possible because the provider is "
 "disabled."
-msgstr ""
+msgstr "הגשת בקשה לספק אינה אפשרית מכיוון שהספק מושבת."
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.pay_meth_link
@@ -1123,14 +1125,14 @@ msgstr ""
 #: code:addons/payment/models/payment_transaction.py:0
 #, python-format
 msgid "Only authorized transactions can be voided."
-msgstr ""
+msgstr "ניתן לבטל רק עסקאות מורשות."
 
 #. module: payment
 #. odoo-python
 #: code:addons/payment/models/payment_transaction.py:0
 #, python-format
 msgid "Only confirmed transactions can be refunded."
-msgstr ""
+msgstr "ניתן לזכות רק עסקאות מאושרות."
 
 #. module: payment
 #: model:ir.model.fields,field_description:payment.field_payment_transaction__operation
@@ -1229,7 +1231,7 @@ msgstr "אמצעי תשלום"
 #. module: payment
 #: model:ir.model,name:payment.model_payment_provider
 msgid "Payment Provider"
-msgstr ""
+msgstr "ספק תשלום"
 
 #. module: payment
 #: model:ir.actions.act_window,name:payment.action_payment_provider
@@ -1292,12 +1294,12 @@ msgstr ""
 #: code:addons/payment/models/payment_token.py:0
 #, python-format
 msgid "Payment details saved on %(date)s"
-msgstr ""
+msgstr "פרטי תשלום נשמור ב-%(date)s"
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.payment_provider_form
 msgid "Payment provider"
-msgstr ""
+msgstr "ספק תשלום"
 
 #. module: payment
 #: model:ir.model,name:payment.model_payment_provider_onboarding_wizard
@@ -1411,6 +1413,7 @@ msgstr ""
 #. module: payment
 #. odoo-javascript
 #: code:addons/payment/static/src/xml/payment_post_processing.xml:0
+#: code:addons/payment/static/src/xml/payment_post_processing.xml:0
 #, python-format
 msgid "Reason:"
 msgstr "סיבה:"
@@ -1491,7 +1494,7 @@ msgstr ""
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.payment_provider_form
 msgid "Select countries. Leave empty to make available everywhere."
-msgstr ""
+msgstr "בחר מדינות. השאר ריק כדי שיהיה זמין בכל מקום."
 
 #. module: payment
 #: model:ir.model.fields,field_description:payment.field_res_company__payment_onboarding_payment_method
@@ -1619,7 +1622,7 @@ msgstr "מצב בדיקה"
 #: code:addons/payment/controllers/portal.py:0
 #, python-format
 msgid "The access token is invalid."
-msgstr ""
+msgstr "האסימון גישה אינו חוקי."
 
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_transaction__child_transaction_ids
@@ -1681,6 +1684,8 @@ msgid ""
 "The maximum payment amount that this payment provider is available for. "
 "Leave blank to make it available for any payment amount."
 msgstr ""
+"סכום התשלום המקסימלי שבו ספק התשלום הזה זמין. השאר ריק כדי לאפשר תשלום בכל "
+"סכום."
 
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_provider__auth_msg
@@ -1698,17 +1703,17 @@ msgstr ""
 msgid ""
 "The message displayed if the order is successfully done after the payment "
 "process"
-msgstr ""
+msgstr "ההודעה המוצגת אם ההזמנה בוצעה בהצלחה לאחר תהליך התשלום"
 
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_provider__pending_msg
 msgid "The message displayed if the order pending after the payment process"
-msgstr ""
+msgstr "ההודעה המוצגת אם ההזמנה ממתינה לאחר תהליך התשלום"
 
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_provider__pre_msg
 msgid "The message displayed to explain and help the payment process"
-msgstr ""
+msgstr "ההודעה המוצגת כדי להסביר ולעזור לתהליך התשלום"
 
 #. module: payment
 #. odoo-python
@@ -1726,7 +1731,7 @@ msgstr ""
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_transaction__provider_reference
 msgid "The provider reference of the transaction"
-msgstr ""
+msgstr " ההתייחסות של הספק לעסקה"
 
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_transaction__landing_route
@@ -1743,7 +1748,7 @@ msgstr ""
 #: model:ir.model.fields,help:payment.field_payment_token__provider_code
 #: model:ir.model.fields,help:payment.field_payment_transaction__provider_code
 msgid "The technical code of this payment provider."
-msgstr ""
+msgstr "הקוד הטכני של ספק התשלומים הזה."
 
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_provider__redirect_form_view_id
@@ -2015,7 +2020,7 @@ msgstr ""
 msgid ""
 "Whether a payment token should be created when post-processing the "
 "transaction"
-msgstr ""
+msgstr "האם יש ליצור טוקן תשלום בעת עיבוד העסקה לאחר ביצועה."
 
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_transaction__callback_is_done
@@ -2028,6 +2033,8 @@ msgid ""
 "Whether the provider is visible on the website or not. Tokens remain "
 "functional but are only visible on manage forms."
 msgstr ""
+"בין אם הספק מופיע באתר ובין אם לא . הטוקנים נשארים פעילים, אך נראים רק בטפסי"
+" הניהול."
 
 #. module: payment
 #: model:payment.provider,name:payment.payment_provider_transfer
@@ -2041,21 +2048,21 @@ msgstr "העברה בנקאית"
 msgid ""
 "You cannot delete the payment provider %s; disable it or uninstall it "
 "instead."
-msgstr ""
+msgstr "לא ניתן לבטל ספק תשלום %s;השבת אותו או הסר אותו במקום זאת."
 
 #. module: payment
 #. odoo-python
 #: code:addons/payment/models/payment_provider.py:0
 #, python-format
 msgid "You cannot publish a disabled provider."
-msgstr ""
+msgstr "לא ניתן לפרסם ספק שמושבת."
 
 #. module: payment
 #. odoo-python
 #: code:addons/payment/controllers/portal.py:0
 #, python-format
 msgid "You do not have access to this payment token."
-msgstr ""
+msgstr "אין לך גישה לאסימון תשלום זה."
 
 #. module: payment
 #. odoo-javascript
@@ -2183,7 +2190,7 @@ msgstr "התשלום שלך עבר עיבוד בהצלחה. תודה!"
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.transaction_status
 msgid "Your payment has not been processed yet."
-msgstr ""
+msgstr "התשלום שלך טרם עובד."
 
 #. module: payment
 #. odoo-javascript
@@ -2204,7 +2211,7 @@ msgstr "התשלום שלך במצב ממתין."
 #: code:addons/payment/static/src/xml/payment_post_processing.xml:0
 #, python-format
 msgid "Your payment method has been saved."
-msgstr ""
+msgstr "אמצעי התשלום שלך נשמר. "
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.payment_transaction_form
@@ -2217,16 +2224,6 @@ msgid "Zip"
 msgstr "מיקוד"
 
 #. module: payment
-#: model_terms:ir.ui.view,arch_db:payment.transaction_status
-msgid "danger"
-msgstr ""
-
-#. module: payment
-#: model_terms:ir.ui.view,arch_db:payment.transaction_status
-msgid "info"
-msgstr ""
-
-#. module: payment
 #: model:ir.actions.server,name:payment.cron_post_process_payment_tx_ir_actions_server
 #: model:ir.cron,cron_name:payment.cron_post_process_payment_tx
 msgid "payment: post-process transactions"
@@ -2236,7 +2233,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:payment.payment_provider_kanban
 #: model_terms:ir.ui.view,arch_db:payment.payment_provider_search
 msgid "provider"
-msgstr ""
+msgstr "ספק"
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.icon_list
@@ -2247,13 +2244,3 @@ msgstr "הצג פחות..."
 #: model_terms:ir.ui.view,arch_db:payment.icon_list
 msgid "show more"
 msgstr "הצג עוד..."
-
-#. module: payment
-#: model_terms:ir.ui.view,arch_db:payment.transaction_status
-msgid "success"
-msgstr ""
-
-#. module: payment
-#: model_terms:ir.ui.view,arch_db:payment.transaction_status
-msgid "warning"
-msgstr ""

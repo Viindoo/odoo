@@ -10,7 +10,7 @@
 # ExcaliberX <excaliberx@gmail.com>, 2022
 # NoaFarkash, 2022
 # שהאב חוסיין <shhab89@gmail.com>, 2022
-# hed shefer <hed@laylinetech.com>, 2022
+# Hed Shefer <hed@laylinetech.com>, 2022
 # Ofir Blum <ofir.blum@gmail.com>, 2022
 # Martin Trigaux, 2022
 # Yihya Hugirat <hugirat@gmail.com>, 2022
@@ -20,14 +20,16 @@
 # ZVI BLONDER <ZVIBLONDER@gmail.com>, 2022
 # Roy Sayag, 2022
 # Ha Ketem <haketem@gmail.com>, 2024
+# tomerlayline, 2024
+# or balmas, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 08:23+0000\n"
+"POT-Creation-Date: 2025-02-10 08:27+0000\n"
 "PO-Revision-Date: 2022-09-22 05:45+0000\n"
-"Last-Translator: Ha Ketem <haketem@gmail.com>, 2024\n"
+"Last-Translator: or balmas, 2025\n"
 "Language-Team: Hebrew (https://app.transifex.com/odoo/teams/41243/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,28 +53,28 @@ msgstr "# נשלח"
 #: code:addons/event/models/event_event.py:0
 #, python-format
 msgid "%(event_name)s (%(count)s seats remaining)"
-msgstr ""
+msgstr "%(event_name)s(%(count)sמקומות שנשארו)"
 
 #. module: event
 #. odoo-python
 #: code:addons/event/models/event_event.py:0
 #, python-format
 msgid "%(event_name)s (Sold out)"
-msgstr ""
+msgstr "%(event_name)s(הכרטיסים אזלו)"
 
 #. module: event
 #. odoo-python
 #: code:addons/event/models/event_ticket.py:0
 #, python-format
 msgid "%(ticket_name)s (%(count)s seats remaining)"
-msgstr ""
+msgstr "%(ticket_name)s(%(count)sמקומות שנשארו)"
 
 #. module: event
 #. odoo-python
 #: code:addons/event/models/event_ticket.py:0
 #, python-format
 msgid "%(ticket_name)s (Sold out)"
-msgstr ""
+msgstr "%(ticket_name)s(הכרטיסים אזלו)"
 
 #. module: event
 #. odoo-python
@@ -110,7 +112,7 @@ msgstr "'כרטיס עמוד מלא - %s' % (object.name or 'Event').replace('/'
 #: code:addons/event/models/event_event.py:0
 #, python-format
 msgid "- \"%(event_name)s\": Missing %(nb_too_many)i seats."
-msgstr ""
+msgstr "-\"%(event_name)s\": חסר%(nb_too_many)i מושבים."
 
 #. module: event
 #. odoo-python
@@ -120,6 +122,7 @@ msgid ""
 "- the ticket \"%(ticket_name)s\" (%(event_name)s): Missing %(nb_too_many)i "
 "seats."
 msgstr ""
+"- לכרטיס \"%(ticket_name)s\" (%(event_name)s) : חסר %(nb_too_many)i מושבים."
 
 #. module: event
 #: model:event.tag,name:event.event_tag_category_1_tag_2
@@ -273,6 +276,8 @@ msgid ""
 "<i class=\"fa fa-info-circle me-2\"></i>This event and all the conferences "
 "are in <b>English</b>!"
 msgstr ""
+"<i class=\"fa fa-info-circle me-2\"></i> אירוע זה וכל הכנסים הם בשפה "
+"<b>האנגלית</b>!"
 
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.view_event_kanban
@@ -318,6 +323,7 @@ msgid ""
 "<span class=\"badge text-bg-secondary o_wevent_badge float-"
 "end\">SPEAKER</span>"
 msgstr ""
+"<span class=\"badge text-bg-secondary o_wevent_badge float-end\">דובר</span>"
 
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.event_registration_view_kanban
@@ -912,7 +918,7 @@ msgstr "מפורסם"
 #: code:addons/event/static/src/js/tours/event_tour.js:0
 #, python-format
 msgid "Apply change."
-msgstr ""
+msgstr "החל שינוי"
 
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.view_event_search
@@ -1131,7 +1137,7 @@ msgstr "קטגוריה"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_tag__category_sequence
 msgid "Category Sequence"
-msgstr ""
+msgstr "רצף קטגוריות"
 
 #. module: event
 #: model_terms:event.event,description:event.event_2
@@ -1401,6 +1407,11 @@ msgid "Display Sponsors and Exhibitors on your event pages"
 msgstr "הצג נותני חסות ומציגים בדפי האירוע שלך"
 
 #. module: event
+#: model:ir.model.fields,field_description:event.field_event_event__date_tz
+msgid "Display Timezone"
+msgstr "הצג אזור זמן"
+
+#. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__sequence
 msgid "Display order"
 msgstr "סדר תצוגה"
@@ -1522,7 +1533,7 @@ msgstr "ארגון אירועים"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_registration__event_organizer_id
 msgid "Event Organizer"
-msgstr ""
+msgstr "מארגן אירוע"
 
 #. module: event
 #: model:ir.model,name:event.model_event_registration
@@ -1535,7 +1546,7 @@ msgstr "הרשמה לאירוע"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_registration__event_user_id
 msgid "Event Responsible"
-msgstr ""
+msgstr "אחראי אירוע"
 
 #. module: event
 #. odoo-python
@@ -1684,7 +1695,7 @@ msgstr "אירוע: תג רישום"
 #. module: event
 #: model:mail.template,name:event.event_subscription
 msgid "Event: Registration Confirmation"
-msgstr ""
+msgstr "אירוע: אישור הרשמה"
 
 #. module: event
 #: model:mail.template,name:event.event_reminder
@@ -2028,7 +2039,7 @@ msgstr "סמל"
 #: code:addons/event/static/src/icon_selection_field/icon_selection_field.js:0
 #, python-format
 msgid "Icon Selection"
-msgstr ""
+msgstr "בחירת סמלים"
 
 #. module: event
 #: model:ir.model.fields,help:event.field_event_event__activity_exception_icon
@@ -2093,6 +2104,13 @@ msgstr "מידע חשוב על כרטיסים"
 #, python-format
 msgid "In Progress"
 msgstr "בתהליך"
+
+#. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_tz
+msgid ""
+"Indicates the timezone in which the event dates/times will be displayed on "
+"the website."
+msgstr "מציין את אזור הזמן בו תאריכי/שעות האירוע יוצגו באתר."
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__interval_nbr
@@ -2263,7 +2281,7 @@ msgstr "בואו ליצור את <b>האירוע</b> הראשון שלכם"
 #: model:ir.model.fields,field_description:event.field_event_event_ticket__seats_limited
 #: model:ir.model.fields,field_description:event.field_event_type_ticket__seats_limited
 msgid "Limit Attendees"
-msgstr ""
+msgstr "הגבל משתתפים"
 
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.view_event_form
@@ -2508,7 +2526,7 @@ msgstr "מספר פעולות"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__seats_used
 msgid "Number of Attendees"
-msgstr ""
+msgstr "מספר משתתפים"
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__seats_expected
@@ -2518,7 +2536,7 @@ msgstr "מספר המשתתפים הצפויים"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__seats_reserved
 msgid "Number of Registrations"
-msgstr ""
+msgstr "מספר הרשמות"
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__message_has_error_counter
@@ -2603,7 +2621,7 @@ msgstr ""
 #: code:addons/event/models/event_event.py:0
 #, python-format
 msgid "Operation not supported."
-msgstr ""
+msgstr "הפעולה אינה נתמכת."
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__organizer_id
@@ -2791,7 +2809,7 @@ msgstr "נפתחה ההרשמה"
 #. module: event
 #: model:ir.actions.act_window,name:event.event_registration_action_stats_from_event
 msgid "Registration statistics"
-msgstr ""
+msgstr "סטטיסטיקות הרשמה"
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event_ticket__registration_ids
@@ -2926,12 +2944,12 @@ msgstr "נשלח"
 #: model:mail.template,description:event.event_reminder
 msgid ""
 "Sent automatically to attendees if there is a reminder defined on the event"
-msgstr ""
+msgstr "שלח אוטומטית למשתתפים אם יש תזכורת מוגדרת באירוע"
 
 #. module: event
 #: model:mail.template,description:event.event_registration_mail_template_badge
 msgid "Sent automatically to someone after they registered to an event"
-msgstr ""
+msgstr "נשלח אוטומטית למישהו לאחר שנרשם לאירוע"
 
 #. module: event
 #: model:mail.template,description:event.event_subscription
@@ -3183,6 +3201,8 @@ msgid ""
 "The stop date cannot be earlier than the start date. Please check ticket "
 "%(ticket_name)s"
 msgstr ""
+"תאריך העצירה אינו יכול להיות מוקדם מתאריך ההתחלה. נא לבדוק כרטיס "
+"%(ticket_name)s"
 
 #. module: event
 #. odoo-python
@@ -3198,7 +3218,7 @@ msgstr ""
 #: code:addons/event/models/event_ticket.py:0
 #, python-format
 msgid "There are not enough seats available for:"
-msgstr ""
+msgstr "אין מספיק מושבים זמינים ל :"
 
 #. module: event
 #: model_terms:event.event,description:event.event_0
@@ -3306,7 +3326,6 @@ msgid "Tickets can be printed or scanned directly from your phone."
 msgstr "ניתן להדפיס או לסרוק כרטיסים ישירות מהטלפון שלך."
 
 #. module: event
-#: model:ir.model.fields,field_description:event.field_event_event__date_tz
 #: model:ir.model.fields,field_description:event.field_event_type__default_timezone
 msgid "Timezone"
 msgstr "אזור זמן"
@@ -3518,6 +3537,14 @@ msgid "What's new?"
 msgstr "מה חדש?"
 
 #. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_begin
+#: model:ir.model.fields,help:event.field_event_registration__event_begin_date
+msgid ""
+"When the event is scheduled to take place (expressed in your local timezone "
+"on the form view)."
+msgstr "מועד קיום האירוע (מוצג באזור הזמן המקומי שלך בתצוגת הטופס)."
+
+#. module: event
 #: model:ir.model.fields,help:event.field_event_event__is_ongoing
 msgid "Whether event has begun"
 msgstr "האם האירוע התחיל"
@@ -3525,12 +3552,12 @@ msgstr "האם האירוע התחיל"
 #. module: event
 #: model:ir.model.fields,help:event.field_event_event_ticket__sale_available
 msgid "Whether it is possible to sell these tickets"
-msgstr ""
+msgstr "האם ניתן למכור את הכרטיסים הללו"
 
 #. module: event
 #: model:ir.model.fields,help:event.field_event_event_ticket__is_sold_out
 msgid "Whether seats are not available for this ticket."
-msgstr ""
+msgstr "האם אין מקומות פנויים עבור כרטיס זה."
 
 #. module: event
 #: model:event.event.ticket,description:event.event_0_ticket_2

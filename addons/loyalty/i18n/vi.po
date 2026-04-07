@@ -8,15 +8,15 @@
 # Nancy Momoland <thanh.np2502@gmail.com>, 2023
 # Martin Trigaux, 2023
 # Wil Odoo, 2024
-# Thi Huong Nguyen, 2024
+# Thi Huong Nguyen, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-22 18:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Thi Huong Nguyen, 2024\n"
+"Last-Translator: Thi Huong Nguyen, 2025\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1015,6 +1015,13 @@ msgstr "Ngày hết hạn"
 
 #. module: loyalty
 #. odoo-python
+#: code:addons/loyalty/models/loyalty_card.py:0
+#, python-format
+msgid "Expiration date cannot be set on a loyalty card."
+msgstr "Không thể thiết lập ngày hết hạn trên thẻ khách hàng thân thiết."
+
+#. module: loyalty
+#. odoo-python
 #: code:addons/loyalty/models/loyalty_program.py:0
 #: code:addons/loyalty/models/loyalty_program.py:0
 #, python-format
@@ -1097,9 +1104,9 @@ msgid ""
 "constraints on its usage through conditional rule."
 msgstr ""
 "Tạo &amp; chia sẻ mã phiếu giảm giá theo cách thủ công. Nó có thể được sử "
-"dụng trong Thương mại điện tử, Điểm bán hàng hoặc các đơn đặt hàng thông "
-"thường để nhận Phần thưởng. Bạn có thể xác định các ràng buộc đối với việc "
-"sử dụng nó thông qua quy tắc có điều kiện."
+"dụng trong Thương mại điện tử, POS hoặc các đơn đặt hàng thông thường để "
+"nhận Phần thưởng. Bạn có thể xác định các ràng buộc đối với việc sử dụng nó "
+"thông qua quy tắc có điều kiện."
 
 #. module: loyalty
 #: model:ir.model,name:loyalty.model_loyalty_generate_wizard
@@ -1370,7 +1377,7 @@ msgstr "Quy tắc CT KH thân thiết"
 #: code:addons/loyalty/models/loyalty_program.py:0
 #, python-format
 msgid "Loyalty point(s)"
-msgstr "Điểm khách hàng thân thiết"
+msgstr "Điểm thưởng"
 
 #. module: loyalty
 #: model:ir.model.fields,field_description:loyalty.field_loyalty_card__message_main_attachment_id
@@ -1693,6 +1700,7 @@ msgstr ""
 
 #. module: loyalty
 #: model:ir.model.fields,field_description:loyalty.field_loyalty_program__reward_ids
+#: model_terms:ir.ui.view,arch_db:loyalty.loyalty_program_view_form
 msgid "Rewards"
 msgstr "Phần thưởng"
 
@@ -1808,6 +1816,13 @@ msgid "The required points for a reward must be strictly positive."
 msgstr "Điểm cần thiết để nhận phần thưởng phải là số dương."
 
 #. module: loyalty
+#. odoo-python
+#: code:addons/loyalty/models/loyalty_reward.py:0
+#, python-format
+msgid "The reward description field cannot be empty."
+msgstr "Không được để trống trường mô tả phần thưởng."
+
+#. module: loyalty
 #: model:ir.model.constraint,message:loyalty.constraint_loyalty_reward_product_qty_positive
 msgid "The reward product quantity must be strictly positive."
 msgstr "Số lượng sản phẩm phần thưởng phải là số dương."
@@ -1857,6 +1872,13 @@ msgid "Trigger"
 msgstr "Bộ khởi động"
 
 #. module: loyalty
+#. odoo-python
+#: code:addons/loyalty/models/loyalty_reward.py:0
+#, python-format
+msgid "Unsupported search operator"
+msgstr ""
+
+#. module: loyalty
 #: model:ir.model.fields,field_description:loyalty.field_loyalty_card__use_count
 msgid "Use Count"
 msgstr "Đếm sử dụng"
@@ -1890,7 +1912,7 @@ msgstr "Có hiệu lực đến"
 #. module: loyalty
 #: model:ir.model.fields,field_description:loyalty.field_loyalty_program__date_to
 msgid "Validity"
-msgstr "Ngày xác nhận"
+msgstr "Có hiệu lực đến"
 
 #. module: loyalty
 #: model:ir.model.fields,field_description:loyalty.field_loyalty_mail__trigger
@@ -1953,13 +1975,6 @@ msgstr "Với một mã khuyến mãi"
 #, python-format
 msgid "You can not delete a program in an active state"
 msgstr "Bạn không thể xóa một chương trình ở trạng thái hoạt động"
-
-#. module: loyalty
-#. odoo-python
-#: code:addons/loyalty/models/loyalty_reward.py:0
-#, python-format
-msgid "The reward description field cannot be empty."
-msgstr "Không được để trống trường mô tả phần thưởng."
 
 #. module: loyalty
 #. odoo-python

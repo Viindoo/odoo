@@ -5,15 +5,16 @@
 # Translators:
 # Martin Trigaux, 2022
 # 敬雲 林 <chingyun@yuanchih-consult.com>, 2022
-# Tony Ng, 2024
+# Wil Odoo, 2025
+# Tony Ng, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:32+0000\n"
+"POT-Creation-Date: 2025-05-06 20:36+0000\n"
 "PO-Revision-Date: 2022-09-22 05:55+0000\n"
-"Last-Translator: Tony Ng, 2024\n"
+"Last-Translator: Tony Ng, 2025\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/odoo/teams/41243/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -52,6 +53,13 @@ msgstr "%s無效的收件人"
 msgid ""
 "%s out of the %s selected SMS Text Messages have successfully been resent."
 msgstr "%s 條選定的 SMS 文本消息中有 %s 條已成功重新發送。"
+
+#. module: sms
+#. odoo-javascript
+#: code:addons/sms/static/src/components/sms_widget/fields_sms_widget.xml:0
+#, python-format
+msgid ", fits in"
+msgstr "，需要"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_view_form
@@ -136,7 +144,12 @@ msgstr "確定要將這些短訊範本重設為原始配置？所有變更及翻
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_attachment_count
 msgid "Attachment Count"
-msgstr "附件數"
+msgstr "附件數目"
+
+#. module: sms
+#: model:ir.model,name:sms.model_base
+msgid "Base"
+msgstr "計稅基數"
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__sms_sms__failure_type__sms_blacklist
@@ -281,7 +294,7 @@ msgstr "親愛的{{ object.display_name }} 這是一條自動簡訊。"
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_template_preview_form
 msgid "Discard"
-msgstr "取消"
+msgstr "捨棄"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_sms_composer__display_name
@@ -359,7 +372,7 @@ msgstr "失敗類型"
 msgid ""
 "Field used to store sanitized phone number. Helps speeding up searches and "
 "comparisons."
-msgstr "用於存儲已清理電話號碼的欄位。説明加快搜索和比較。"
+msgstr "此欄位用於儲存已清理格式的電話號碼，有助加快資料搜尋及比對。"
 
 #. module: sms
 #: model:ir.model.fields,help:sms.field_sms_template__template_fs
@@ -601,7 +614,7 @@ msgstr "消息通知"
 msgid ""
 "Message type: email for email message, notification for system message, "
 "comment for other messages such as user replies"
-msgstr "消息類型：電子信件用於 信件消息， 通知使用者系統消息，評論用於其他消息，例如使用者回覆"
+msgstr "訊息類型：電郵訊息為「電郵」，系統訊息為「通知」，使用者回覆等其他訊息為「留言」"
 
 #. module: sms
 #: model:ir.model.fields,field_description:sms.field_res_partner__message_ids
@@ -1085,8 +1098,8 @@ msgstr "發送失敗"
 #. odoo-python
 #: code:addons/sms/models/ir_actions_server.py:0
 #, python-format
-msgid "Sending SMS can only be done on a mail.thread or a transient model"
-msgstr "發送短訊只可在mail.thread或瞬態模型上完成"
+msgid "Sending SMS can only be done on a not transient mail.thread model"
+msgstr "傳送短訊只可在非瞬態的 mail.thread 模型上進行"
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__sms_sms__state__sent
@@ -1232,15 +1245,15 @@ msgid ""
 "- 'Create Next Activity': create an activity (Discuss)\n"
 "- 'Send SMS Text Message': send SMS, log them on documents (SMS)"
 msgstr ""
-"伺服器操作類型。可使用以下的值：\n"
-"- 「執行 Python 程式碼」：將執行的一段 Python 程式碼\n"
-"- 「建立新記錄」：使用新的值建立新記錄\n"
-"- 「更新記錄」：更新記錄的值\n"
-"- 「執行多個操作」：定義一個操作以觸發多個其他伺服器操作\n"
-"- 「發送電郵」：張貼訊息、備註或發送電子郵件（聊天應用程式）\n"
-"- 「加入關注者」：將關注者加至記錄（聊天應用程式）\n"
-"- 「建立下一活動」：建立一個活動（聊天應用程式）\n"
-"- 「發送 SMS 簡訊」：發送 SMS 文字短訊，將其記錄在文件上（短訊應用程式）"
+"伺服器操作類型。 可使用以下的值：\n"
+"- 執行 Python 程式碼：將會執行的 Python 程式碼段落\n"
+"- 建立新記錄：使用新的值去建立新記錄\n"
+"- 更新記錄：更新某項記錄的值\n"
+"- 執行數項操作：設定一項操作，用以觸發多項其他伺服器操作\n"
+"- 傳送電郵：發佈訊息、備註或傳送電子郵件（聊天應用程式）\n"
+"- 加入關注者：將關注者加入記錄中（聊天應用程式）\n"
+"- 建立下一活動：建立一項活動（聊天應用程式）\n"
+"- 傳送 SMS 文字訊息：傳送 SMS 電話短訊，並在文件中建立相關記錄（短訊應用程式）"
 
 #. module: sms
 #: model:ir.model.fields.selection,name:sms.selection__mail_notification__failure_type__sms_acc
@@ -1324,8 +1337,8 @@ msgstr "您的 SMS 文本消息必須包含至少一個非空白字符"
 #. odoo-javascript
 #: code:addons/sms/static/src/components/sms_widget/fields_sms_widget.xml:0
 #, python-format
-msgid "characters, fits in"
-msgstr "個字元，需使用"
+msgid "characters"
+msgstr "字元"
 
 #. module: sms
 #: model_terms:ir.ui.view,arch_db:sms.sms_composer_view_form

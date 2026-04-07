@@ -9,15 +9,15 @@
 # Yoshi Tashiro (Quartile) <tashiro@roomsfor.hk>, 2022
 # Andy Yiu, 2023
 # Ryoko Tsuda <ryoko@quartile.co>, 2023
-# Junko Augias, 2024
+# Junko Augias, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 08:23+0000\n"
+"POT-Creation-Date: 2025-02-10 08:27+0000\n"
 "PO-Revision-Date: 2022-09-22 05:45+0000\n"
-"Last-Translator: Junko Augias, 2024\n"
+"Last-Translator: Junko Augias, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1194,7 +1194,7 @@ msgstr "出席確定"
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.event_registration_view_kanban
 msgid "Confirm Registration"
-msgstr "登録を確定する"
+msgstr "登録を確定"
 
 #. module: event
 #: model:ir.model.fields.selection,name:event.selection__event_registration__state__open
@@ -1365,6 +1365,11 @@ msgstr "表示名"
 #: model_terms:ir.ui.view,arch_db:event.res_config_settings_view_form
 msgid "Display Sponsors and Exhibitors on your event pages"
 msgstr "イベントページへのスポンサー・出展者の表示"
+
+#. module: event
+#: model:ir.model.fields,field_description:event.field_event_event__date_tz
+msgid "Display Timezone"
+msgstr "タイムゾーンを表示"
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__sequence
@@ -2052,6 +2057,13 @@ msgid "In Progress"
 msgstr "進行中"
 
 #. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_tz
+msgid ""
+"Indicates the timezone in which the event dates/times will be displayed on "
+"the website."
+msgstr "イベントの日付/時間がウェブサイトに表示されるタイムゾーンを示します。"
+
+#. module: event
 #: model:ir.model.fields,field_description:event.field_event_mail__interval_nbr
 #: model:ir.model.fields,field_description:event.field_event_type_mail__interval_nbr
 msgid "Interval"
@@ -2077,7 +2089,7 @@ msgstr "利用可能か"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event_ticket__is_expired
 msgid "Is Expired"
-msgstr "期限切れです"
+msgstr "期限切れである"
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__is_finished
@@ -2098,7 +2110,7 @@ msgstr "1日"
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_event__is_ongoing
 msgid "Is Ongoing"
-msgstr "現在進行中か"
+msgstr "現在進行中"
 
 #. module: event
 #: model:ir.model.fields,help:event.field_event_type__seats_max
@@ -3209,7 +3221,7 @@ msgstr "チケット"
 #: model_terms:ir.ui.view,arch_db:event.view_event_form
 #: model_terms:ir.ui.view,arch_db:event.view_event_type_form
 msgid "Ticket Instructions"
-msgstr "チケットのインストラクション"
+msgstr "チケット案内"
 
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.event_event_ticket_form_view
@@ -3241,7 +3253,6 @@ msgid "Tickets can be printed or scanned directly from your phone."
 msgstr "チケットは印刷するか、携帯電話から直接スキャンすることができます。"
 
 #. module: event
-#: model:ir.model.fields,field_description:event.field_event_event__date_tz
 #: model:ir.model.fields,field_description:event.field_event_type__default_timezone
 msgid "Timezone"
 msgstr "タイムゾーン"
@@ -3447,6 +3458,14 @@ msgstr "週"
 #: model_terms:event.event,description:event.event_0
 msgid "What's new?"
 msgstr "新着情報"
+
+#. module: event
+#: model:ir.model.fields,help:event.field_event_event__date_begin
+#: model:ir.model.fields,help:event.field_event_registration__event_begin_date
+msgid ""
+"When the event is scheduled to take place (expressed in your local timezone "
+"on the form view)."
+msgstr "イベント予定日時 (フォームビューに表示されている現地時間)"
 
 #. module: event
 #: model:ir.model.fields,help:event.field_event_event__is_ongoing

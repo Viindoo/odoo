@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import contextlib
+import json
 import logging
 import logging.handlers
 import os
@@ -17,6 +18,7 @@ import werkzeug.serving
 from . import release
 from . import sql_db
 from . import tools
+from .modules import module
 
 _logger = logging.getLogger(__name__)
 
@@ -42,6 +44,15 @@ class PostgreSQLHandler(logging.Handler):
     """ PostgreSQL Logging Handler will store logs in the database, by default
     the current database, can be set using --log-db=DBNAME
     """
+
+    def __init__(self):
+        super().__init__()
+        self._support_metadata = False
+        if tools.config['log_db'] != '%d':
+            with contextlib.suppress(Exception), tools.mute_logger('odoo.sql_db'), sql_db.db_connect(tools.config['log_db'], allow_uri=True).cursor() as cr:
+                cr.execute("""SELECT 1 FROM information_schema.columns WHERE table_name='ir_logging' and column_name='metadata'""")
+                self._support_metadata = bool(cr.fetchone())
+
     def emit(self, record):
         ct = threading.current_thread()
         ct_db = getattr(ct, 'dbname', None)
@@ -61,7 +72,24 @@ class PostgreSQLHandler(logging.Handler):
             levelname = logging.getLevelName(record.levelno)
 
             val = ('server', ct_db, record.name, levelname, msg, record.pathname, record.lineno, record.funcName)
-            cr.execute("""
+
+            if self._support_metadata:
+                metadata = {}
+                if module.current_test:
+                    try:
+                        metadata['test'] = module.current_test.get_log_metadata()
+                    except:
+                        pass
+
+                if metadata:
+                    val = (*val, json.dumps(metadata))
+                    cr.execute(f"""
+                        INSERT INTO ir_logging(create_date, type, dbname, name, level, message, path, line, func, metadata)
+                        VALUES (NOW() at time zone 'UTC', %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """, val)
+                    return
+
+            cr.execute(f"""
                 INSERT INTO ir_logging(create_date, type, dbname, name, level, message, path, line, func)
                 VALUES (NOW() at time zone 'UTC', %s, %s, %s, %s, %s, %s, %s, %s)
             """, val)
@@ -117,6 +145,16 @@ class DBFormatter(logging.Formatter):
         record.dbname = getattr(threading.current_thread(), 'dbname', '?')
         return logging.Formatter.format(self, record)
 
+    def formatMessage(self, record):
+        if record.munge_traceback:
+            return super().formatMessage(record).replace(
+                'Traceback (most recent call last):',
+                '_Traceback_ (most recent call last):',
+            )
+        else:
+            return super().formatMessage(record)
+
+
 class ColoredFormatter(DBFormatter):
     def format(self, record):
         fg_color, bg_color = LEVEL_COLOR_MAPPING.get(record.levelno, (GREEN, DEFAULT))
@@ -134,6 +172,7 @@ def init_logger():
     def record_factory(*args, **kwargs):
         record = old_factory(*args, **kwargs)
         record.perf_info = ""
+        record.munge_traceback = False
         return record
     logging.setLogRecordFactory(record_factory)
 
@@ -164,6 +203,8 @@ def init_logger():
     ]:
         warnings.filterwarnings('ignore', category=DeprecationWarning, module=module)
 
+    # reportlab<4.0.6 triggers this in Py3.10/3.11
+    warnings.filterwarnings('ignore', r'the load_module\(\) method is deprecated', category=DeprecationWarning, module='importlib._bootstrap')
     # the SVG guesser thing always compares str and bytes, ignore it
     warnings.filterwarnings('ignore', category=BytesWarning, module='odoo.tools.image')
     # reportlab does a bunch of bytes/str mixing in a hashmap
@@ -175,6 +216,9 @@ def init_logger():
     # need to be adapted later but too muchwork for this pr.
     warnings.filterwarnings('ignore', r'^datetime.datetime.utcnow\(\) is deprecated and scheduled for removal in a future version.*', category=DeprecationWarning)
 
+    # This warning is triggered library only during the python precompilation which does not occur on readonly filesystem
+    warnings.filterwarnings("ignore", r'invalid escape sequence', category=DeprecationWarning, module=".*vobject")
+    warnings.filterwarnings("ignore", r'invalid escape sequence', category=SyntaxWarning, module=".*vobject")
     from .tools.translate import resetlocale
     resetlocale()
 

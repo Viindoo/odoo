@@ -118,6 +118,28 @@ const wSnippetMenu = weSnippetEditor.SnippetsMenu.extend({
         `, _t("Position"), _t("Cover"), _t("Contain"))));
         // TODO remove me in master
         $html.find('[data-attribute-name="interval"]')[0].dataset.attributeName = "bsInterval";
+        // TODO adapt in 17.0: changing the `data-apply-to` attribute of the
+        // grid padding option so it is not applied on inner rows.
+        const $gridPaddingOptions = $html.find('[data-css-property="--grid-item-padding-y"], [data-css-property="--grid-item-padding-x"]');
+        $gridPaddingOptions.attr("data-apply-to", ".row.o_grid_mode");
+
+        // TODO remove in master and adapt XML.
+        const contentAdditionEl = $html.find("#so_content_addition")[0];
+        if (contentAdditionEl) {
+            // Necessary to be able to drop "inner blocks" next to an image link.
+            contentAdditionEl.dataset.dropNear += ", .row > div:not(.o_grid_item_image) > a";
+            // TODO remove in master
+            // The class is added again here even though it has already been
+            // added by the "searchbar_input_snippet_options" template. We are
+            // doing it again because it was mistakenly translated into Dutch.
+            contentAdditionEl.dataset.selector += ", .s_searchbar_input";
+            contentAdditionEl.dataset.dropNear += ", .s_searchbar_input";
+        }
+        // TODO remove in master
+        const snippetSaveOptionEl = $html.find("[data-js='SnippetSave']")[0];
+        if (snippetSaveOptionEl) {
+            snippetSaveOptionEl.dataset.selector += ", .s_searchbar_input";
+        }
     },
     /**
      * Depending of the demand, reconfigure they gmap key or configure it

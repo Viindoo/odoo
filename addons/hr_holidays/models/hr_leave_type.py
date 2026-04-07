@@ -182,6 +182,11 @@ class HolidaysType(models.Model):
             else:
                 holiday_type.has_valid_allocation = True
 
+    def _load_records_write(self, values):
+        if 'requires_allocation' in values and self.requires_allocation == values['requires_allocation']:
+            values.pop('requires_allocation')
+        return super()._load_records_write(values)
+
     @api.constrains('requires_allocation')
     def check_allocation_requirement_edit_validity(self):
         if self.env['hr.leave'].search_count([('holiday_status_id', 'in', self.ids)], limit=1):
@@ -400,6 +405,7 @@ class HolidaysType(models.Model):
                         if interval_to != future_allocations_date_to
                         else {'days': float('inf'), 'hours': float('inf')}
                     )
+                    reached_remaining_days_limit = False
                     for allocation in interval_allocations:
                         if allocation.date_from > search_date:
                             continue
@@ -412,11 +418,12 @@ class HolidaysType(models.Model):
                             remaining_days_allocation = (allocation.number_of_hours_display - days_consumed['virtual_leaves_taken'])
                         if quantity_available <= remaining_days_allocation:
                             search_date = interval_to.date() + timedelta(days=1)
-                        days_consumed['virtual_remaining_leaves'] += min(quantity_available, remaining_days_allocation)
                         days_consumed['max_leaves'] = allocation.number_of_days if allocation.type_request_unit in ['day', 'half_day'] else allocation.number_of_hours_display
-                        days_consumed['remaining_leaves'] = days_consumed['max_leaves'] - days_consumed['leaves_taken']
+                        if not reached_remaining_days_limit:
+                            days_consumed['virtual_remaining_leaves'] += min(quantity_available, remaining_days_allocation)
+                            days_consumed['remaining_leaves'] = days_consumed['max_leaves'] - days_consumed['leaves_taken']
                         if remaining_days_allocation >= quantity_available:
-                            break
+                            reached_remaining_days_limit = True
                         # Check valid allocations with still availabe leaves on it
                         if days_consumed['virtual_remaining_leaves'] > 0 and allocation.date_to and allocation.date_to > date:
                             allocations_with_remaining_leaves |= allocation
@@ -622,6 +629,7 @@ class HolidaysType(models.Model):
             ('holiday_status_id', 'in', self.ids),
         ]
         action['context'] = {
+            'employee_id': False,
             'default_holiday_type': 'department',
             'default_holiday_status_id': self.ids[0],
             'search_default_approved_state': 1,

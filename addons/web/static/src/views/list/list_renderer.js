@@ -537,6 +537,11 @@ export class ListRenderer extends Component {
                 continue;
             }
             const { rawAttrs, widget } = this.props.list.activeFields[fieldName];
+            const func =
+                (rawAttrs.sum && "sum") ||
+                (rawAttrs.avg && "avg") ||
+                (rawAttrs.max && "max") ||
+                (rawAttrs.min && "min");
             let currencyId;
             if (type === "monetary" || widget === "monetary") {
                 const currencyField =
@@ -547,7 +552,7 @@ export class ListRenderer extends Component {
                     currencyField in this.props.list.activeFields &&
                     values[0][currencyField] &&
                     values[0][currencyField][0];
-                if (currencyId) {
+                if (currencyId && func) {
                     const sameCurrency = values.every(
                         (value) => currencyId === value[currencyField][0]
                     );
@@ -560,11 +565,6 @@ export class ListRenderer extends Component {
                     }
                 }
             }
-            const func =
-                (rawAttrs.sum && "sum") ||
-                (rawAttrs.avg && "avg") ||
-                (rawAttrs.max && "max") ||
-                (rawAttrs.min && "min");
             if (func) {
                 let aggregateValue = 0;
                 if (func === "max") {
@@ -1617,7 +1617,7 @@ export class ListRenderer extends Component {
             return;
         }
         // Legacy DatePicker
-        if (target.closest(".daterangepicker")) {
+        if (target.closest(".daterangepicker") || ev.isFromDateRangePicker) {
             return;
         }
         // Legacy autocomplete
@@ -1716,7 +1716,8 @@ export class ListRenderer extends Component {
         const resizeHeader = (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
-            const delta = ev.clientX - initialX;
+            let delta = ev.clientX - initialX;
+            delta = this.isRTL ? -delta : delta;
             const newWidth = Math.max(10, initialWidth + delta);
             const tableDelta = newWidth - initialWidth;
             th.style.width = `${Math.floor(newWidth)}px`;

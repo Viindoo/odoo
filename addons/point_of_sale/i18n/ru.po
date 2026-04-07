@@ -27,15 +27,17 @@
 # Смородин Даниил, 2024
 # Сергей Шебанин <sergey@shebanin.ru>, 2024
 # Martin Trigaux, 2024
-# Wil Odoo, 2024
+# Ilya Rozhkov, 2024
+# Wil Odoo, 2025
+# Anastasiia Koroleva, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-06-27 03:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Wil Odoo, 2024\n"
+"Last-Translator: Anastasiia Koroleva, 2025\n"
 "Language-Team: Russian (https://app.transifex.com/odoo/teams/41243/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -116,7 +118,7 @@ msgstr "для \"%s\" найдено %s товаров."
 #: code:addons/point_of_sale/models/pos_session.py:0
 #, python-format
 msgid "%s untaxed"
-msgstr ""
+msgstr "%s без налога"
 
 #. module: point_of_sale
 #. odoo-python
@@ -202,6 +204,7 @@ msgstr "<i class=\"fa fa-pencil\"/>Редактировать"
 #, python-format
 msgid "<p>Dear %s,<br/>Here is your electronic ticket for the %s. </p>"
 msgstr ""
+"<p>Уважаемые %s,<br/>Здесь находится ваш электронный билет на %s. </p>"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -2931,11 +2934,14 @@ msgid "Invoice payment for %s (%s) using %s"
 msgstr "Оплата счета-фактуры за %s (%s) с использованием %s"
 
 #. module: point_of_sale
+#. odoo-javascript
+#: code:addons/point_of_sale/static/src/js/Screens/TicketScreen/TicketScreen.js:0
 #: model:ir.model.fields,field_description:point_of_sale.field_report_pos_order__invoiced
 #: model:ir.model.fields.selection,name:point_of_sale.selection__pos_order__state__invoiced
 #: model:ir.model.fields.selection,name:point_of_sale.selection__report_pos_order__state__invoiced
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_pos_order_filter
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_report_pos_order_search
+#, python-format
 msgid "Invoiced"
 msgstr "Выставлен счет"
 
@@ -3464,6 +3470,13 @@ msgid "More..."
 msgstr "Больше..."
 
 #. module: point_of_sale
+#. odoo-javascript
+#: code:addons/point_of_sale/static/src/js/Screens/TicketScreen/TicketScreen.js:0
+#, python-format
+msgid "Multiple Orders Selected"
+msgstr ""
+
+#. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_session__my_activity_date_deadline
 msgid "My Activity Deadline"
 msgstr "Крайний срок моего действия"
@@ -3822,6 +3835,7 @@ msgstr ""
 "Нажмите на +/-, чтобы изменить количество, подлежащее возврату."
 
 #. module: point_of_sale
+#. odoo-python
 #: code:addons/point_of_sale/models/pos_config.py:0
 #, python-format
 msgid "Only administrators can edit receipt headers and footers"
@@ -4634,12 +4648,12 @@ msgstr "Категория продуктов PoS"
 #: code:addons/point_of_sale/models/pos_session.py:0
 #, python-format
 msgid "PoS order %s can not be processed"
-msgstr ""
+msgstr "Заказ торговой точки %s не может быть обработан"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_partner_property_form
 msgid "Point Of Sale"
-msgstr "Касса"
+msgstr "Торговая точка"
 
 #. module: point_of_sale
 #. odoo-python
@@ -4779,7 +4793,7 @@ msgstr "Пользователь группы точки продаж"
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_bill__pos_config_ids
 msgid "Point of Sales"
-msgstr "Точка продажи"
+msgstr "Торговая точка"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_order__access_url
@@ -6389,6 +6403,8 @@ msgid ""
 "The amount of your payment lines must be rounded to validate the transaction.\n"
 "The rounding precision is %s so you should set %s or %s as payment amount instead of %s."
 msgstr ""
+"Суммы платежных строк должны быть округлены для проведения операции. \n"
+"Точность округления — %s. Укажите сумму %s или %s вместо %s."
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -6882,6 +6898,17 @@ msgstr ""
 msgid ""
 "This journal is associated with a payment method. You cannot modify its type"
 msgstr "Этот журнал связан с методом оплаты. Вы не можете изменить его тип"
+
+#. module: point_of_sale
+#. odoo-python
+#: code:addons/point_of_sale/models/account_journal.py:0
+#, python-format
+msgid ""
+"This journal is associated with payment method %s that is being used by "
+"order %s in the active pos session %s"
+msgstr ""
+"Этот журнал связан со методом оплаты %s, который используется в заказе %s в "
+"активной сессии POS %s"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -7615,6 +7642,15 @@ msgstr ""
 
 #. module: point_of_sale
 #. odoo-python
+#: code:addons/point_of_sale/models/account_cash_rounding.py:0
+#, python-format
+msgid ""
+"You cannot delete a rounding method that is used in a Point of Sale "
+"configuration."
+msgstr "Нельзя удалить метод округления, используемый в конфигурации POS."
+
+#. module: point_of_sale
+#. odoo-python
 #: code:addons/point_of_sale/models/res_partner.py:0
 #, python-format
 msgid ""
@@ -7630,6 +7666,8 @@ msgid ""
 "You do not have permission to open a POS session. Please try opening a "
 "session with a different user"
 msgstr ""
+"У вас нет прав для открытия сеанса торговой точки. Попробуйте открыть сеанс "
+"с другим пользователем"
 
 #. module: point_of_sale
 #. odoo-python
@@ -7650,6 +7688,15 @@ msgid ""
 msgstr ""
 "Вы включили опцию \"Определить клиента\" для метода оплаты %s, но заказ %s "
 "не содержит клиента."
+
+#. module: point_of_sale
+#. odoo-javascript
+#: code:addons/point_of_sale/static/src/js/Screens/TicketScreen/TicketScreen.js:0
+#, python-format
+msgid ""
+"You have selected orderlines from multiple orders. To proceed refund, please"
+" select orderlines from the same order."
+msgstr ""
 
 #. module: point_of_sale
 #. odoo-javascript

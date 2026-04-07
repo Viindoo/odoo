@@ -4445,7 +4445,7 @@ registry.sizing = SnippetOptionWidget.extend({
                 _.each(resize[0], function (val, key) {
                     if (self.$target.hasClass(val)) {
                         current = key;
-                    } else if (resize[1][key] === cssPropertyValue) {
+                    } else if (parseInt(resize[1][key]) === cssPropertyValue) {
                         current = key;
                     }
                 });
@@ -4781,7 +4781,7 @@ registry['sizing_x'] = registry.sizing.extend({
 
             if (compass === 'w') {
                 // don't change the right border position when we change the offset (replace col size)
-                var beginCol = Number(beginClass.match(/col-lg-([0-9]+)|$/)[1] || 0);
+                var beginCol = Number(beginClass.match(/col-lg-([0-9]+)|$/)[1] || 12);
                 var offset = Number(this.grid.w[0][current].match(/offset-lg-([0-9-]+)|$/)[1] || 0);
                 if (offset < 0) {
                     offset = 0;
@@ -5494,7 +5494,7 @@ registry.ReplaceMedia = SnippetOptionWidget.extend({
      * @see this.selectClass for parameters
      */
     setLink(previewMode, widgetValue, params) {
-        const parentEl = this.$target[0].parentNode;
+        const parentEl = this._searchSupportedParentLinkEl();
         if (parentEl.tagName !== 'A') {
             const wrapperEl = document.createElement('a');
             this.$target[0].after(wrapperEl);
@@ -5519,7 +5519,7 @@ registry.ReplaceMedia = SnippetOptionWidget.extend({
      * @see this.selectClass for parameters
      */
     setNewWindow(previewMode, widgetValue, params) {
-        const linkEl = this.$target[0].parentElement;
+        const linkEl = this._searchSupportedParentLinkEl();
         if (widgetValue) {
             linkEl.setAttribute('target', '_blank');
         } else {
@@ -5532,7 +5532,7 @@ registry.ReplaceMedia = SnippetOptionWidget.extend({
      * @see this.selectClass for parameters
      */
     setUrl(previewMode, widgetValue, params) {
-        const linkEl = this.$target[0].parentElement;
+        const linkEl = this._searchSupportedParentLinkEl();
         let url = widgetValue;
         if (!url) {
             // As long as there is no URL, the image is not considered a link.
@@ -5570,7 +5570,8 @@ registry.ReplaceMedia = SnippetOptionWidget.extend({
      * @private
      */
     _activateLinkTool() {
-        if (this.$target[0].parentElement.tagName === 'A') {
+        const parentEl = this._searchSupportedParentLinkEl();
+        if (parentEl.tagName === 'A') {
             this._requestUserValueWidgets('media_url_opt')[0].focus();
         } else {
             this._requestUserValueWidgets('media_link_opt')[0].enable();
@@ -5580,7 +5581,7 @@ registry.ReplaceMedia = SnippetOptionWidget.extend({
      * @private
      */
     _deactivateLinkTool() {
-        const parentEl = this.$target[0].parentNode;
+        const parentEl = this._searchSupportedParentLinkEl();
         if (parentEl.tagName === 'A') {
             this._requestUserValueWidgets('media_link_opt')[0].enable();
         }
@@ -5589,7 +5590,7 @@ registry.ReplaceMedia = SnippetOptionWidget.extend({
      * @override
      */
     _computeWidgetState(methodName, params) {
-        const parentEl = this.$target[0].parentElement;
+        const parentEl = this._searchSupportedParentLinkEl();
         const linkEl = parentEl.tagName === 'A' ? parentEl : null;
         switch (methodName) {
             case 'setLink': {
@@ -5612,11 +5613,20 @@ registry.ReplaceMedia = SnippetOptionWidget.extend({
     async _computeWidgetVisibility(widgetName, params) {
         if (widgetName === 'media_link_opt') {
             if (this.$target[0].matches('img')) {
-                return isImageSupportedForStyle(this.$target[0]);
+                return isImageSupportedForStyle(this.$target[0])
+                    && !this._searchSupportedParentLinkEl().matches("a[data-oe-xpath]");
             }
             return !this.$target[0].classList.contains('media_iframe_video');
         }
         return this._super(...arguments);
+    },
+    /**
+     * @private
+     * @returns {Element} The "closest" element that can be supported as a <a>.
+     */
+    _searchSupportedParentLinkEl() {
+        const parentEl = this.$target[0].parentElement;
+        return parentEl.matches("figure") ? parentEl.parentElement : parentEl;
     },
 });
 
@@ -6516,6 +6526,9 @@ registry.ImageTools = ImageHandlerOption.extend({
         this.trigger_up('snippet_edition_request', {exec: async () => {
             await this._autoOptimizeImage();
             this.trigger_up('cover_update');
+            if (ev._complete) {
+                ev._complete();
+            }
         }});
     },
     /**
@@ -6907,12 +6920,13 @@ registry.BackgroundImage = SnippetOptionWidget.extend({
         const parts = backgroundImageCssToParts(this.$target.css('background-image'));
         if (backgroundURL) {
             parts.url = `url('${backgroundURL}')`;
-            this.$target.addClass('oe_img_bg o_bg_img_center');
+            this.$target.addClass('oe_img_bg o_bg_img_center o_bg_img_origin_border_box');
         } else {
             delete parts.url;
             this.$target[0].classList.remove(
                 "oe_img_bg",
                 "o_bg_img_center",
+                "o_bg_img_origin_border_box",
                 "o_modified_image_to_save",
             );
         }
@@ -7978,6 +7992,17 @@ registry.SnippetSave = SnippetOptionWidget.extend({
                                     const defaultSnippetName = _.str.sprintf(_t("Custom %s"), this.data.snippetName);
                                     const targetCopyEl = this.$target[0].cloneNode(true);
                                     targetCopyEl.classList.add('s_custom_snippet');
+                                    // when cloning the snippets which has o_snippet_invisible, o_snippet_mobile_invisible or
+                                    // o_snippet_desktop_invisible class will be hidden because of d-none class added on it,
+                                    // so we needs to remove `d-none` explicity in such case from the target.
+                                    const isTargetHidden = [
+                                        "o_snippet_invisible",
+                                        "o_snippet_mobile_invisible",
+                                        "o_snippet_desktop_invisible"
+                                    ].some(className => this.$target[0].classList.contains(className));
+                                    if (isTargetHidden) {
+                                        targetCopyEl.classList.remove("d-none");
+                                    }
                                     delete targetCopyEl.dataset.name;
                                     // By the time onSuccess is called after request_save, the
                                     // current widget has been destroyed and is orphaned, so this._rpc

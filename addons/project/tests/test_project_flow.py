@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+from markupsafe import Markup
+
 from .test_project_base import TestProjectCommon
 from odoo import Command
 from odoo.tools import mute_logger
@@ -123,6 +125,38 @@ class TestProjectFlow(TestProjectCommon, MailCommon):
         self.assertEqual(task.name, 'Super Frog', 'project_task: name should be the email subject')
         self.assertEqual(task.project_id, self.project_goats, 'project_task: incorrect project')
         self.assertEqual(task.stage_id.sequence, 1, "project_task: should have a stage with sequence=1")
+        self.assertEqual(
+            task.description,
+            Markup(
+                '<pre>Hello,\n\nThis email should create a new entry in your module. Please check that it\neffectively works.\n\nThanks,\n<span data-o-mail-quote="1">\n--\nRaoul Boitempoils\nIntegrator at Agrolait</span></pre>\n'
+            ),
+            'The task description should be the email content.',
+        )
+
+    @mute_logger('odoo.addons.mail.models.mail_thread')
+    def test_task_creation_from_mail(self):
+        server = self.env['fetchmail.server'].create({
+            'name': 'Test server',
+            'user': 'test@example.com',
+            'password': '',
+        })
+        task_id = self.env["mail.thread"].with_context(
+            default_fetchmail_server_id=server.id
+        ).message_process(
+            server.object_id.model,
+            EMAIL_TPL.format(
+                cc="",
+                email_from="chell@gladys.portal",
+                to="project+pigs@example.com",
+                subject="In a cage",
+                msg_id="<on.antibiotics@example.com>",
+            ),
+            save_original=server.original,
+            strip_attachments=not server.attach,
+        )
+        task = self.env['project.task'].browse(task_id)
+        self.assertEqual(task.name, "In a cage")
+        self.assertEqual(task.project_id, self.project_pigs)
 
     def test_subtask_process(self):
         """

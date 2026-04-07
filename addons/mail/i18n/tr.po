@@ -17,28 +17,29 @@
 # Ayhan KIZILTAN <akiziltan76@hotmail.com>, 2022
 # ismail eski <ismaileski@gmail.com>, 2022
 # Erdal Mutlu, 2022
-# Nadir Gazioglu <nadirgazioglu@gmail.com>, 2022
 # İlknur Püskül <ilknurpuskull@gmail.com>, 2022
 # Murat Kaplan <muratk@projetgrup.com>, 2022
 # Martin Trigaux, 2022
 # Umur Akın <umura@projetgrup.com>, 2022
 # abc Def <hdogan1974@gmail.com>, 2022
 # Saban Yildiz <sabany@projetgrup.com>, 2022
-# Ediz Duman <neps1192@gmail.com>, 2023
 # Tugay Hatıl <tugayh@projetgrup.com>, 2023
 # Halil, 2023
 # Murat Durmuş <muratd@projetgrup.com>, 2023
 # Ertuğrul Güreş <ertugrulg@projetgrup.com>, 2023
 # Melih Melik Sonmez, 2023
 # Özlem Atalay <ozlema@eskayazilim.com.tr>, 2024
+# Nadir Gazioglu <nadirgazioglu@gmail.com>, 2024
+# Ediz Duman <neps1192@gmail.com>, 2024
+# Deniz Guvener_Odoo <degu@odoo.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Özlem Atalay <ozlema@eskayazilim.com.tr>, 2024\n"
+"Last-Translator: Deniz Guvener_Odoo <degu@odoo.com>, 2025\n"
 "Language-Team: Turkish (https://app.transifex.com/odoo/teams/41243/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1780,9 +1781,22 @@ msgid "Auto subscription"
 msgstr "Otomatik abonelik"
 
 #. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__mail_compose_message__message_type__auto_comment
+#: model:ir.model.fields.selection,name:mail.selection__mail_message__message_type__auto_comment
+msgid "Automated Targeted Notification"
+msgstr "Otomatik Hedefli Bildirim"
+
+#. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity__automated
 msgid "Automated activity"
 msgstr "Otomatik aktivite"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/models/message.js:0
+#, python-format
+msgid "Automated message"
+msgstr "Otomatik mesaj"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_activity_type__triggered_next_type_id
@@ -7052,6 +7066,14 @@ msgid "Open Document"
 msgstr "Belge Aç"
 
 #. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#: code:addons/mail/static/src/components/attachment_card/attachment_card.xml:0
+#, python-format
+msgid "Open Link"
+msgstr "Bağlantıyı Aç"
+
+#. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_alias_form
 msgid "Open Parent Document"
 msgstr "Üst Belgeyi Aç"
@@ -10768,14 +10790,6 @@ msgid ""
 msgstr ""
 "Bu şablona dosya eleyebilirsiniz, bu şablonda oluşturulan tüm epostalara "
 "eklenmek üzere"
-
-#. module: mail
-#: code:addons/mail/models/ir_attachment.py:0
-#, python-format
-msgid ""
-"You may not unlink or modify the content of attachments from other people's "
-"messages"
-msgstr ""
 
 #. module: mail
 #. odoo-javascript

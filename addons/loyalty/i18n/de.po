@@ -8,15 +8,15 @@
 # Friederike Fasterling-Nesselbosch, 2022
 # Martin Trigaux, 2023
 # Wil Odoo, 2024
-# Larissa Manderfeld, 2024
+# Larissa Manderfeld, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-22 18:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Larissa Manderfeld, 2024\n"
+"Last-Translator: Larissa Manderfeld, 2025\n"
 "Language-Team: German (https://app.transifex.com/odoo/teams/41243/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -434,7 +434,7 @@ msgstr ""
 "            Herzlichen Glückwusch <t t-out=\"object._get_mail_partner().name or ''\">Brandon Freeman</t>,<br>\n"
 "        </t>\n"
 "\n"
-"        hier ist Ihre Belohnung von <t t-out=\"object.program_id.company_id.name or ''\">YourCompany</t>.<br>\n"
+"        hier ist Ihre Belohnung von <t t-out=\"object.program_id.company_id.name or ''\">IhrUnternehmen</t>.<br>\n"
 "\n"
 "        <t t-foreach=\"object.program_id.reward_ids\" t-as=\"reward\">\n"
 "            <t t-if=\"reward.required_points &lt;= object.points\">\n"
@@ -1011,6 +1011,13 @@ msgstr "Exklusive"
 #: model:ir.model.fields,field_description:loyalty.field_loyalty_card__expiration_date
 msgid "Expiration Date"
 msgstr "Ablaufdatum"
+
+#. module: loyalty
+#. odoo-python
+#: code:addons/loyalty/models/loyalty_card.py:0
+#, python-format
+msgid "Expiration date cannot be set on a loyalty card."
+msgstr "Das Ablaufdataum kann nicht für Treuekarte eingestellt werden."
 
 #. module: loyalty
 #. odoo-python
@@ -1698,6 +1705,7 @@ msgstr ""
 
 #. module: loyalty
 #: model:ir.model.fields,field_description:loyalty.field_loyalty_program__reward_ids
+#: model_terms:ir.ui.view,arch_db:loyalty.loyalty_program_view_form
 msgid "Rewards"
 msgstr "Belohnungen"
 
@@ -1816,6 +1824,13 @@ msgstr ""
 "Die für eine Belohnung erforderlichen Punkte müssen unbedingt positiv sein."
 
 #. module: loyalty
+#. odoo-python
+#: code:addons/loyalty/models/loyalty_reward.py:0
+#, python-format
+msgid "The reward description field cannot be empty."
+msgstr "Das Feld zur Beschreibung der Belohnung darf nicht leer sein."
+
+#. module: loyalty
 #: model:ir.model.constraint,message:loyalty.constraint_loyalty_reward_product_qty_positive
 msgid "The reward product quantity must be strictly positive."
 msgstr "Die Menge des Belohnungsprodukts muss unbedingt positiv sein."
@@ -1864,6 +1879,13 @@ msgstr "Gesamtzahl der Aufträge"
 #: model:ir.model.fields,field_description:loyalty.field_loyalty_program__trigger
 msgid "Trigger"
 msgstr "Auslöser"
+
+#. module: loyalty
+#. odoo-python
+#: code:addons/loyalty/models/loyalty_reward.py:0
+#, python-format
+msgid "Unsupported search operator"
+msgstr "Suchoperator nicht unterstützt"
 
 #. module: loyalty
 #: model:ir.model.fields,field_description:loyalty.field_loyalty_card__use_count
@@ -1965,13 +1987,6 @@ msgstr "Mit einem Aktionscode"
 #, python-format
 msgid "You can not delete a program in an active state"
 msgstr "Sie können ein aktives Programm nicht löschen"
-
-#. module: loyalty
-#. odoo-python
-#: code:addons/loyalty/models/loyalty_reward.py:0
-#, python-format
-msgid "The reward description field cannot be empty."
-msgstr "Das Feld zur Beschreibung der Belohnung darf nicht leer sein."
 
 #. module: loyalty
 #. odoo-python

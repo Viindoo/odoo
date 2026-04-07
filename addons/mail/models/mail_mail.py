@@ -349,20 +349,21 @@ class MailMail(models.Model):
         body = self._send_prepare_body()
         body_alternative = tools.html2plaintext(body)
         if partner:
-            emails_normalized = tools.email_normalize_all(partner.email)
-            if emails_normalized:
-                email_to = [
-                    tools.formataddr((partner.name or "False", email or "False"))
-                    for email in emails_normalized
-                ]
-            else:
-                email_to = [tools.formataddr((partner.name or "False", partner.email or "False"))]
+            email_to_normalized = tools.email_normalize_all(partner.email)
+            email_to = [
+                tools.formataddr((partner.name or "False", email or "False"))
+                for email in email_to_normalized or [partner.email]
+            ]
         else:
-            email_to = tools.email_split_and_format(self.email_to)
+            email_to_normalized = tools.email_normalize_all(self.email_to)
+            email_to = tools.email_split_and_format_normalize(self.email_to)
+        # email_cc is added to the "to" when invoking send_email
+        email_to_normalized += tools.email_normalize_all(self.email_cc)
         res = {
             'body': body,
             'body_alternative': body_alternative,
             'email_to': email_to,
+            'email_to_normalized': email_to_normalized,
         }
         return res
 
@@ -385,8 +386,11 @@ class MailMail(models.Model):
         # First group the <mail.mail> per mail_server_id and per email_from
         group_per_email_from = defaultdict(list)
         for values in mail_values:
+            # protect against ill-formatted email_from when formataddr was used on an already formatted email
+            emails_from = tools.email_split_and_format_normalize(values['email_from'])
+            email_from = emails_from[0] if emails_from else values['email_from']
             mail_server_id = values['mail_server_id'][0] if values['mail_server_id'] else False
-            group_per_email_from[(mail_server_id, values['email_from'])].append(values['id'])
+            group_per_email_from[mail_server_id, email_from].append(values['id'])
 
         # Then find the mail server for each email_from and group the <mail.mail>
         # per mail_server_id and smtp_from
@@ -399,7 +403,7 @@ class MailMail(models.Model):
             else:
                 smtp_from = email_from
 
-            group_per_smtp_from[(mail_server_id, smtp_from)].extend(mail_ids)
+            group_per_smtp_from[mail_server_id, smtp_from].extend(mail_ids)
 
         sys_params = self.env['ir.config_parameter'].sudo()
         batch_size = int(sys_params.get_param('mail.session.batch.size', 1000))
@@ -446,7 +450,12 @@ class MailMail(models.Model):
                     len(batch_ids), mail_server_id)
             finally:
                 if smtp_session:
-                    smtp_session.quit()
+                    try:
+                        smtp_session.quit()
+                    except smtplib.SMTPServerDisconnected:
+                        _logger.info(
+                            "Ignoring SMTPServerDisconnected while trying to quit non open session"
+                        )
 
     def _send(self, auto_commit=False, raise_exception=False, smtp_session=None):
         IrMailServer = self.env['ir.mail_server']
@@ -522,7 +531,7 @@ class MailMail(models.Model):
                     notifs.flush_recordset(['notification_status', 'failure_type', 'failure_reason'])
 
                 # protect against ill-formatted email_from when formataddr was used on an already formatted email
-                emails_from = tools.email_split_and_format(mail.email_from)
+                emails_from = tools.email_split_and_format_normalize(mail.email_from)
                 email_from = emails_from[0] if emails_from else mail.email_from
 
                 # build an RFC2822 email.message.Message object and send it without queuing
@@ -530,6 +539,9 @@ class MailMail(models.Model):
                 # TDE note: could be great to pre-detect missing to/cc and skip sending it
                 # to go directly to failed state update
                 for email in email_list:
+                    # give indication to 'send_mail' about emails already considered
+                    # as being valid
+                    email_to_normalized = email.pop('email_to_normalized', [])
                     # support headers specific to the specific outgoing email
                     if email.get('headers'):
                         email_headers = headers.copy()
@@ -546,7 +558,7 @@ class MailMail(models.Model):
                         subject=mail.subject,
                         body=email.get('body'),
                         body_alternative=email.get('body_alternative'),
-                        email_cc=tools.email_split(mail.email_cc),
+                        email_cc=tools.email_split_and_format_normalize(mail.email_cc),
                         reply_to=mail.reply_to,
                         attachments=attachments,
                         message_id=mail.message_id,
@@ -557,7 +569,8 @@ class MailMail(models.Model):
                         headers=email_headers)
                     processing_pid = email.pop("partner_id", None)
                     try:
-                        res = IrMailServer.send_email(
+                        # 'send_validated_to' restricts emails found by 'extract_rfc2822_addresses'
+                        res = IrMailServer.with_context(send_validated_to=email_to_normalized).send_email(
                             msg, mail_server_id=mail.mail_server_id.id, smtp_session=smtp_session)
                         if processing_pid:
                             success_pids.append(processing_pid)
@@ -579,7 +592,18 @@ class MailMail(models.Model):
                             raise
                 if res:  # mail has been sent at least once, no major exception occurred
                     mail.write({'state': 'sent', 'message_id': res, 'failure_reason': False})
-                    _logger.info('Mail with ID %r and Message-Id %r successfully sent', mail.id, mail.message_id)
+                    _logger.info(
+                        "Mail (mail.mail) with ID %r and Message-Id %r from %r to (redacted) %s successfully sent",
+                        mail.id,
+                        mail.message_id,
+                        tools.email_normalize(msg['from']),  # FROM should not change, so last msg good enough
+                        ', '.join(
+                            repr(tools.mail.email_anonymize(tools.email_normalize(e)))
+                            for m in email_list for e in m['email_to']
+                        ),
+                    )
+                    _logger.info("Total emails tried by SMTP: %s", len(email_list))
+
                     # /!\ can't use mail.state here, as mail.refresh() will cause an error
                     # see revid:odo@openerp.com-20120622152536-42b2s28lvdv3odyr in 6.1
                 mail._postprocess_sent_message(success_pids=success_pids, failure_type=failure_type)

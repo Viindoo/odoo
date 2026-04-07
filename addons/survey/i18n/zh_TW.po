@@ -5,16 +5,16 @@
 # Translators:
 # 敬雲 林 <chingyun@yuanchih-consult.com>, 2022
 # Martin Trigaux, 2023
-# Wil Odoo, 2024
-# Tony Ng, 2024
+# Wil Odoo, 2025
+# Tony Ng, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-05-06 20:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:55+0000\n"
-"Last-Translator: Tony Ng, 2024\n"
+"Last-Translator: Tony Ng, 2025\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/odoo/teams/41243/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -73,6 +73,13 @@ msgstr "已完成"
 #, python-format
 msgid "%s (copy)"
 msgstr "%s (副本)"
+
+#. module: survey
+#. odoo-python
+#: code:addons/survey/models/survey_question.py:0
+#, python-format
+msgid "%s Votes"
+msgstr "%s 個投票"
 
 #. module: survey
 #. odoo-python
@@ -681,7 +688,7 @@ msgstr "<span>哪個是黃色的？</span><br/>"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p3_q4
 msgid "A \"Citrus\" could give you ..."
-msgstr "可以給你一個“柑橘”..."
+msgstr "「柑橘類果實」可以給你⋯"
 
 #. module: survey
 #. odoo-python
@@ -744,12 +751,12 @@ msgstr "存取模式"
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_survey__access_token
 msgid "Access Token"
-msgstr "存取代碼(token)"
+msgstr "存取權杖(token)"
 
 #. module: survey
 #: model:ir.model.constraint,message:survey.constraint_survey_survey_access_token_unique
 msgid "Access token should be unique"
-msgstr "存取代碼(token)應該是唯一值"
+msgstr "存取權杖(token)應該是唯一值"
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_survey__message_needaction
@@ -872,7 +879,7 @@ msgstr "阿蒙霍特普"
 #. module: survey
 #: model:ir.model.constraint,message:survey.constraint_survey_user_input_unique_token
 msgid "An access token must be unique!"
-msgstr "存取代碼(token)必須是唯一的！"
+msgstr "存取權杖(token)必須是唯一的！"
 
 #. module: survey
 #: model:ir.model.constraint,message:survey.constraint_survey_question_positive_answer_score
@@ -970,7 +977,7 @@ msgstr "亞洲"
 #: model:ir.model.fields,field_description:survey.field_survey_survey__message_attachment_count
 #: model:ir.model.fields,field_description:survey.field_survey_user_input__message_attachment_count
 msgid "Attachment Count"
-msgstr "附件數"
+msgstr "附件數目"
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_invite__attachment_ids
@@ -981,7 +988,7 @@ msgstr "附件"
 #: model:ir.model.fields,field_description:survey.field_survey_user_input__attempts_number
 #: model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_form
 msgid "Attempt n°"
-msgstr "嘗試n°"
+msgstr "嘗試次數"
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_survey__answer_done_count
@@ -1062,7 +1069,7 @@ msgstr "返回按鈕"
 #: model:ir.model.fields,field_description:survey.field_survey_question__background_image
 #: model:ir.model.fields,field_description:survey.field_survey_survey__background_image
 msgid "Background Image"
-msgstr "背景圖像"
+msgstr "背景圖片"
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_question__background_image_url
@@ -1367,7 +1374,7 @@ msgstr "撰寫電郵"
 #: code:addons/survey/models/survey_user_input.py:0
 #, python-format
 msgid "Computing score requires a question in arguments."
-msgstr "計算分數需要在參數中提出問題。"
+msgstr "計算分數需要在引數中提出問題。"
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_question__is_conditional
@@ -1425,7 +1432,7 @@ msgstr "繼續"
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_fill_form
 msgid "Continue here"
-msgstr "在這裡繼續"
+msgstr "在此處繼續"
 
 #. module: survey
 #: model:survey.question.answer,value:survey.survey_demo_quiz_p3_q3_sug4
@@ -1447,7 +1454,7 @@ msgstr "山茱萸科"
 #. module: survey
 #: model:survey.question.answer,value:survey.vendor_certification_page_2_question_2_choice_1
 msgid "Corner Desk Right Sit"
-msgstr "角台右坐"
+msgstr "轉角辦公桌右坐"
 
 #. module: survey
 #. odoo-javascript
@@ -1961,6 +1968,11 @@ msgid "Group By"
 msgstr "分組方式"
 
 #. module: survey
+#: model:ir.model,name:survey.model_ir_http
+msgid "HTTP Routing"
+msgstr "http路由"
+
+#. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_invite__existing_mode
 #: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
 msgid "Handle existing"
@@ -2072,7 +2084,7 @@ msgstr "您在我們的網站上訂購了多少次產品？"
 #. module: survey
 #: model:survey.question,title:survey.vendor_certification_page_1_question_4
 msgid "How many versions of the Corner Desk do we have?"
-msgstr "我們有多少個版本的 Corner Desk？"
+msgstr "我們的轉角辦公桌有多少個款式？"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p3_q3
@@ -2313,7 +2325,7 @@ msgstr "無效"
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_question__validation_email
 msgid "Input must be an email"
-msgstr "輸入必須是電子信件"
+msgstr "輸入必須是電郵"
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_user_input__invite_token
@@ -3434,6 +3446,11 @@ msgid "Products"
 msgstr "產品"
 
 #. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
+msgid "Public share URL"
+msgstr ""
+
+#. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_question_answer__question_id
 #: model:ir.model.fields,field_description:survey.field_survey_user_input_line__question_id
 #: model_terms:ir.ui.view,arch_db:survey.survey_question_answer_view_search
@@ -3628,7 +3645,7 @@ msgstr "責任使用者"
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_page_statistics_inner
 msgid "Results Overview"
-msgstr "結果概述"
+msgstr "結果概覽"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_button_retake
@@ -4498,7 +4515,7 @@ msgstr "這不是一個數字"
 msgid ""
 "This list of emails of recipients will not be converted in contacts.        "
 "Emails must be separated by commas, semicolons or newline."
-msgstr "此電子信件收件人列表不會轉換為聯絡人。電子信件必須由逗號、分號或新行分隔。"
+msgstr ""
 
 #. module: survey
 #: model:ir.model.fields,help:survey.field_survey_survey__description_done
@@ -4698,7 +4715,7 @@ msgstr "未回答"
 #: code:addons/survey/models/survey_user_input.py:0
 #, python-format
 msgid "Uncategorized"
-msgstr "未歸類"
+msgstr "未分類"
 
 #. module: survey
 #: model:survey.question.answer,value:survey.vendor_certification_page_2_question_3_choice_2
@@ -4740,6 +4757,11 @@ msgstr "利用生動有趣的視覺協助，例如即場演示簡報"
 #, python-format
 msgid "Use humor and make jokes"
 msgstr "運用幽默感及開玩笑"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
+msgid "Use template"
+msgstr "使用範本"
 
 #. module: survey
 #. odoo-javascript

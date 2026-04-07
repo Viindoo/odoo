@@ -158,7 +158,7 @@ const FontFamilyPickerUserValueWidget = SelectUserValueWidget.extend({
 
         const fontsToLoad = [];
         for (const font of this.googleFonts) {
-            const fontURL = `https://fonts.googleapis.com/css?family=${encodeURIComponent(font).replace(/%20/g, '+')}`;
+            const fontURL = `https://fonts.googleapis.com/css?family=${encodeURIComponent(font).replace(/%20/g, '+')}:300,300i,400,400i,700,700i`;
             fontsToLoad.push(fontURL);
         }
         for (const font of this.googleLocalFonts) {
@@ -1759,6 +1759,9 @@ options.registry.Carousel = options.Class.extend({
         // Handle the sliding manually.
         this.__onControlClick = _.throttle(this._onControlClick.bind(this), 1000);
         this.$controls.on("click.carousel_option", this.__onControlClick);
+        for (const controlEl of this.$controls) {
+            controlEl.addEventListener("keydown", this._onControlKeyDown);
+        }
 
         return this._super.apply(this, arguments);
     },
@@ -1769,6 +1772,9 @@ options.registry.Carousel = options.Class.extend({
         this._super.apply(this, arguments);
         this.$bsTarget.off('.carousel_option');
         this.$controls.off(".carousel_option");
+        for (const controlEl of this.$controls) {
+            controlEl.removeEventListener("keydown", this._onControlKeyDown);
+        }
     },
     /**
      * @override
@@ -1932,6 +1938,20 @@ options.registry.Carousel = options.Class.extend({
             this.options.wysiwyg.odooEditor.historyUnpauseSteps();
             this.options.wysiwyg.odooEditor.historyStep();
         }});
+    },
+    /**
+     * Since carousel controls are disabled in edit mode because slides are
+     * handled manually, we disable the left and right keydown events to prevent
+     * sliding this way.
+     *
+     * @private
+     * @param {Event} ev
+     */
+    _onControlKeyDown(ev) {
+        if (["ArrowLeft", "ArrowRight"].includes(ev.code)) {
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
     },
 });
 

@@ -21,7 +21,7 @@
 # Jacek Michalski <michalski.jck@gmail.com>, 2022
 # Paweł Michoń <michon.pawel@wp.pl>, 2022
 # Maksym <ms@myodoo.pl>, 2022
-# Piotr Strębski <strebski@gmail.com>, 2022
+# Piotr Strebski <strebski@gmail.com>, 2022
 # Wojciech Warczakowski <w.warczakowski@gmail.com>, 2022
 # Dariusz Żbikowski <darek@krokus.com.pl>, 2022
 # Piotr Szlązak <szlazakpiotr@gmail.com>, 2022
@@ -35,14 +35,15 @@
 # Tadeusz Karpiński <tadeuszkarpinski@gmail.com>, 2023
 # Krystian Harkot <kharkot@trilab.pl>, 2024
 # Wil Odoo, 2024
+# Marta Wacławek, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 13:31+0000\n"
+"POT-Creation-Date: 2025-06-27 03:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:53+0000\n"
-"Last-Translator: Wil Odoo, 2024\n"
+"Last-Translator: Marta Wacławek, 2025\n"
 "Language-Team: Polish (https://app.transifex.com/odoo/teams/41243/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -123,7 +124,7 @@ msgstr "%s produktów znalezionych dla \"%s\"."
 #: code:addons/point_of_sale/models/pos_session.py:0
 #, python-format
 msgid "%s untaxed"
-msgstr ""
+msgstr "%s nieopodatkowane"
 
 #. module: point_of_sale
 #. odoo-python
@@ -1086,7 +1087,7 @@ msgstr "Nie można zamknąć sesji w trybie offline."
 #: code:addons/point_of_sale/static/src/js/Screens/ProductScreen/ProductScreen.js:0
 #, python-format
 msgid "Cannot modify a tip"
-msgstr ""
+msgstr "Nie można zmodyfikować napiwku"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -1868,7 +1869,7 @@ msgstr "Klient jest wymagany do metody płatności %s."
 #: code:addons/point_of_sale/static/src/js/Screens/ProductScreen/ProductScreen.js:0
 #, python-format
 msgid "Customer tips, cannot be modified directly"
-msgstr ""
+msgstr "Napiwki klienta, nie mogą być modyfikowane bezpośrednio"
 
 #. module: point_of_sale
 #: model:ir.ui.menu,name:point_of_sale.menu_point_of_sale_customer
@@ -2455,7 +2456,7 @@ msgstr "Obszar podatkowy"
 #: code:addons/point_of_sale/static/src/js/Screens/TicketScreen/TicketScreen.js:0
 #, python-format
 msgid "Fiscal Position not found"
-msgstr ""
+msgstr "Nie znaleziono pozycji fiskalnej"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_config__fiscal_position_ids
@@ -2947,11 +2948,14 @@ msgid "Invoice payment for %s (%s) using %s"
 msgstr "Faktura płatności za %s (%s) przy użyciu %s"
 
 #. module: point_of_sale
+#. odoo-javascript
+#: code:addons/point_of_sale/static/src/js/Screens/TicketScreen/TicketScreen.js:0
 #: model:ir.model.fields,field_description:point_of_sale.field_report_pos_order__invoiced
 #: model:ir.model.fields.selection,name:point_of_sale.selection__pos_order__state__invoiced
 #: model:ir.model.fields.selection,name:point_of_sale.selection__report_pos_order__state__invoiced
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_pos_order_filter
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_report_pos_order_search
+#, python-format
 msgid "Invoiced"
 msgstr "Zafakturowano"
 
@@ -3477,6 +3481,13 @@ msgid "More..."
 msgstr "Więcej..."
 
 #. module: point_of_sale
+#. odoo-javascript
+#: code:addons/point_of_sale/static/src/js/Screens/TicketScreen/TicketScreen.js:0
+#, python-format
+msgid "Multiple Orders Selected"
+msgstr ""
+
+#. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_session__my_activity_date_deadline
 msgid "My Activity Deadline"
 msgstr "Ostateczny terminin moich aktywności"
@@ -3835,10 +3846,11 @@ msgstr ""
 "zmodyfikować ilość do zwrotu."
 
 #. module: point_of_sale
+#. odoo-python
 #: code:addons/point_of_sale/models/pos_config.py:0
 #, python-format
 msgid "Only administrators can edit receipt headers and footers"
-msgstr ""
+msgstr "Tylko administratorzy mogą edytować nagłówki i stopki paragonów"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_config__only_round_cash_method
@@ -3853,6 +3865,8 @@ msgstr "Zaokrąglanie dotyczy wyłącznie gotówki"
 msgid ""
 "Only journals of type 'Cash' or 'Bank' could be used with payment methods."
 msgstr ""
+"W metodach płatności można użyć jedynie dzienników typu \"gotówka\" lub "
+"\"bank\"."
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.res_config_settings_view_form
@@ -6405,6 +6419,8 @@ msgid ""
 "The amount of your payment lines must be rounded to validate the transaction.\n"
 "The rounding precision is %s so you should set %s or %s as payment amount instead of %s."
 msgstr ""
+"Kwota Twoich pozycji płatności musi być zaokrąglona w celu zweryfikowania transakcji.\n"
+"Precyzja zaokrąglania to %s, więc powinieneś ustawić %s lub %s jako kwotę płatności zamiast %s. "
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -6472,6 +6488,8 @@ msgid ""
 "The fiscal position used in the original order is not loaded. Make sure it "
 "is loaded by adding it in the pos configuration."
 msgstr ""
+"Pozycja fiskalna użyta w oryginalnym zamówieniu nie jest ładowana. Upewnij "
+"się, że jest ładowana, dodając ją w konfiguracji pos."
 
 #. module: point_of_sale
 #. odoo-python
@@ -6516,6 +6534,8 @@ msgid ""
 "The maximum difference allowed is %s.\n"
 "Please contact your manager to accept the closing difference."
 msgstr ""
+"Maksymalna dopuszczalna różnica wynosi %s.\n"
+"Skontaktuj się ze swoim menedżerem w celu zaakceptowania różnicy zamknięcia."
 
 #. module: point_of_sale
 #. odoo-python
@@ -6903,6 +6923,17 @@ msgid ""
 msgstr ""
 "Ten dziennik jest powiązany z metodą płatności. Nie można modyfikować jego "
 "typu"
+
+#. module: point_of_sale
+#. odoo-python
+#: code:addons/point_of_sale/models/account_journal.py:0
+#, python-format
+msgid ""
+"This journal is associated with payment method %s that is being used by "
+"order %s in the active pos session %s"
+msgstr ""
+"Ten dziennik jest powiązany z metodą płatności %s, która jest używana przez "
+"zamówienie %s w aktywnej sesji pos %s"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -7637,6 +7668,17 @@ msgstr ""
 
 #. module: point_of_sale
 #. odoo-python
+#: code:addons/point_of_sale/models/account_cash_rounding.py:0
+#, python-format
+msgid ""
+"You cannot delete a rounding method that is used in a Point of Sale "
+"configuration."
+msgstr ""
+"Nie możesz usunąć metody zaokrąglania, która jest używana w konfiguracji "
+"Punktu Sprzedaży."
+
+#. module: point_of_sale
+#. odoo-python
 #: code:addons/point_of_sale/models/res_partner.py:0
 #, python-format
 msgid ""
@@ -7654,6 +7696,8 @@ msgid ""
 "You do not have permission to open a POS session. Please try opening a "
 "session with a different user"
 msgstr ""
+"Nie masz pozwolenia na otwarcie sesji POS. Spróbuj otworzyć sesję z innym "
+"użytkownikiem"
 
 #. module: point_of_sale
 #. odoo-python
@@ -7675,6 +7719,15 @@ msgid ""
 msgstr ""
 "Włączyłeś opcję \"Identyfikuj klienta\" dla metody płatności %s, ale "
 "zamówienie %s nie zawiera klienta."
+
+#. module: point_of_sale
+#. odoo-javascript
+#: code:addons/point_of_sale/static/src/js/Screens/TicketScreen/TicketScreen.js:0
+#, python-format
+msgid ""
+"You have selected orderlines from multiple orders. To proceed refund, please"
+" select orderlines from the same order."
+msgstr ""
 
 #. module: point_of_sale
 #. odoo-javascript
