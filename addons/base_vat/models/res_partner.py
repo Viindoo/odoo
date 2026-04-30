@@ -1,18 +1,20 @@
 import datetime
+import logging
 import string
 import re
+import requests
+import secrets
+import uuid
+
 import stdnum
-from stdnum.eu.vat import check_vies
-from stdnum.exceptions import InvalidComponent, InvalidChecksum, InvalidFormat
+from stdnum.exceptions import InvalidChecksum, InvalidFormat
 from stdnum.util import clean
 from stdnum import luhn
 
-import logging
-
-from odoo import api, models, fields, tools, _
-from odoo.tools import zeep
+from odoo import api, models, fields, _
+from odoo.tools import hash_sign
 from odoo.tools.misc import ustr
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 
 
 _logger = logging.getLogger(__name__)
@@ -30,7 +32,7 @@ _ref_vat = {
     'au': '83 914 571 673',
     'be': 'BE0477472701',
     'bg': 'BG1234567892',
-    'br': _('either 11 digits for CPF or 14 digits for CNPJ'),
+    'br': _('either 11 digits for CPF or 14 characters for CNPJ'),
     'cr': _('3101012009'),
     'ch': _('CHE-123.456.788 TVA or CHE-123.456.788 MWST or CHE-123.456.788 IVA'),  # Swiss by Yannick Vaucher @ Camptocamp
     'cl': 'CL76086428-5',
@@ -215,22 +217,110 @@ class ResPartner(models.Model):
             if partner.parent_id and partner.parent_id.vies_vat_to_check == partner.vies_vat_to_check:
                 partner.vies_valid = partner.parent_id.vies_valid
                 continue
-            try:
-                _logger.info('Calling VIES service to check VAT for validation: %s', partner.vies_vat_to_check)
-                vies_valid = check_vies(partner.vies_vat_to_check, timeout=10)
-                partner.vies_valid = vies_valid['valid']
-            except (OSError, InvalidComponent, zeep.exceptions.Error) as e:
-                if partner._origin.id:
-                    msg = ""
-                    if isinstance(e, OSError):
-                        msg = _("Connection with the VIES server failed. The VAT number %s could not be validated.", partner.vies_vat_to_check)
-                    elif isinstance(e, InvalidComponent):
-                        msg = _("The VAT number %s could not be interpreted by the VIES server.", partner.vies_vat_to_check)
-                    elif isinstance(e, zeep.exceptions.Error):
-                        msg = _('The request for VAT validation was not processed. VIES service has responded with the following error: %s', e.message)
-                    partner._origin.message_post(body=msg)
-                _logger.warning("The VAT number %s failed VIES check.", partner.vies_vat_to_check)
-                partner.vies_valid = False
+            status = partner._check_vies_iap()
+            partner._update_vies_status(status)
+
+    @api.model
+    def _get_iap_vies_credentials(self):
+        """
+        Return a couple (identifier, token) that is going to identify this db to IAP such that only
+        this one can request updates on a previously asked VIES check.
+        If they exist, we simply return them. If they don't, we create them in another cursor to
+        avoid the current transaction to be rolled back after the record has been created on IAP.
+        """
+        # No existing cron = no way for db to pull updates, thus no need to bother IAP
+        if not self.env.ref('base_vat.vies_iap_check_update', raise_if_not_found=False):
+            return "dummy_identifier", "dummy_token"  # ignored by IAP, same as neutralized
+
+        IrConfigParam = self.env['ir.config_parameter'].sudo()
+        identifier = IrConfigParam.get_param('iap_vies.client_identifier')
+        token = IrConfigParam.get_param('iap_vies.client_token')
+        if identifier and token:
+            return identifier, token
+
+        identifier = str(uuid.uuid4())
+        token = secrets.token_urlsafe()
+        with self.env.registry.cursor() as new_cursor:
+            IrConfigParamNewCursor = self.env(cr=new_cursor)['ir.config_parameter'].sudo()
+            IrConfigParamNewCursor.set_param('iap_vies.client_identifier', identifier)
+            IrConfigParamNewCursor.set_param('iap_vies.client_token', token)
+
+        return identifier, token
+
+    @api.model
+    def _get_iap_vies_endpoint(self):
+        prod, test = 'https://vies.api.odoo.com', 'https://vies.test.odoo.com'
+        default_endpoint = test if self.env.ref('base.module_base_vat').demo else prod
+        endpoint = self.env['ir.config_parameter'].sudo().get_param('iap_vies.endpoint', default_endpoint)
+        if endpoint not in (prod, test):
+            raise UserError(_('Invalid IAP VIES endpoint'))
+        return endpoint
+
+    def _check_vies_iap(self):
+        """Called when VAT is manually edited"""
+        self.ensure_one()
+        endpoint = self._get_iap_vies_endpoint()
+        client_identifier, client_token = self._get_iap_vies_credentials()
+        try:
+            req = requests.post(
+                endpoint + '/api/vies/1/check_validity',
+                data={
+                    "vat": self.vat,
+                    "db_uuid": self.env['ir.config_parameter'].sudo().get_param('database.uuid'),
+                    "client_identifier": client_identifier,
+                    "client_token": client_token,
+                    "webhook_url": self.get_base_url() + '/base_vat/1/webhook_update_vies',
+                    "webhook_token": hash_sign(self.sudo().env, "vies_check", self.vat, expiration_hours=24),  # See BaseVatWebhookController
+                },
+                timeout=20,
+            )
+            req.raise_for_status()
+        except requests.exceptions.RequestException:
+            _logger.exception("VIES check: call to IAP failed")
+            return "fault"
+        resp = req.json()
+        if not resp.get("status"):
+            _logger.error("VIES check: no status returned. Response: %s", resp)
+            return "fault"
+        return resp["status"]
+
+    @api.model
+    def _cron_check_vies_iap(self):
+        """Called by cron to check if IAP has any update on a previously requested VAT that was pending"""
+        endpoint = self._get_iap_vies_endpoint()
+        client_identifier, client_token = self._get_iap_vies_credentials()
+        try:
+            req = requests.post(
+                endpoint + '/api/vies/1/check_update',
+                data={
+                    "db_uuid": self.env['ir.config_parameter'].sudo().get_param('database.uuid'),
+                    "client_identifier": client_identifier,
+                    "client_token": client_token,
+                },
+                timeout=10,
+            )
+            req.raise_for_status()
+        except requests.exceptions.RequestException:
+            _logger.exception("Error while contacting IAP VIES")
+            return
+        resp = req.json()
+        _logger.info("IAP VIES check response: %s", resp)
+        for company_vat, company_status in resp.items():
+            partner = self.search([("vat", "=", company_vat)])
+            partner._update_vies_status(company_status)
+
+    def _update_vies_status(self, status):
+        self.vies_valid = status == "valid"
+        _logger.info("VIES status updated to %s for partner ids: %s", status, self.ids)
+        msg = None
+        if status == "pending":
+            msg = _("The VIES check is pending. The status will be updated soon.")
+        elif status == "fault":
+            msg = _("The VIES check failed. Please check the Tax ID manually.")
+        elif status in ("valid", "unassigned"):
+            msg = _("The Intra-Community validity has been updated.")
+        if msg:
+            self._message_log_batch(bodies={p._origin.id: msg for p in self if p._origin.id})
 
     @api.model
     def _run_vat_test(self, vat_number, default_country, partner_is_company=True):
@@ -750,9 +840,26 @@ class ResPartner(models.Model):
         if self.country_id.code == 'JP':
             return self.simple_vat_check('jp', vat)
 
+    # Minimal regex matching similar to stdnum
+    # Derived from https://github.com/arthurdejong/python-stdnum/commit/d3ec3bd7fefe0d0a708b6594a66de28777eb9b8d
+    __check_vat_br_re = re.compile(r'^[\dA-Z]+$')
+
     def check_vat_br(self, vat):
+        def is_cnpj_valid(vat):
+            vat = clean(vat, ' -./').strip().upper()
+            if vat.startswith('000000000000') or len(vat) != 14:
+                return False
+            if self.__check_vat_br_re.match(vat):
+                values = [ord(n) - 48 for n in vat[:12]]
+                weights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+                d1 = (11 - sum(w * v for w, v in zip(weights, values))) % 11 % 10
+                values.append(d1)
+                weights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+                d2 = (11 - sum(w * v for w, v in zip(weights, values))) % 11 % 10
+                return vat[-2:] == f'{d1}{d2}'
+            return False
+
         is_cpf_valid = stdnum.get_cc_module('br', 'cpf').is_valid
-        is_cnpj_valid = stdnum.get_cc_module('br', 'cnpj').is_valid
         return is_cpf_valid(vat) or is_cnpj_valid(vat)
 
     __check_vat_cr_re = re.compile(r'^(?:[1-9]\d{8}|\d{10}|[1-9]\d{10,11})$')
@@ -846,7 +953,7 @@ class ResPartner(models.Model):
         own validation to support these new valid UBNs.
         """
         vat = stdnum.util.get_cc_module("tw", "vat").compact(vat)
-        if len(vat) != 8:
+        if len(vat) != 8 or not vat.isdigit():
             return False  # The length is fixed, and we will expect it to be 8 in the following checks.
 
         logic_multiplier = [1, 2, 1, 2, 1, 2, 4, 1]  # This multiplier is set by the official validation logic.

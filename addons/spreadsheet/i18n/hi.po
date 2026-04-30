@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 18:37+0000\n"
-"PO-Revision-Date: 2026-03-21 08:06+0000\n"
+"POT-Creation-Date: 2026-04-24 17:38+0000\n"
+"PO-Revision-Date: 2026-04-07 09:27+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Hindi <https://translate.odoo.com/projects/odoo-17/"
 "spreadsheet/hi/>\n"
@@ -107,13 +107,12 @@ msgstr ""
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid ""
-"(1) Search starting at first item. \n"
-"      (-1) Search starting at last item. \n"
-"      (2) Perform a binary search that relies on lookup_array being sorted "
-"in ascending order. If not sorted, invalid results will be returned. \n"
-"      (-2) Perform a binary search that relies on lookup_array being sorted "
-"in descending order. If not sorted, invalid results will be returned.\n"
-"      "
+"(1) Search starting at first item.       (-1) Search starting at last "
+"item.       (2) Perform a binary search that relies on lookup_array being "
+"sorted in ascending order. If not sorted, invalid results will be "
+"returned.       (-2) Perform a binary search that relies on lookup_array "
+"being sorted in descending order. If not sorted, invalid results will be "
+"returned.      "
 msgstr ""
 
 #. module: spreadsheet
@@ -163,6 +162,13 @@ msgstr "2 कॉलम"
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "2 rows"
+msgstr ""
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.xml:0
+#, python-format
+msgid "A"
 msgstr ""
 
 #. module: spreadsheet
@@ -3064,23 +3070,6 @@ msgstr ""
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid ""
-"Function [[FUNCTION_NAME]] expects criteria_range and criterion to be in "
-"pairs."
-msgstr ""
-
-#. module: spreadsheet
-#. odoo-javascript
-#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
-#, python-format
-msgid ""
-"Function [[FUNCTION_NAME]] expects criteria_range to have the same dimension"
-msgstr ""
-
-#. module: spreadsheet
-#. odoo-javascript
-#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
-#, python-format
-msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got a boolean."
 msgstr ""
 
@@ -3476,8 +3465,7 @@ msgstr ""
 #, python-format
 msgid ""
 "In [[FUNCTION_NAME]], the number of columns of the first matrix (%s) must be "
-"equal to the \n"
-"        number of rows of the second matrix (%s)."
+"equal to the         number of rows of the second matrix (%s)."
 msgstr ""
 
 #. module: spreadsheet
@@ -4875,10 +4863,11 @@ msgid ""
 "returned from the last row or column in the array. If search_key is not "
 "found, a non-exact match may be returned."
 msgstr ""
-"इस फ़ंक्शन का उपयोग करने का एक तरीका search_key को खोजने के लिए एक सॉर्ट की गई रो या कॉलम "
-"search_array देना है, जिसके साथ result_range का दूसरा तर्क होता है. दूसरा तरीका इन दोनों तर्कों को "
-"एक search_array में मिलाना है जहां पहली रो या कॉलम को खोजा जाता है और एरे की अंतिम रो या कॉलम से मान लौटाया"
-" जाता है. यदि search_key नहीं मिलता है, तो एक गैर-सटीक मिलान वापस किया जा सकता है।"
+"इस फ़ंक्शन का उपयोग करने का एक तरीका search_key को खोजने के लिए एक सॉर्ट की गई रो "
+"या कॉलम search_array देना है, जिसके साथ result_range का दूसरा तर्क होता है. दूसरा "
+"तरीका इन दोनों तर्कों को एक search_array में मिलाना है जहां पहली रो या कॉलम को खोजा "
+"जाता है और एरे की अंतिम रो या कॉलम से मान लौटाया जाता है. यदि search_key नहीं "
+"मिलता है, तो एक गैर-सटीक मिलान वापस किया जा सकता है।"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -8410,6 +8399,10 @@ msgid ""
 "only a single row or column and should not be used if using the "
 "search_result_array method."
 msgstr ""
+"जिस श्रेणी से परिणाम लौटाना है. लौटाया गया मान उस स्थान से मेल खाता है जहां "
+"search_key, search_range में पाया जाता है. यह श्रेणी केवल एक ही पंक्ति या स्तंभ की "
+"होनी चाहिए और यदि search_result_array विधि का उपयोग कर रहे हैं तो इसका उपयोग "
+"नहीं किया जाना चाहिए।"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -10646,9 +10639,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Whether or not to remove empty text messages from the split results. The "
-"default behavior is to treat \n"
-"        consecutive delimiters as one (if TRUE). If FALSE, empty cells "
-"values are added between consecutive delimiters."
+"default behavior is to treat         consecutive delimiters as one (if "
+"TRUE). If FALSE, empty cells values are added between consecutive delimiters."
 msgstr ""
 
 #. module: spreadsheet
@@ -10665,8 +10657,7 @@ msgstr ""
 #, python-format
 msgid ""
 "Whether the array should be scanned by column. True scans the array by "
-"column and false (default) \n"
-"      scans the array by row."
+"column and false (default)       scans the array by row."
 msgstr ""
 
 #. module: spreadsheet
@@ -10859,6 +10850,13 @@ msgstr ""
 #, python-format
 msgid ""
 "You don't have the rights to export data. Please contact an Administrator."
+msgstr ""
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.xml:0
+#, python-format
+msgid "Z"
 msgstr ""
 
 #. module: spreadsheet
@@ -11094,6 +11092,13 @@ msgstr "आज"
 #, python-format
 msgid "tomorrow"
 msgstr "आने वाला कल"
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/public_readonly_app/public_readonly.xml:0
+#, python-format
+msgid "x"
+msgstr ""
 
 #. module: spreadsheet
 #. odoo-javascript

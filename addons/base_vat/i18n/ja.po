@@ -1,24 +1,27 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* base_vat
+# * base_vat
 #
 # Translators:
 # Wil Odoo, 2023
 # Junko Augias, 2025
 #
+# Weblate <noreply-mt-weblate@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 18:36+0000\n"
-"PO-Revision-Date: 2023-10-26 23:09+0000\n"
-"Last-Translator: Junko Augias, 2025\n"
-"Language-Team: Japanese (https://app.transifex.com/odoo/teams/41243/ja/)\n"
+"POT-Creation-Date: 2026-04-17 18:37+0000\n"
+"PO-Revision-Date: 2026-04-18 17:00+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
+"Language-Team: Japanese <https://translate.odoo.com/projects/odoo-17/"
+"base_vat/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #. module: base_vat
 #. odoo-python
@@ -33,7 +36,7 @@ msgstr ""
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
 msgid "11111111111 (NIN) or 2222222222 (VKN)"
-msgstr ""
+msgstr "11111111111 (NIN) または 2222222222 (VKN)"
 
 #. module: base_vat
 #. odoo-python
@@ -41,13 +44,6 @@ msgstr ""
 #, python-format
 msgid "1792060346001 or 1792060346"
 msgstr "1792060346001 または 1792060346"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
-msgid "3101012009"
-msgstr "3101012009"
 
 #. module: base_vat
 #. odoo-python
@@ -69,6 +65,11 @@ msgstr "49-098-576 または 49098576"
 #, python-format
 msgid "AR200-5536168-2 or 20055361682"
 msgstr "AR200-5536168-2 または 20055361682"
+
+#. module: base_vat
+#: model:ir.actions.server,name:base_vat.vies_iap_check_update_ir_actions_server
+msgid "Base VAT: Sync updates from IAP VIES"
+msgstr "基本VAT(付加価値税)：IAP VIESからの更新を同期"
 
 #. module: base_vat
 #. odoo-python
@@ -94,15 +95,6 @@ msgstr "会社"
 #: model:ir.model,name:base_vat.model_res_config_settings
 msgid "Config Settings"
 msgstr "コンフィグ設定"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
-msgid ""
-"Connection with the VIES server failed. The VAT number %s could not be "
-"validated."
-msgstr "VIESサーバとの接続に失敗しました。VAT番号%sが検証できませんでした。"
 
 #. module: base_vat
 #: model:ir.model,name:base_vat.model_res_partner
@@ -176,6 +168,13 @@ msgstr "域内無効"
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
+msgid "Invalid IAP VIES endpoint"
+msgstr "無効なIAP VIESエンドポイント"
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
 msgid "MXGODE561231GR8 or GODE561231GR8"
 msgstr "MXGODE561231GR8 または GODE561231GR8"
 
@@ -218,8 +217,22 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
-msgid "The VAT number %s could not be interpreted by the VIES server."
-msgstr "VAT 番号 %s はVIESサーバで解釈することはできませんでした。"
+msgid "The Intra-Community validity has been updated."
+msgstr "EU域内の有効性を更新しました。"
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
+msgid "The VIES check failed. Please check the Tax ID manually."
+msgstr "VIESチェックに失敗しました。税IDを手動で確認してください。"
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
+msgid "The VIES check is pending. The status will be updated soon."
+msgstr "VIESチェックは保留中です。ステータスはまもなく更新されます。"
 
 #. module: base_vat
 #. odoo-python
@@ -242,17 +255,6 @@ msgid ""
 msgstr ""
 "外国VAT番号の国を検出できませんでした。会計ポジションに国を割当てるか、国グ"
 "ループを設定して下さい。"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
-msgid ""
-"The request for VAT validation was not processed. VIES service has responded "
-"with the following error: %s"
-msgstr ""
-"VAT検証のリクエストは処理されませんでした。VIESサービスは以下のエラーで応答し"
-"ました:%s"
 
 #. module: base_vat
 #. odoo-python
@@ -306,6 +308,28 @@ msgstr "会計ポジション [%s]"
 #, python-format
 msgid "partner [%s]"
 msgstr "取引先 [%s]"
+
+#, python-format
+#~ msgid ""
+#~ "Connection with the VIES server failed. The VAT number %s could not be "
+#~ "validated."
+#~ msgstr "VIESサーバとの接続に失敗しました。VAT番号%sが検証できませんでした。"
+
+#, python-format
+#~ msgid "The VAT number %s could not be interpreted by the VIES server."
+#~ msgstr "VAT 番号 %s はVIESサーバで解釈することはできませんでした。"
+
+#, python-format
+#~ msgid ""
+#~ "The request for VAT validation was not processed. VIES service has "
+#~ "responded with the following error: %s"
+#~ msgstr ""
+#~ "VAT検証のリクエストは処理されませんでした。VIESサービスは以下のエラーで応"
+#~ "答しました:%s"
+
+#, python-format
+#~ msgid "3101012009"
+#~ msgstr "3101012009"
 
 #, python-format
 #~ msgid "17291716060 (NIN) or 1729171602 (VKN)"

@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 18:37+0000\n"
-"PO-Revision-Date: 2026-01-24 17:01+0000\n"
+"POT-Creation-Date: 2026-04-24 17:38+0000\n"
+"PO-Revision-Date: 2026-04-15 15:01+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.odoo.com/"
 "projects/odoo-17/spreadsheet/zh_Hans/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -119,21 +119,13 @@ msgstr ""
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid ""
-"(1) Search starting at first item. \n"
-"      (-1) Search starting at last item. \n"
-"      (2) Perform a binary search that relies on lookup_array being sorted "
-"in ascending order. If not sorted, invalid results will be returned. \n"
-"      (-2) Perform a binary search that relies on lookup_array being sorted "
-"in descending order. If not sorted, invalid results will be returned.\n"
-"      "
+"(1) Search starting at first item.       (-1) Search starting at last "
+"item.       (2) Perform a binary search that relies on lookup_array being "
+"sorted in ascending order. If not sorted, invalid results will be "
+"returned.       (-2) Perform a binary search that relies on lookup_array "
+"being sorted in descending order. If not sorted, invalid results will be "
+"returned.      "
 msgstr ""
-"(1) 从第一个项目开始搜索。\n"
-"      (-1) 从最后一项开始搜索。\n"
-"      (2) 执行二进制搜索，依赖于 lookup_array 按升序排序。如果未排序，将返回"
-"无效结果。\n"
-"      (-2) 执行二进制搜索，依赖于 lookup_array 按降序排序。如果未排序，将返回"
-"无效结果。\n"
-"      "
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -183,6 +175,13 @@ msgstr "2列"
 #, python-format
 msgid "2 rows"
 msgstr "2行"
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.xml:0
+#, python-format
+msgid "A"
+msgstr ""
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3091,25 +3090,8 @@ msgstr "函数[[FUNCTION_NAME]]未找到结果。"
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid ""
-"Function [[FUNCTION_NAME]] expects criteria_range and criterion to be in "
-"pairs."
-msgstr "函数[[FUNCTION_NAME]]要求criteria_range和criteria是成对的。"
-
-#. module: spreadsheet
-#. odoo-javascript
-#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
-#, python-format
-msgid ""
-"Function [[FUNCTION_NAME]] expects criteria_range to have the same dimension"
-msgstr "函数 [[FUNCTION_NAME]] 希望 criteria_range 具有相同的维度"
-
-#. module: spreadsheet
-#. odoo-javascript
-#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
-#, python-format
-msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got a boolean."
-msgstr ""
+msgstr "函数 [[FUNCTION_NAME]] 的参数 %s 需要数值，但得到了布尔值。"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3117,7 +3099,7 @@ msgstr ""
 #, python-format
 msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got a string."
-msgstr ""
+msgstr "函数 [[FUNCTION_NAME]] 的参数 %s 需要数值，但得到了字符串。"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3126,7 +3108,7 @@ msgstr ""
 msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got an empty "
 "value."
-msgstr ""
+msgstr "函数 [[FUNCTION_NAME]] 的参数 %s 需要数值，但得到了空值。"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3512,11 +3494,8 @@ msgstr "在[[FUNCTION_NAME]]评估中，无法在'%s'中找到'%s'。"
 #, python-format
 msgid ""
 "In [[FUNCTION_NAME]], the number of columns of the first matrix (%s) must be "
-"equal to the \n"
-"        number of rows of the second matrix (%s)."
+"equal to the         number of rows of the second matrix (%s)."
 msgstr ""
-"在 [[FUNCTION_NAME]] 中，第一个矩阵 (%s) 的列数必须等于第二个矩阵 (%s) 的行"
-"数。"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -7201,7 +7180,7 @@ msgstr "第一个补充。"
 msgid ""
 "The first and second arguments of [[FUNCTION_NAME]] must be non-empty "
 "matrices."
-msgstr ""
+msgstr "[[FUNCTION_NAME]] 的第一和第二个参数必须为非空矩阵。"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -10359,7 +10338,7 @@ msgstr "键值的值变化"
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "Value for parameter %s is missing in [[FUNCTION_NAME]]."
-msgstr ""
+msgstr "[[FUNCTION_NAME]] 中缺少参数 %s 的值。"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -10730,13 +10709,9 @@ msgstr "是否在分隔符包含的每个字符周围分割文本。"
 #, python-format
 msgid ""
 "Whether or not to remove empty text messages from the split results. The "
-"default behavior is to treat \n"
-"        consecutive delimiters as one (if TRUE). If FALSE, empty cells "
-"values are added between consecutive delimiters."
+"default behavior is to treat         consecutive delimiters as one (if "
+"TRUE). If FALSE, empty cells values are added between consecutive delimiters."
 msgstr ""
-"是否删除分割结果中的空文本信息。默认行为是将\n"
-"        连续分隔符视为一个（如果为 TRUE）。如果为 FALSE，则会在连续分隔符之间"
-"添加空单元格值。"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -10752,11 +10727,8 @@ msgstr "是否在每期期末（0）或期初（1）付款。"
 #, python-format
 msgid ""
 "Whether the array should be scanned by column. True scans the array by "
-"column and false (default) \n"
-"      scans the array by row."
+"column and false (default)       scans the array by row."
 msgstr ""
-"数组是否应按列进行扫描。True表示按列扫描数组，False（默认）表示\n"
-"      按行扫描数组。"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -10954,6 +10926,13 @@ msgstr "您没有导出数据的权限。请联系管理员。"
 
 #. module: spreadsheet
 #. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.xml:0
+#, python-format
+msgid "Z"
+msgstr ""
+
+#. module: spreadsheet
+#. odoo-javascript
 #: code:addons/spreadsheet/static/src/pivot/pivot_functions.js:0
 #, python-format
 msgid "[[FUNCTION_NAME]] cannot be called from the spreadsheet."
@@ -10994,7 +10973,7 @@ msgstr "[[FUNCTION_NAME]] 希望得到数字值。"
 msgid ""
 "[[FUNCTION_NAME]] expects the provided values of %(argName)s to be a non-"
 "empty matrix."
-msgstr ""
+msgstr "[[FUNCTION_NAME]] 期望 %(argName)s 的值为非空矩阵。"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -11188,10 +11167,78 @@ msgstr "明天"
 
 #. module: spreadsheet
 #. odoo-javascript
+#: code:addons/spreadsheet/static/src/public_readonly_app/public_readonly.xml:0
+#, python-format
+msgid "x"
+msgstr ""
+
+#. module: spreadsheet
+#. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "yesterday"
 msgstr "昨天"
+
+#, python-format
+#~ msgid ""
+#~ "(1) Search starting at first item. \n"
+#~ "      (-1) Search starting at last item. \n"
+#~ "      (2) Perform a binary search that relies on lookup_array being "
+#~ "sorted in ascending order. If not sorted, invalid results will be "
+#~ "returned. \n"
+#~ "      (-2) Perform a binary search that relies on lookup_array being "
+#~ "sorted in descending order. If not sorted, invalid results will be "
+#~ "returned.\n"
+#~ "      "
+#~ msgstr ""
+#~ "(1) 从第一个项目开始搜索。\n"
+#~ "      (-1) 从最后一项开始搜索。\n"
+#~ "      (2) 执行二进制搜索，依赖于 lookup_array 按升序排序。如果未排序，将返"
+#~ "回无效结果。\n"
+#~ "      (-2) 执行二进制搜索，依赖于 lookup_array 按降序排序。如果未排序，将"
+#~ "返回无效结果。\n"
+#~ "      "
+
+#, python-format
+#~ msgid ""
+#~ "Function [[FUNCTION_NAME]] expects criteria_range and criterion to be in "
+#~ "pairs."
+#~ msgstr "函数[[FUNCTION_NAME]]要求criteria_range和criteria是成对的。"
+
+#, python-format
+#~ msgid ""
+#~ "Function [[FUNCTION_NAME]] expects criteria_range to have the same "
+#~ "dimension"
+#~ msgstr "函数 [[FUNCTION_NAME]] 希望 criteria_range 具有相同的维度"
+
+#, python-format
+#~ msgid ""
+#~ "In [[FUNCTION_NAME]], the number of columns of the first matrix (%s) must "
+#~ "be equal to the \n"
+#~ "        number of rows of the second matrix (%s)."
+#~ msgstr ""
+#~ "在 [[FUNCTION_NAME]] 中，第一个矩阵 (%s) 的列数必须等于第二个矩阵 (%s) 的"
+#~ "行数。"
+
+#, python-format
+#~ msgid ""
+#~ "Whether or not to remove empty text messages from the split results. The "
+#~ "default behavior is to treat \n"
+#~ "        consecutive delimiters as one (if TRUE). If FALSE, empty cells "
+#~ "values are added between consecutive delimiters."
+#~ msgstr ""
+#~ "是否删除分割结果中的空文本信息。默认行为是将\n"
+#~ "        连续分隔符视为一个（如果为 TRUE）。如果为 FALSE，则会在连续分隔符"
+#~ "之间添加空单元格值。"
+
+#, python-format
+#~ msgid ""
+#~ "Whether the array should be scanned by column. True scans the array by "
+#~ "column and false (default) \n"
+#~ "      scans the array by row."
+#~ msgstr ""
+#~ "数组是否应按列进行扫描。True表示按列扫描数组，False（默认）表示\n"
+#~ "      按行扫描数组。"
 
 #, python-format
 #~ msgid ""

@@ -1,7 +1,7 @@
 from odoo import _, models, Command
 from odoo.addons.base.models.res_bank import sanitize_account_number
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools import float_compare, float_is_zero, float_repr, find_xml_value
+from odoo.tools import float_compare, float_is_zero, float_repr, find_xml_value, html2plaintext
 from odoo.tools.float_utils import float_round
 from odoo.tools.misc import clean_context, formatLang
 from odoo.tools.zeep import Client
@@ -98,6 +98,11 @@ EAS_MAPPING = {
     'VA': {'9953': 'vat'},
 }
 
+COCONTRACTANT_DEFAULT_NOTE = _('Reverse charge: In the absence of a written objection within one month of receipt of the invoice, '
+                              'the customer is deemed to acknowledge that they are a taxable person required to file periodic returns. '
+                              'If this condition is not met, the customer will be liable for the payment of the tax, interest, '
+                              'and penalties due in relation to this condition.')
+
 # -------------------------------------------------------------------------
 # SUPPORTED FILE TYPES FOR IMPORT
 # -------------------------------------------------------------------------
@@ -141,6 +146,14 @@ class AccountEdiCommon(models.AbstractModel):
         # avoid 'TypeError: empty namespace prefix is not supported in XPath'
         nsmap = nsmap or {k: v for k, v in tree.nsmap.items() if k is not None}
         return find_xml_value(xpath, tree, nsmap)
+
+    def _get_belgian_cocontractant_note(self, invoice, customer):
+        if customer.country_id.code == 'BE' and invoice.country_code == 'BE':
+            co_contractant = self.env['account.chart.template'].ref('fiscal_position_template_4', raise_if_not_found=False)
+            if co_contractant and invoice.fiscal_position_id == co_contractant:
+                note = html2plaintext(invoice.fiscal_position_id.note) if invoice.fiscal_position_id.note else ''
+                return note or COCONTRACTANT_DEFAULT_NOTE
+        return ''
 
     # -------------------------------------------------------------------------
     # TAXES
@@ -193,10 +206,14 @@ class AccountEdiCommon(models.AbstractModel):
             if customer.zip[:2] in ('51', '52'):
                 return create_dict(tax_category_code='M')  # Ceuta & Mellila
 
+        cocontractant_note = self._get_belgian_cocontractant_note(invoice, customer)
+        if cocontractant_note:
+            return create_dict(tax_category_code='AE', tax_exemption_reason_code='VATEX-EU-AE - Reverse charge', tax_exemption_reason=cocontractant_note)
+
         if supplier.country_id == customer.country_id:
             if not tax or tax.amount == 0:
                 # in theory, you should indicate the precise law article
-                return create_dict(tax_category_code='E', tax_exemption_reason=_('Articles 226 items 11 to 15 Directive 2006/112/EN'))
+                return create_dict(tax_category_code='E', tax_exemption_reason=_('Exempt from tax'))
             elif self._is_reverse_charge_tax(tax):
                 # Special case: Purchase reverse-charge taxes for self-billed invoices.
                 # From the buyer's perspective, this is a standard tax with a non-zero percentage but
@@ -231,7 +248,7 @@ class AccountEdiCommon(models.AbstractModel):
         if tax.amount != 0:
             return create_dict(tax_category_code='S')
         else:
-            return create_dict(tax_category_code='E', tax_exemption_reason=_('Articles 226 items 11 to 15 Directive 2006/112/EN'))
+            return create_dict(tax_category_code='E', tax_exemption_reason=_('Exempt from tax'))
 
     def _get_tax_category_list(self, invoice, taxes):
         """ Full list: https://unece.org/fileadmin/DAM/trade/untdid/d16b/tred/tred5305.htm
@@ -866,6 +883,7 @@ class AccountEdiCommon(models.AbstractModel):
                 ('amount_type', '=', 'percent'),
                 ('type_tax_use', '=', invoice_line.move_id.journal_id.type),
                 ('amount', '=', amount),
+                ('country_id', '=', invoice_line.move_id.tax_country_id.id),
             ]
 
             tax = False

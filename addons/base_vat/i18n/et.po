@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 18:36+0000\n"
+"POT-Creation-Date: 2026-04-17 18:37+0000\n"
 "PO-Revision-Date: 2023-10-26 23:09+0000\n"
 "Last-Translator: Anna, 2024\n"
 "Language-Team: Estonian (https://app.transifex.com/odoo/teams/41243/et/)\n"
@@ -50,13 +50,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
-msgid "3101012009"
-msgstr "3101012009"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
 msgid "310175397400003 [Fifteen digits, first and last digits should be \"3\"]"
 msgstr ""
 
@@ -73,6 +66,11 @@ msgstr "49-098-576 või 49098576"
 #, python-format
 msgid "AR200-5536168-2 or 20055361682"
 msgstr "AR200-5536168-2 või 20055361682"
+
+#. module: base_vat
+#: model:ir.actions.server,name:base_vat.vies_iap_check_update_ir_actions_server
+msgid "Base VAT: Sync updates from IAP VIES"
+msgstr ""
 
 #. module: base_vat
 #. odoo-python
@@ -97,15 +95,6 @@ msgstr "Ettevõtted"
 #: model:ir.model,name:base_vat.model_res_config_settings
 msgid "Config Settings"
 msgstr "Seadistused"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
-msgid ""
-"Connection with the VIES server failed. The VAT number %s could not be "
-"validated."
-msgstr ""
 
 #. module: base_vat
 #: model:ir.model,name:base_vat.model_res_partner
@@ -176,6 +165,13 @@ msgstr "Ühendusesisene kehtiv"
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
+msgid "Invalid IAP VIES endpoint"
+msgstr ""
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
 msgid "MXGODE561231GR8 or GODE561231GR8"
 msgstr "MXGODE561231GR8 või GODE561231GR8"
 
@@ -218,7 +214,21 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
-msgid "The VAT number %s could not be interpreted by the VIES server."
+msgid "The Intra-Community validity has been updated."
+msgstr ""
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
+msgid "The VIES check failed. Please check the Tax ID manually."
+msgstr ""
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
+msgid "The VIES check is pending. The status will be updated soon."
 msgstr ""
 
 #. module: base_vat
@@ -242,15 +252,6 @@ msgid ""
 msgstr ""
 "Käibemaksukohuslase numbri põhjal ei suudetud riiki tuvastada. Palun määra "
 "riik finantspositsioonile või määra riikide grupp"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
-msgid ""
-"The request for VAT validation was not processed. VIES service has responded "
-"with the following error: %s"
-msgstr ""
 
 #. module: base_vat
 #. odoo-python
@@ -303,3 +304,7 @@ msgstr "finantspositsioon [%s]"
 #, python-format
 msgid "partner [%s]"
 msgstr "partner [%s]"
+
+#, python-format
+#~ msgid "3101012009"
+#~ msgstr "3101012009"

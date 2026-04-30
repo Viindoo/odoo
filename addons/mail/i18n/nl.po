@@ -10,13 +10,14 @@
 # Erwin van der Ploeg <erwin@odooexperts.nl>, 2025
 # "Manon Rondou (ronm)" <ronm@odoo.com>, 2025.
 # Bren Driesen <brdri@odoo.com>, 2026.
+# Weblate <noreply-mt-weblate@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-29 18:37+0000\n"
-"PO-Revision-Date: 2026-03-14 08:10+0000\n"
-"Last-Translator: Bren Driesen <brdri@odoo.com>\n"
+"POT-Creation-Date: 2026-04-03 18:38+0000\n"
+"PO-Revision-Date: 2026-04-14 15:07+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Dutch <https://translate.odoo.com/projects/odoo-17/mail/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -1392,7 +1393,7 @@ msgstr "Bijlage toevoegen"
 #: code:addons/mail/static/src/core/web/chatter.xml:0
 #, python-format
 msgid "Attach files"
-msgstr "Voeg bestanden toe"
+msgstr "Bestanden toevoegen"
 
 #. module: mail
 #: model:ir.model,name:mail.model_ir_attachment
@@ -3752,22 +3753,26 @@ msgstr "Kan de SFU-server niet laden en valt terug naar peer-to-peer"
 #: code:addons/mail/models/mail_render_mixin.py:0
 #, python-format
 msgid ""
-"Failed to render QWeb template: %(template_src)s\n"
+"Failed to render QWeb template for %(template_label)s\n"
+"Target Model: %(model_name)s\n"
+"Language context: %(lang_context)s\n"
+"Error: %(error_details)s\n"
 "\n"
-"%(template_traceback)s)"
+"Template Source Snippet:\n"
+"%(template_src)s"
 msgstr ""
-"Kan QWeb-sjabloon niet weergeven: %(template_src)s\n"
-"\n"
-"%(template_traceback)s)"
 
 #. module: mail
 #. odoo-python
 #: code:addons/mail/models/mail_render_mixin.py:0
 #, python-format
-msgid "Failed to render inline_template template: %(template_txt)s"
+msgid ""
+"Failed to render inline_template template: %(template_txt)s\n"
+"Error details: %(error)s"
 msgstr ""
-"Het is niet gelukt om de inline_template-sjabloon te renderen: "
-"%(template_txt)s"
+"Het is niet gelukt om de inline_template-sjabloon te renderen: %"
+"(template_txt)s\n"
+"Foutgegevens: %(error)s"
 
 #. module: mail
 #. odoo-python
@@ -5705,6 +5710,13 @@ msgstr "E-mailsjabloon resetten"
 
 #. module: mail
 #. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "Mail Template: '%(name)s' (ID: %(record_id)s)"
+msgstr "Mailsjabloon: '%(name)s' (ID: %(record_id)s)"
+
+#. module: mail
+#. odoo-python
 #: code:addons/mail/wizard/mail_template_reset.py:0
 #, python-format
 msgid "Mail Templates have been reset"
@@ -5874,6 +5886,13 @@ msgstr "Markeren als niet gelezen"
 #, python-format
 msgid "Mark as done"
 msgstr "Markeren als gereed"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "Mass Mailing Template: '%(name)s' (ID: %(record_id)s)"
+msgstr ""
 
 #. module: mail
 #. odoo-javascript
@@ -6474,6 +6493,13 @@ msgstr "Nog geen conversatie..."
 #, python-format
 msgid "No history messages"
 msgstr "Geen berichtengeschiedenis"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "No language detected in context"
+msgstr "Geen taal gedetecteerd in context"
 
 #. module: mail
 #. odoo-python
@@ -8292,14 +8318,14 @@ msgstr "Activiteit plannen"
 #: code:addons/mail/models/mail_activity.py:0
 #, python-format
 msgid "Schedule an Activity"
-msgstr "Plan een activiteit"
+msgstr "Activiteit plannen"
 
 #. module: mail
 #. odoo-javascript
 #: code:addons/mail/static/src/core/web/activity_list_popover.xml:0
 #, python-format
 msgid "Schedule an activity"
-msgstr "Plan een activiteit"
+msgstr "Activiteit plannen"
 
 #. module: mail
 #. odoo-javascript
@@ -9212,6 +9238,13 @@ msgstr "Sjabloonbeschrijving"
 #. odoo-python
 #: code:addons/mail/models/mail_render_mixin.py:0
 #, python-format
+msgid "Template name not identified"
+msgstr "Sjabloonnaam niet geïdentificeerd"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
 msgid ""
 "Template rendering should be called only using on a list of IDs; received "
 "%(res_ids)r instead."
@@ -10113,6 +10146,20 @@ msgstr "Dempen opheffen"
 #, python-format
 msgid "Unmute Channel"
 msgstr "Kanaal dempen"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "Unnamed Mail Template"
+msgstr "Naamloos e-mailsjabloon"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "Unnamed Mailing"
+msgstr "Naamloze mailing"
 
 #. module: mail
 #. odoo-javascript
@@ -11703,6 +11750,23 @@ msgstr "{{ object.partner_id.lang }}"
 #, python-format
 msgid "“%(member_name)s” in “%(channel_name)s”"
 msgstr "“%(member_name)s” in “%(channel_name)s”"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/web/activity.js:0
+#, python-format
+msgid "“%s”"
+msgstr ""
+
+#, python-format
+#~ msgid ""
+#~ "Failed to render QWeb template: %(template_src)s\n"
+#~ "\n"
+#~ "%(template_traceback)s)"
+#~ msgstr ""
+#~ "Kan QWeb-sjabloon niet weergeven: %(template_src)s\n"
+#~ "\n"
+#~ "%(template_traceback)s)"
 
 #~ msgid "The channel type cannot be empty"
 #~ msgstr "Het kanaaltype mag niet leeg zijn"

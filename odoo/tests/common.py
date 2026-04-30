@@ -1118,12 +1118,21 @@ class ChromeBrowser:
             self.ws.close()
         if self.chrome:
             self._logger.info("Terminating chrome headless with pid %s", self.chrome.pid)
+            main = psutil.Process(self.chrome.pid)
+            children = main.children(recursive=True)
+            children.insert(0, main)
             self.chrome.terminate()
-            try:
-                self.chrome.wait(15)
-            except subprocess.TimeoutExpired:
-                self._logger.warning("Killing chrome headless with pid %s: still alive", self.chrome.pid)
-                self.chrome.kill()
+            _, alive = psutil.wait_procs(children, 15)
+            if alive:
+                self._logger.warning(
+                    "Killing chrome descendants-or-self of %s: %d remaining%s",
+                    self.chrome.pid,
+                    len(alive),
+                    "".join(f"\n- {p.name()} ({p.status()})" for p in alive),
+                )
+                for p in alive:
+                    p.kill()
+                psutil.wait_procs(alive, 1)
                 self.chrome_log_level = logging.RUNBOT
 
         if self.user_data_dir and os.path.isdir(self.user_data_dir) and self.user_data_dir != '/':
@@ -1358,8 +1367,13 @@ class ChromeBrowser:
                 if not self._result.done():
                     del self.ws
                     self._result.set_exception(e)
-                    for f in self._responses.values():
-                        f.cancel()
+                    while True:
+                        try:
+                            _, f = self._responses.popitem()
+                        except KeyError:
+                            break
+                        else:
+                            f.cancel()
                 return
             except Exception as e:
                 if isinstance(e, ConnectionResetError) and self._result.done():
@@ -1681,10 +1695,16 @@ which leads to stray network requests and inconsistencies."""
             if taken > timeout:
                 break
 
-            result = self._websocket_request('Runtime.evaluate', params={
-                'expression': "try { %s } catch {}" % ready_code,
-                'awaitPromise': True,
-            }, timeout=timeout-taken)['result']
+            try:
+                result = self._websocket_request('Runtime.evaluate', params={
+                    'expression': "try { %s } catch {}" % ready_code,
+                    'awaitPromise': True,
+                }, timeout=timeout-taken)['result']
+            except CancelledError:
+                exc = self._result.done() and self._result.exception()
+                if exc:
+                    raise exc from None
+                result = "cancelled"
 
             if result == {'type': 'boolean', 'value': True}:
                 time_to_ready = time.time() - start_time
@@ -1692,6 +1712,9 @@ which leads to stray network requests and inconsistencies."""
                     self._logger.info('The ready code tooks too much time : %s', time_to_ready)
                 return True
 
+        exc = self._result.done() and self._result.exception()
+        if exc:
+            raise exc from None
         self.take_screenshot(prefix='sc_failed_ready_')
         self._logger.info('Ready code last try result: %s', result)
         return False

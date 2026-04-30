@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 18:36+0000\n"
+"POT-Creation-Date: 2026-04-17 18:37+0000\n"
 "PO-Revision-Date: 2023-10-26 23:09+0000\n"
 "Last-Translator: Mostafa Barmshory <mostafa.barmshory@gmail.com>, 2024\n"
 "Language-Team: Persian (https://app.transifex.com/odoo/teams/41243/fa/)\n"
@@ -48,13 +48,6 @@ msgstr "1792060346001 یا 1792060346"
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
-msgid "3101012009"
-msgstr ""
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
 msgid "310175397400003 [Fifteen digits, first and last digits should be \"3\"]"
 msgstr "310175397400003 [پانزده رقم، رقم اول و آخر باید \"۳\" باشد]"
 
@@ -71,6 +64,11 @@ msgstr "۴۹-۰۹۸-۵۷۶ یا ۴۹۰۹۸۵۷۶"
 #, python-format
 msgid "AR200-5536168-2 or 20055361682"
 msgstr "AR200-5536168-2 یا 20055361682"
+
+#. module: base_vat
+#: model:ir.actions.server,name:base_vat.vies_iap_check_update_ir_actions_server
+msgid "Base VAT: Sync updates from IAP VIES"
+msgstr ""
 
 #. module: base_vat
 #. odoo-python
@@ -97,17 +95,6 @@ msgstr "شرکت‌ها"
 #: model:ir.model,name:base_vat.model_res_config_settings
 msgid "Config Settings"
 msgstr "تنظیمات پیکربندی"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
-msgid ""
-"Connection with the VIES server failed. The VAT number %s could not be "
-"validated."
-msgstr ""
-"اتصال با سرور VIES ناموفق بود. شماره مالیات بر ارزش افزوده %s نمی‌تواند تأیید "
-"شود."
 
 #. module: base_vat
 #: model:ir.model,name:base_vat.model_res_partner
@@ -184,6 +171,13 @@ msgstr "معتبر درون جامعه‌ای"
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
+msgid "Invalid IAP VIES endpoint"
+msgstr ""
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
 msgid "MXGODE561231GR8 or GODE561231GR8"
 msgstr "MXGODE561231GR8 یا GODE561231GR8"
 
@@ -226,8 +220,22 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
-msgid "The VAT number %s could not be interpreted by the VIES server."
-msgstr "شماره مالیات بر ارزش افزوده %s توسط سرور VIES قابل تفسیر نیست."
+msgid "The Intra-Community validity has been updated."
+msgstr ""
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
+msgid "The VIES check failed. Please check the Tax ID manually."
+msgstr ""
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
+msgid "The VIES check is pending. The status will be updated soon."
+msgstr ""
 
 #. module: base_vat
 #. odoo-python
@@ -246,17 +254,6 @@ msgid ""
 "The country of the foreign VAT number could not be detected. Please assign a "
 "country to the fiscal position or set a country group"
 msgstr ""
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
-msgid ""
-"The request for VAT validation was not processed. VIES service has responded "
-"with the following error: %s"
-msgstr ""
-"درخواست برای اعتبارسنجی مالیات بر ارزش افزوده پردازش نشد. سرویس VIES با خطای "
-"زیر پاسخ داده است: %s"
 
 #. module: base_vat
 #. odoo-python
@@ -310,3 +307,23 @@ msgstr "موقعیت مالی [%s]"
 #, python-format
 msgid "partner [%s]"
 msgstr "شریک [%s]"
+
+#, python-format
+#~ msgid ""
+#~ "Connection with the VIES server failed. The VAT number %s could not be "
+#~ "validated."
+#~ msgstr ""
+#~ "اتصال با سرور VIES ناموفق بود. شماره مالیات بر ارزش افزوده %s نمی‌تواند "
+#~ "تأیید شود."
+
+#, python-format
+#~ msgid "The VAT number %s could not be interpreted by the VIES server."
+#~ msgstr "شماره مالیات بر ارزش افزوده %s توسط سرور VIES قابل تفسیر نیست."
+
+#, python-format
+#~ msgid ""
+#~ "The request for VAT validation was not processed. VIES service has "
+#~ "responded with the following error: %s"
+#~ msgstr ""
+#~ "درخواست برای اعتبارسنجی مالیات بر ارزش افزوده پردازش نشد. سرویس VIES با "
+#~ "خطای زیر پاسخ داده است: %s"

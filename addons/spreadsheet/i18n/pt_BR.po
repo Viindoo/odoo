@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 18:37+0000\n"
-"PO-Revision-Date: 2026-01-24 17:01+0000\n"
+"POT-Creation-Date: 2026-04-24 17:38+0000\n"
+"PO-Revision-Date: 2026-04-15 15:03+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.odoo.com/projects/"
 "odoo-17/spreadsheet/pt_BR/>\n"
@@ -21,9 +21,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : "
-"((n != 0 && n % 1000000 == 0) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14.3\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : ((n != 0 && n % "
+"1000000 == 0) ? 1 : 2);\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -121,23 +121,13 @@ msgstr ""
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid ""
-"(1) Search starting at first item. \n"
-"      (-1) Search starting at last item. \n"
-"      (2) Perform a binary search that relies on lookup_array being sorted "
-"in ascending order. If not sorted, invalid results will be returned. \n"
-"      (-2) Perform a binary search that relies on lookup_array being sorted "
-"in descending order. If not sorted, invalid results will be returned.\n"
-"      "
+"(1) Search starting at first item.       (-1) Search starting at last "
+"item.       (2) Perform a binary search that relies on lookup_array being "
+"sorted in ascending order. If not sorted, invalid results will be "
+"returned.       (-2) Perform a binary search that relies on lookup_array "
+"being sorted in descending order. If not sorted, invalid results will be "
+"returned.      "
 msgstr ""
-"(1) Pesquisa a partir do primeiro item.  \n"
-"(-1) Pesquisa a partir do último item. \n"
-"(2) Executa uma pesquisa binária que depende de lookup_array ser ordenado de "
-"forma crescente. Se não for ordenado, serão retornados resultados "
-"inválidos. \n"
-"(-2) Executa uma pesquisa binária que depende de lookup_array ser ordenado "
-"de forma decrescente. Se não for classificada, serão retornados resultados "
-"inválidos.\n"
-"      "
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -187,6 +177,13 @@ msgstr "2 colunas"
 #, python-format
 msgid "2 rows"
 msgstr "2 linhas"
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.xml:0
+#, python-format
+msgid "A"
+msgstr "A"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3217,28 +3214,10 @@ msgstr "A função [[FUNCTION_NAME]] não encontrou resultados."
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid ""
-"Function [[FUNCTION_NAME]] expects criteria_range and criterion to be in "
-"pairs."
-msgstr ""
-"A função [[FUNCTION_NAME]] espera que criteria_range e criterion estejam em "
-"pares."
-
-#. module: spreadsheet
-#. odoo-javascript
-#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
-#, python-format
-msgid ""
-"Function [[FUNCTION_NAME]] expects criteria_range to have the same dimension"
-msgstr ""
-"A função [[FUNCTION_NAME]] espera que criteria_range tenha a mesma dimensão"
-
-#. module: spreadsheet
-#. odoo-javascript
-#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
-#, python-format
-msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got a boolean."
 msgstr ""
+"A função [[FUNCTION_NAME]] espera valores numéricos para %s, mas recebeu um "
+"valor booleano."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3247,6 +3226,8 @@ msgstr ""
 msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got a string."
 msgstr ""
+"A função [[FUNCTION_NAME]] espera valores numéricos para %s, mas recebeu uma "
+"string."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3256,6 +3237,8 @@ msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got an empty "
 "value."
 msgstr ""
+"A função [[FUNCTION_NAME]] espera valores numéricos para %s, mas recebeu um "
+"valor vazio."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3651,12 +3634,8 @@ msgstr ""
 #, python-format
 msgid ""
 "In [[FUNCTION_NAME]], the number of columns of the first matrix (%s) must be "
-"equal to the \n"
-"        number of rows of the second matrix (%s)."
+"equal to the         number of rows of the second matrix (%s)."
 msgstr ""
-"Em [[FUNCTION_NAME]], o número de colunas da primeira matriz (%s) deve ser "
-"igual ao \n"
-"número de linhas da segunda matriz (%s)."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -7441,6 +7420,8 @@ msgid ""
 "The first and second arguments of [[FUNCTION_NAME]] must be non-empty "
 "matrices."
 msgstr ""
+"O primeiro e o segundo argumentos de [[FUNCTION_NAME]] devem ser matrizes "
+"não vazias."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -10732,7 +10713,7 @@ msgstr "Alteração de valor do valor-chave"
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "Value for parameter %s is missing in [[FUNCTION_NAME]]."
-msgstr ""
+msgstr "O valor do parâmetro %s está faltando em [[FUNCTION_NAME]]."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -11111,14 +11092,9 @@ msgstr ""
 #, python-format
 msgid ""
 "Whether or not to remove empty text messages from the split results. The "
-"default behavior is to treat \n"
-"        consecutive delimiters as one (if TRUE). If FALSE, empty cells "
-"values are added between consecutive delimiters."
+"default behavior is to treat         consecutive delimiters as one (if "
+"TRUE). If FALSE, empty cells values are added between consecutive delimiters."
 msgstr ""
-"Se deve ou não remover mensagens de texto vazias dos resultados da divisão. "
-"O comportamento padrão é tratar \n"
-"delimitadores consecutivos como um (se TRUE). Se FALSE, os valores de "
-"células vazias são adicionados entre delimitadores consecutivos."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -11135,12 +11111,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Whether the array should be scanned by column. True scans the array by "
-"column and false (default) \n"
-"      scans the array by row."
+"column and false (default)       scans the array by row."
 msgstr ""
-"Se a matriz deve ser examinada por coluna. True faz a varredura da matriz "
-"por coluna e false (padrão) \n"
-"faz a varredura da matriz por linha."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -11353,6 +11325,13 @@ msgstr ""
 
 #. module: spreadsheet
 #. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.xml:0
+#, python-format
+msgid "Z"
+msgstr "Z"
+
+#. module: spreadsheet
+#. odoo-javascript
 #: code:addons/spreadsheet/static/src/pivot/pivot_functions.js:0
 #, python-format
 msgid "[[FUNCTION_NAME]] cannot be called from the spreadsheet."
@@ -11396,6 +11375,8 @@ msgid ""
 "[[FUNCTION_NAME]] expects the provided values of %(argName)s to be a non-"
 "empty matrix."
 msgstr ""
+"[[FUNCTION_NAME]] espera que os valores fornecidos de ` %(argName)s ` sejam "
+"uma matriz não vazia."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -11591,10 +11572,87 @@ msgstr "amanhã"
 
 #. module: spreadsheet
 #. odoo-javascript
+#: code:addons/spreadsheet/static/src/public_readonly_app/public_readonly.xml:0
+#, python-format
+msgid "x"
+msgstr "x"
+
+#. module: spreadsheet
+#. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #, python-format
 msgid "yesterday"
 msgstr "ontem"
+
+#, python-format
+#~ msgid ""
+#~ "(1) Search starting at first item. \n"
+#~ "      (-1) Search starting at last item. \n"
+#~ "      (2) Perform a binary search that relies on lookup_array being "
+#~ "sorted in ascending order. If not sorted, invalid results will be "
+#~ "returned. \n"
+#~ "      (-2) Perform a binary search that relies on lookup_array being "
+#~ "sorted in descending order. If not sorted, invalid results will be "
+#~ "returned.\n"
+#~ "      "
+#~ msgstr ""
+#~ "(1) Pesquisa a partir do primeiro item.  \n"
+#~ "(-1) Pesquisa a partir do último item. \n"
+#~ "(2) Executa uma pesquisa binária que depende de lookup_array ser ordenado "
+#~ "de forma crescente. Se não for ordenado, serão retornados resultados "
+#~ "inválidos. \n"
+#~ "(-2) Executa uma pesquisa binária que depende de lookup_array ser "
+#~ "ordenado de forma decrescente. Se não for classificada, serão retornados "
+#~ "resultados inválidos.\n"
+#~ "      "
+
+#, python-format
+#~ msgid ""
+#~ "Function [[FUNCTION_NAME]] expects criteria_range and criterion to be in "
+#~ "pairs."
+#~ msgstr ""
+#~ "A função [[FUNCTION_NAME]] espera que criteria_range e criterion estejam "
+#~ "em pares."
+
+#, python-format
+#~ msgid ""
+#~ "Function [[FUNCTION_NAME]] expects criteria_range to have the same "
+#~ "dimension"
+#~ msgstr ""
+#~ "A função [[FUNCTION_NAME]] espera que criteria_range tenha a mesma "
+#~ "dimensão"
+
+#, python-format
+#~ msgid ""
+#~ "In [[FUNCTION_NAME]], the number of columns of the first matrix (%s) must "
+#~ "be equal to the \n"
+#~ "        number of rows of the second matrix (%s)."
+#~ msgstr ""
+#~ "Em [[FUNCTION_NAME]], o número de colunas da primeira matriz (%s) deve "
+#~ "ser igual ao \n"
+#~ "número de linhas da segunda matriz (%s)."
+
+#, python-format
+#~ msgid ""
+#~ "Whether or not to remove empty text messages from the split results. The "
+#~ "default behavior is to treat \n"
+#~ "        consecutive delimiters as one (if TRUE). If FALSE, empty cells "
+#~ "values are added between consecutive delimiters."
+#~ msgstr ""
+#~ "Se deve ou não remover mensagens de texto vazias dos resultados da "
+#~ "divisão. O comportamento padrão é tratar \n"
+#~ "delimitadores consecutivos como um (se TRUE). Se FALSE, os valores de "
+#~ "células vazias são adicionados entre delimitadores consecutivos."
+
+#, python-format
+#~ msgid ""
+#~ "Whether the array should be scanned by column. True scans the array by "
+#~ "column and false (default) \n"
+#~ "      scans the array by row."
+#~ msgstr ""
+#~ "Se a matriz deve ser examinada por coluna. True faz a varredura da matriz "
+#~ "por coluna e false (padrão) \n"
+#~ "faz a varredura da matriz por linha."
 
 #, python-format
 #~ msgid ""

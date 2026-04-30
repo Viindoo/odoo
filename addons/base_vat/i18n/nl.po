@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 18:36+0000\n"
-"PO-Revision-Date: 2026-03-14 08:09+0000\n"
+"POT-Creation-Date: 2026-04-17 18:37+0000\n"
+"PO-Revision-Date: 2026-04-18 17:00+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Dutch <https://translate.odoo.com/projects/odoo-17/base_vat/"
 "nl/>\n"
@@ -49,13 +49,6 @@ msgstr "1792060346001 of 1792060346"
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
-msgid "3101012009"
-msgstr "3101012009"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
 msgid "310175397400003 [Fifteen digits, first and last digits should be \"3\"]"
 msgstr ""
 "310175397400003 [Vijftien cijfers, eerste en laatste cijfers moeten \"3\" "
@@ -74,6 +67,11 @@ msgstr "49-098-576 of 49098576"
 #, python-format
 msgid "AR200-5536168-2 or 20055361682"
 msgstr "AR200-5536168-2 of 20055361682"
+
+#. module: base_vat
+#: model:ir.actions.server,name:base_vat.vies_iap_check_update_ir_actions_server
+msgid "Base VAT: Sync updates from IAP VIES"
+msgstr ""
 
 #. module: base_vat
 #. odoo-python
@@ -98,17 +96,6 @@ msgstr "Bedrijven"
 #: model:ir.model,name:base_vat.model_res_config_settings
 msgid "Config Settings"
 msgstr "Configuratie instellingen"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
-msgid ""
-"Connection with the VIES server failed. The VAT number %s could not be "
-"validated."
-msgstr ""
-"De verbinding met de VIES-server is mislukt. Het BTW-nummer %s kon niet "
-"worden bevestigd."
 
 #. module: base_vat
 #: model:ir.model,name:base_vat.model_res_partner
@@ -185,6 +172,13 @@ msgstr "Geldig voor intracommunautair"
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
+msgid "Invalid IAP VIES endpoint"
+msgstr ""
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
 msgid "MXGODE561231GR8 or GODE561231GR8"
 msgstr "MXGODE561231GR8 of GODE561231GR8"
 
@@ -227,8 +221,23 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_vat/models/res_partner.py:0
 #, python-format
-msgid "The VAT number %s could not be interpreted by the VIES server."
-msgstr "Het BTW-nummer %s kon niet worden geïnterpreteerd door de VIES-server."
+msgid "The Intra-Community validity has been updated."
+msgstr ""
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
+msgid "The VIES check failed. Please check the Tax ID manually."
+msgstr "De VIES-controle is mislukt. Controleer het btw-nummer handmatig."
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+#, python-format
+msgid "The VIES check is pending. The status will be updated soon."
+msgstr ""
+"De VIES-controle is in behandeling. De status wordt binnenkort bijgewerkt."
 
 #. module: base_vat
 #. odoo-python
@@ -252,17 +261,6 @@ msgid ""
 msgstr ""
 "Het land van het buitenlandse btw-nummer kon niet worden gedetecteerd. Wijs "
 "een land toe aan de fiscale positie of stel een landengroep in"
-
-#. module: base_vat
-#. odoo-python
-#: code:addons/base_vat/models/res_partner.py:0
-#, python-format
-msgid ""
-"The request for VAT validation was not processed. VIES service has responded "
-"with the following error: %s"
-msgstr ""
-"De aanvraag voor BTW-validatie is niet verwerkt. De VIES-service heeft "
-"gereageerd met de volgende fout: %s"
 
 #. module: base_vat
 #. odoo-python
@@ -318,6 +316,31 @@ msgstr "fiscale positie [%s]"
 #, python-format
 msgid "partner [%s]"
 msgstr "relatie [%s]"
+
+#, python-format
+#~ msgid ""
+#~ "Connection with the VIES server failed. The VAT number %s could not be "
+#~ "validated."
+#~ msgstr ""
+#~ "De verbinding met de VIES-server is mislukt. Het BTW-nummer %s kon niet "
+#~ "worden bevestigd."
+
+#, python-format
+#~ msgid "The VAT number %s could not be interpreted by the VIES server."
+#~ msgstr ""
+#~ "Het BTW-nummer %s kon niet worden geïnterpreteerd door de VIES-server."
+
+#, python-format
+#~ msgid ""
+#~ "The request for VAT validation was not processed. VIES service has "
+#~ "responded with the following error: %s"
+#~ msgstr ""
+#~ "De aanvraag voor BTW-validatie is niet verwerkt. De VIES-service heeft "
+#~ "gereageerd met de volgende fout: %s"
+
+#, python-format
+#~ msgid "3101012009"
+#~ msgstr "3101012009"
 
 #, python-format
 #~ msgid "17291716060 (NIN) or 1729171602 (VKN)"

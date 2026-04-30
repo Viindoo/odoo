@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* mail
+# * mail
 #
 # Translators:
 # Martin Trigaux, 2023
@@ -9,21 +9,24 @@
 # Wil Odoo, 2024
 # Maitê Dietze, 2025
 #
+# "Maitê Dietze (madi)" <madi@odoo.com>, 2026.
+# Weblate <noreply-mt-weblate@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-29 18:37+0000\n"
-"PO-Revision-Date: 2023-10-26 23:09+0000\n"
-"Last-Translator: Maitê Dietze, 2025\n"
-"Language-Team: Portuguese (Brazil) (https://app.transifex.com/odoo/teams/"
-"41243/pt_BR/)\n"
+"POT-Creation-Date: 2026-04-03 18:38+0000\n"
+"PO-Revision-Date: 2026-04-15 11:01+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.odoo.com/projects/odoo-"
+"17/mail/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % "
-"1000000 == 0 ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : ((n != 0 && n % "
+"1000000 == 0) ? 1 : 2);\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #. module: mail
 #. odoo-python
@@ -3752,20 +3755,32 @@ msgstr "Falha ao carregar o servidor SFU, voltando para o ponto a ponto"
 #: code:addons/mail/models/mail_render_mixin.py:0
 #, python-format
 msgid ""
-"Failed to render QWeb template: %(template_src)s\n"
+"Failed to render QWeb template for %(template_label)s\n"
+"Target Model: %(model_name)s\n"
+"Language context: %(lang_context)s\n"
+"Error: %(error_details)s\n"
 "\n"
-"%(template_traceback)s)"
+"Template Source Snippet:\n"
+"%(template_src)s"
 msgstr ""
-"Falha ao renderizar o modelo QWeb: %(template_src)s\n"
+"Falha ao renderizar o modelo QWeb para %(template_label)s\n"
+"Modelo de destino: %(model_name)s\n"
+"Contexto de idioma: %(lang_context)s\n"
+"Erro: %(error_details)s\n"
 "\n"
-"%(template_traceback)s)"
+"Snippet da fonte do modelo:\n"
+"%(template_src)s"
 
 #. module: mail
 #. odoo-python
 #: code:addons/mail/models/mail_render_mixin.py:0
 #, python-format
-msgid "Failed to render inline_template template: %(template_txt)s"
-msgstr "Falha ao renderizar o modelo inline_template: %(template_txt)s"
+msgid ""
+"Failed to render inline_template template: %(template_txt)s\n"
+"Error details: %(error)s"
+msgstr ""
+"Falha ao renderizar o modelo inline_template: %(template_txt)s\n"
+"Detalhes do erro: %(error)s"
 
 #. module: mail
 #. odoo-python
@@ -5700,6 +5715,13 @@ msgstr "Redefinição de modelo de e-mail"
 
 #. module: mail
 #. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "Mail Template: '%(name)s' (ID: %(record_id)s)"
+msgstr "Modelo de e-mail: '%(name)s' (ID: %(record_id)s)"
+
+#. module: mail
+#. odoo-python
 #: code:addons/mail/wizard/mail_template_reset.py:0
 #, python-format
 msgid "Mail Templates have been reset"
@@ -5868,6 +5890,13 @@ msgstr "Marcar como não lido"
 #, python-format
 msgid "Mark as done"
 msgstr "Marcar como concluído"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "Mass Mailing Template: '%(name)s' (ID: %(record_id)s)"
+msgstr "Modelo de envio em massa: '%(name)s' (ID: %(record_id)s)"
 
 #. module: mail
 #. odoo-javascript
@@ -6467,6 +6496,13 @@ msgstr "Sem conversas ainda..."
 #, python-format
 msgid "No history messages"
 msgstr "Nenhum histórico de mensagens"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "No language detected in context"
+msgstr "Nenhum idioma detectado no contexto"
 
 #. module: mail
 #. odoo-python
@@ -9199,6 +9235,13 @@ msgstr "Descrição do modelo"
 #. odoo-python
 #: code:addons/mail/models/mail_render_mixin.py:0
 #, python-format
+msgid "Template name not identified"
+msgstr "Nome do modelo não identificado"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
 msgid ""
 "Template rendering should be called only using on a list of IDs; received "
 "%(res_ids)r instead."
@@ -10092,6 +10135,20 @@ msgstr "Desmutar"
 #, python-format
 msgid "Unmute Channel"
 msgstr "Dessilenciar canal"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "Unnamed Mail Template"
+msgstr "Modelo de e-mail sem nome"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#, python-format
+msgid "Unnamed Mailing"
+msgstr "Lista de distribuição sem nome"
 
 #. module: mail
 #. odoo-javascript
@@ -11677,6 +11734,23 @@ msgstr "{{ object.partner_id.lang }}"
 #, python-format
 msgid "“%(member_name)s” in “%(channel_name)s”"
 msgstr "\"%(member_name)s\" em \"%(channel_name)s\""
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/web/activity.js:0
+#, python-format
+msgid "“%s”"
+msgstr "“%s”"
+
+#, python-format
+#~ msgid ""
+#~ "Failed to render QWeb template: %(template_src)s\n"
+#~ "\n"
+#~ "%(template_traceback)s)"
+#~ msgstr ""
+#~ "Falha ao renderizar o modelo QWeb: %(template_src)s\n"
+#~ "\n"
+#~ "%(template_traceback)s)"
 
 #~ msgid "The channel type cannot be empty"
 #~ msgstr "O tipo de canal não pode estar em branco"

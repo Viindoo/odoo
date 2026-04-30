@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 18:36+0000\n"
-"PO-Revision-Date: 2026-03-14 08:08+0000\n"
+"POT-Creation-Date: 2026-04-10 18:36+0000\n"
+"PO-Revision-Date: 2026-04-14 14:24+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Finnish <https://translate.odoo.com/projects/odoo-17/"
 "account_edi_ubl_cii/fi/>\n"
@@ -277,11 +277,6 @@ msgid "0240 - Register of legal persons (France)"
 msgstr ""
 
 #. module: account_edi_ubl_cii
-#: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii.account_invoice_pdfa_3_facturx_metadata
-msgid "1.0"
-msgstr "1.0"
-
-#. module: account_edi_ubl_cii
 #: model:ir.model.fields.selection,name:account_edi_ubl_cii.selection__res_partner__peppol_eas__9901
 msgid "9901 - Danish Ministry of the Interior and Health"
 msgstr "9901 - Tanskan sisä- ja terveysministeriö"
@@ -515,6 +510,11 @@ msgstr ""
 "yrityskohtaisia.\"/>"
 
 #. module: account_edi_ubl_cii
+#: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii.account_invoice_pdfa_3_facturx_metadata
+msgid "A"
+msgstr "A"
+
+#. module: account_edi_ubl_cii
 #. odoo-python
 #: code:addons/account_edi_ubl_cii/models/account_edi_common.py:0
 #, python-format
@@ -562,13 +562,6 @@ msgstr "Lähetä tilikirjaus"
 #. odoo-python
 #: code:addons/account_edi_ubl_cii/models/account_edi_common.py:0
 #, python-format
-msgid "Articles 226 items 11 to 15 Directive 2006/112/EN"
-msgstr "226 artiklan kohdat 11-15, direktiivi 2006/112/EN"
-
-#. module: account_edi_ubl_cii
-#. odoo-python
-#: code:addons/account_edi_ubl_cii/models/account_edi_common.py:0
-#, python-format
 msgid "At least one of the following fields %s is required on %s."
 msgstr "Vähintään yksi seuraavista kentistä %s on pakollinen %s."
 
@@ -603,7 +596,7 @@ msgstr "BIS3 DE (XRechnung)"
 #. odoo-python
 #: code:addons/account_edi_ubl_cii/models/account_move.py:0
 #, python-format
-msgid "Cannot decode the origin file, try by importing it again"
+msgid "Cannot decode origin file, try by importing it again"
 msgstr ""
 
 #. module: account_edi_ubl_cii
@@ -753,6 +746,14 @@ msgstr "Ota Ubl Cii Xml käyttöön"
 #, python-format
 msgid "Errors occurred while creating the EDI document (format: %s):"
 msgstr "EDI-asiakirjaa luodessa tapahtui virheitä (muoto: %s):"
+
+#. module: account_edi_ubl_cii
+#. odoo-python
+#: code:addons/account_edi_ubl_cii/models/account_edi_common.py:0
+#: code:addons/account_edi_ubl_cii/models/account_edi_xml_ubl_20.py:0
+#, python-format
+msgid "Exempt from tax"
+msgstr "Verovapaa"
 
 #. module: account_edi_ubl_cii
 #. odoo-python
@@ -919,6 +920,18 @@ msgstr ""
 #: model:ir.model,name:account_edi_ubl_cii.model_ir_actions_report
 msgid "Report Action"
 msgstr "Raporttitoiminto"
+
+#. module: account_edi_ubl_cii
+#. odoo-python
+#: code:addons/account_edi_ubl_cii/models/account_edi_common.py:0
+#, python-format
+msgid ""
+"Reverse charge: In the absence of a written objection within one month of "
+"receipt of the invoice, the customer is deemed to acknowledge that they are "
+"a taxable person required to file periodic returns. If this condition is not "
+"met, the customer will be liable for the payment of the tax, interest, and "
+"penalties due in relation to this condition."
+msgstr ""
 
 #. module: account_edi_ubl_cii
 #. odoo-python
@@ -1091,7 +1104,7 @@ msgstr "UBL/CII -tiedosto"
 #: code:addons/account_edi_ubl_cii/models/account_move.py:0
 #, python-format
 msgid "Ungrouped lines from %s"
-msgstr ""
+msgstr "Ryhmittelemättömät rivit kohdasta %s"
 
 #. module: account_edi_ubl_cii
 #: model:ir.model.fields,help:account_edi_ubl_cii.field_res_partner__peppol_endpoint
@@ -1160,6 +1173,13 @@ msgstr ""
 
 #. module: account_edi_ubl_cii
 #. odoo-python
+#: code:addons/account_edi_ubl_cii/models/account_move.py:0
+#, python-format
+msgid "You can only group lines of an invoice"
+msgstr "Voit ryhmitellä vain laskun rivejä"
+
+#. module: account_edi_ubl_cii
+#. odoo-python
 #: code:addons/account_edi_ubl_cii/models/account_edi_xml_cii_facturx.py:0
 #, python-format
 msgid ""
@@ -1190,6 +1210,13 @@ msgstr "fx"
 #: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii.account_invoice_pdfa_3_facturx_metadata
 msgid "urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#"
 msgstr "urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#"
+
+#, python-format
+#~ msgid "Articles 226 items 11 to 15 Directive 2006/112/EN"
+#~ msgstr "226 artiklan kohdat 11-15, direktiivi 2006/112/EN"
+
+#~ msgid "1.0"
+#~ msgstr "1.0"
 
 #, python-format
 #~ msgid ""
