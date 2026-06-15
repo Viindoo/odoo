@@ -345,14 +345,17 @@ class SaleOrder(models.Model):
         base_lines = []
         for line in lines:
             base_line = line._prepare_base_line_for_taxes_computation()
-            taxes = base_line['tax_ids'].flatten_taxes_hierarchy()
+            taxes = base_line['tax_ids']
+            discountable_taxes = base_line['tax_ids'].flatten_taxes_hierarchy()
             if not reward.program_id.is_payment_program:
                 # To compute the discountable amount we get the subtotal and add
                 # non-fixed tax totals. This way fixed taxes will not be discounted
                 # This does not apply to Gift Cards and e-Wallet, where the total
                 # order amount may be paid with the card balance
                 taxes = taxes.filtered(lambda t: t.amount_type != 'fixed')
+                discountable_taxes = discountable_taxes.filtered(lambda t: t.amount_type != 'fixed')
             base_line['discount_taxes'] = taxes
+            base_line['discountable_taxes'] = discountable_taxes
             base_lines.append(base_line)
         AccountTax._add_tax_details_in_base_lines(base_lines, self.company_id)
         AccountTax._round_base_lines_tax_details(base_lines, self.company_id)
@@ -363,7 +366,7 @@ class SaleOrder(models.Model):
             return {
                 'taxes': base_line['discount_taxes'],
                 'skip': (
-                    tax_data['tax'] not in base_line['discount_taxes']
+                    tax_data['tax'] not in base_line['discountable_taxes']
                     or base_line['record'] not in lines
                 ),
             }
@@ -1344,7 +1347,7 @@ class SaleOrder(models.Model):
                     program_result['error'] = _("This program requires a code to be applied.")
                 elif not minimum_amount_matched:
                     program_result['error'] = _(
-                        "A minimum of %(amount)s %(currency)s should be purchased to get the reward",
+                        "To take advantage of this offer, your order must include at least %(amount)s %(currency)s of the eligible products.",
                         amount=min(program.rule_ids.mapped('minimum_amount')),
                         currency=program.currency_id.name,
                     )

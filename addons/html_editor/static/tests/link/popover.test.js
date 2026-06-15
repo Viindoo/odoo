@@ -1,6 +1,7 @@
 import { describe, expect, test } from "@odoo/hoot";
 import {
     click,
+    delay,
     fill,
     press,
     queryFirst,
@@ -472,6 +473,14 @@ describe("Link creation", () => {
             await insertText(editor, "www.odoo");
             await insertText(editor, " ");
             expect(cleanLinkArtifacts(getContent(el))).toBe("<p>www.odoo []</p>");
+        });
+        test("typing uppercase URL + space should convert to link", async () => {
+            const { editor, el } = await setupEditor("<p>[]</p>");
+            await insertText(editor, "http://ODOO.COM");
+            await insertSpace(editor);
+            expect(cleanLinkArtifacts(getContent(el))).toBe(
+                '<p><a href="http://ODOO.COM">http://ODOO.COM</a>&nbsp;[]</p>'
+            );
         });
     });
     describe("Creation by powerbox", () => {
@@ -1693,6 +1702,69 @@ describe("upload file via link popover", () => {
         );
         const favIcon = await waitFor(".o_we_preview_favicon span.o_image");
         expect(favIcon).toHaveAttribute("data-mimetype", "text/plain");
+    });
+
+    test("should not insert attachment as link if popover is discarded during file upload", async () => {
+        const patchUpload = (editor) => {
+            const mockedUploadPromise = new Promise((resolve) => {
+                patchWithCleanup(editor.services.uploadLocalFiles, {
+                    async upload({ resId, resModel }, { setAbortCallback } = {}) {
+                        const attachments = [];
+                        await editor.services.upload.uploadFiles(
+                            [
+                                new File(["test"], "fake_file.txt", {
+                                    type: "text/plain",
+                                    size: 100,
+                                }),
+                            ],
+                            { resModel, resId },
+                            (attachment) => {
+                                attachments.push(attachment);
+                            },
+                            setAbortCallback
+                        );
+                        resolve();
+                        return attachments;
+                    },
+                });
+            });
+            return mockedUploadPromise;
+        };
+
+        onRpc("/html_editor/attachment/add_data", async (request) => {
+            const { params } = await request.json();
+            await delay(100);
+            return {
+                name: params.name,
+            };
+        });
+        const { editor, el } = await setupEditor("<p>[]<br></p>");
+        const mockedUpload = patchUpload(editor);
+        execCommand(editor, "openLinkTools");
+        await waitFor(".o-we-linkpopover");
+        let xhr;
+        const waitForRequest = new Promise((res) => {
+            patchWithCleanup(XMLHttpRequest.prototype, {
+                open() {
+                    xhr = this;
+                    super.open(...arguments);
+                    res();
+                },
+                abort() {
+                    xhr.dispatchEvent(new Event("abort"));
+                    super.abort();
+                },
+            });
+        });
+        await click("button i[class='fa fa-upload']");
+        await waitForRequest;
+        await expectElementCount(".o_notification_manager .o_notification", 1);
+        await click(".o_we_discard_link");
+        await expectElementCount(".o-we-linkpopover", 0);
+        await expectElementCount(".o_notification_manager .o_notification", 0);
+        await mockedUpload;
+        await tick();
+        expect(getContent(el)).toBe(`<p o-we-hint-text='Type "/" for commands' class="o-we-hint">[]<br></p>`);
     });
 });
 

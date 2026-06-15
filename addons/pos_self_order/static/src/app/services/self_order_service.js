@@ -143,7 +143,7 @@ export class SelfOrder extends Reactive {
                 return;
             }
             const productTemplate = product.product_tmpl_id;
-            if (productTemplate.isConfigurable()) {
+            if (this.isProductConfigurable(productTemplate)) {
                 this.router.navigate("product", { id: productTemplate.id });
                 return;
             }
@@ -247,7 +247,7 @@ export class SelfOrder extends Reactive {
             if (
                 combo_item_ids.length > 1 ||
                 combo.qty_max > 1 ||
-                combo_item_ids[0]?.product_id.isConfigurable()
+                this.isProductConfigurable(combo_item_ids[0]?.product_id)
             ) {
                 return { show: true, selectedCombos: [] };
             }
@@ -261,6 +261,16 @@ export class SelfOrder extends Reactive {
             });
         }
         return { show: false, selectedCombos };
+    }
+
+    isProductConfigurable(product) {
+        if (!product) {
+            return false;
+        }
+        if (!this.kioskMode) {
+            return product.isConfigurable();
+        }
+        return product.attribute_line_ids.some((a) => a.product_template_value_ids.length > 1);
     }
 
     async addToCart(
@@ -920,19 +930,14 @@ export class SelfOrder extends Reactive {
     }
 
     getProductPriceInfo(productTemplate, product) {
-        const pricelist = this.currentOrder.preset_id?.pricelist_id || this.config.pricelist_id;
-        const price = productTemplate.getPrice(pricelist, 1, 0, false, product);
-
-        if (!product) {
-            product = productTemplate;
-        }
-
-        // Taxes computation.
         const order = this.currentOrder;
-        const taxesData = product.getTaxDetails({
+        const pricelist = order.preset_id?.pricelist_id || this.config.pricelist_id;
+        const productVariant = product || productTemplate.product_variant_ids[0];
+        const price = productTemplate.getPrice(pricelist, 1, 0, false, productVariant);
+        const taxesData = (productVariant || productTemplate).getTaxDetails({
             overridedValues: {
                 price,
-                fiscalPosition: order?.fiscal_position_id || false,
+                fiscalPosition: order.fiscal_position_id || false,
             },
         });
         return { pricelist_price: price, ...taxesData };

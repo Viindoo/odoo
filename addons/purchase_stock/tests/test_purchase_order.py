@@ -571,6 +571,8 @@ class TestPurchaseOrder(ValuationReconciliationTestCommon):
         self.assertEqual(quant.quantity, 5)
 
     def test_po_edit_after_receive(self):
+        # Picking types can be detached from any warehouse; ensure PO confirmation still works.
+        self.company_data['default_warehouse'].in_type_id.warehouse_id = False
         self.po = self.env['purchase.order'].create(self.po_vals)
         self.po.button_confirm()
         self.po.picking_ids.move_ids.quantity = 5
@@ -579,6 +581,16 @@ class TestPurchaseOrder(ValuationReconciliationTestCommon):
         self.assertEqual(self.po.picking_ids.move_ids.mapped('product_uom_qty'), [5.0, 5.0])
         self.po.with_context(import_file=True).order_line[0].product_qty = 10
         self.assertEqual(self.po.picking_ids.move_ids.mapped('product_uom_qty'), [5.0, 5.0, 5.0])
+
+    def test_po_edit_after_receive_2_steps_route(self):
+        self.company_data['default_warehouse'].reception_steps = 'two_steps'
+        self.po = self.env['purchase.order'].create(self.po_vals)
+        self.po.button_confirm()
+        self.po.picking_ids.move_ids.quantity = 1
+        Form.from_action(self.env, self.po.picking_ids.button_validate()).save().process()
+        self.assertEqual(self.po.picking_ids.move_ids.mapped('product_uom_qty'), [1.0, 1.0, 4.0, 4.0])
+        self.po.order_line[0].product_qty = 3
+        self.assertEqual(self.po.picking_ids.move_ids.mapped('product_uom_qty'), [1.0, 1.0, 2.0, 4.0])
 
     def test_receive_returned_product_without_po_update(self):
         """
@@ -879,3 +891,57 @@ class TestPurchaseOrder(ValuationReconciliationTestCommon):
         pos.picking_ids.button_validate()
         dashboard = self.env['purchase.order'].retrieve_dashboard()
         self.assertEqual(dashboard['global']['otd'], '67 %')
+
+    def test_cogs_no_taxes(self):
+        """Taxes should not be set on COGS lines."""
+        vendor = self.env['res.partner'].create({
+            'name': 'Test Vendor',
+            'is_company': True,
+        })
+
+        self.product_a.is_storable = True
+        self.product_a.categ_id.property_cost_method = 'standard'
+        self.product_a.categ_id.property_price_difference_account_id = self.company_data['default_account_revenue'].id
+
+        stock_location = self.env['stock.warehouse'].search([
+            ('company_id', '=', self.env.company.id),
+        ], limit=1).lot_stock_id
+        customer_location = self.env.ref('stock.stock_location_customers')
+
+        po = self.env['purchase.order'].create({
+            'partner_id': vendor.id,
+            'order_line': [
+                Command.create({
+                    'product_id': self.product_a.id,
+                    'product_qty': 10,
+                    'price_unit': 10,
+                })
+            ],
+        })
+        po.button_confirm()
+
+        receipt = po.picking_ids[0]
+        receipt.button_validate()
+
+        move_out = self.env['stock.move'].create({
+            'product_id': self.product_a.id,
+            'product_uom': self.product_a.uom_id.id,
+            'product_uom_qty': 6,
+            'location_id': stock_location.id,
+            'location_dest_id': customer_location.id,
+        })
+        move_out._action_confirm()
+        move_out.quantity = 6
+        move_out.picked = True
+        move_out._action_done()
+
+        action = po.action_create_invoice()
+        bill = self.env['account.move'].browse(action['res_id'])
+        for line in bill.invoice_line_ids:
+            if line.product_id == self.product_a:
+                line.price_unit = 20
+        bill.invoice_date = fields.Date.today()
+        bill.action_post()
+
+        cogs_lines = bill.line_ids.filtered(lambda l: l.display_type == 'cogs')
+        self.assertRecordValues(cogs_lines, [{'tax_ids': []} for _ in cogs_lines])

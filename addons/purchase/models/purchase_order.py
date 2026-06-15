@@ -1209,7 +1209,7 @@ class PurchaseOrder(models.Model):
         seller = product._select_seller(
             partner_id=self.partner_id,
             quantity=None,
-            date=self.date_order and self.date_order.date(),
+            date=fields.Date.context_today(self, timestamp=self.date_order),
             uom_id=product.uom_id,
             ordered_by='min_qty',
             params=params
@@ -1333,7 +1333,7 @@ class PurchaseOrder(models.Model):
                 price = seller.price
                 if seller.currency_id != self.currency_id:
                     price = seller.currency_id._convert(price, self.currency_id)
-                pol.price_unit = pol.technical_price_unit = price
+                pol._reset_price_unit(price)
                 pol.discount = seller.discount
         return pol.price_unit_discounted
 

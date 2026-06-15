@@ -37,6 +37,7 @@ class TestUBLDKOIOUBL21(TestUBLCommon, TestAccountMoveSendCommon):
 
         cls.partner_a.write({
             'name': 'SUPER DANISH PARTNER',
+            'is_company': True,
             'city': 'Aalborg',
             'zip': '9430',
             'vat': 'DK12345674',
@@ -120,10 +121,12 @@ class TestUBLDKOIOUBL21(TestUBLCommon, TestAccountMoveSendCommon):
 
     @classmethod
     def _send_patched(cls, invoice):
-        with patch('odoo.addons.l10n_dk_nemhandel.models.res_partner.ResPartner._get_nemhandel_verification_state', return_value='not_valid'):
-            wizard = cls.env['account.move.send.wizard'] \
+        wizard = cls.env['account.move.send.wizard'] \
                 .with_context(active_model=invoice._name, active_ids=invoice.ids) \
                 .create({})
+
+        with patch('odoo.addons.l10n_dk_nemhandel.models.res_partner.ResPartner._get_nemhandel_verification_state', return_value='valid'), \
+             patch.object(cls.env.registry['account_edi_proxy_client.user'], '_call_nemhandel_proxy', return_value={}):
             wizard.action_send_and_print()
 
     @classmethod
@@ -264,6 +267,7 @@ class TestUBLDKOIOUBL21(TestUBLCommon, TestAccountMoveSendCommon):
         """
         self.partner_b.vat = None
         self.partner_b.invoice_edi_format = 'oioubl_21'  # default format recomputes when vat is changed
-        with self.assertRaises(UserError) as exception:
-            self.create_post_and_send_invoice(partner=self.partner_b)
-        self.assertIn(f"The field '{self.partner_b._fields['vat'].string}' is required", exception.exception.args[0])
+        invoice = self.create_post_and_send_invoice(partner=self.partner_b)
+        self.assertFalse(invoice.ubl_cii_xml_id)
+        self.assertEqual(len(invoice.attachment_ids), 1)
+        self.assertEqual(invoice.attachment_ids[0].res_name, 'INV/2017/00001 (ref_move)')

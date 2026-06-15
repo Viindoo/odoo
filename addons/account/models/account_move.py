@@ -1058,9 +1058,10 @@ class AccountMove(models.Model):
                 move.partner_bank_id = payment_method.journal_id.bank_account_id
                 continue
 
-            move.partner_bank_id = move.bank_partner_id.bank_ids.filtered(
-                lambda bank: not bank.company_id or bank.company_id == move.company_id
-            ).sorted(key=_bank_selection_key)[:1]
+            move.partner_bank_id = move.bank_partner_id.bank_ids.filtered_domain([
+                *self.env['res.partner.bank']._check_company_domain(move.company_id),
+                ('active', '=', True),  # active_test could be False in the context
+            ]).sorted(key=_bank_selection_key)[:1]
 
     @api.depends('partner_id')
     def _compute_invoice_payment_term_id(self):
@@ -1580,16 +1581,23 @@ class AccountMove(models.Model):
         is_invoice = self.is_invoice(include_receipts=True)
         sign = self.direction_sign if is_invoice else 1
 
-        return self.env['account.tax']._prepare_base_line_for_taxes_computation(
-            product_line,
-            price_unit=product_line.price_unit if is_invoice else product_line.amount_currency,
-            quantity=product_line.quantity if is_invoice else 1.0,
-            discount=product_line.discount if is_invoice else 0.0,
-            rate=self._get_product_base_line_currency_rate(product_line),
-            sign=sign,
-            special_mode=False if is_invoice else 'total_excluded',
-            name=product_line.name,
-        )
+        kwargs = {
+            'price_unit': product_line.price_unit if is_invoice else product_line.amount_currency,
+            'quantity': product_line.quantity if is_invoice else 1.0,
+            'discount': product_line.discount if is_invoice else 0.0,
+            'rate': self._get_product_base_line_currency_rate(product_line),
+            'sign': sign,
+            'special_mode': False if is_invoice else 'total_excluded',
+            'name': product_line.name,
+        }
+
+        computation_key = (product_line.extra_tax_data or {}).get('computation_key', '')
+        if computation_key.startswith('global_discount'):
+            kwargs['special_type'] = 'global_discount'
+        elif computation_key.startswith('down_payment'):
+            kwargs['special_type'] = 'down_payment'
+
+        return self.env['account.tax']._prepare_base_line_for_taxes_computation(product_line, **kwargs)
 
     def _prepare_epd_base_line_for_taxes_computation(self, epd_line):
         """ Convert an account.move.line having display_type='epd' into a base line for the taxes computation.
@@ -3274,7 +3282,7 @@ class AccountMove(models.Model):
         def get_base_line_tracked_fields(line):
             grouping_key = AccountTax._prepare_base_line_grouping_key(fake_base_line)
             if line.move_id.is_invoice(include_receipts=True):
-                extra_fields = ['price_unit', 'quantity', 'discount']
+                extra_fields = ['price_unit', 'quantity', 'discount', 'deductible_amount']
             else:
                 extra_fields = ['amount_currency']
             return list(grouping_key.keys()) + extra_fields
@@ -3468,7 +3476,7 @@ class AccountMove(models.Model):
         def has_non_deductible_lines(move):
             return (
                 move.state == 'draft'
-                and move.is_purchase_document()
+                and move.is_purchase_document(include_receipts=True)
                 and any(move.line_ids.filtered(lambda line: line.display_type == 'product' and line.deductible_amount < 100))
             )
 
@@ -3514,7 +3522,7 @@ class AccountMove(models.Model):
             rate = move.invoice_currency_rate
 
             for line in move.line_ids.filtered(lambda line: line.display_type == 'product'):
-                if float_compare(line.deductible_amount, 100, precision_rounding=2) == 0:
+                if float_compare(line.deductible_amount, 100, precision_digits=2) == 0:
                     continue
 
                 percentage = (1 - line.deductible_amount / 100)
@@ -5762,13 +5770,19 @@ class AccountMove(models.Model):
 
         def is_computed_with_mixin(move):
             # if computed with the mixin we are guaranteed to not have gaps, need to bypass to avoid concurrency issues
-            format_string, format_values = move._get_next_sequence_format()
+            if not move.name or move.name == '/':
+                return False
+            format_string, format_values = move._get_sequence_format_param(move.name)
             format_values.pop('seq')
             cache_key = (format_string.format(**format_values, seq=0), self._sequence_index and self[self._sequence_index])
             return sequence_mixin_cache.get(cache_key) is not None
 
         def browse(ids=()):
-            return self.browse(ids).with_prefetch(all_ids)
+            # Use sudo() because the SQL query above has no company filter and may
+            # return IDs from a parent/sibling company that the current user cannot
+            # access.  made_sequence_gap is a purely technical housekeeping flag, so
+            # bypassing record rules here is safe.
+            return self.sudo().browse(ids).with_prefetch(all_ids)
 
         sequence_mixin_cache = self._get_sequence_cache()
         self.env['account.move'].flush_model(['name', 'sequence_prefix', 'sequence_number', 'journal_id'])

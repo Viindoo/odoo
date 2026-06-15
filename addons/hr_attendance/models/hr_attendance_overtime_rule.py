@@ -425,9 +425,19 @@ class HrAttendanceOvertimeRule(models.Model):
 
         for employee in employees:
             if {'work_days', 'non_work_days'} & timing_type_set:
-                intervals_by_timing_type['work_days'][employee] = _generate_days_intervals(
-                    schedules_intervals_by_employee['schedule'][employee]['work'] - schedules_intervals_by_employee['leave'][employee]
-                )
+                sudo_calendar = employee.sudo().resource_calendar_id
+                if sudo_calendar and sudo_calendar.flexible_hours:
+                    intervals_by_timing_type['work_days'][employee] = _generate_days_intervals(
+                        Intervals([(
+                            datetime.combine(min_check_in, datetime.min.time()),
+                            datetime.combine(max_check_out, datetime.max.time()),
+                            self.env['resource.calendar'],
+                        )]) - schedules_intervals_by_employee['leave'][employee]
+                    )
+                else:
+                    intervals_by_timing_type['work_days'][employee] = _generate_days_intervals(
+                        schedules_intervals_by_employee['schedule'][employee]['work'] - schedules_intervals_by_employee['leave'][employee]
+                    )
             if 'non_work_days' in timing_type_set:
                 intervals_by_timing_type['non_work_days'][employee] = _generate_days_intervals(
                     _invert_intervals(
@@ -468,7 +478,7 @@ class HrAttendanceOvertimeRule(models.Model):
                 for (start, stop, attendance) in intersetion_interval_for_attendance:
                     overtime_interval_list[attendance].append((start, stop, rules))
                 for attendance, attendance_intervals_list in overtime_interval_list.items():
-                    overtime_by_employee_by_attendance[employee][attendance] |= Intervals(attendance_intervals_list)
+                    overtime_by_employee_by_attendance[employee][attendance].extend(attendance_intervals_list)
 
         def _build_day_rule_intervals(employees, rule, intervals):
             timing_intervals_by_employee = defaultdict(Intervals)
@@ -496,7 +506,7 @@ class HrAttendanceOvertimeRule(models.Model):
             schedules_intervals_by_employee
         )
         attendances_intervals_by_employee = defaultdict()
-        overtime_by_employee_by_attendance = defaultdict(lambda: defaultdict(Intervals))
+        overtime_by_employee_by_attendance = defaultdict(lambda: defaultdict(list))
 
         attendances_by_employee = attendances.grouped('employee_id')
         for employee, emp_attendance in attendances_by_employee.items():

@@ -128,6 +128,29 @@ class StockPickingType(models.Model):
     _name = 'stock.picking.type'
     _inherit = ['stock.picking.type', 'pos.load.mixin']
 
+    has_stock_reports_to_print = fields.Boolean(compute='_compute_has_stock_reports_to_print')
+
+    @api.depends(
+        'auto_print_delivery_slip',
+        'auto_print_return_slip',
+        'auto_print_reception_report',
+        'auto_print_reception_report_labels',
+        'auto_print_product_labels',
+        'auto_print_lot_labels',
+        'auto_print_packages',
+    )
+    def _compute_has_stock_reports_to_print(self):
+        for record in self:
+            record.has_stock_reports_to_print = (
+                record.auto_print_delivery_slip
+                or record.auto_print_return_slip
+                or record.auto_print_reception_report
+                or record.auto_print_reception_report_labels
+                or record.auto_print_product_labels
+                or record.auto_print_lot_labels
+                or record.auto_print_packages
+            )
+
     @api.depends('warehouse_id')
     def _compute_hide_reservation_method(self):
         super()._compute_hide_reservation_method()
@@ -150,7 +173,7 @@ class StockPickingType(models.Model):
 
     @api.model
     def _load_pos_data_fields(self, config):
-        return ['id', 'use_create_lots', 'use_existing_lots']
+        return ['id', 'use_create_lots', 'use_existing_lots', 'has_stock_reports_to_print']
 
 
 class StockMove(models.Model):
@@ -314,10 +337,16 @@ class StockMove(models.Model):
             line = pos_order.lines.filtered(
                 lambda l: l.product_id == product
                 and l.id not in seen
-                and any(av.attribute_id.create_variant == "no_variant" for av in l.attribute_value_ids)
+                and any(av.attribute_id.create_variant == "no_variant" or av.is_custom for av in l.attribute_value_ids)
             )[:1]
 
             if line and move.description_picking == product.display_name:
-                extra = line.full_product_name.replace(product.name, "", 1).strip()
-                move.description_picking = f"\n{extra}" if extra else ""
+                never_values = line.attribute_value_ids.filtered(
+                    lambda av: av.attribute_id.create_variant == 'no_variant' and not av.is_custom
+                )
+                descriptions = never_values.mapped("display_name")
+                for custom_value in line.custom_attribute_value_ids:
+                    descriptions.append(f"{custom_value.display_name}")
+
+                move.description_picking = "\n".join(descriptions) if descriptions else ""
                 seen.add(line.id)

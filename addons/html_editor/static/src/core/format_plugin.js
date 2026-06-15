@@ -119,7 +119,7 @@ export class FormatPlugin extends Plugin {
                 id: "removeFormat",
                 description: (sel, nodes) =>
                     nodes && this.hasAnyFormat(nodes)
-                        ? _t("Remove Format")
+                        ? _t("Remove Format (Ctrl + Space)")
                         : _t("Selection has no format"),
                 icon: "fa-eraser",
                 run: this.removeAllFormats.bind(this),
@@ -267,7 +267,8 @@ export class FormatPlugin extends Plugin {
             (node) =>
                 isTextNode(node) &&
                 !isNonFormattedWhiteSpaces(node) &&
-                this.dependencies.selection.isNodeEditable(node)
+                this.dependencies.selection.isNodeEditable(node) &&
+                (this.checkPredicates("is_formattable_node_predicates", node) ?? true)
         );
         return (
             targetedTextNodes.length &&
@@ -580,9 +581,9 @@ export class FormatPlugin extends Plugin {
     }
 
     cleanElement(element, { preserveSelection }) {
-        delete element.dataset.oeZwsEmptyInline;
         if (!allWhitespaceRegex.test(element.textContent)) {
             // The element has some meaningful text. Remove the ZWS in it.
+            delete element.dataset.oeZwsEmptyInline;
             this.cleanZWS(element, { preserveSelection });
             return;
         }
@@ -600,6 +601,7 @@ export class FormatPlugin extends Plugin {
             // ensure the cursor can be placed in it).
             return;
         }
+        delete element.dataset.oeZwsEmptyInline;
         const restore = prepareUpdate(...leftPos(element), ...rightPos(element));
         element.remove();
         restore();

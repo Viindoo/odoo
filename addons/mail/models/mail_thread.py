@@ -4872,32 +4872,42 @@ class MailThread(models.AbstractModel):
                     will transfer the context of the thread of my_lead to my_project_task
         """
         self.ensure_one()
-        # get the subtype of the comment Message
-        subtype_comment = self.env['ir.model.data']._xmlid_to_res_id('mail.mt_comment')
-
+        self.check_access('read')
+        new_thread.check_access('read')
         # get the ids of the comment and not-comment of the thread
         # TDE check: sudo on mail.message, to be sure all messages are moved ?
         MailMessage = self.env['mail.message']
-        msg_comment = MailMessage.search([
+        messages = MailMessage.search([
             ('model', '=', self._name),
             ('res_id', '=', self.id),
             ('message_type', '!=', 'user_notification'),
-            ('subtype_id', '=', subtype_comment)])
-        msg_not_comment = MailMessage.search([
-            ('model', '=', self._name),
-            ('res_id', '=', self.id),
-            ('message_type', '!=', 'user_notification'),
-            ('subtype_id', '!=', subtype_comment)])
+        ])
+        non_generic_messages = messages.filtered(lambda m: m.subtype_id.res_model)
+        generic_messages = messages - non_generic_messages
 
         # update the messages
         msg_vals = {"res_id": new_thread.id, "model": new_thread._name}
         if new_parent_message:
             msg_vals["parent_id"] = new_parent_message.id
-        msg_comment.sudo().write(msg_vals)
+        generic_messages.sudo().write(msg_vals)
 
-        # other than comment: reset subtype
-        msg_vals["subtype_id"] = None
-        msg_not_comment.sudo().write(msg_vals)
+        messages_with_description = MailMessage
+
+        if self._name != new_thread._name:
+            msg_vals["subtype_id"] = None
+
+            messages_with_description = non_generic_messages.filtered(
+                lambda msg: msg.subtype_id.description
+            )
+            for message in messages_with_description:
+                body = append_content_to_html(
+                    message.subtype_id.description,
+                    message.body,
+                )
+                # only admin can modify model and res_id, so use sudo
+                message.sudo().write({**msg_vals, "body": body})
+
+        (non_generic_messages - messages_with_description).sudo().write(msg_vals)
         return True
 
     def _message_update_content(self, message, /, *, body, attachment_ids=None, partner_ids=None,
@@ -4962,6 +4972,8 @@ class MailThread(models.AbstractModel):
             message.attachment_ids._delete_and_notify()
         if partner_ids is not None:
             msg_values.update({"partner_ids": [int(pid) for pid in partner_ids] or False})
+        if "subject" in kwargs:
+            msg_values["subject"] = kwargs["subject"]
         if msg_values:
             message.write(msg_values)
         if message._filter_empty():
@@ -4987,6 +4999,8 @@ class MailThread(models.AbstractModel):
             *message._get_store_linked_messages_fields(),
             *self._get_store_message_update_extra_fields(),
         ]
+        if "subject" in kwargs:
+            res.append("subject")
         if body is not None:
             # sudo: mail.message.translation - discarding translations of message after editing it
             self.env["mail.message.translation"].sudo().search([("message_id", "=", message.id)]).unlink()
@@ -5083,7 +5097,7 @@ class MailThread(models.AbstractModel):
         sudo()._message_update_content(), which means these parameters should be either inoffensive
         or safely handled by these methods. Parameters requiring special processing need to be
         manually handled in _prepare_message_data."""
-        return {"email_add_signature", "message_type", "subtype_xmlid"}
+        return {"email_add_signature", "message_type", "subject", "subtype_xmlid"}
 
     @api.model
     def _get_allowed_access_params(self):

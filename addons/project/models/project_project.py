@@ -474,10 +474,15 @@ class ProjectProject(models.Model):
         default = dict(default or {})
         vals_list = super().copy_data(default=default)
         copy_from_template = self.env.context.get('copy_from_template')
+        has_project_stage_feature = False
+        if copy_from_template and 'stage_id' not in default:
+            has_project_stage_feature = self.env.user.has_group('project.group_project_stages')
         for project, vals in zip(self, vals_list):
             if project.is_template and not copy_from_template:
                 vals['is_template'] = True
             if copy_from_template:
+                if has_project_stage_feature:
+                    vals['stage_id'] = project.stage_id.id
                 for field in self._get_template_field_blacklist():
                     if field in vals and field not in default:
                         del vals[field]
@@ -1354,7 +1359,9 @@ class ProjectProject(models.Model):
 
     def action_create_template_from_project(self):
         self.ensure_one()
-        template = self.copy(default={"is_template": True, "partner_id": False})
+        template = self.with_context(convert_to_template=True).copy(
+            default={"is_template": True, "partner_id": False, "date_start": self.date_start, "date": self.date,
+        })
         template._toggle_template_mode(True)
         template.message_post(body=self.env._("Template created from %s.", self.name))
         config = {

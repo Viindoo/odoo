@@ -271,8 +271,9 @@ class StockMove(models.Model):
     @api.depends('move_line_ids', 'move_line_ids.result_package_id', 'move_line_ids.result_package_id.outermost_package_id')
     def _compute_package_ids(self):
         for move in self:
-            if move.state in ['done', 'cancel']:
-                move.package_ids = move.move_line_ids.package_history_id.outermost_dest_id
+            package_history = move.move_line_ids.package_history_id
+            if move.state in ['done', 'cancel'] and package_history:
+                move.package_ids = package_history.outermost_dest_id
             else:
                 # Only display the top-level packages until the move is done.
                 move.package_ids = move.move_line_ids.result_package_id.outermost_package_id
@@ -644,6 +645,11 @@ Please change the quantity done or the rounding precision in your settings.""",
                     move_line = move.move_line_ids.filtered(lambda line: line.lot_id.id == lot.id)
                     move_line.quantity = 1
             move.write({'move_line_ids': move_lines_commands})
+        # When `quantity` is written in the same call as `lot_ids`, the
+        # user-set value is kept and the recompute triggered by this
+        # inverse rewriting `move_line_ids` does not override it. Force
+        # the recompute to keep `quantity` in sync with the move lines
+        self.env.add_to_compute(move._fields['quantity'], move)
 
     @api.depends('picking_type_id', 'date', 'priority', 'state')
     def _compute_reservation_date(self):
@@ -762,6 +768,12 @@ Please change the quantity done or the rounding precision in your settings.""",
         if 'quantity' in vals:
             if any(move.state == 'cancel' for move in self):
                 raise UserError(_('You cannot change a cancelled stock move, create a new line instead.'))
+            # TODO The order of the calls is based on the orders of the keys in vals, which is the order of changes made
+            # in the UI. This should be refactored to avoid relying on the order of the keys in vals.
+            if 'lot_ids' in vals:
+                # If lot_ids is changed after changing the quantity, we need to ensure that the lot_ids changed is process before
+                # processing the quantity change, to avoid unexpected lot_ids that will be re-added later in the process.
+                vals = dict(sorted(vals.items()))
         if 'product_uom' in vals and any(move.state == 'done' for move in self) and not self.env.context.get('skip_uom_conversion'):
             raise UserError(_('You cannot change the UoM for a stock move that has been set to \'Done\'.'))
         if 'product_uom_qty' in vals:
@@ -2087,7 +2099,10 @@ Please change the quantity done or the rounding precision in your settings.""",
 
     def _skip_push(self):
         return self.is_inventory or (
-            self.move_dest_ids and any(m.location_id._child_of(self.location_dest_id) for m in self.move_dest_ids)
+            self.move_dest_ids and any(
+                m.location_id._child_of(self.location_dest_id) or self.location_dest_id._child_of(m.location_id)
+                for m in self.move_dest_ids
+            )
         )
 
     def _check_quantity(self):

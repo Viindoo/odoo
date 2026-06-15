@@ -42,7 +42,7 @@ class PosOrder(models.Model):
                         order['amount_total'])
 
         open_session = PosSession.search([
-            ('state', 'not in', ('closed', 'closing_control')),
+            ('state', '=', 'opened'),
             ('config_id', '=', closed_session.config_id.id)
         ], limit=1)
 
@@ -682,15 +682,20 @@ class PosOrder(models.Model):
         body += Markup("</ul>")
         return body
 
+    def _get_order_name_from_pos_reference(self, session=None):
+        """Return the order name from the sequence prefix and the receipt reference (``pos_reference``)."""
+        self.ensure_one()
+        session = session or self.session_id
+        last_reference_part = self.get_reference_last_part()
+        prefix = session.config_id.order_seq_id.prefix or session.config_id.name
+        suffix = f" - {session.config_id.order_seq_id.suffix}" if session.config_id.order_seq_id.suffix else ''
+        return f"{prefix} - {last_reference_part}{suffix}"
+
     def _compute_order_name(self, session=None):
         session = session or self.session_id
         if self.refunded_order_id.exists():
             return _('%(refunded_order)s REFUND', refunded_order=self.refunded_order_id.name)
-        else:
-            last_reference_part = self.get_reference_last_part()
-            prefix = session.config_id.order_seq_id.prefix or session.config_id.name
-            suffix = f" - {session.config_id.order_seq_id.suffix}" if session.config_id.order_seq_id.suffix else ''
-            return f"{prefix} - {last_reference_part}{suffix}"
+        return self._get_order_name_from_pos_reference(session)
 
     def get_reference_last_part(self):
         return self.pos_reference.split('-')[-1]
@@ -1330,7 +1335,8 @@ class PosOrder(models.Model):
                     destination_id = picking_type.default_location_dest_id.id
 
                 pickings = self.env['stock.picking']._create_picking_from_pos_order_lines(destination_id, self.lines, picking_type, self.partner_id)
-                pickings.write({'pos_session_id': self.session_id.id, 'pos_order_id': self.id, 'origin': self.name})
+                all_pickings = pickings | pickings.backorder_ids
+                all_pickings.write({'pos_session_id': self.session_id.id, 'pos_order_id': self.id, 'origin': self.name})
 
     def add_payment(self, data):
         """Create a new payment for the order"""
@@ -1525,6 +1531,10 @@ class PosOrder(models.Model):
 
     def _prepare_pos_log(self, body):
         return body
+
+    def get_stock_reports_to_print(self):
+        self.ensure_one()
+        return self.picking_ids._get_autoprint_report_actions()
 
 
 class PosOrderLine(models.Model):
@@ -1895,7 +1905,13 @@ class PosOrderLine(models.Model):
         is_refund_line = line.qty * line.price_unit < 0
 
         lang = line.order_id.partner_id.lang or self.env.user.lang
-        product_name = line.with_context(lang=lang).full_product_name or line.product_id.with_context(lang=lang).display_name
+        product_name = line.product_id.with_context(lang=lang).display_name
+
+        product_full_name = line.with_context(lang=lang).full_product_name
+        if product_full_name:
+            product_code = f"[{line.with_context(lang=lang).product_id.code}] " if line.product_id.code else ""
+            product_name = product_code + product_full_name
+
         if line.product_id.description_sale:
             product_name += '\n' + line.product_id.with_context(lang=lang).description_sale
         return {
@@ -1937,6 +1953,12 @@ class PosOrderLine(models.Model):
         self.ensure_one()
         original_price = self.tax_ids_after_fiscal_position.compute_all(self.price_unit, self.currency_id, self.qty, product=self.product_id, partner=self.order_id.partner_id)['total_included']
         return original_price - self.price_subtotal_incl
+
+    def _get_discount_amount_for_report(self):
+        return self._get_discount_amount()
+
+    def _has_discount(self):
+        return self.discount > 0
 
 
 class PosPackOperationLot(models.Model):

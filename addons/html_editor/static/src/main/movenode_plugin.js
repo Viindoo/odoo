@@ -1,9 +1,10 @@
 import { useNativeDraggable } from "@html_editor/utils/drag_and_drop";
-import { childNodeIndex, endPos, leftPos, nodeSize, rightPos } from "@html_editor/utils/position";
+import { childNodeIndex, leftPos, nodeSize, rightPos } from "@html_editor/utils/position";
 import { xml } from "@odoo/owl";
 import { Plugin } from "../plugin";
 import { closestElement } from "../utils/dom_traversal";
 import { _t } from "@web/core/l10n/translation";
+import { escape } from "@web/core/utils/strings";
 import { baseContainerGlobalSelector } from "@html_editor/utils/base_container";
 import { getDeepestPosition, isContentEditable } from "@html_editor/utils/dom_info";
 
@@ -281,11 +282,13 @@ export class MoveNodePlugin extends Plugin {
         this.moveWidget.style.top = `${anchorY - containerRect.y - moveWidgetOffsetTop}px`;
         this.moveWidget.style.left = `${anchorX - containerRect.x - WIDGET_CONTAINER_WIDTH}px`;
 
+        const dragToMoveTooltip = _t("Drag to move");
+        const clickToSelectTooltip = _t("Click to select");
         this.services.tooltip.add(this.moveWidget, {
             template: xml`
                 <div class="o-tooltip tooltip-inner text-start px-3">
-                    ${_t("Drag to move")}<br/>
-                    ${_t("Click to select")}
+                    ${escape(dragToMoveTooltip)}<br/>
+                    ${escape(clickToSelectTooltip)}
                 </div>`,
             arrow: true,
         });
@@ -452,6 +455,7 @@ export class MoveNodePlugin extends Plugin {
         this.dropzoneHintContainer.replaceChildren();
 
         if (this._currentDropHintElementPosition) {
+            const cursors = this.dependencies.selection.preserveSelection();
             const [position, focusElelement] = this._currentDropHintElementPosition;
             this._currentDropHintElementPosition = undefined;
             const previousParent = movableElement.parentElement;
@@ -483,11 +487,21 @@ export class MoveNodePlugin extends Plugin {
                     previousParent.append(baseContainer);
                 }
             }
-            const selectionPosition = endPos(movableElement);
-            this.dependencies.selection.setSelection({
-                anchorNode: selectionPosition[0],
-                anchorOffset: selectionPosition[1],
-            });
+            // Preserve the selection if it was inside the moved element,
+            // otherwise place the caret at the start of the moved element.
+            const isSelectionInsideMovedNode =
+                movableElement.contains(cursors.anchor.node) &&
+                movableElement.contains(cursors.focus.node);
+            if (isSelectionInsideMovedNode) {
+                cursors.restore();
+            } else {
+                const selectionPosition = getDeepestPosition(movableElement, 0);
+                this.dependencies.selection.setSelection({
+                    anchorNode: selectionPosition[0],
+                    anchorOffset: selectionPosition[1],
+                });
+            }
+            this.dependencies.selection.focusEditable();
             this.dependencies.history.addStep();
         }
     }

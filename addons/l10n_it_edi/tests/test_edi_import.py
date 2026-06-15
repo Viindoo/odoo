@@ -290,11 +290,10 @@ class TestItEdiImport(TestItEdi):
     def test_cron_receives_bill_in_preferred_journal(self):
         """ Ensure that the received bill is in the preferred journal set from the setting. """
         preferred_journal = self.company_data_2['default_journal_purchase'].copy()
+        preferred_journal.default_account_id = False
         filename = 'IT01234567890_FPR02.xml'
 
         with self.assertRaisesRegex(ValidationError, "The Italian default purchase journal requires a default account."):
-            # When copying journal, the default_account_id are not copied.
-            # It should raise an error when we try to set the company's default purchase journal in the Settings.
             self.company.l10n_it_edi_purchase_journal_id = preferred_journal
 
         preferred_journal.default_account_id = self.company_data_2['default_journal_purchase'].default_account_id.id
@@ -340,7 +339,7 @@ class TestItEdiImport(TestItEdi):
         })
         self.env['ir.attachment'].with_company(other_company).create({
             'name': filename,
-            'datas': self.fake_test_content,
+            'raw': self.fake_test_content,
             'res_model': 'account.move',
             'res_id': invoice.id,
             'res_field': 'l10n_it_edi_attachment_file',
@@ -914,3 +913,111 @@ class TestItEdiImport(TestItEdi):
             'l10n_it_edi_transaction': f'{2:0>11}',
             },
         ])
+
+    def test_receive_multiple_body_bill_xml_and_p7m(self):
+        """ Test the correct import of an XML file containing multiple bodies."""
+        single_body_data = {
+            'invoice_date': fields.Date.from_string('2026-03-26'),
+            'ref': 'INV/2026/00010',
+            'amount_untaxed': 750.0,
+            'amount_tax': 165.0,
+            'amount_total': 915.0,
+            'invoice_line_ids': [
+                {
+                    'name': '[DESK0006] Customizable Desk (Black, Custom) 160x80cm, with large legs',
+                    'quantity': 1.0,
+                    'price_unit': 750.0,
+                },
+            ],
+        }
+        # Check xml file
+        self._assert_import_invoice('IT01654010345_10099.xml', [single_body_data] * 3)
+        # Check p7m file
+        self._assert_import_invoice('IT01654010345_10099.xml.p7m', [single_body_data] * 3)
+
+    def test_import_simplified_invoice_zero_base(self):
+        """Test the import of a xml bill where the total amount equals the tax amount (Importo == Imposta)."""
+
+        self._assert_import_invoice('IT01234567890_FPR05.xml', [{
+            'move_type': 'in_refund',
+            'amount_untaxed': 0.0,
+            'invoice_line_ids': [
+                {
+                    'name': 'IVA ANNO PRECEDENTE',
+                    'quantity': 1.0,
+                    'price_unit': 9.20,
+                },
+                {
+                    'name': 'TOTALE IMPORTO IN ADDEBITO',
+                    'quantity': 1.0,
+                    'price_unit': -9.20,
+                }
+            ],
+        }])
+
+    def test_import_pension_fund_specific_natura(self):
+        """ Ensure that the pension fund tax is only applied to lines matching the VAT rate and the exemption reason (Natura) """
+
+        self.env = self.env['base'].with_company(self.company_data_2['company']).env
+        pension_tax = self.env['account.tax'].search([
+            ('amount', '=', 4.0),
+            ('type_tax_use', '=', 'purchase'),
+        ], limit=1)
+        pension_tax.write({'l10n_it_exempt_reason': 'N2.1'})
+
+        applied_xml = """
+            <xpath expr="//FatturaElettronicaBody/DatiBeniServizi" position="replace">
+                <DatiBeniServizi>
+                    <DettaglioLinee>
+                        <NumeroLinea>1</NumeroLinea>
+                        <Descrizione>Compenso professionale</Descrizione>
+                        <Quantita>1.00</Quantita>
+                        <PrezzoUnitario>750.00</PrezzoUnitario>
+                        <PrezzoTotale>750.00</PrezzoTotale>
+                        <AliquotaIVA>0.00</AliquotaIVA>
+                        <Natura>N2.1</Natura>
+                    </DettaglioLinee>
+                    <DettaglioLinee>
+                        <NumeroLinea>2</NumeroLinea>
+                        <Descrizione>Imposta di bollo</Descrizione>
+                        <Quantita>1.00</Quantita>
+                        <PrezzoUnitario>2.00</PrezzoUnitario>
+                        <PrezzoTotale>2.00</PrezzoTotale>
+                        <AliquotaIVA>0.00</AliquotaIVA>
+                        <Natura>N1</Natura>
+                    </DettaglioLinee>
+                    <DatiRiepilogo>
+                        <AliquotaIVA>0.00</AliquotaIVA>
+                        <Natura>N2.1</Natura>
+                        <ImponibileImporto>750.00</ImponibileImporto>
+                        <Imposta>0.00</Imposta>
+                    </DatiRiepilogo>
+                    <DatiRiepilogo>
+                        <AliquotaIVA>0.00</AliquotaIVA>
+                        <Natura>N1</Natura>
+                        <ImponibileImporto>2.00</ImponibileImporto>
+                        <Imposta>0.00</Imposta>
+                    </DatiRiepilogo>
+                </DatiBeniServizi>
+            </xpath>
+            <xpath expr="//FatturaElettronicaBody/DatiGenerali/DatiGeneraliDocumento/ImportoTotaleDocumento" position="replace">
+                <ImportoTotaleDocumento>782.00</ImportoTotaleDocumento>
+            </xpath>
+            <xpath expr="//FatturaElettronicaBody/DatiPagamento/DettaglioPagamento/ImportoPagamento" position="replace">
+                <ImportoPagamento>782.00</ImportoPagamento>
+            </xpath>
+        """
+
+        invoices = self._assert_import_invoice('IT00470550013_pfun3.xml', [{
+            'move_type': 'in_invoice',
+            'amount_untaxed': 752.00,
+            'amount_tax': 30.00,
+            'invoice_line_ids': [
+                {'quantity': 1.0, 'price_unit': 750.00},
+                {'quantity': 1.0, 'price_unit': 2.00},
+            ],
+        }], applied_xml)
+        line_1 = invoices.invoice_line_ids[0]
+        line_2 = invoices.invoice_line_ids[1]
+        self.assertIn(pension_tax.id, line_1.tax_ids.ids)
+        self.assertNotIn(pension_tax.id, line_2.tax_ids.ids)

@@ -307,6 +307,7 @@ class TestWithholdingAndPensionFundTaxes(TestItEdi):
                 'price_unit': price_unit,
             } for name, price_unit in self.invoice_lines]
         }])
+        # Line 1 is taken into account because the TC is missing, so we deduce it should be included.
         for line in invoice.line_ids.filtered(lambda x: x.display_type == 'product'):
             self.assertEqual(line.tax_ids, (
                 self.inps_purchase_tax
@@ -331,6 +332,9 @@ class TestWithholdingAndPensionFundTaxes(TestItEdi):
             ))
 
     def test_pension_fund_taxes_import_zero_vat_rate(self):
+        """ Test that pension fund taxes with a 0.00% VAT rate are correctly imported."""
+
+        self.inps_purchase_tax.write({'l10n_it_exempt_reason': 'N2.1'})
         invoice = self._assert_import_invoice('IT00470550013_pfun3.xml', [{
             'invoice_date': datetime.date(2022, 3, 24),
             'invoice_date_due': datetime.date(2022, 3, 24),
