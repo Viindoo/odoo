@@ -3,7 +3,7 @@
 
 {
     'name': "Point of Sale - Coupons & Loyalty",
-    'version': '2.0',
+    'version': '2.0.1',
     'category': 'Sales/Point Of Sale',
     'sequence': 6,
     'summary': 'Use Coupons, Gift Cards and Loyalty programs in Point of Sale',
