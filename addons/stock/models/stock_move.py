@@ -1539,7 +1539,7 @@ Please change the quantity done or the rounding precision of your unit of measur
         # Find a candidate move line to update or create a new one.
         serial_move_line_vals = []
         for reserved_quant, quantity in quants:
-            to_update = next((line for line in self.move_line_ids if line._reservation_is_updatable(quantity, reserved_quant)), False)
+            to_update = False if self.product_id.tracking == 'serial' else next((line for line in self.move_line_ids if line._reservation_is_updatable(quantity, reserved_quant)), False)
             if to_update:
                 uom_quantity = self.product_id.uom_id._compute_quantity(quantity, to_update.product_uom_id, rounding_method='HALF-UP')
                 uom_quantity = float_round(uom_quantity, precision_digits=rounding)
