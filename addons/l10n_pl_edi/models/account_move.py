@@ -219,7 +219,7 @@ class AccountMove(models.Model):
                 'P_7': line.name,
                 'P_8A': line.product_uom_id.name or 'szt.',
                 'P_8B': line.quantity * sign,
-                'P_9A': float_repr(line.price_unit, 2),
+                'P_9A': float_repr(line.price_unit, 8),
                 'P_11': float_repr(line.price_subtotal * sign, 2),
                 'P_12': compute_p_12(tag_names),
             }
@@ -504,7 +504,7 @@ class AccountMove(models.Model):
                     else:
                         raise UserError(self.env._("Tax corresponding to '%s' required to derive the net unit price from gross price during KSeF import was not found in the mapping.", tax_name))
                 else:
-                    raise UserError(self.env._("No net or gross unit price found in the FA (3) for the line with product '%s'.", name))
+                    price_unit = 0.0
 
                 if P_10 := get_value(line_node, '{*}P_10'):
                     price_unit = float(Decimal(str(price_unit)) - Decimal(P_10))

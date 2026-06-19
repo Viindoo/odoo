@@ -479,6 +479,33 @@ def serialize_exception(exception, *, message=None, arguments=None):
     }
 
 
+def fragment_to_query_string(func):
+    """
+    Decorate a controller method to force the client to write fragment into the query
+    in case there isn't any query.
+    """
+    @functools.wraps(func)
+    def wrapper(self, *a, **kw):
+        if not (kw.keys() - {'debug'}):
+            return Response("""<!DOCTYPE html>
+            <html><head><script>
+                (function() {
+                    const url = window.location;
+                    const fragment = url.hash.substring(1);  // remove the leading "#"
+                    let new_url = url.pathname + url.search;
+                    if(fragment.length !== 0) {
+                        const separator = url.search ? (url.search === '?' ? '' : '&') : '?';
+                        new_url = url.pathname + url.search + separator + fragment;
+                    }
+                    if (new_url == url.pathname) {
+                        new_url = '/';
+                    }
+                    window.location = new_url;
+                })()
+            </script></head><body></body></html>""")
+        return func(self, *a, **kw)
+    return wrapper
+
 # =========================================================
 # File Streaming
 # =========================================================

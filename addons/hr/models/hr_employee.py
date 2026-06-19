@@ -71,6 +71,7 @@ class HrEmployee(models.Model):
         required=True
     )
     versions_count = fields.Integer(compute='_compute_versions_count', groups="hr.group_hr_user")
+    version_revision = fields.Char(compute="_compute_version_revision", groups="hr.group_hr_user")
 
     @api.model
     def _lang_get(self):
@@ -780,6 +781,11 @@ class HrEmployee(models.Model):
         )
         for employee in self:
             employee.versions_count = version_count_per_employee.get(employee, 0)
+
+    @api.depends('version_ids.date_version')
+    def _compute_version_revision(self):
+        for employee in self:
+            employee.version_revision = ",".join(f"{v.id},{v.date_version!s}" for v in employee.version_ids)
 
     def _search_newly_hired(self, operator, value):
         if operator not in ('in', 'not in'):
@@ -1792,8 +1798,10 @@ We can redirect you to the public employee list."""
 
     def _get_store_avatar_card_fields(self, target):
         employee_fields = [
+            "active",
             "company_id",
             Store.One("department_id", ["name"]),
+            "user_id",
             "work_email",
             Store.One("work_location_id", ["location_type", "name"]),
             "work_phone",

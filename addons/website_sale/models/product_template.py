@@ -8,6 +8,7 @@ from werkzeug import urls
 from odoo import _, api, fields, models
 from odoo.fields import Domain
 from odoo.http import request
+from odoo.modules.db import FunctionStatus
 from odoo.tools import float_is_zero, is_html_empty
 from odoo.tools.sql import SQL, column_exists, create_column
 from odoo.tools.translate import html_translate
@@ -25,7 +26,7 @@ _logger = logging.getLogger(__name__)
 def get_translated_field_gist_index(registry, column_name):
     if not registry.has_trigram:
         return ""
-    if registry.has_unaccent:
+    if registry.has_unaccent == FunctionStatus.INDEXABLE:
         return f"USING GIST(unaccent((JSONB_PATH_QUERY_ARRAY({column_name}, '$.*'::jsonpath))::text) gist_trgm_ops)"
     return f"USING GIST((JSONB_PATH_QUERY_ARRAY({column_name}, '$.*'::jsonpath)::text) gist_trgm_ops)"
 
@@ -134,6 +135,9 @@ class ProductTemplate(models.Model):
         compute='_compute_base_unit_count',
         inverse='_set_base_unit_count',
         store=True,
+        # Force NUMERIC with unlimited precision, as for `uom.uom.relative_factor`,
+        # to support very small ratios, e.g. one unit in a box of 10000.
+        digits=0,
         required=True,
         default=0,
     )
@@ -175,7 +179,7 @@ class ProductTemplate(models.Model):
     _description_sale_gist_idx = models.Index(lambda registry: get_translated_field_gist_index(registry, "description_sale"))
     _default_code_gist_idx = models.Index(
         lambda registry: 'USING GIST(unaccent(default_code) gist_trgm_ops)'
-        if registry.has_trigram and registry.has_unaccent
+        if registry.has_trigram and registry.has_unaccent == FunctionStatus.INDEXABLE
         else ('USING GIST(default_code gist_trgm_ops)' if registry.has_trigram else '')
     )
 

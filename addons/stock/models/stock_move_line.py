@@ -694,7 +694,7 @@ class StockMoveLine(models.Model):
             available_qty, in_date = ml._synchronize_quant(-ml.quantity_product_uom, ml.location_id)
             ml._synchronize_quant(ml.quantity_product_uom, ml.location_dest_id, package=ml.result_package_id, in_date=in_date)
             if available_qty < 0:
-                ml.with_context(quants_cache=None)._free_reservation(
+                ml.with_context(quants_cache=None, bypass_entire_pack=True)._free_reservation(
                     ml.product_id, ml.location_id,
                     abs(available_qty), lot_id=ml.lot_id, package_id=ml.package_id,
                     owner_id=ml.owner_id, ml_ids_to_ignore=ml_ids_to_ignore)
@@ -704,6 +704,9 @@ class StockMoveLine(models.Model):
             mls_todo.result_package_id._apply_dest_to_package()
 
         # Reset the reserved quantity as we just moved it to the destination location.
+        affected_pickings = mls_todo.mapped('picking_id')
+        if affected_pickings:
+            affected_pickings._check_entire_pack()
         mls_todo.write({
             'date': fields.Datetime.now(),
         })
@@ -849,7 +852,7 @@ class StockMoveLine(models.Model):
                 'move_orig_ids': [Command.clear()]
             })
         move_line_to_unlink.unlink()
-        move_to_reassign._action_assign()
+        move_to_reassign[::-1]._action_assign()
 
     def _get_aggregated_properties(self, move_line=False, move=False):
         move = move or move_line.move_id
