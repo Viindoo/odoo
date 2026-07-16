@@ -12,6 +12,7 @@ from markupsafe import Markup
 import math
 import re
 import os
+import warnings
 from textwrap import shorten
 from urllib.parse import urlencode
 
@@ -6093,7 +6094,7 @@ class AccountMove(models.Model):
                 line[2]['partner_id'] = self.env['res.partner'].browse(line[2]['partner_id']).sudo().display_name
             line[2]['account_id'] = self.env['account.account'].browse(line[2]['account_id']).display_name or _('Destination Account')
             line[2]['debit'] = currency_id and formatLang(self.env, line[2]['debit'], currency_obj=currency_id) or line[2]['debit']
-            line[2]['credit'] = currency_id and formatLang(self.env, line[2]['credit'], currency_obj=currency_id) or line[2]['debit']
+            line[2]['credit'] = currency_id and formatLang(self.env, line[2]['credit'], currency_obj=currency_id) or line[2]['credit']
         return preview_vals
 
     def _generate_qr_code(self, silent_errors=False):
@@ -6591,6 +6592,7 @@ class AccountMove(models.Model):
     # -------------------------------------------------------------------------
 
     def _get_moves_zip_export_docs(self):
+        warnings.warn("The '_get_moves_zip_export_docs' method is deprecated and has been removed in future versions.", DeprecationWarning)
         docs = set()
         for move in self.filtered(lambda m: m.state == 'posted' and m.is_sale_document()):
             try:
@@ -6603,6 +6605,7 @@ class AccountMove(models.Model):
         return docs, filename
 
     def action_export_zip(self):
+        warnings.warn("The 'action_export_zip' method is deprecated and has been removed in future versions.", DeprecationWarning)
         attachment_ids, filename = self._get_moves_zip_export_docs()
         if not attachment_ids:
             raise UserError(_('Nothing to export.'))
