@@ -214,9 +214,25 @@ class AccountMoveSend(models.AbstractModel):
         if method == 'peppol':
             partner = move.partner_id.commercial_partner_id.with_company(move.company_id)
             invoice_edi_format = move_data.get('invoice_edi_format') or partner._get_peppol_edi_format()
+
+            partner.button_account_peppol_check_partner_endpoint(company=move.company_id)
+            if partner.peppol_verification_state != 'valid' and partner.peppol_eas in ('0208', '9925'):
+                # only for BE participants
+                inverse_eas = '9925' if partner.peppol_eas == '0208' else '0208'
+                inverse_endpoint = f'BE{partner.peppol_endpoint}' if partner.peppol_eas == '0208' else partner.peppol_endpoint[2:]
+                if (
+                    not partner._build_error_peppol_endpoint(inverse_eas, inverse_endpoint)
+                    and partner._get_peppol_verification_state(inverse_endpoint, inverse_eas, invoice_edi_format) == 'valid'
+                ):
+                    partner.write({
+                        'peppol_eas': inverse_eas,
+                        'peppol_endpoint': inverse_endpoint,
+                    })
+                    partner.button_account_peppol_check_partner_endpoint(company=move.company_id)
+
             result = all([
                 self._is_applicable_to_company(method, move.company_id),
-                self.env['res.partner'].with_company(move.company_id)._get_peppol_verification_state(partner.peppol_endpoint, partner.peppol_eas, invoice_edi_format) == 'valid',
+                partner.peppol_verification_state == 'valid',
                 move.company_id.account_peppol_proxy_state != 'rejected',
                 move._need_ubl_cii_xml(invoice_edi_format) or move.ubl_cii_xml_id and not move.peppol_is_sent,
             ])
@@ -312,7 +328,7 @@ class AccountMoveSend(models.AbstractModel):
             else:
                 # the response only contains message uuids,
                 # so we have to rely on the order to connect peppol messages to account.move
-                attachments_linked_message = _("The invoice has been sent to the Peppol Access Point. The following attachments were sent with the XML:")
+                attachments_linked_message = self._get_peppol_attachments_linked_message(edi_user)
                 attachments_not_linked_message = _("Some attachments could not be sent with the XML:")
                 for message, (invoice, invoice_data) in zip(response['messages'], invoices_data_peppol.items()):
                     invoice.peppol_message_uuid = message['message_uuid']
@@ -348,6 +364,9 @@ class AccountMoveSend(models.AbstractModel):
                             'res_id': new_message.id,
                         })
                 self.env.ref('account_peppol.ir_cron_peppol_get_message_status')._trigger(at=fields.Datetime.now() + timedelta(minutes=5))
+
+    def _get_peppol_attachments_linked_message(self, edi_user):
+        return _("The invoice has been sent to the Peppol Access Point. The following attachments were sent with the XML:")
 
     def action_what_is_peppol_activate(self, moves):
         companies = moves.company_id

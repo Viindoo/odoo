@@ -12,6 +12,7 @@ from markupsafe import Markup
 import math
 import re
 import os
+import warnings
 from textwrap import shorten
 from urllib.parse import urlencode
 
@@ -1856,7 +1857,7 @@ class AccountMove(models.Model):
     @api.depends('company_id', 'partner_id', 'tax_totals', 'currency_id')
     def _compute_partner_credit_warning(self):
         for move in self:
-            move.with_company(move.company_id)
+            move = move.with_company(move.company_id)
             move.partner_credit_warning = ''
             show_warning = move.state == 'draft' and \
                            move.move_type == 'out_invoice' and \
@@ -5619,6 +5620,7 @@ class AccountMove(models.Model):
         self.sending_data = False
 
         self._detach_attachments()
+        return True
 
     def _get_fields_to_detach(self):
         """"
@@ -6093,7 +6095,7 @@ class AccountMove(models.Model):
                 line[2]['partner_id'] = self.env['res.partner'].browse(line[2]['partner_id']).sudo().display_name
             line[2]['account_id'] = self.env['account.account'].browse(line[2]['account_id']).display_name or _('Destination Account')
             line[2]['debit'] = currency_id and formatLang(self.env, line[2]['debit'], currency_obj=currency_id) or line[2]['debit']
-            line[2]['credit'] = currency_id and formatLang(self.env, line[2]['credit'], currency_obj=currency_id) or line[2]['debit']
+            line[2]['credit'] = currency_id and formatLang(self.env, line[2]['credit'], currency_obj=currency_id) or line[2]['credit']
         return preview_vals
 
     def _generate_qr_code(self, silent_errors=False):
@@ -6369,9 +6371,11 @@ class AccountMove(models.Model):
                 'company_email': journal_alias_company.email or self.env.company.email,
                 'company_name': journal_alias_company.name or self.env.company.name,
             })
-            self._routing_create_bounce_email(
+            reply_to_journal_company = journal_alias_company.email or self.env.company.email
+            self.with_company(journal_alias_company)._routing_create_bounce_email(
                 message_dict['from'], body, message,
-                references=f'{message_dict["message_id"]} {generate_tracking_message_id("loop-detection-bounce-email")}')
+                references=f'{message_dict["message_id"]} {generate_tracking_message_id("loop-detection-bounce-email")}',
+                reply_to=reply_to_journal_company)
             return ()
         return super()._routing_check_route(message, message_dict, route, raise_exception=raise_exception)
 
@@ -6591,6 +6595,7 @@ class AccountMove(models.Model):
     # -------------------------------------------------------------------------
 
     def _get_moves_zip_export_docs(self):
+        warnings.warn("The '_get_moves_zip_export_docs' method is deprecated and has been removed in future versions.", DeprecationWarning)
         docs = set()
         for move in self.filtered(lambda m: m.state == 'posted' and m.is_sale_document()):
             try:
@@ -6603,6 +6608,7 @@ class AccountMove(models.Model):
         return docs, filename
 
     def action_export_zip(self):
+        warnings.warn("The 'action_export_zip' method is deprecated and has been removed in future versions.", DeprecationWarning)
         attachment_ids, filename = self._get_moves_zip_export_docs()
         if not attachment_ids:
             raise UserError(_('Nothing to export.'))

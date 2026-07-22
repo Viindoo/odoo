@@ -233,9 +233,7 @@ class ResCompany(models.Model):
 
     @api.depends('l10n_fr_pdp_annuaire_start_date', 'l10n_fr_pdp_periodicity')
     def _compute_l10n_fr_pdp_flow_10_start_date(self):
-        changed_companies = self.browse()
         for company in self:
-            previous_date = company.l10n_fr_pdp_flow_10_start_date
             if company.l10n_fr_pdp_annuaire_start_date:
                 period_data = self.env['l10n.fr.pdp.reports.flow']._get_period_flow_properties(
                     company,
@@ -245,9 +243,6 @@ class ResCompany(models.Model):
                 company.l10n_fr_pdp_flow_10_start_date = period_data['period_start']
             else:
                 company.l10n_fr_pdp_flow_10_start_date = None
-            if previous_date != company.l10n_fr_pdp_flow_10_start_date:
-                changed_companies += company
-        changed_companies._force_update_l10n_fr_f10_moves()
 
     @api.depends('l10n_fr_pdp_send_to_ppf', 'account_fiscal_country_id', 'account_peppol_edi_user', 'l10n_fr_pdp_pilot_phase')
     def _compute_l10n_fr_f10_enable_reporting(self):
@@ -276,7 +271,7 @@ class ResCompany(models.Model):
             'object_uuid': self.pdp_authentication_uuid,
         })
         kyc_status = response.get('kyc_status')
-        if kyc_status in {'success', 'fail'}:
+        if kyc_status == 'success':
             self.pdp_kyc_status = kyc_status
             if self.env['account.move']._can_commit():
                 self.env.cr.commit()

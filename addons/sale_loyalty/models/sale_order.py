@@ -285,6 +285,11 @@ class SaleOrder(models.Model):
             # Gift cards and eWallets are applied on the total order amount
             # Other types of programs are not expected to apply on delivery lines
             lines -= self._get_no_effect_on_threshold_lines()
+        else:
+            # Prevent paying for a payment program's own top-up product using that
+            # same program (e.g. topping up an eWallet by paying with the eWallet).
+            top_up_products = reward.program_id.trigger_product_ids
+            lines -= lines.filtered(lambda line: line.product_id in top_up_products)
 
         discountable = 0
         discountable_per_tax = defaultdict(float)
@@ -765,9 +770,18 @@ class SaleOrder(models.Model):
             ('order_model', '=', self._name),
             ('order_id', '=', self.id),
         ], limit=1)
-        order_coupon_history.update({
-            'used': order_coupon_history.used + points,
-        })
+        if order_coupon_history:
+            order_coupon_history.update({'used': order_coupon_history.used + points})
+        else:
+            issued = self.coupon_point_ids.filtered(lambda p: p.coupon_id == coupon_id).points
+            self.env['loyalty.history'].create({
+                'card_id': coupon_id.id,
+                'order_model': self._name,
+                'order_id': self.id,
+                'description': _("Order %s", self.display_name),
+                'issued': issued,
+                'used': points,
+            })
 
     def _remove_program_from_points(self, programs):
         self.coupon_point_ids.filtered(lambda p: p.coupon_id.program_id in programs).sudo().unlink()
