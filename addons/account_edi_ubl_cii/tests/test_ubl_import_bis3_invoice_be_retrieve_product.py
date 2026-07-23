@@ -68,6 +68,16 @@ class TestUblImportBis3InvoiceBERetrieveProduct(TestUblImportBis3InvoiceBE):
 
     @freeze_time('2020-01-01')
     def test_partial_import_product_invoice_predictive(self):
+        # Viindoo: the invoice-line-history product predictor lives only in Enterprise
+        # account_accountant, absent from Viindoo's Community stack, so the predictive
+        # path in product._import_retrieve_product_from_invoice_predictive no-ops and this
+        # test cannot resolve product_id. Skip on the SAME condition production code gates
+        # on (the Enterprise-only payment_state_before_switch field), rather than on a
+        # module name. Upstream 9365822e (18.0-only) dropped the original
+        # ensure_installed('account_accountant') guard here as collateral of an unrelated
+        # settings-toggle sweep; master still carries a guard.
+        if 'payment_state_before_switch' not in self.env['account.move']._fields:
+            self.skipTest("predictive bill matching (account_accountant) is not available")
         company = self.company_data['company']
         if "predict_bill_product" in company._fields:
             company.predict_bill_product = True
