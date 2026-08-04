@@ -68,12 +68,16 @@ export class PosOrderline extends Base {
 
         if (unit) {
             if (unit.rounding) {
-                const decimals = this.models["decimal.precision"].find(
-                    (dp) => dp.name === "Product Unit of Measure"
-                ).digits;
-                qtyStr = formatFloat(this.qty, {
-                    digits: [69, decimals],
-                });
+                if (this.qty % 1 === 0) {
+                    qtyStr = this.qty.toFixed(0);
+                } else {
+                    const decimals = this.models["decimal.precision"].find(
+                        (dp) => dp.name === "Product Unit of Measure"
+                    ).digits;
+                    qtyStr = formatFloat(this.qty, {
+                        digits: [69, decimals],
+                    });
+                }
             } else {
                 qtyStr = this.qty.toFixed(0);
             }
