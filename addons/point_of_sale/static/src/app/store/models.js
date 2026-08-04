@@ -672,9 +672,13 @@ export class Orderline extends PosModel {
                 var decimals = this.pos.dp["Product Unit of Measure"];
                 var rounding = Math.max(unit.rounding, Math.pow(10, -decimals));
                 this.quantity = round_pr(quant, rounding);
-                this.quantityStr = formatFloat(this.quantity, {
-                    digits: [69, decimals],
-                });
+                if (this.quantity % 1 === 0) {
+                    this.quantityStr = this.quantity.toFixed(0);
+                } else {
+                    this.quantityStr = formatFloat(this.quantity, {
+                        digits: [69, decimals],
+                    });
+                }
             } else {
                 this.quantity = round_pr(quant, 1);
                 this.quantityStr = this.quantity.toFixed(0);
