@@ -42,6 +42,7 @@ export function hasLine({
         trigger += `:has(.product-name:contains("${productName}"))`;
     }
     if (quantity) {
+        quantity = parseFloat(quantity) % 1 === 0 ? parseInt(quantity).toString() : quantity;
         trigger += `:has(em.qty:contains("${quantity}"))`;
     }
     if (price) {
