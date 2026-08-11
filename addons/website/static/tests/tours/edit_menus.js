@@ -398,6 +398,20 @@ wTourUtils.registerWebsitePreviewTour('edit_menus', {
         run: () => {}, // It's a check.
     },
     {
+        // The drag helper takes viewport coordinates without scrolling the
+        // target into view first. The rows this tour drags are appended at the
+        // bottom of the list, so when installed modules add enough menu items,
+        // those rows overflow the dialog body and the drags silently miss.
+        content: "Scroll to the bottom of the menu editor so the rows to drag are visible",
+        trigger: ".oe_menu_editor li:contains('new_nested_menu')",
+        run: function () {
+            const scrollableEl = this.$anchor[0].closest(".modal-body");
+            if (scrollableEl) {
+                scrollableEl.scrollTop = scrollableEl.scrollHeight;
+            }
+        },
+    },
+    {
         content: "Nest 'new_nested_menu' under 'new_menu'",
         trigger: ".oe_menu_editor li:contains('new_nested_menu') .fa-bars",
         run: "drag_and_drop_native .oe_menu_editor li:contains('new_menu') .form-control",
