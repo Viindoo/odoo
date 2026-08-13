@@ -16,7 +16,11 @@ registry.category("web_tour.tours").add('test_repair_without_product_in_parts', 
     {
         content: "Click partner field",
         trigger: ".o_field_widget[name=partner_id] input",
-        run: "click",
+        // Type the partner name: the customer search mode of the field orders
+        // the dropdown by customer_rank, so on a database with enough ranked
+        // customers a bare click would not show "A Partner" (rank 0) in the
+        // first page at all.
+        run: "edit A Partner",
     },
     // Note: Selecting the partner is only to trigger the compute;
     // this could be done by modifying any other field.
