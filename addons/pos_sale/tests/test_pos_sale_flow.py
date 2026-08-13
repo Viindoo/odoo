@@ -968,7 +968,7 @@ class TestPoSSale(TestPointOfSaleHttpCommon):
         self.main_pos_config.open_ui()
         self.start_tour("/pos/ui?config_id=%d" % self.main_pos_config.id, 'PosSettleOrder4', login="accountman")
 
-        self.assertEqual(sale_order.picking_ids.state, 'cancel')
+        self.assertEqual(set(sale_order.picking_ids.mapped('state')), {'cancel'})
         self.assertEqual(sale_order.pos_order_line_ids.order_id.picking_ids.state, 'assigned')
         self.assertEqual(self.env['purchase.order.line'].search_count([('product_id', '=', product_a.id)]), 1)
 
