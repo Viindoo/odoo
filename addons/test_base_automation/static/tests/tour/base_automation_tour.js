@@ -565,8 +565,40 @@ registry.category("web_tour.tours").add("test_form_view_custom_reference_field",
         {
             trigger:
                 ".o_field_widget[name='trg_field_ref'] .o-autocomplete--dropdown-menu:not(:has(a .fa-spin)",
-            run() {
-                assertEqual(this.$anchor[0].innerText, "test tag\nSearch More...");
+            async run() {
+                // Switching the trigger from "on_stage_set" to "on_tag_set" swaps
+                // the relation of trg_field_ref through an onchange round-trip.
+                // The dropdown may have been opened before that round-trip
+                // completed: it then still lists the records of the previous
+                // model and never refreshes on its own, because the (empty)
+                // field value did not change so the AutoComplete does not
+                // close. Close and reopen it until the relation switch lands.
+                const expected = "test tag\nSearch More...";
+                const input = document.querySelector(
+                    ".o_field_widget[name='trg_field_ref'] input"
+                );
+                const getMenu = () =>
+                    document.querySelector(
+                        ".o_field_widget[name='trg_field_ref'] .o-autocomplete--dropdown-menu"
+                    );
+                await waitUntil(
+                    () => {
+                        const menu = getMenu();
+                        if (!menu) {
+                            input.click();
+                        } else if (!menu.querySelector("a .fa-spin")) {
+                            if (menu.innerText === expected) {
+                                return true;
+                            }
+                            input.dispatchEvent(
+                                new KeyboardEvent("keydown", { key: "Escape", bubbles: true })
+                            );
+                        }
+                        return false;
+                    },
+                    { timeout: 10000 }
+                );
+                assertEqual(getMenu().innerText, expected);
             },
         },
         {
