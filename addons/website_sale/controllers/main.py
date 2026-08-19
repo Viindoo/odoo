@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import json
+import re
 import logging
 from datetime import datetime
 
@@ -188,6 +189,13 @@ class WebsiteSale(http.Controller):
         # OrderBy will be parsed in orm and so no direct sql injection
         # id is added to be sure that order is a unique sort key
         order = post.get('order') or request.env['website'].get_current_website().shop_default_sort
+        # crawlers request arbitrary ?order= values; the ORM answers those
+        # with UserError('Invalid "order" specified') = a 500 on the shop
+        # page. Fall back to the default sort instead of crashing.
+        if not re.match(r'^\s*[a-zA-Z0-9_]+(\s+(asc|desc))?'
+                        r'(\s*,\s*[a-zA-Z0-9_]+(\s+(asc|desc))?)*\s*$',
+                        order, re.IGNORECASE):
+            order = 'website_sequence ASC'
         return 'is_published desc, %s, id desc' % order
 
     def _add_search_subdomains_hook(self, search):
@@ -306,7 +314,12 @@ class WebsiteSale(http.Controller):
 
         Category = request.env['product.public.category']
         if category:
-            category = Category.search([('id', '=', int(category))], limit=1)
+            try:
+                category_id = int(category)
+            except (TypeError, ValueError):
+                # crawlers append slashes/garbage to ?category=
+                raise NotFound()
+            category = Category.search([('id', '=', category_id)], limit=1)
             if not category or not category.can_access_from_current_website():
                 raise NotFound()
         else:
