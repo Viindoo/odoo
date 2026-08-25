@@ -120,6 +120,12 @@ class TestUi(TestPointOfSaleHttpCommon):
         self.main_pos_config.with_user(self.pos_user).open_ui()
         self.product_b.uom_id = 1
 
+    def start_tour(self, *args, **kwargs):
+        partner_count = self.env['res.partner'].sudo().with_context(active_test=False).search_count([])
+        # Keep ORM-created tour partners in the initial preload despite unrelated demo data.
+        self.env['ir.config_parameter'].sudo().set_param('point_of_sale.limited_customer_count', partner_count)
+        return super().start_tour(*args, **kwargs)
+
     def create_programs(self, details):
         """
         Create loyalty programs based on the details given.
