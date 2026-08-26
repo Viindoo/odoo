@@ -758,12 +758,27 @@ registry.category("web_tour.tours").add("test_book_and_release_table", {
             {
                 content: "Check if order has a server ID",
                 trigger: "body",
-                run: () => {
-                    const order = posmodel.models["pos.order"].getFirst();
-
-                    if (typeof order.id !== "number") {
-                        throw new Error("Order does not have a valid server ID");
+                // `waitForLoading()` above only waits for the loader to disappear; it does
+                // not await the `syncAllOrders` RPC that gives the order its server id.
+                // Sampling the id once therefore races that RPC, and which side wins is
+                // decided by how fast the runner is - the step passes on a quick machine
+                // and fails on a slow or contended one. Poll until the id arrives instead,
+                // and only fail once it has genuinely not arrived.
+                // The usual Odoo idiom for a racy tour step is a more specific `trigger`,
+                // letting the tour engine's own retry loop do the waiting (see 8cb86ec07ad5
+                // "[FIX] lunch: fix non-determistic tour error"). That does not transfer
+                // here: the condition is JS model state, not a DOM fact, so there is no
+                // selector to wait on.
+                async run() {
+                    const deadline = Date.now() + 10000;
+                    while (Date.now() < deadline) {
+                        const order = posmodel.models["pos.order"].getFirst();
+                        if (typeof order?.id === "number") {
+                            return;
+                        }
+                        await new Promise((resolve) => setTimeout(resolve, 50));
                     }
+                    throw new Error("Order does not have a valid server ID");
                 },
             },
             FloorScreen.clickTable("5"),
