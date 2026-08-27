@@ -258,20 +258,20 @@ msgstr ""
 "                <!-- We use the logo of the company that created the survey (to handle multi company cases) -->\n"
 "                <a href=\"/\"><img t-attf-src=\"/logo.png?company={{ object.survey_id.create_uid.company_id.id }}\" style=\"vertical-align:baseline;max-width:100px;\"></a>\n"
 "            </td><td style=\"text-align:right;vertical-align:middle;\">\n"
-"                    Chứng nhận: <t t-out=\"object.survey_id.display_name or ''\">Form lấy ý kiến khách hàng</t>\n"
+"                    Chứng nhận: <t t-out=\"object.survey_id.display_name or ''\">Biểu mẫu phản hồi</t>\n"
 "            </td></tr>\n"
 "        </tbody>\n"
 "    </table>\n"
 "    <table style=\"width:600px;margin:0px auto;background:white;border:1px solid #e1e1e1;\">\n"
 "        <tbody>\n"
 "            <tr><td style=\"padding:15px 20px 10px 20px;\">\n"
-"                <p>Xin chào <span t-out=\"object.partner_id.name or 'bạn'\"></span></p>\n"
+"                <p>Xin chào <span t-out=\"object.partner_id.name or 'participant'\">participant</span></p>\n"
 "                <p>\n"
-"                    Vui lòng đính kèm chứng nhận\n"
-"                        <strong t-out=\"object.survey_id.display_name or ''\">Tạo hình đồ nội thất</strong>\n"
-"                    của bạn\n"
+"                    Vui lòng xem tệp đính kèm của bạn\n"
+"                        <strong t-out=\"object.survey_id.display_name or ''\">Tạo đồ nội thất</strong>\n"
+"                    certification\n"
 "                </p>\n"
-"                <p>Chúc mừng bạn đã vượt qua bài kiểm tra với số điểm là <strong t-out=\"object.scoring_percentage\"></strong>% !</p>\n"
+"                <p>Chúc mừng bạn đã vượt qua bài kiểm tra với số điểm <strong t-out=\"object.scoring_percentage\"></strong>% !</p>\n"
 "            </td></tr>\n"
 "        </tbody>\n"
 "    </table>\n"
@@ -681,7 +681,7 @@ msgstr "<span>Lãnh đạo nổi tiếng của chúng tôi</span>"
 #. module: survey
 #: model_terms:survey.question,description:survey.survey_demo_quiz_p3_q3
 msgid "<span>Our sales people have an advantage, but you can do it !</span>"
-msgstr ""
+msgstr "<span>Nhân viên bán hàng của chúng tôi có lợi thế, nhưng bạn có thể làm được !"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_results_filters
@@ -841,6 +841,8 @@ msgid ""
 "Add a list of email recipients (separated by commas, semicolons or line "
 "breaks). They will not be converted into contacts."
 msgstr ""
+"Thêm danh sách email người nhận ( được ngăn cách bởi dấu phẩy, chấm phẩy "
+"hoặc xuống dòng). Những email này sẽ không được chuyển đổi thành liên hệ."
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
@@ -885,6 +887,8 @@ msgid ""
 "After watching this video, will you swear that you are not going to "
 "procrastinate to trim your hedge this year ?"
 msgstr ""
+"Sau khi xem xong video này, bạn có thề rằng sẽ không cắt tỉa hàng rào "
+"của mình trong năm nay không?"
 
 #. module: survey
 #: model:survey.question.answer,value:survey.survey_feedback_p2_q2_col3
@@ -1149,7 +1153,7 @@ msgstr "Con Ong"
 #. module: survey
 #: model:survey.question,question_placeholder:survey.vendor_certification_page_3_question_3
 msgid "Beware of leap years !"
-msgstr ""
+msgstr "Hãy cẩn thận với năm nhuận!"
 
 #. module: survey
 #. odoo-python
@@ -1203,7 +1207,7 @@ msgstr "Có thể sửa thân bài"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p4_q3
 msgid "Can Humans ever directly see a photon ?"
-msgstr ""
+msgstr "Con người có thể nhìn thấy trực tiếp một photon không?"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
@@ -1333,7 +1337,7 @@ msgstr "Các lựa chọn"
 #. module: survey
 #: model_terms:survey.survey,description:survey.survey_demo_burger_quiz
 msgid "Choose your favourite subject and show how good you are. Ready ?"
-msgstr ""
+msgstr "Chọn môn học yêu thích và thể hiện khả năng của mình. Sẵn sàng chưa?"
 
 #. module: survey
 #: model:ir.model.fields.selection,name:survey.selection__survey_survey__certification_report_layout__classic_blue
@@ -1779,7 +1783,7 @@ msgstr "Con Chó"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p4_q1
 msgid "Dogwood is from which family of trees ?"
-msgstr ""
+msgstr "Cây Dogwood thuộc họ cây nào?"
 
 #. module: survey
 #: model:survey.question,question_placeholder:survey.survey_demo_quiz_p1_q2
@@ -1955,7 +1959,7 @@ msgstr "Từ"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p4_q4
 msgid "From which continent is native the Scots pine (pinus sylvestris) ?"
-msgstr ""
+msgstr "Cây thông Scots (Pinus sylvestris) có nguồn gốc từ lục địa Eurasia?"
 
 #. module: survey
 #: model:survey.question.answer,value:survey.survey_demo_quiz_p3_q1_sug1
@@ -2097,7 +2101,7 @@ msgstr "Lịch sử"
 #. module: survey
 #: model:survey.question,title:survey.survey_feedback_p1_q3
 msgid "How frequently do you buy products online ?"
-msgstr ""
+msgstr "Bạn mua sắm sản phẩm trực tuyến với tần suất bao nhiêu?"
 
 #. module: survey
 #. odoo-python
@@ -2148,7 +2152,7 @@ msgstr "Bạn đã vượt qua bao nhiêu đơn hàng trong 6 tháng qua?"
 #. module: survey
 #: model:survey.question,title:survey.survey_feedback_p1_q4
 msgid "How many times did you order products on our website ?"
-msgstr ""
+msgstr "Bạn đã đặt hàng sản phẩm trên trang web của chúng tôi bao nhiêu lần?"
 
 #. module: survey
 #: model:survey.question,title:survey.vendor_certification_page_1_question_4
@@ -2158,7 +2162,7 @@ msgstr "Chúng tôi có bao nhiêu phiên bản bàn góc?"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p3_q3
 msgid "How many years did the 100 years war last ?"
-msgstr ""
+msgstr "Cuộc Chiến Trăm Năm kéo dài bao nhiêu năm?"
 
 #. module: survey
 #: model:survey.question,title:survey.vendor_certification_page_2_question_1
@@ -2173,7 +2177,7 @@ msgstr "Bao nhiêu lâu bạn nên tưới các cây này cây một lần?"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p1_q4
 msgid "How old are you ?"
-msgstr ""
+msgstr "Bạn bao nhiêu tuổi?"
 
 #. module: survey
 #: model:survey.question.answer,value:survey.survey_demo_burger_quiz_p5_q3_sug4
@@ -2206,7 +2210,7 @@ msgstr "Tôi không có ý kiến gì!"
 #. module: survey
 #: model:survey.question.answer,value:survey.survey_demo_burger_quiz_p5_q3_sug3
 msgid "I've been noticing gravity since I was very young !"
-msgstr ""
+msgstr "Tôi đã nhận thấy lực hấp dẫn từ khi còn nhỏ"
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_invite__id
@@ -2297,6 +2301,8 @@ msgid ""
 "If checked, this question will be displayed only\n"
 "        if the specified conditional answer have been selected in a previous question"
 msgstr ""
+"Nếu được chọn, câu hỏi này sẽ chỉ được hiển thị\n"
+"        nếu câu trả lời điều kiện đã chỉ định được chọn trong một câu hỏi trước đó."
 
 #. module: survey
 #: model:ir.model.fields,help:survey.field_survey_survey__users_can_go_back
@@ -2388,7 +2394,7 @@ msgstr "Chọn tất cả các cây lá kim trong danh sách dưới đây."
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p4_q2
 msgid "In which country did the bonsai technique develop ?"
-msgstr ""
+msgstr "Kỹ thuật bonsai được phát triển ở quốc gia nào?"
 
 #. module: survey
 #: model:ir.model.fields,help:survey.field_survey_question__is_scored_question
@@ -2468,7 +2474,7 @@ msgstr "Câu trả lời có phải là một phần của phiên khảo sát ha
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p4_q3
 msgid "Is the wood of a coniferous hard or soft ?"
-msgstr ""
+msgstr "Gỗ của cây lá kim thì cứng hay mềm?"
 
 #. module: survey
 #: model:survey.question.answer,value:survey.survey_demo_burger_quiz_p2_q2_sug4
@@ -2716,7 +2722,7 @@ msgstr "Số lần thử lại bị giới hạn"
 #: model_terms:ir.actions.act_window,help:survey.action_survey_form
 #, python-format
 msgid "Live Presentation"
-msgstr ""
+msgstr "Buổi trình bày trực tuyến"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
@@ -3674,7 +3680,7 @@ msgstr "Bạn đã sẵn sàng thay đổi cách <b>thu thập dữ liệu</b>?"
 #. module: survey
 #: model_terms:ir.actions.act_window,help:survey.action_survey_form
 msgid "Ready to test? Pick a sample..."
-msgstr ""
+msgstr "Sẵn sàng để kiểm tra chưa? Chọn một mẫu..."
 
 #. module: survey
 #: model:ir.model.fields,field_description:survey.field_survey_invite__partner_ids
@@ -4370,7 +4376,7 @@ msgstr "Cảm ơn bạn đã tham gia và hi vọng bạn đã có một trải 
 #: code:addons/survey/models/survey_survey_template.py:0
 #, python-format
 msgid "Thank you very much for your feedback. We highly value your opinion !"
-msgstr ""
+msgstr "Cảm ơn bạn rất nhiều vì phản hồi của bạn. Chúng tôi rất trân trọng ý kiến của bạn!"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_fill_form_done
@@ -4594,7 +4600,7 @@ msgstr "Câu trả lời ở đây phải là một địa chỉ email."
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.certification_report_view_classic
 msgid "This certificate is presented to"
-msgstr ""
+msgstr "Được trao cho"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.certification_report_view_modern
@@ -4602,6 +4608,8 @@ msgid ""
 "This certificate is presented to\n"
 "                                <br/>"
 msgstr ""
+"Được trao cho\n"
+"                                <br/>"
 
 #. module: survey
 #: model:ir.model.fields,help:survey.field_survey_survey__session_code
@@ -4689,6 +4697,8 @@ msgstr "Phần này hỏi về trải nghiệm Thương mại điện tử của
 msgid ""
 "This small quiz will test your knowledge about our Company. Be prepared !"
 msgstr ""
+"Cuộc khảo sát nhỏ này sẽ kiểm tra kiến thức của bạn về công ty của chúng "
+"tôi. Hãy chuẩn bị sẵn sàng!"
 
 #. module: survey
 #: model_terms:survey.survey,description:survey.survey_feedback
@@ -5062,7 +5072,7 @@ msgstr ""
 #. module: survey
 #: model:survey.question,title:survey.survey_feedback_p2_q2
 msgid "What do you think about our new eCommerce ?"
-msgstr ""
+msgstr "Bạn nghĩ gì về thương mại điện tử mới của chúng tôi?"
 
 #. module: survey
 #: model:survey.question,title:survey.vendor_certification_page_2_question_3
@@ -5072,7 +5082,7 @@ msgstr "Bạn nghĩ gì về giá của chúng tôi (không được xếp hạn
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p5_q1
 msgid "What do you think about this survey ?"
-msgstr ""
+msgstr "Bạn nghĩ gì về cuộc khảo sát này?"
 
 #. module: survey
 #. odoo-python
@@ -5105,32 +5115,32 @@ msgstr "Cách tốt nhất để thu hút sự chú ý của khán giả là gì
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p2_q2
 msgid "What is the biggest city in the world ?"
-msgstr ""
+msgstr "Thành phố lớn nhất thế giới là thành phố nào?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p1_q1
 msgid "What is your email ?"
-msgstr ""
+msgstr "Email của bạn là gì?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p1_q2
 msgid "What is your nickname ?"
-msgstr ""
+msgstr "Biệt danh của bạn là gì"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p4_q2
 msgid "What is, approximately, the critical mass of plutonium-239 ?"
-msgstr ""
+msgstr "Khối lượng giới hạn của plutonium-239, ước chừng, là bao nhiêu?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p3_q1
 msgid "When did Genghis Khan die ?"
-msgstr ""
+msgstr "Thành Cát Tư Hãn qua đời vào năm nào?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p2_q2
 msgid "When did precisely Marc Demo crop its first apple tree ?"
-msgstr ""
+msgstr "Chính xác thì khi nào Marc Demo đã thu hoạch cây táo đầu tiên của mình?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p3_q6
@@ -5140,12 +5150,12 @@ msgstr "Khi nào bạn thu hoạch những trái cây đó?"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p2_q1
 msgid "When is Mitchell Admin born ?"
-msgstr ""
+msgstr "Mitchell Admin sinh vào lúc nào?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_feedback_p1_q2
 msgid "When is your date of birth ?"
-msgstr ""
+msgstr "Ngày sinh của bạn là khi nào?"
 
 #. module: survey
 #. odoo-javascript
@@ -5157,12 +5167,12 @@ msgstr "Sau khi bạn chọn một câu trả lời, Odoo sẽ lưu lại cho b�
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p1_q3
 msgid "Where are you from ?"
-msgstr ""
+msgstr "Bạn đến từ đâu?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_feedback_p1_q1
 msgid "Where do you live ?"
-msgstr ""
+msgstr "Bạn sống ở đâu?"
 
 #. module: survey
 #: model:ir.model.fields,help:survey.field_survey_survey__session_show_leaderboard
@@ -5173,7 +5183,7 @@ msgstr "Có hiện thị bảng thành tích của người tham dự khảo sá
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p5_q1
 msgid "Which Musician is not in the 27th Club ?"
-msgstr ""
+msgstr "Nghệ sĩ nào không thuộc câu lạc bộ 27th?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p3_q1
@@ -5183,12 +5193,12 @@ msgstr "Cà chua thuộc loại nào"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p2_q3
 msgid "Which is the highest volcano in Europe ?"
-msgstr ""
+msgstr "Ngọn núi lửa nào cao nhất châu Âu?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_feedback_p2_q1
 msgid "Which of the following words would you use to describe our products ?"
-msgstr ""
+msgstr "Từ nào dưới đây bạn sẽ sử dụng để mô tả sản phẩm của chúng tôi?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p3_q2
@@ -5198,7 +5208,7 @@ msgstr "Con vật nào sau đây có thể thụ phấn"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p5_q2
 msgid "Which painting/drawing was not made by Pablo Picasso ?"
-msgstr ""
+msgstr "Bức tranh/đồ họa nào không phải do Pablo Picasso tạo ra?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p5_q3
@@ -5208,12 +5218,12 @@ msgstr "Câu nói nào là của Jean-Claude Van Damme"
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_quiz_p1
 msgid "Who are you ?"
-msgstr ""
+msgstr "Bạn là ai?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p3_q2
 msgid "Who is the architect of the Great Pyramid of Giza ?"
-msgstr ""
+msgstr "Ai là kiến trúc sư của Kim tự tháp Giza?"
 
 #. module: survey
 #: model:survey.question,title:survey.survey_demo_burger_quiz_p4_q1
@@ -5221,6 +5231,8 @@ msgid ""
 "Who received a Nobel prize in Physics for the discovery of neutrino "
 "oscillations, which shows that neutrinos have mass ?"
 msgstr ""
+"Ai đã nhận Giải Nobel Vật lý cho sự phát hiện ra hiện tượng dao động "
+"neutrino, cho thấy neutrino có khối lượng?"
 
 #. module: survey
 #. odoo-python
@@ -5470,6 +5482,8 @@ msgid ""
 "for successfully completing\n"
 "                                <br/>"
 msgstr ""
+"vì đã hoàn thành xuất sắc\n"
+"                                <br/>"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.survey_auth_required
