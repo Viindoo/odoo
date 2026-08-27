@@ -8,6 +8,7 @@ import * as Order from "@point_of_sale/../tests/generic_helpers/order_widget_uti
 import { inLeftSide } from "@point_of_sale/../tests/pos/tours/utils/common";
 import { registry } from "@web/core/registry";
 import { negate } from "@point_of_sale/../tests/generic_helpers/utils";
+import * as PartnerList from "@point_of_sale/../tests/pos/tours/utils/partner_list_util";
 
 registry.category("web_tour.tours").add("PosLoyaltyLoyaltyProgram1", {
     steps: () =>
@@ -278,6 +279,7 @@ registry.category("web_tour.tours").add("test_not_create_loyalty_card_expired_pr
             Chrome.startPoS(),
             Dialog.confirm("Open Register"),
             ProductScreen.clickPartnerButton(),
+            PartnerList.searchCustomerValue("Test Partner", true),
             ProductScreen.clickCustomer("Test Partner", true),
             ProductScreen.addOrderline("Desk Organizer", "3"),
             PosLoyalty.finalizeOrder("Cash", "15.3"),
@@ -290,6 +292,7 @@ registry.category("web_tour.tours").add("PosOrderClaimReward", {
             Chrome.startPoS(),
             Dialog.confirm("Open Register"),
             ProductScreen.clickPartnerButton(),
+            PartnerList.searchCustomerValue("Test Partner", true),
             ProductScreen.clickCustomer("Test Partner"),
             ProductScreen.addOrderline("Desk Organizer", "3"),
             PosLoyalty.isPointsDisplayed(true),
@@ -304,6 +307,7 @@ registry.category("web_tour.tours").add("PosOrderNoPoints", {
         [
             Chrome.startPoS(),
             ProductScreen.clickPartnerButton(),
+            PartnerList.searchCustomerValue("Test Partner 2", true),
             ProductScreen.clickCustomer("Test Partner 2"),
             ProductScreen.addOrderline("Desk Organizer", "3"),
             PosLoyalty.isPointsDisplayed(false),
