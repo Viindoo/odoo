@@ -9,7 +9,7 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools import frozendict, html2plaintext
 
 from odoo.addons.l10n_fr_pdp.models.account_edi_proxy_user import STATUS_TO_PROCESS_CONDITION_CODE_PDP
-from odoo.addons.l10n_fr_pdp.models.account_edi_xml_ubl_21_fr import PDP_CUSTOMIZATION_ID
+from odoo.addons.l10n_fr_pdp.models.account_edi_xml_ubl_21_fr import PDP_CUSTOMIZATION_ID, CPRO_CUSTOMIZATION_ID
 from odoo.addons.l10n_fr_pdp.models.account_peppol_response import NEW_STATUSES
 from odoo.addons.l10n_fr_pdp.models.pdp_flow import FLOW_OPEN_STATES_SELECTION, FLOW_SENT_STATES, FLOW_SENT_STATES_SELECTION
 from odoo.addons.l10n_fr_pdp.utils import drom_com_territories
@@ -120,14 +120,11 @@ class AccountMove(models.Model):
         copy=False,
     )
 
-    @api.depends('peppol_is_sent', 'l10n_fr_pdp_sent_in_flow_ids')
-    def _compute_show_reset_to_draft_button(self):
-        # EXTEND 'account' to hide the reset to draft button for sent PDP invoices
-        super()._compute_show_reset_to_draft_button()
-        relevant_moves = self.filtered(
-            lambda move: move.l10n_fr_pdp_sent_in_flow_ids or move.pdp_is_sent and move.is_sale_document(include_receipts=True)
-        )
-        relevant_moves.show_reset_to_draft_button = False
+    # TODO: remove in master
+    @api.model
+    def fields_get(self, allfields=None, attributes=None):
+        self.env['res.config.settings']._pdp_ensure_selection_value('account.move', 'peppol_move_state', 'completed')
+        return super().fields_get(allfields, attributes)
 
     @api.depends(
         'line_ids.matched_debit_ids.debit_move_id',
@@ -176,6 +173,16 @@ class AccountMove(models.Model):
                 and move.partner_id._get_pdp_receiver_identification_info()[0] == 'pdp'
             )
 
+    @api.depends('pdp_can_send_response')
+    def _compute_peppol_can_send_response(self):
+        # EXTENDS account_peppol_response to avoid sending the same response through 2 channels
+        super()._compute_peppol_can_send_response()
+        for move in self:
+            move.peppol_can_send_response = (
+                move.peppol_can_send_response
+                and not move.pdp_can_send_response
+            )
+
     @api.depends('company_id')
     def _compute_pdp_uses_pdp(self):
         for move in self:
@@ -186,10 +193,19 @@ class AccountMove(models.Model):
         for move in self:
             move.pdp_is_sent = move.peppol_is_sent and move.pdp_uses_pdp
 
-    def _pdp_get_paid_amount(self):
+    def _pdp_get_reconciled_amls(self):
         self.ensure_one()
         counterpart_move_type = 'out_invoice' if self.move_type == 'out_refund' else 'out_refund'
-        reconciled_amls = self._get_reconciled_amls().filtered(lambda l: l.move_id.move_type != counterpart_move_type)
+        return self._get_reconciled_amls().filtered(lambda l: l.move_id.move_type != counterpart_move_type)
+
+    def _pdp_get_payment_date(self):
+        reconciled_amls = self._pdp_get_reconciled_amls()
+        if not reconciled_amls:
+            return None
+        return max(aml.date for aml in reconciled_amls)
+
+    def _pdp_get_paid_amount(self):
+        reconciled_amls = self._pdp_get_reconciled_amls()
         return self.direction_sign * sum(reconciled_amls.mapped('balance'))
 
     def _pdp_get_paid_lifecycle_total_amount(self):
@@ -250,8 +266,8 @@ class AccountMove(models.Model):
     def _l10n_fr_pdp_get_default_notes(self):
         self.ensure_one()
         # Mandatory / default notes for French e-invoicing [BR-FR-05]
-        # Only add them when using PDP
-        if self.company_id._get_peppol_proxy_type() != 'pdp':
+        # Only add them for French companies
+        if not self.company_id._peppol_is_french_company():
             return {}
         payment_term = self.invoice_payment_term_id
         return {
@@ -263,10 +279,12 @@ class AccountMove(models.Model):
     @api.model
     def _get_ubl_cii_builder_from_xml_tree(self, tree):
         # Extends account_edi_ubl_cii
-        customization_id = tree.find('{*}CustomizationID')
+        customization_id = tree.findtext('{*}CustomizationID')
         # Note: The CustomizationID alone is not enough because e.g. SuperPDP just sends `urn:cen.eu:en16931:2017`
         #       but still expects the full French validation.
-        if customization_id is not None and customization_id.text == PDP_CUSTOMIZATION_ID:
+        if customization_id == CPRO_CUSTOMIZATION_ID:
+            return self.env['account.edi.xml.ubl_21_fr']
+        if customization_id == PDP_CUSTOMIZATION_ID:
             receiver_endpoint_node = tree.find('./{*}AccountingCustomerParty/{*}Party/{*}EndpointID')
             if receiver_endpoint_node is not None and receiver_endpoint_node.get('schemeID') == '0225':
                 return self.env['account.edi.xml.ubl_21_fr']
@@ -366,11 +384,6 @@ class AccountMove(models.Model):
         if status and self.filtered('pdp_can_send_response') and (action := self.action_pdp_open_response_wizard(status=status)):
             return action
 
-        for move in self:
-            if move.state == 'posted' and move.l10n_fr_pdp_sent_in_flow_ids:
-                # move was sent, must rectify
-                self.env['l10n.fr.pdp.reports.flow']._get_open_flow_and_create_if_needed(move)
-                move.with_context(l10n_fr_pdp_bypass_draft_check=True).button_draft()
         return res
 
     # -------------------------------------------------------------------------
@@ -629,15 +642,15 @@ class AccountMove(models.Model):
         # All other cases: International
         return 'b2bi'
 
-    # -------------------------------------------------------------------------
-    # CRUD Override
-    # -------------------------------------------------------------------------
-
-    def _check_draftable(self):
-        """Prevent resetting to draft when invoice already sent to PDP."""
-        if not self.env.context.get('l10n_fr_pdp_bypass_draft_check') and self.l10n_fr_pdp_sent_in_flow_ids:
-            raise UserError(_(
-                "You cannot reset an invoice to draft if it was already sent to PDP. "
-                "Create a credit note and issue a new invoice instead or cancel this invoice."
-            ))
-        return super()._check_draftable()
+    def button_draft(self):
+        for move in self:
+            if move.l10n_fr_pdp_sent_in_flow_ids and move.state == 'posted':
+                # When a flow is sent it compares the moves it sends vs the moves of the previous
+                # flow to avoid sending the data twice if it's strictly the same.
+                # Setting "l10n_fr_pdp_sent_in_flow_ids" to None will ensure the move is not already
+                # considered as sent in previous flow, and allow the current flow to be sent even if
+                # it's the only diffrence between the 2 flows.
+                move.l10n_fr_pdp_sent_in_flow_ids = False
+                # Ensure RE flow exist for current move period.
+                self.env['l10n.fr.pdp.reports.flow']._get_open_flow_and_create_if_needed(move)
+        return super().button_draft()
