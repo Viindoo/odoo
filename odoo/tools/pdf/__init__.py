@@ -50,8 +50,8 @@ else:
     raise ImportError("pypdf implementation not found") from error
 del error
 
-PdfReaderBase, PdfWriter, filters, generic, errors, create_string_object =\
-    pypdf.PdfReader, pypdf.PdfWriter, pypdf.filters, pypdf.generic, pypdf.errors, pypdf.create_string_object
+PageObject, PdfReaderBase, PdfWriter, filters, generic, errors, create_string_object =\
+    pypdf.PageObject, pypdf.PdfReader, pypdf.PdfWriter, pypdf.filters, pypdf.generic, pypdf.errors, pypdf.create_string_object
 # because they got re-exported
 ArrayObject, BooleanObject, ByteStringObject, DecodedStreamObject, DictionaryObject, IndirectObject, NameObject, NumberObject =\
     generic.ArrayObject, generic.BooleanObject, generic.ByteStringObject, generic.DecodedStreamObject, generic.DictionaryObject, generic.IndirectObject, generic.NameObject, generic.NumberObject
@@ -182,14 +182,11 @@ def fill_form_fields_pdf(writer, form_fields):
 
     if pypdf_version >= parse_version('3.13.0'):
         catalog = writer._root_object
-        if "/Fields" not in catalog.get('/AcroForm'):
-            catalog.update({
-                NameObject("/AcroForm"): writer._add_object(
-                    DictionaryObject({
-                        NameObject("/Fields"): ArrayObject()
-                    })
-                )
-            })
+        acroform = catalog.get("/AcroForm").get_object()
+        if "/Fields" not in acroform:
+            acroform[NameObject("/Fields")] = ArrayObject()
+        if "/DR" not in acroform:
+            acroform[NameObject("/DR")] = DictionaryObject()
 
     nbr_pages = len(writer.pages) if pypdf_version >= parse_version('1.28.0') else writer.getNumPages()
 

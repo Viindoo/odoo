@@ -1068,8 +1068,8 @@ class HrExpense(models.Model):
                     'email_to': manager.employee_id.work_email or manager.email,
                     'subject': _("New expenses waiting for your approval"),
                 })
-            if new_mails:
-                self.env['mail.mail'].sudo().create(new_mails).send()
+        if new_mails:
+            self.env['mail.mail'].sudo().create(new_mails).send()
 
     @api.model
     def get_empty_list_help(self, help_message):
@@ -1581,7 +1581,7 @@ class HrExpense(models.Model):
         Creation of the account moves for the company paid expenses.
         -> Create an account payment (we only "log" the already paid expense so it can be reconciled)
         """
-        self = self.with_context(clean_context(self.env.context))  # remove default_*
+        self = self.with_context(clean_context(self.env.context), project_id=False)  # noqa: PLW0642  # remove default_* and project_id
         company_account_expenses = self.filtered(lambda expense: expense.payment_mode == 'company_account')
         moves_sudo = self.env['account.move'].sudo()
 

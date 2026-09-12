@@ -38,7 +38,7 @@ class HrEmployee(models.Model):
     """
     _name = 'hr.employee'
     _description = "Employee"
-    _order = 'name'
+    _order = 'name, id'
     _inherit = ['mail.thread.main.attachment', 'mail.activity.mixin', 'resource.mixin', 'avatar.mixin']
     _mail_post_access = 'read'
     _primary_email = 'work_email'
@@ -562,9 +562,9 @@ class HrEmployee(models.Model):
         If no valid version is found, we return the very first version of the employee.
         """
         self.ensure_one()
-        versions = self.version_ids.filtered(lambda v: v.active)
+        versions = self.version_ids.filtered(lambda v: v.active) or self.with_context(active_test=False).version_ids
         if not versions:
-            versions = self.with_context(active_test=False).version_ids
+            return self.env['hr.version']
         filtered_versions = versions.filtered_domain([('date_version', '<=', date)])
         return max(filtered_versions, key=lambda v: v.date_version) if filtered_versions else versions[0]
 

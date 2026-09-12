@@ -218,13 +218,15 @@ class PosSession(models.Model):
         pos_config = self.env['pos.config'].browse(config_id)
         pricelist_item_fields = self.env['product.pricelist.item']._load_pos_data_fields(pos_config)
         today = fields.Date.today()
+        categ_ids = self.env['product.template'].browse(product_tmpl_ids).categ_id.ids
         pricelist_item_domain = [
             '&',
             ('pricelist_id', 'in', self.config_id._get_available_pricelists().ids),
             *self.env['product.pricelist.item']._check_company_domain(self.company_id),
-            '|',
+            '|', '|',
             '&', ('product_id', '=', False), ('product_tmpl_id', 'in', product_tmpl_ids),
             ('product_id', 'in', product_ids),
+            ('categ_id', 'parent_of', categ_ids),
             '|', ('date_start', '=', False), ('date_start', '<=', today),
             '|', ('date_end', '=', False), ('date_end', '>=', today)]
 
@@ -253,7 +255,9 @@ class PosSession(models.Model):
                 if session.state == 'closed':
                     total_cash = session.cash_real_transaction + total_cash_payment
                 else:
-                    total_cash = sum(session.statement_line_ids.mapped('amount')) + total_cash_payment
+                    # sudo: cash moves are hidden by the account.move record rules
+                    # from users without accounting rights, who can still create them
+                    total_cash = sum(session.sudo().statement_line_ids.mapped('amount')) + total_cash_payment
 
                 session.cash_register_balance_end = session.cash_register_balance_start + total_cash
                 session.cash_register_difference = session.cash_register_balance_end_real - session.cash_register_balance_end
@@ -1319,20 +1323,18 @@ class PosSession(models.Model):
         combine_invoice_receivables = data.get('combine_invoice_receivables')
         split_invoice_receivables = data.get('split_invoice_receivables')
 
-        combine_invoice_receivable_vals = defaultdict(list)
-        split_invoice_receivable_vals = defaultdict(list)
         combine_invoice_receivable_lines = {}
         split_invoice_receivable_lines = {}
-        for payment_method, amounts in combine_invoice_receivables.items():
-            combine_invoice_receivable_vals[payment_method].append(self._get_invoice_receivable_vals(amounts['amount'], amounts['amount_converted']))
-        for payment, amounts in split_invoice_receivables.items():
-            split_invoice_receivable_vals[payment].append(self._get_invoice_receivable_vals(amounts['amount'], amounts['amount_converted']))
-        for payment_method, vals in combine_invoice_receivable_vals.items():
-            receivable_lines = MoveLine.create(vals)
-            combine_invoice_receivable_lines[payment_method] = receivable_lines
-        for payment, vals in split_invoice_receivable_vals.items():
-            receivable_lines = MoveLine.create(vals)
-            split_invoice_receivable_lines[payment] = receivable_lines
+        # `create` returns the records in the order of the values, so all the lines can
+        # be created at once and dispatched back to the key they belong to afterwards.
+        keys = [(combine_invoice_receivable_lines, payment_method) for payment_method in combine_invoice_receivables]
+        keys += [(split_invoice_receivable_lines, payment) for payment in split_invoice_receivables]
+        vals_list = [
+            self._get_invoice_receivable_vals(amounts['amount'], amounts['amount_converted'])
+            for amounts in [*combine_invoice_receivables.values(), *split_invoice_receivables.values()]
+        ]
+        for (mapping, key), receivable_line in zip(keys, MoveLine.create(vals_list)):
+            mapping[key] = receivable_line
 
         data.update({'combine_invoice_receivable_lines': combine_invoice_receivable_lines})
         data.update({'split_invoice_receivable_lines': split_invoice_receivable_lines})
@@ -1378,24 +1380,25 @@ class PosSession(models.Model):
         )
         all_lines.filtered(lambda line: line.move_id.state != 'posted').move_id._post(soft=False)
 
-        accounts = all_lines.mapped('account_id')
-        lines_by_account = [all_lines.filtered(lambda l: l.account_id == account and not l.reconciled) for account in accounts if account.reconcile]
-        for lines in lines_by_account:
-            lines.with_context(no_cash_basis=True).reconcile()
+        # Gather every reconciliation into a single plan. `_reconcile_plan` processes the
+        # entries of the plan independently and in order, so this is equivalent to
+        # reconciling them one by one, but the recompute cascade triggered by the created
+        # partials runs once instead of once per entry.
+        reconciliation_plan = []
 
+        accounts = all_lines.mapped('account_id')
+        reconciliation_plan += [all_lines.filtered(lambda l: l.account_id == account and not l.reconciled) for account in accounts if account.reconcile]
 
         for payment_method, lines in payment_method_to_receivable_lines.items():
             receivable_account = self._get_receivable_account(payment_method)
             if receivable_account.reconcile:
-                lines.filtered(lambda line: not line.reconciled).with_context(no_cash_basis=True).reconcile()
+                reconciliation_plan.append(lines.filtered(lambda line: not line.reconciled))
 
-        split_plan = [
+        reconciliation_plan += [
             lines.filtered(lambda line: not line.reconciled)
             for payment, lines in payment_to_receivable_lines.items()
             if payment.partner_id.property_account_receivable_id.reconcile
         ]
-        if split_plan:
-            self.env['account.move.line'].with_context(no_cash_basis=True)._reconcile_plan(split_plan)
 
         # Reconcile invoice payments' receivable lines. But we only do when the account is reconcilable.
         # Though `account_default_pos_receivable_account_id` should be of type receivable, there is currently
@@ -1403,11 +1406,14 @@ class PosSession(models.Model):
         if self.company_id.account_default_pos_receivable_account_id.reconcile:
             for payment_method in combine_inv_payment_receivable_lines:
                 lines = combine_inv_payment_receivable_lines[payment_method] | combine_invoice_receivable_lines.get(payment_method, self.env['account.move.line'])
-                lines.filtered(lambda line: not line.reconciled).with_context(no_cash_basis=True).reconcile()
+                reconciliation_plan.append(lines.filtered(lambda line: not line.reconciled))
 
             for payment in split_inv_payment_receivable_lines:
                 lines = split_inv_payment_receivable_lines[payment] | split_invoice_receivable_lines.get(payment, self.env['account.move.line'])
-                lines.filtered(lambda line: not line.reconciled).with_context(no_cash_basis=True).reconcile()
+                reconciliation_plan.append(lines.filtered(lambda line: not line.reconciled))
+
+        if reconciliation_plan:
+            self.env['account.move.line'].with_context(no_cash_basis=True)._reconcile_plan(reconciliation_plan)
 
         return data
 

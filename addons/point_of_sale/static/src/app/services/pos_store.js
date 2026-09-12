@@ -819,13 +819,16 @@ export class PosStore extends WithLazyGetterTrap {
                 hideAlwaysVariants: opts.hideAlwaysVariants,
                 forceVariantValue,
                 line: opts.line,
+                comboItem: opts.comboItem,
             });
         }
         return {
             attribute_value_ids: attributeLinesValues.map((values) => values[0].id),
             attribute_custom_values: [],
+            // Only no_variant extras have to be carried by the line: the extras of
+            // variant-creating attributes are already part of the variant lst_price.
             price_extra: attributeLinesValues
-                .filter((attr) => attr[0].attribute_id.create_variant !== "always")
+                .filter((attr) => attr[0].attribute_id.create_variant === "no_variant")
                 .reduce((acc, values) => acc + values[0].price_extra, 0),
             quantity: 1,
         };
@@ -1282,7 +1285,7 @@ export class PosStore extends WithLazyGetterTrap {
             if (values.product_id.product_template_variant_value_ids.length > 0) {
                 // Verify price extra of variant products
                 const priceExtra = values.product_id.product_template_variant_value_ids
-                    .filter((attr) => attr.attribute_id.create_variant !== "always" && !opts.code)
+                    .filter((attr) => attr.attribute_id.create_variant === "no_variant")
                     .reduce((acc, attr) => acc + attr.price_extra, 0);
 
                 values.price_extra += priceExtra;
@@ -2018,7 +2021,8 @@ export class PosStore extends WithLazyGetterTrap {
             this.syncingOrders.add(order.uuid);
             if (this.config.printerCategories.size && !opts.byPassPrint) {
                 try {
-                    const orderChange = changesToOrder(
+                    let reprint = false;
+                    let orderChange = changesToOrder(
                         order,
                         this.config.printerCategories,
                         opts.cancelled
@@ -2030,8 +2034,25 @@ export class PosStore extends WithLazyGetterTrap {
                         orderChange.noteUpdate.length ||
                         orderChange.internal_note ||
                         orderChange.general_customer_note;
-                    if (hasChanges) {
-                        isPrinted = await this.printChanges(order, [orderChange]);
+
+                    let shouldPrint = true;
+                    if (!hasChanges) {
+                        if (opts.explicitReprint && order.uiState.lastPrints) {
+                            orderChange = [order.uiState.lastPrints.at(-1)];
+                            reprint = true;
+                        } else {
+                            shouldPrint = false;
+                        }
+                    } else {
+                        orderChange = [orderChange];
+                    }
+
+                    if (reprint && opts.orderDone) {
+                        shouldPrint = false;
+                    }
+
+                    if (shouldPrint) {
+                        isPrinted = await this.printChanges(order, orderChange, reprint);
                         if (isPrinted) {
                             order.updateLastOrderChange();
                         }
@@ -2104,7 +2125,7 @@ export class PosStore extends WithLazyGetterTrap {
 
     getOrderData(order, reprint) {
         return {
-            reprint: order.uiState.isReprinting,
+            reprint: reprint,
             pos_reference: order.preparationName,
             config_name: order.config_id?.name || order.config.name,
             time: DateTime.now().toFormat("HH:mm"),
@@ -2210,9 +2231,6 @@ export class PosStore extends WithLazyGetterTrap {
                     result = await this.printOrderChanges(data, printer);
                     if (result.successful) {
                         isPrinted = true;
-                        if (!order.uiState.isReprinting) {
-                            order.uiState.lastPrints.push(orderChange);
-                        }
                     }
 
                     if (!result.successful) {
@@ -2223,6 +2241,10 @@ export class PosStore extends WithLazyGetterTrap {
                     }
                 }
             }
+        }
+
+        if (!reprint && isPrinted && orderChange.length) {
+            order.uiState.lastPrints.push(orderChange[0]);
         }
 
         // printing errors

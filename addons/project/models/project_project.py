@@ -200,15 +200,11 @@ class ProjectProject(models.Model):
 
     @api.depends('milestone_ids', 'milestone_ids.is_reached', 'milestone_ids.deadline')
     def _compute_next_milestone_id(self):
-        milestones_per_project_id = {
-            project.id: milestones
-            for project, milestones in self.env['project.milestone']._read_group(
-                [('project_id', 'in', self.ids), ('is_reached', '=', False)],
-                ['project_id'],
-                ['id:recordset'],
-            )
-        }
-        milestones = self.env['project.milestone'].concat(*milestones_per_project_id.values())
+        milestones = self.env['project.milestone'].search([
+            ('project_id', 'in', self.ids),
+            ('is_reached', '=', False),
+        ])
+        milestones_per_project_id = milestones.grouped(lambda milestone: milestone.project_id.id)
         task_read_group = self.env['project.task']._read_group(
             [('milestone_id', 'in', milestones.ids)],
             ['milestone_id', 'state'],
@@ -1153,6 +1149,8 @@ class ProjectProject(models.Model):
             'costs': profitability_items['costs'],
             'revenues': profitability_items['revenues'],
             'expected_percentage': expected_percentage,
+            'to_bill_to_invoice': to_bill_to_invoice,
+            'billed_invoiced': billed_invoiced,
             'to_bill_to_invoice_percentage': to_bill_to_invoice_percentage,
             'billed_invoiced_percentage': billed_invoiced_percentage,
             'total': {

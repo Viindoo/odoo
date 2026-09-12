@@ -792,6 +792,7 @@ class AccountMove(models.Model):
         "(name, journal_id) WHERE (state = 'posted'AND name != '/')",
         "Another entry with the same name already exists.",
     )
+    _journal_id_date_idx = models.Index('(journal_id, date)')
     _journal_id_company_id_idx = models.Index('(journal_id, company_id, date)')
     # used in <account.journal>._query_has_sequence_holes
     _made_gaps = models.Index('(journal_id, state, payment_state, move_type, date) WHERE (made_sequence_gap IS TRUE)')
@@ -2082,7 +2083,7 @@ class AccountMove(models.Model):
             move.duplicated_ref_ids = move_to_duplicate_move.get(move._origin, self.env['account.move'])
 
     def _fetch_duplicate_reference(self, matching_states=('draft', 'posted')):
-        moves = self.filtered(lambda m: m.is_sale_document() or m.is_purchase_document())
+        moves = self.filtered(lambda m: m.is_sale_document(include_receipts=True) or m.is_purchase_document(include_receipts=True))
 
         if not moves:
             return {}
@@ -2114,10 +2115,10 @@ class AccountMove(models.Model):
             move_table_and_alias = SQL("(VALUES %s) AS move(%s)", SQL(', ').join(all_values), column_names)
 
         to_query = []
-        out_moves = moves.filtered(lambda m: m.move_type in ('out_invoice', 'out_refund'))
+        out_moves = moves.filtered(lambda m: m.move_type in ('out_invoice', 'out_refund', 'out_receipt'))
         if out_moves:
             out_moves_sql_condition = SQL("""
-                move.move_type in ('out_invoice', 'out_refund')
+                move.move_type in ('out_invoice', 'out_refund', 'out_receipt')
                 AND (
                    move.amount_total = duplicate_move.amount_total
                    AND move.invoice_date = duplicate_move.invoice_date
@@ -2125,11 +2126,11 @@ class AccountMove(models.Model):
             """)
             to_query.append((out_moves, out_moves_sql_condition))
 
-        in_moves = moves.filtered(lambda m: m.move_type in ('in_invoice', 'in_refund'))
+        in_moves = moves.filtered(lambda m: m.move_type in ('in_invoice', 'in_refund', 'in_receipt'))
         if in_moves:
             in_moves_sql_condition = SQL("""
-                move.move_type in ('in_invoice', 'in_refund')
-                AND duplicate_move.move_type in ('in_invoice', 'in_refund')
+                move.move_type in ('in_invoice', 'in_refund', 'in_receipt')
+                AND duplicate_move.move_type in ('in_invoice', 'in_refund', 'in_receipt')
                 AND (
                    -- case 1: same ref and (no date or same year)
                      (
@@ -2163,7 +2164,11 @@ class AccountMove(models.Model):
                     ON move.company_id = duplicate_move.company_id
                    AND move.id != duplicate_move.id
                    AND duplicate_move.state IN %(matching_states)s
-                   AND move.move_type = duplicate_move.move_type
+                   AND (
+                            move.move_type = duplicate_move.move_type
+                            OR (move.move_type IN ('in_invoice', 'in_receipt') AND duplicate_move.move_type IN ('in_invoice', 'in_receipt'))
+                            OR (move.move_type IN ('out_invoice', 'out_receipt') AND duplicate_move.move_type IN ('out_invoice', 'out_receipt'))
+                       )
                    AND move.currency_id = duplicate_move.currency_id
                    AND (
                            move.commercial_partner_id = duplicate_move.commercial_partner_id
@@ -2189,7 +2194,11 @@ class AccountMove(models.Model):
             move.is_draft_duplicated_ref_ids = any(duplicate_move.state == 'draft' for duplicate_move in move.duplicated_ref_ids)
             move.is_exact_move_duplicate = any(
                 move.ref and move.ref == dup.ref
-                and move.move_type == dup.move_type
+                and (
+                    move.move_type == dup.move_type
+                    or (move.move_type in ['in_invoice', 'in_receipt'] and dup.move_type in ['in_invoice', 'in_receipt'])
+                    or (move.move_type in ['out_invoice', 'out_receipt'] and dup.move_type in ['out_invoice', 'out_receipt'])
+                )
                 and move.partner_id == dup.partner_id
                 and move.invoice_date == dup.invoice_date
                 and move.amount_total == dup.amount_total
@@ -5091,6 +5100,7 @@ class AccountMove(models.Model):
         payment_term = self.invoice_payment_term_id
         early_pay_discount_computation = payment_term.early_pay_discount_computation
         discount_percentage = payment_term.discount_percentage
+        tax_lines_needed = early_pay_discount_computation == 'included' and invoice_lines.tax_ids
 
         res = {
             'term_lines': defaultdict(lambda: {}),
@@ -5101,11 +5111,12 @@ class AccountMove(models.Model):
             return res
 
         # Get the current tax amounts in the current invoice.
-        tax_amounts = defaultdict(lambda: {'amount_currency': 0.0, 'balance': 0.0})
+        tax_amounts = defaultdict(lambda: {'amount_currency': 0.0, 'balance': 0.0, 'analytic_distribution': False})
         for line in tax_lines:
             tax_rep_id = inverse_tax_rep(line.tax_repartition_line_id).id
             tax_amounts[tax_rep_id]['amount_currency'] += line.amount_currency
             tax_amounts[tax_rep_id]['balance'] += line.balance
+            tax_amounts[tax_rep_id]['analytic_distribution'] = line.analytic_distribution
 
         base_lines = [
             {
@@ -5116,10 +5127,8 @@ class AccountMove(models.Model):
         ]
         for base_line in base_lines:
             base_line['tax_ids'] = base_line['tax_ids'].filtered(lambda t: t.amount_type != 'fixed')
-
-            if early_pay_discount_computation == 'included':
-                remaining_part_to_consider = (100 - discount_percentage) / 100.0
-                base_line['price_unit'] *= remaining_part_to_consider
+            remaining_part_to_consider = (100 - discount_percentage) / 100.0
+            base_line['price_unit'] *= remaining_part_to_consider
         AccountTax = self.env['account.tax']
         AccountTax._add_tax_details_in_base_lines(base_lines, self.company_id)
         AccountTax._round_base_lines_tax_details(base_lines, self.company_id)
@@ -5141,37 +5150,42 @@ class AccountMove(models.Model):
 
         term_amount_currency = payment_term_line.amount_currency - payment_term_line.discount_amount_currency
         term_balance = payment_term_line.balance - payment_term_line.discount_balance
-        if early_pay_discount_computation == 'included' and invoice_lines.tax_ids:
-            # Compute the base amounts.
-            resulting_delta_base_details = {}
-            resulting_delta_tax_details = {}
-            for base_line in base_lines:
-                tax_details = base_line['tax_details']
-                invoice_line = base_line['record']
+        # Compute the base amounts.
+        resulting_delta_base_details = {}
+        resulting_delta_tax_details = {}
+        for base_line in base_lines:
+            tax_details = base_line['tax_details']
+            invoice_line = base_line['record']
 
-                grouping_dict = {
+            grouping_dict = {
+                'partner_id': base_line['partner_id'].id,
+                'currency_id': base_line['currency_id'].id,
+                'account_id': cash_discount_account.id,
+                'analytic_distribution': base_line['analytic_distribution'] or epd_analytic_distribution,
+            }
+
+            if tax_lines_needed:
+                grouping_dict.update({
                     'tax_ids': [Command.set(base_line['tax_ids'].ids)],
                     'tax_tag_ids': [Command.set(base_line['tax_tag_ids'].ids)],
-                    'partner_id': base_line['partner_id'].id,
-                    'currency_id': base_line['currency_id'].id,
-                    'account_id': cash_discount_account.id,
-                    'analytic_distribution': base_line['analytic_distribution'] or epd_analytic_distribution,
-                }
-                base_detail = resulting_delta_base_details.setdefault(frozendict(grouping_dict), {
-                    'balance': 0.0,
-                    'amount_currency': 0.0,
                 })
+            base_detail = resulting_delta_base_details.setdefault(frozendict(grouping_dict), {
+                'balance': 0.0,
+                'amount_currency': 0.0,
+            })
 
-                amount_currency = self.currency_id\
-                    .round(self.direction_sign * tax_details['total_excluded_currency'] - invoice_line.amount_currency)
-                balance = self.company_currency_id\
-                    .round(self.direction_sign * tax_details['total_excluded'] - invoice_line.balance)
+            amount_currency = self.currency_id\
+                .round(self.direction_sign * tax_details['total_excluded_currency'] - invoice_line.amount_currency)
+            balance = self.company_currency_id\
+                .round(self.direction_sign * tax_details['total_excluded'] - invoice_line.balance)
 
-                base_detail['balance'] += balance
-                base_detail['amount_currency'] += amount_currency
+            base_detail['balance'] += balance
+            base_detail['amount_currency'] += amount_currency
 
-                bases_details[frozendict(grouping_dict)] = base_detail
+            bases_details[frozendict(grouping_dict)] = base_detail
 
+        percentage_paid = abs(payment_term_line.amount_residual_currency / self.amount_total)
+        if tax_lines_needed:
             # Compute the tax amounts.
             tax_results = AccountTax._prepare_tax_lines(base_lines, self.company_id)
             for tax_line_vals in tax_results['tax_lines_to_add']:
@@ -5181,10 +5195,10 @@ class AccountMove(models.Model):
                         **tax_line_vals,
                         'amount_currency': tax_line_vals['amount_currency'] - tax_amount_without_epd['amount_currency'],
                         'balance': tax_line_vals['balance'] - tax_amount_without_epd['balance'],
+                        'analytic_distribution': tax_amount_without_epd['analytic_distribution'],
                     }
 
             # Multiply the amount by the percentage
-            percentage_paid = abs(payment_term_line.amount_residual_currency / self.amount_total)
             for tax_line_vals in resulting_delta_tax_details.values():
                 tax_rep = self.env['account.tax.repartition.line'].browse(tax_line_vals['tax_repartition_line_id'])
                 tax = tax_rep.tax_id
@@ -5206,36 +5220,24 @@ class AccountMove(models.Model):
                     'balance': payment_term_line.company_currency_id.round(tax_line_vals['balance'] * percentage_paid),
                 }
 
-            for grouping_dict, base_detail in bases_details.items():
-                res['base_lines'][payment_term_line][grouping_dict] = {
-                    'name': _("Early Payment Discount"),
-                    'amount_currency': payment_term_line.currency_id.round(base_detail['amount_currency'] * percentage_paid),
-                    'balance': payment_term_line.company_currency_id.round(base_detail['balance'] * percentage_paid),
-                }
-
-            # Fix the rounding issue if any.
-            delta_amount_currency = term_amount_currency \
-                                    - sum(x['amount_currency'] for x in res['base_lines'][payment_term_line].values()) \
-                                    - sum(x['amount_currency'] for x in res['tax_lines'][payment_term_line].values())
-            delta_balance = term_balance \
-                            - sum(x['balance'] for x in res['base_lines'][payment_term_line].values()) \
-                            - sum(x['balance'] for x in res['tax_lines'][payment_term_line].values())
-
-            biggest_base_line = max(list(res['base_lines'][payment_term_line].values()), key=lambda x: x['amount_currency'])
-            biggest_base_line['amount_currency'] += delta_amount_currency
-            biggest_base_line['balance'] += delta_balance
-
-        else:
-            grouping_dict = {'account_id': cash_discount_account.id}
-
-            res['term_lines'][payment_term_line][frozendict(grouping_dict)] = {
+        for grouping_dict, base_detail in bases_details.items():
+            res['base_lines'][payment_term_line][grouping_dict] = {
                 'name': _("Early Payment Discount"),
-                'partner_id': payment_term_line.partner_id.id,
-                'currency_id': payment_term_line.currency_id.id,
-                'amount_currency': term_amount_currency,
-                'balance': term_balance,
-                'analytic_distribution': epd_analytic_distribution,
+                'amount_currency': payment_term_line.currency_id.round(base_detail['amount_currency'] * percentage_paid),
+                'balance': payment_term_line.company_currency_id.round(base_detail['balance'] * percentage_paid),
             }
+
+        # Fix the rounding issue if any.
+        delta_amount_currency = term_amount_currency \
+                                - sum(x['amount_currency'] for x in res['base_lines'][payment_term_line].values()) \
+                                - sum(x['amount_currency'] for x in res['tax_lines'][payment_term_line].values())
+        delta_balance = term_balance \
+                        - sum(x['balance'] for x in res['base_lines'][payment_term_line].values()) \
+                        - sum(x['balance'] for x in res['tax_lines'][payment_term_line].values())
+
+        biggest_base_line = max(list(res['base_lines'][payment_term_line].values()), key=lambda x: x['amount_currency'])
+        biggest_base_line['amount_currency'] += delta_amount_currency
+        biggest_base_line['balance'] += delta_balance
 
         return res
 
@@ -5809,6 +5811,19 @@ class AccountMove(models.Model):
     def _set_next_made_sequence_gap(self, made_gap: bool):
         self._update_sequence_made_gap(invalidate_current=made_gap)
 
+    def _get_sequence_suffix(self):
+        """
+        Return this move's sequence suffix (the part of `name` right after the
+        number), or '' if it doesn't have a real sequence assigned yet.
+
+        Avoids calling `_get_sequence_format_param` on an unset/placeholder sequence
+        (e.g. '/'), which some localizations treat as an unexpected format.
+        """
+        self.ensure_one()
+        if not self.name or self.name == '/':
+            return ''
+        return self._get_sequence_format_param(self.name)[1].get('suffix', '')
+
     def _update_sequence_made_gap(self, invalidate_current=False):
         """Update the field made_sequence_gap on the current, next and previous moves.
 
@@ -5817,7 +5832,8 @@ class AccountMove(models.Model):
           sequence as broken on the next moves before updating (invalidate_current=True)
         - we are filling a gap, so we need to update the next move to remove the flag (invalidate_current=False)
         """
-        if not self:
+        moves_to_update = self.browse(self.ids)
+        if not moves_to_update:
             return
 
         def check_around(previous, current, next_move):
@@ -5847,8 +5863,12 @@ class AccountMove(models.Model):
             # bypassing record rules here is safe.
             return self.sudo().browse(ids).with_prefetch(all_ids)
 
+        def _escape_like(value):
+            return value.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
+
         sequence_mixin_cache = self._get_sequence_cache()
         self.env['account.move'].flush_model(['name', 'sequence_prefix', 'sequence_number', 'journal_id'])
+        suffix_pairs = [(move.id, _escape_like(move._get_sequence_suffix())) for move in moves_to_update]
         made_gap_data = self.env.execute_query(SQL("""
             SELECT ARRAY(
                             SELECT other.id
@@ -5856,6 +5876,7 @@ class AccountMove(models.Model):
                              WHERE other.journal_id = move.journal_id
                                AND other.sequence_prefix = move.sequence_prefix
                                AND other.sequence_number < move.sequence_number
+                               AND other.name LIKE '%%' || other.sequence_number || ms.suffix
                           ORDER BY other.sequence_number DESC
                              LIMIT 2
                    ),
@@ -5866,12 +5887,14 @@ class AccountMove(models.Model):
                              WHERE other.journal_id = move.journal_id
                                AND other.sequence_prefix = move.sequence_prefix
                                AND other.sequence_number > move.sequence_number
+                               AND other.name LIKE '%%' || other.sequence_number || ms.suffix
                           ORDER BY other.sequence_number ASC
                              LIMIT 2
                    )
               FROM account_move move
-             WHERE move.id = ANY(%s)
-        """, self.ids))
+              JOIN (VALUES %(suffix_pairs)s) AS ms(move_id, suffix) ON ms.move_id = move.id
+             WHERE move.id = ANY(%(move_ids)s)
+        """, suffix_pairs=SQL(", ").join(suffix_pairs), move_ids=moves_to_update.ids))
         all_ids = tuple({id_ for row in made_gap_data for ids in row for id_ in (ids if isinstance(ids, list) else [ids])})
         for previous_ids, current_id, next_ids in made_gap_data:
             move_p1, move_p2 = browse(previous_ids) if len(previous_ids) == 2 else (browse(previous_ids), browse())
@@ -5889,7 +5912,7 @@ class AccountMove(models.Model):
                 if move_n1.made_sequence_gap != n1_made_gap:
                     move_n1.made_sequence_gap = n1_made_gap
 
-            if move_p1 and (not is_computed_with_mixin(current_move) or current_move.state != 'posted'):
+            if move_p1 and (not is_computed_with_mixin(current_move) or current_move.state != 'posted' or move_p1.state != 'posted'):
                 p1_made_gap = bool(check_around(move_p2, move_p1, self.browse() if invalidate_current else current_move))
                 if move_p1.made_sequence_gap != p1_made_gap:
                     move_p1.made_sequence_gap = p1_made_gap
