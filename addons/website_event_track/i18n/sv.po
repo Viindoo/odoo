@@ -19,13 +19,14 @@
 # Jakob Krabbe <jakob.krabbe@vertel.se>, 2024
 # Mikael Åkerberg <mikael.akerberg@mariaakerberg.com>, 2024
 # Weblate <noreply-mt-weblate@weblate.org>, 2025, 2026.
+# Hanna Kharraziha <hakha@odoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-03 18:40+0000\n"
-"PO-Revision-Date: 2026-06-14 21:05+0000\n"
-"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
+"PO-Revision-Date: 2026-09-03 11:11+0000\n"
+"Last-Translator: Hanna Kharraziha <hakha@odoo.com>\n"
 "Language-Team: Swedish <https://translate.odoo.com/projects/odoo-17/"
 "website_event_track/sv/>\n"
 "Language: sv\n"
@@ -33,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #. module: website_event_track
 #. odoo-python
@@ -145,8 +146,8 @@ msgid ""
 "</div>"
 msgstr ""
 "<div>\n"
-"    Kära <t t-out=\"object.partner_id.name or object.partner_name or "
-"''\">Brandon Freeman</t><br>\n"
+"    Kära <t t-out=\"object.partner_id.name or object.partner_name or ''\">"
+"Brandon Freeman</t><br>\n"
 "    Vi är glada att informera dig om att ditt förslag <t t-out=\"object.name "
 "or ''\">Vad evenemanget ska handla om</t> har accepterats och bekräftats för "
 "evenemanget <t t-out=\"object.event_id.name or ''\">OpenWood Collection "
@@ -154,9 +155,9 @@ msgstr ""
 "    <br>\n"
 "    Du hittar mer information här:\n"
 "    <div style=\"margin: 16px 0px 16px 0px;\">\n"
-"        <a t-attf-href=\"/event/{{ object.event_id.id }}/track/"
-"{{ object.id }}\" style=\"padding: 8px 16px 8px 16px; font-size: 14px; "
-"color: #FFFFFF; text-decoration: none !important; background-color: #875A7B; "
+"        <a t-attf-href=\"/event/{{ object.event_id.id }}/track/{{ "
+"object.id }}\" style=\"padding: 8px 16px 8px 16px; font-size: 14px; color: "
+"#FFFFFF; text-decoration: none !important; background-color: #875A7B; "
 "border: 0px solid #875A7B; border-radius:3px\">\n"
 "            Visa samtal\n"
 "        </a>\n"
@@ -292,12 +293,12 @@ msgstr "Aktiviteter"
 #. module: website_event_track
 #: model:ir.model.fields,field_description:website_event_track.field_event_track__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr "Aktivitet undantaget dekoration"
+msgstr "Stilmarkeringar för undantagsaktiviteter"
 
 #. module: website_event_track
 #: model:ir.model.fields,field_description:website_event_track.field_event_track__activity_state
 msgid "Activity State"
-msgstr "Aktivitetstillstånd"
+msgstr "Aktivitetsstatus"
 
 #. module: website_event_track
 #: model:ir.model.fields,field_description:website_event_track.field_event_track__activity_type_icon
@@ -402,7 +403,7 @@ msgstr "Applikation"
 #: model_terms:ir.ui.view,arch_db:website_event_track.view_event_track_form
 #: model_terms:ir.ui.view,arch_db:website_event_track.view_event_track_search
 msgid "Archived"
-msgstr "Arkiverad"
+msgstr "Arkiverade"
 
 #. module: website_event_track
 #: model:ir.model.fields,help:website_event_track.field_event_track_visitor__is_blacklisted
@@ -784,7 +785,7 @@ msgstr "Dymling Hack"
 #. module: website_event_track
 #: model:ir.model.fields,field_description:website_event_track.field_event_track__duration
 msgid "Duration"
-msgstr "Varaktighet"
+msgstr "Tidsperiod"
 
 #. module: website_event_track
 #: model:event.track,name:website_event_track.event_7_track_3
@@ -1126,13 +1127,15 @@ msgstr ""
 #. module: website_event_track
 #: model:ir.model.fields,help:website_event_track.field_event_track__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr "Om markerad så finns det meddelanden som kräver din uppmärksamhet."
+msgstr ""
+"Om rutan är markerad, så finns det nya meddelanden som kräver din "
+"uppmärksamhet."
 
 #. module: website_event_track
 #: model:ir.model.fields,help:website_event_track.field_event_track__message_has_error
 #: model:ir.model.fields,help:website_event_track.field_event_track__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr "Om markerad, en del meddelanden har leveransfel."
+msgstr "Om rutan är markerad, så har vissa meddelanden leveransfel."
 
 #. module: website_event_track
 #: model:ir.model.fields,help:website_event_track.field_event_track_stage__is_visible_in_agenda
@@ -1533,12 +1536,12 @@ msgstr "Nästa Kalenderhändelse för Aktivitet"
 #. module: website_event_track
 #: model:ir.model.fields,field_description:website_event_track.field_event_track__activity_date_deadline
 msgid "Next Activity Deadline"
-msgstr "Nästa slutdatum för aktivitet"
+msgstr "Tidsgräns för nästa aktivitet"
 
 #. module: website_event_track
 #: model:ir.model.fields,field_description:website_event_track.field_event_track__activity_summary
 msgid "Next Activity Summary"
-msgstr "Nästa aktivitetssammanställning"
+msgstr "Sammanfattning av nästa aktivitet"
 
 #. module: website_event_track
 #: model:ir.model.fields,field_description:website_event_track.field_event_track__activity_type_id
@@ -1588,7 +1591,7 @@ msgstr "Antal fel"
 #. module: website_event_track
 #: model:ir.model.fields,help:website_event_track.field_event_track__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr "Antal meddelanden som kräver åtgärd"
+msgstr "Antal meddelanden som kräver en åtgärd"
 
 #. module: website_event_track
 #: model:ir.model.fields,help:website_event_track.field_event_track__message_has_error_counter
@@ -1925,10 +1928,10 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
-"Status baserad på aktiviteter\n"
-"Försenade: Leveranstidpunkten har passerat\n"
-"Idag: Aktivitetsdatum är idag\n"
-"Kommande: Framtida aktiviteter."
+"Status baserat på aktivitetsdatum:\n"
+"Försenade: Aktivitetsdatum har redan passerat.\n"
+"Idag: Aktivitetsdatum är dagens datum.\n"
+"Planerade: Kommande aktiviteter."
 
 #. module: website_event_track
 #: model_terms:ir.ui.view,arch_db:website_event_track.event_track_proposal

@@ -197,26 +197,37 @@ class AccountEdiProxyClientUser(models.Model):
                     'Error while receiving the document from Peppol Proxy: %s', e.message)
                 continue
 
-            message_uuids = [
-                message['uuid']
-                for message in messages.get('messages', [])
+            received_messages = messages.get('messages', [])
+            # Edge case: self-addressed messages (sender == receiver), i.e. a company genuinely
+            # invoicing itself. The outgoing invoice already carries the message UUID, so the
+            # duplicate check would wrongly discard the incoming document.
+            # Exclude those messages from the check so the vendor bill can still be created.
+            uuids_to_check = [
+                message['uuid'] for message in received_messages
+                if message.get('sender') and message['sender'] != message['receiver']
             ]
-            # remove the duplicates
+            # Acknowledge the duplicates on IAP side.
             if duplicate_message_uuids := set(
                 self.env['account.move'].search([
-                    ('peppol_message_uuid', 'in', message_uuids),
+                    ('peppol_message_uuid', 'in', uuids_to_check),
                     ('company_id', '=', edi_user.company_id.id),
                 ])
                 .mapped('peppol_message_uuid')
             ):
-                message_uuids = [uuid for uuid in message_uuids if uuid not in duplicate_message_uuids]
-                # acknowledge the duplicates on IAP side.
                 edi_user._make_request(
                     edi_user._get_server_url() + edi_user._get_peppol_proxy_endpoint('1/ack'),
                     {'message_uuids': list(duplicate_message_uuids)},
                 )
-                for uuid in duplicate_message_uuids:
-                    _logger.info("Message with UUID %s could not be imported because it is identified as a duplicate", uuid)
+                _logger.info(
+                    "Messages with UUID %s could not be imported because they are identified as duplicates",
+                    ', '.join(duplicate_message_uuids)
+                )
+
+            # Remove the duplicates
+            message_uuids = [
+                message['uuid'] for message in received_messages
+                if message['uuid'] not in duplicate_message_uuids
+            ]
 
             if not message_uuids:
                 continue
@@ -252,6 +263,19 @@ class AccountEdiProxyClientUser(models.Model):
         document_content = content["document"]
         return self._decrypt_data(document_content, enc_key)
 
+    def _peppol_get_import_sale_journal(self, company):
+        return self.env['account.journal'].search(
+            [
+                *self.env['account.journal']._check_company_domain(company),
+                ('type', '=', 'sale'),
+            ],
+            limit=1,
+        )
+
+    def _get_type_code(self, attachment, content):
+        xml_tree = etree.fromstring(attachment.raw)
+        return xml_tree.findtext('.//{*}InvoiceTypeCode') or xml_tree.findtext('.//{*}CreditNoteTypeCode')
+
     def _peppol_process_new_messages(self, messages):
         self.ensure_one()
         company = self.company_id
@@ -269,20 +293,11 @@ class AccountEdiProxyClientUser(models.Model):
 
             try:
                 attachment = self.env['ir.attachment'].create(attachment_vals)
-                xml_tree = etree.fromstring(attachment.raw)
-                invoice_type_code = xml_tree.findtext('.//{*}InvoiceTypeCode')
-                credit_note_type_code = xml_tree.findtext('.//{*}CreditNoteTypeCode')
-
-                if invoice_type_code in ['389', '527'] or credit_note_type_code == '261':
+                type_code = self._get_type_code(attachment, content)
+                if type_code in ['389', '527', '261']:
                     # 389/527: Self-billing invoice; 261: Self-billing credit note
-                    journal = self.env['account.journal'].search(
-                        [
-                            *self.env['account.journal']._check_company_domain(company),
-                            ('type', '=', 'sale'),
-                        ],
-                        limit=1,
-                    )
-                    move_type = 'out_invoice' if invoice_type_code else 'out_refund'
+                    journal = self._peppol_get_import_sale_journal(company)
+                    move_type = 'out_invoice' if type_code in ['389', '527'] else 'out_refund'
                 else:
                     # use the first purchase journal if the Peppol journal is not set up
                     # to create the move anyway

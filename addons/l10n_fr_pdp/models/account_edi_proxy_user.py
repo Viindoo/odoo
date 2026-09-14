@@ -35,11 +35,14 @@ CDAR_NSMAP = MappingProxyType({
 
 PROCESS_CONDITION_CODE_TO_RESPONSE_CODE_PDP = MappingProxyType({
     '200': 'submitted',  # PA-S (sending platform)
+    '201': 'sent',  # PA-S
     '202': 'AB',  # PA-R (receiving platform)
     '203': 'made_available',  # PA-R
     '204': 'in_hand',  # R (receiver)
     '205': 'AP',  # R
     '207': 'contested',  # R
+    '208': 'suspended',  # R
+    '209': 'completed',  # S
     '210': 'refused',  # R
     '211': 'payment_sent',  # R
     '212': 'PD',  # S (sender)
@@ -78,7 +81,6 @@ PAYMENT_TYPE_CODES = MappingProxyType({
 DEMO_ENDPOINTS = {  # pdp reports specific endpoints not already mocked by l10n_fr_pdp demo utils
     'pilot_phase': lambda params: {
         'annuaire_line_start_date': fields.Date.today(),
-        'pilot_phase': params['pdp_pilot_phase'],
     },
     'participant_status': lambda params: {},
     'send_document': lambda params: {
@@ -154,14 +156,6 @@ class AccountEdiProxyClientUser(models.Model):
             scheme = dict(self.env["res.partner"]._fields['peppol_eas']._description_selection(self.env))["0225"]
             raise UserError(_("Please fill the Peppol Endpoint field with scheme '%s' on the company partner.", scheme))
         return f'0225:{company.pdp_identifier}'
-
-    def _get_company_details(self):
-        self.ensure_one()
-        result = super()._get_company_details()
-        if self.proxy_type != 'pdp':
-            return result
-        result['pdp_pilot_phase'] = self.company_id.l10n_fr_pdp_pilot_phase
-        return result
 
     @handle_demo
     def _register_proxy_user(self, company, proxy_type, edi_mode):
@@ -255,8 +249,6 @@ class AccountEdiProxyClientUser(models.Model):
             company = self.sudo().company_id
             company.l10n_fr_pdp_annuaire_start_date = fields.Date.to_date(annuaire_start_date)
             company._force_update_l10n_fr_f10_moves()
-        if 'pilot_phase' in proxy_user:
-            self.sudo().company_id.l10n_fr_pdp_pilot_phase = proxy_user['pilot_phase']
 
     def _peppol_get_new_documents(self):
         if 'pdp_einvoicing_chatter_messages' not in self.env.context:
@@ -846,6 +838,14 @@ class AccountEdiProxyClientUser(models.Model):
         if content['document_type'] == 'Factur-X':
             return "pdf", "application/pdf"
         return super()._peppol_get_filetype(content)
+
+    def _get_type_code(self, attachment, content):
+        # Factur-X format embeds the XML in a PDF file.
+        if content['document_type'] == 'Factur-X':
+            embedded_files = attachment._unwrap_edi_attachments()
+            xml_tree = next(filter(lambda file: file['type'] == 'xml', embedded_files))['xml_tree']
+            return xml_tree.findtext('.//{*}ExchangedDocument/{*}TypeCode')
+        return super()._get_type_code(attachment, content)
 
     def _pdp_send_lifecycles(self, batch_size=None):
         job_count = batch_size or BATCH_SIZE

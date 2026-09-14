@@ -8,14 +8,14 @@
 # Pablo Rojas <rojaspablo88@gmail.com>, 2023
 # Wil Odoo, 2025
 # Larissa Manderfeld, 2025
-# "Larissa Manderfeld (lman)" <lman@odoo.com>, 2025.
+# "Larissa Manderfeld (lman)" <lman@odoo.com>, 2025, 2026.
 # "Noemi Pla Garcia (nopl)" <nopl@odoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-03 18:38+0000\n"
-"PO-Revision-Date: 2026-06-20 11:08+0000\n"
+"PO-Revision-Date: 2026-08-28 12:48+0000\n"
 "Last-Translator: \"Noemi Pla Garcia (nopl)\" <nopl@odoo.com>\n"
 "Language-Team: Spanish <https://translate.odoo.com/projects/odoo-17/mrp/es/>"
 "\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
 "0) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_mrp_production__state
@@ -213,8 +213,7 @@ msgstr ""
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.workcenter_line_kanban
 msgid "<i class=\"fa fa-play\" role=\"img\" aria-label=\"Run\" title=\"Run\"/>"
-msgstr ""
-"<i class=\"fa fa-play\" role=\"img\" aria-label=\"Run\" title=\"Run\"/>"
+msgstr "<i class=\"fa fa-play\" role=\"img\" aria-label=\"Run\" title=\"Run\"/>"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.workcenter_line_kanban
@@ -586,7 +585,7 @@ msgstr "Actividades"
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__activity_exception_decoration
 #: model:ir.model.fields,field_description:mrp.field_mrp_unbuild__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr "Decoración de Actividad de Excepción"
+msgstr "Indicador de excepción de actividad"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__activity_state
@@ -598,7 +597,7 @@ msgstr "Estado de la actividad"
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__activity_type_icon
 #: model:ir.model.fields,field_description:mrp.field_mrp_unbuild__activity_type_icon
 msgid "Activity Type Icon"
-msgstr "Icono de tipo de actvidad"
+msgstr "Icono de tipo de actividad"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_workcenter_block_wizard_form
@@ -863,8 +862,7 @@ msgstr "Imprimir automáticamente la orden de producción terminada"
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_stock_picking_type__auto_print_generated_mrp_lot
 msgid "Auto Print Generated Lot/SN Label"
-msgstr ""
-"Imprimir automáticamente la etiqueta de número de lote o serie generada"
+msgstr "Imprimir automáticamente la etiqueta de número de lote o serie generada"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_stock_picking_type__auto_print_done_mrp_lot
@@ -1680,7 +1678,7 @@ msgstr "Crear entrega parcial"
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__use_create_components_lots
 #: model:ir.model.fields,field_description:mrp.field_stock_picking_type__use_create_components_lots
 msgid "Create New Lots/Serial Numbers for Components"
-msgstr "Crear nuevos números de lotes/serie para componentes"
+msgstr "Crear nuevos lotes/números de serie para los componentes"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.view_mrp_production_backorder_form
@@ -4815,7 +4813,7 @@ msgstr "Referencia"
 #. module: mrp
 #: model:ir.model.constraint,message:mrp.constraint_mrp_production_name_uniq
 msgid "Reference must be unique per Company!"
-msgstr "¡La referencia debe ser única por compañía!"
+msgstr "¡La referencia debe ser única por empresa!"
 
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_mrp_production__origin
@@ -4988,8 +4986,8 @@ msgstr "Fecha programada"
 msgid ""
 "Scheduled before the previous work order, planned from %(start)s to %(end)s"
 msgstr ""
-"Programada antes de la orden de trabajo anterior, planidicada desde "
-"%(start)s a %(end)s"
+"Programada antes de la orden de trabajo anterior, planidicada desde %(start)"
+"s a %(end)s"
 
 #. module: mrp
 #. odoo-javascript
@@ -6560,10 +6558,11 @@ msgid ""
 "If not activated, and any of the components consumption is edited manually "
 "on the manufacturing order, Odoo assumes manual consumption also."
 msgstr ""
-"Cuando se activa, el registro de consumo para ese componente se registra "
+"Cuando está activado, el registro del consumo de ese componente se realiza "
 "exclusivamente de forma manual.\n"
-"Si no se activa y el consumo de cualquier componente se edita manualmente en "
-"la orden de fabricación, Odoo asume también el consumo manual."
+"Si no está activado, y se edita manualmente el consumo de cualquiera de los "
+"componentes en la orden de fabricación, Odoo asume que el consumo también es "
+"manual."
 
 #. module: mrp
 #: model:ir.model.fields.selection,name:mrp.selection__mrp_bom__ready_to_produce__asap
@@ -7066,10 +7065,10 @@ msgstr ""
 "                        <b invisible=\"consumption != 'strict'\">\n"
 "                            Revise su consumo de componentes o pida a un "
 "gerente que valide\n"
-"                            <span invisible=\"mrp_production_count != "
-"1\">esta orden de fabricación</span>\n"
-"                            <span invisible=\"mrp_production_count == "
-"1\">estas órdenes de fabricación</span>.\n"
+"                            <span invisible=\"mrp_production_count != 1\">"
+"esta orden de fabricación</span>\n"
+"                            <span invisible=\"mrp_production_count == 1\">"
+"estas órdenes de fabricación</span>.\n"
 "                        </b>"
 
 #. module: mrp
