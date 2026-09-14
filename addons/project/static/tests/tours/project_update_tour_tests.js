@@ -74,7 +74,8 @@ registry.category("web_tour.tours").add('project_update_tour', {
     trigger: ".o_kanban_project_tasks",
 },
 {
-    trigger: '.o_kanban_quick_create div.o_field_char[name=display_name] input',
+    // guarded: the quick-create is inert (pointer-events: none) while the previous record is still saving
+    trigger: '.o_kanban_quick_create:not(.o_disabled) div.o_field_char[name=display_name] input',
     run: "edit Second task",
 },
 {
