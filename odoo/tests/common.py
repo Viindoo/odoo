@@ -1936,6 +1936,18 @@ which leads to stray network requests and inconsistencies."""
             self._logger.info('Waiting for frame %r to stop loading', frame_id)
             e.wait(10)
 
+    def _park_mouse_outside_viewport(self):
+        # On the runbot, a mouse cursor resting inside the viewport at test start makes Blink
+        # fire a TRUSTED hover event into hoot-dom/AutoComplete/sortable on the next focus/
+        # scroll/layout change (confirmed by injecting a matching cursor locally; the runbot's
+        # actual starting cursor position was not itself observed).
+        try:
+            self._websocket_request('Input.dispatchMouseEvent', params={
+                'type': 'mouseMoved', 'x': -100, 'y': -100,
+            })
+        except Exception:  # noqa: BLE001
+            self._logger.warning('Could not park the mouse outside the viewport', exc_info=True)
+
     def _from_remoteobject(self, arg):
         """ attempts to make a CDT RemoteObject comprehensible
         """
@@ -2539,6 +2551,7 @@ class HttpCase(TransactionCase):
             # Needed because tests like test01.js (qunit tests) are passing a ready
             # code = ""
             self.assertTrue(browser._wait_ready(ready), 'The ready "%s" code was always falsy' % ready)
+            browser._park_mouse_outside_viewport()
 
             error = False
             try:
