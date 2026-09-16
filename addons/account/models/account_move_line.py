@@ -177,6 +177,9 @@ class AccountMoveLine(models.Model):
     # === Tax fields === #
     tax_ids = fields.Many2many(
         comodel_name='account.tax',
+        relation='account_move_line_account_tax_rel',
+        column1='account_move_line_id',
+        column2='account_tax_id',
         string="Taxes",
         compute='_compute_tax_ids', store=True, readonly=False, precompute=True,
         context={'active_test': False},
@@ -1025,7 +1028,7 @@ class AccountMoveLine(models.Model):
             else:
                 line.discount_allocation_key = False
 
-    @api.depends('account_id', 'company_id', 'discount', 'price_unit', 'quantity', 'currency_rate', 'analytic_distribution')
+    @api.depends('account_id', 'company_id', 'price_unit', 'quantity', 'currency_rate', 'move_id.line_ids.discount', 'move_id.line_ids.analytic_distribution')
     def _compute_discount_allocation_needed(self):
         line2discounted_amount = {
             line: [
@@ -1052,7 +1055,7 @@ class AccountMoveLine(models.Model):
                         'currency_rate': line.currency_rate,
                     })][analytic_account_id] += weighted_amount
 
-        for line in self.move_id.line_ids:
+        for line in self:
             line.discount_allocation_dirty = True
             if line not in line2discounted_amount:
                 line.discount_allocation_needed = False

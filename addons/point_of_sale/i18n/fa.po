@@ -25,13 +25,14 @@
 # Mostafa Barmshory <mostafa.barmshory@gmail.com>, 2025
 # Naser mars, 2025
 # Odoo Translation Bot <c3p@odoo.com>, 2026.
+# Weblate <noreply-mt-weblate@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 17:36+0000\n"
-"PO-Revision-Date: 2026-04-09 10:44+0000\n"
-"Last-Translator: Odoo Translation Bot <c3p@odoo.com>\n"
+"POT-Creation-Date: 2026-08-28 17:37+0000\n"
+"PO-Revision-Date: 2026-08-25 15:02+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Persian <https://translate.odoo.com/projects/odoo-17/"
 "point_of_sale/fa/>\n"
 "Language: fa\n"
@@ -39,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #. module: point_of_sale
 #. odoo-python
@@ -52,6 +53,10 @@ msgid ""
 "method to ensure that even the smallest quantity in the original unit does "
 "not round down to zero in the target unit."
 msgstr ""
+"\n"
+"علت مشکل این است که مقدار پس از گرد کردن در تبدیل به صفر می‌رسد. برای رفع این "
+"مشکل، ضریب‌های تبدیل یا روش گرد کردن را تنظیم کنید تا اطمینان حاصل شود که حتی "
+"کوچک‌ترین مقدار در واحد اصلی در واحد هدف به صفر گرد نشود."
 
 #. module: point_of_sale
 #. odoo-python
@@ -150,7 +155,7 @@ msgstr "%s محصول(ها) برای \"%s\" یافت شد."
 #: code:addons/point_of_sale/models/pos_session.py:0
 #, python-format
 msgid "%s untaxed"
-msgstr ""
+msgstr "%s بدون مالیات"
 
 #. module: point_of_sale
 #. odoo-python
@@ -841,7 +846,7 @@ msgstr ""
 #: code:addons/point_of_sale/static/src/app/main.js:0
 #, python-format
 msgid "An error occurred while loading the Point of Sale: \n"
-msgstr ""
+msgstr "هنگام بارگذاری پایانه فروش خطایی رخ داد:\n"
 
 #. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_pos_config__name
@@ -1799,6 +1804,8 @@ msgid ""
 "Conversion Error: The following unit of measure conversions result in a zero "
 "quantity due to rounding:"
 msgstr ""
+"خطای تبدیل: تبدیل واحدهای اندازه‌گیری زیر، به دلیل گرد کردن، به مقدار صفر "
+"منجر می‌شوند:"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_payment__currency_rate
@@ -5193,6 +5200,7 @@ msgid "Pos Order Count"
 msgstr "تعداد سفارش Pos"
 
 #. module: point_of_sale
+#: model:ir.model.fields,field_description:point_of_sale.field_account_tax__pos_order_line_ids
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_pack_operation_lot__pos_order_line_id
 msgid "Pos Order Line"
 msgstr "سطر سفارش Pos"
@@ -5927,7 +5935,7 @@ msgstr "درخواست فرستاده شد"
 #: code:addons/point_of_sale/models/pos_config.py:0
 #, python-format
 msgid "Rescue Sessions"
-msgstr ""
+msgstr "نشست‌های نجات"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -6462,7 +6470,7 @@ msgstr "تعیین قیمت های متعدد برای هر محصول، تخف�
 #: code:addons/point_of_sale/static/src/app/screens/product_screen/product_screen.js:0
 #, python-format
 msgid "Set the new discount"
-msgstr ""
+msgstr "تنظیم تخفیف جدید"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -6885,7 +6893,7 @@ msgstr "شناسه مالیاتی"
 #: code:addons/point_of_sale/static/src/app/screens/receipt_screen/receipt/receipt_header/receipt_header.js:0
 #, python-format
 msgid "Tax ID: %(vatId)s"
-msgstr ""
+msgstr "شناسه مالیاتی: %(vatId)s"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.report_saledetails
@@ -7729,6 +7737,11 @@ msgid ""
 "a hamburger from a customer’s hand mid-bite; chaos will ensue as ketchup and "
 "mayo go flying everywhere!"
 msgstr ""
+"برای حذف محصول، اطمینان حاصل کنید که همه نشست‌های پایانه فروش بسته شده‌اند.\n"
+"\n"
+"حذف یک محصول موجود در یک جلسه مانند تلاش برای گرفتن همبرگر از دست مشتری در "
+"حال گاز زدن است؛ هرج و مرج به وجود می‌آید و سس کچاپ و مایونز به همه جا پخش "
+"می‌شود!"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_order__to_invoice
@@ -8314,6 +8327,7 @@ msgid ""
 "You cannot delete a rounding method that is used in a Point of Sale "
 "configuration."
 msgstr ""
+"نمی‌توانید روش گرد کردنی که در پیکربندی پایانه فروش استفاده می‌شود را حذف کنید."
 
 #. module: point_of_sale
 #. odoo-python
@@ -8356,6 +8370,8 @@ msgid ""
 "You do not have permission to open a POS session. Please try opening a "
 "session with a different user"
 msgstr ""
+"شما مجوز باز کردن نشست پایانه فروش را ندارید. با کاربر دیگری نشست جدید باز "
+"کنید."
 
 #. module: point_of_sale
 #. odoo-python

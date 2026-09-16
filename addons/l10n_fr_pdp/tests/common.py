@@ -119,12 +119,13 @@ class TestL10nFrPdpCommon(TestUblCiiCommon, TestAccountMoveSendCommon):
         return response
 
     @classmethod
-    def _get_annuaire_lookup_response(cls, peppol_identifier, expected_peppol_identifier):
+    def _get_annuaire_lookup_response(cls, peppol_identifier, expected_peppol_identifier, **extra_result_kwargs):
         response = requests.Response()
         response.status_code = 200
         response.json = lambda: {
             "result": {
                 "in_annuaire": peppol_identifier == expected_peppol_identifier,
+                **extra_result_kwargs,
             }
         }
         return response
@@ -192,6 +193,26 @@ class TestL10nFrPdpCommon(TestUblCiiCommon, TestAccountMoveSendCommon):
             ],
             **kwargs,
         })
+
+    def _pay(self, move, amount=None):
+        payment = self.env['account.payment.register'].with_context(active_model='account.move', active_ids=move.ids).create({
+            'payment_date': '2020-01-02',
+            **({'amount': amount} if amount else {}),
+        })._create_payments()
+        self.assertTrue(payment.is_reconciled)
+        self.assertFalse(payment.is_matched)
+        liquidity_lines, _counterpart_lines, _writeoff_lines = payment._seek_for_lines()
+
+        statement_line = self.env['account.bank.statement.line'].create({
+            'payment_ref': 'test',
+            'journal_id': self.company_data['default_journal_bank'].id,
+            'partner_id': move.partner_id.id,
+            'amount': amount or payment.amount,
+        })
+
+        _st_liquidity_lines, st_suspense_lines, _st_other_lines = statement_line._seek_for_lines()
+        st_suspense_lines.account_id = liquidity_lines.account_id
+        (st_suspense_lines + liquidity_lines).reconcile()
 
     @classmethod
     def _send_patched(cls, invoice):

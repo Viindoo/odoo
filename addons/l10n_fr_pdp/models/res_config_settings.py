@@ -17,6 +17,7 @@ PEPPOL_PROXY_STATE_17_TO_18 = MappingProxyType({
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
+    # DEPRECATED - was for the pre-prod phase
     l10n_fr_pdp_pilot_phase = fields.Boolean(
         compute='_compute_l10n_fr_pdp_pilot_phase',
         inverse='_inverse_l10n_fr_pdp_pilot_phase',
@@ -77,9 +78,7 @@ class ResConfigSettings(models.TransientModel):
             record.l10n_fr_pdp_pilot_phase = record.company_id.l10n_fr_pdp_pilot_phase
 
     def _inverse_l10n_fr_pdp_pilot_phase(self):
-        for record in self:
-            if record.l10n_fr_pdp_pilot_phase != record.company_id.l10n_fr_pdp_pilot_phase:
-                record.company_id._l10n_fr_pdp_update_pilot_phase(record.l10n_fr_pdp_pilot_phase)
+        pass
 
     @api.depends('account_peppol_proxy_state')
     def _compute_l10n_fr_pdp_peppol_proxy_display_state(self):
@@ -94,3 +93,13 @@ class ResConfigSettings(models.TransientModel):
 
         if not self.account_peppol_contact_email:
             raise ValidationError(_("A contact email is required."))
+
+    # TODO: remove in master
+    @api.model
+    def _pdp_ensure_selection_value(self, model_name, field_name, new_value):
+        # hack to load new selection values in stable
+        field = self.env[model_name]._fields[field_name]
+        if new_value not in {value for value, name in field.get_description(self.env)['selection']}:
+            self.env['ir.model.fields'].invalidate_model(['selection_ids'])
+            self.env['ir.model.fields.selection'].sudo()._update_selection(model_name, field_name, field.selection)
+            self.env.registry.clear_cache()
