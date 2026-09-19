@@ -7,7 +7,7 @@ import logging
 from datetime import datetime
 
 from psycopg2 import DatabaseError
-from werkzeug.exceptions import Forbidden, NotFound
+from werkzeug.exceptions import BadRequest, Forbidden, NotFound
 from werkzeug.urls import url_decode, url_encode, url_parse
 
 from odoo import fields, http, SUPERUSER_ID, tools, _
@@ -674,7 +674,15 @@ class WebsiteSale(http.Controller):
         ProductCategory = request.env['product.public.category']
 
         if category:
+            # crawlers and SQL-injection scanners feed garbage to ?category=
+            # (e.g. "1' AND 1=1 UNION SELECT NULL-- -"): a value that is not an
+            # id is a malformed request (400), an id that matches no category is
+            # an unknown resource (404) - neither may render the page.
+            if not str(category).isdigit():
+                raise BadRequest()
             category = ProductCategory.browse(int(category)).exists()
+            if not category:
+                raise NotFound()
 
         attrib_list = request.httprequest.args.getlist('attrib')
         attrib_values = [[int(x) for x in v.split("-")] for v in attrib_list if v]
