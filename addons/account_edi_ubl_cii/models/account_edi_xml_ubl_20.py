@@ -538,7 +538,8 @@ class AccountEdiXmlUBL20(models.AbstractModel):
         """ Method used to fill the cac:TaxTotal node on a line level.
         Uses the same method as the invoice TaxTotal, but can be overridden in other formats.
         """
-        return self._get_invoice_tax_totals_vals_list(line.move_id, taxes_vals)
+        is_downpayment = 'is_downpayment' in line._fields and line.is_downpayment
+        return self.with_context(is_downpayment=is_downpayment)._get_invoice_tax_totals_vals_list(line.move_id, taxes_vals)
 
     def _get_invoice_line_vals(self, line, line_id, taxes_vals):
         # Old helper used only for non-BIS3 UBLs, removed in saas-18.4.
@@ -557,6 +558,12 @@ class AccountEdiXmlUBL20(models.AbstractModel):
             for vals in allowance_charge_vals_list
             if vals.get('from_fixed_tax')
         )
+        period_vals = {}
+        # deferred_start_date & deferred_end_date are enterprise-only fields
+        if line._fields.get('deferred_start_date') and (line.deferred_start_date or line.deferred_end_date):
+            period_vals.update({'start_date': line.deferred_start_date})
+            period_vals.update({'end_date': line.deferred_end_date})
+
         return {
             'currency': line.currency_id,
             'currency_dp': self._get_currency_decimal_places(line.currency_id),
@@ -568,6 +575,7 @@ class AccountEdiXmlUBL20(models.AbstractModel):
             'tax_total_vals': self._get_invoice_line_tax_totals_vals_list(line, taxes_vals),
             'item_vals': self._get_invoice_line_item_vals(line, taxes_vals),
             'price_vals': self._get_invoice_line_price_vals(line),
+            'invoice_period_vals_list': [period_vals] if period_vals else [],
         }
 
     def _get_invoice_monetary_total_vals(self, invoice, taxes_vals, line_extension_amount, allowance_total_amount, charge_total_amount):

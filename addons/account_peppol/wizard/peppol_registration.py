@@ -7,6 +7,7 @@ except ImportError:
 
 from odoo import _, api, fields, models, modules
 from odoo.exceptions import UserError, ValidationError, RedirectWarning
+from odoo.tools import single_email_re
 
 from odoo.addons.account_edi_proxy_client.models.account_edi_proxy_user import AccountEdiProxyError
 from odoo.addons.account_edi_ubl_cii.models.account_edi_common import DEPRECATED_PEPPOL_EAS
@@ -255,6 +256,8 @@ class PeppolRegistration(models.TransientModel):
             return
         if not self.contact_email or not self.phone_number:
             raise ValidationError(_("Contact email and phone number are required."))
+        if not single_email_re.match(self.contact_email):
+            raise ValidationError(_("Please make sure the Contact email is a valid email address."))
         if not self.peppol_eas or not self.peppol_endpoint:
             raise ValidationError(_("Peppol Address should be provided."))
         if (
@@ -318,6 +321,60 @@ class PeppolRegistration(models.TransientModel):
                 'next': next_action,
             }
         }
+
+    def button_register_with_kyc(self):
+        self.ensure_one()
+        if self.peppol_eas != self.company_id.peppol_eas:
+            self.peppol_eas = self.company_id.peppol_eas
+        self._ensure_mandatory_fields()
+        self._ensure_pdp_not_sent_through_peppol()
+        company = self.company_id
+
+        if self.use_parent_connection:
+            company.write({
+                'peppol_eas': self.peppol_eas,
+                'peppol_endpoint': self.peppol_endpoint,
+                'account_peppol_contact_email': self.contact_email,
+                'account_peppol_phone_number': self.phone_number,
+            })
+        elif self.account_peppol_proxy_state not in ('not_registered', 'in_verification'):
+            raise UserError(_('Cannot register a user with a %s application', self.account_peppol_proxy_state))
+
+        edi_proxy_client = self.env['account_edi_proxy_client.user']
+        blocking_proxy_types = set(edi_proxy_client._get_peppol_proxy_types()) - {'peppol'}
+        blocking_user = company.account_edi_proxy_client_ids.filtered(lambda u: u.proxy_type in blocking_proxy_types)
+        if blocking_user:
+            blocking_proxy_type = dict(blocking_user._fields['proxy_type']._description_selection(self.env))[blocking_user[:1].proxy_type]
+            raise UserError(_("A connection to '%s' already exists.", blocking_proxy_type))
+
+        edi_identification = edi_proxy_client._get_proxy_identification(company, 'peppol')
+
+        # archive before can_connect because _get_peppol_edi_mode() reads the active user
+        edi_proxy_client.sudo().search([
+            ('company_id', '=', company.id),
+            ('proxy_type', '=', 'peppol'),
+        ]).active = False
+        edi_proxy_client.flush_model(['active'])
+
+        authorization_url = self.env['res.company']._peppol_select_kyc_url(
+            company._peppol_can_connect(edi_identification.lower())
+        )
+
+        if authorization_url:
+            # redirect to IAP KYC link (that will redirect back to here thru callback)
+            return {'type': 'ir.actions.act_url', 'url': authorization_url, 'target': 'self'}
+
+        company._peppol_create_connection(edi_identification.lower())  # no auth, IAP will authorize connection directly
+        notifications = {
+            'sender': _('You can now send electronic invoices via Peppol.'),
+            'smp_registration': _('Your Peppol registration will be activated soon. You can already send invoices.'),
+            'receiver': _('You can now send and receive electronic invoices via Peppol'),
+            'rejected': _('Your registration has been rejected. Please contact the support for further assistance.'),
+        }
+        return self._action_send_notification(
+            title=None,
+            message=notifications[company.account_peppol_proxy_state],
+        )
 
     @handle_demo
     def button_peppol_sender_registration(self):

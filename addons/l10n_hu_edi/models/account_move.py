@@ -921,7 +921,7 @@ class AccountMove(models.Model):
             if line.display_type == 'product':
                 vat_tax = line.tax_ids.filtered(lambda t: t.l10n_hu_tax_type)
 
-                if line.quantity == 0.0 or line.discount == 100.0:
+                if float_is_zero(line.quantity, precision_digits=2) or float_compare(line.discount, 100.0, precision_digits=2) == 0:
                     price_unit_signed = 0.0
                 else:
                     price_unit_signed = sign * line.price_subtotal / (1 - line.discount / 100) / line.quantity

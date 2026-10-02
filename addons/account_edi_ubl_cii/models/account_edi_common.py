@@ -4,6 +4,7 @@ import re
 
 from markupsafe import Markup
 from lxml import etree
+from datetime import datetime
 
 from odoo import _, api, fields, models, Command
 from odoo.addons.account.tools import dict_to_xml
@@ -724,11 +725,28 @@ class AccountEdiCommon(models.AbstractModel):
         return lines_values, logs
 
     def _retrieve_invoice_line_vals(self, tree, document_type=False, qty_factor=1):
+        # Start and End date (enterprise fields)
+        xpath_dict = self._get_invoice_line_xpaths(document_type, qty_factor)
+        deferred_values = {}
+        start_date = end_date = None
+        if self.env['account.move.line']._fields.get('deferred_start_date'):
+            start_date_node = tree.find(xpath_dict['deferred_start_date'])
+            end_date_node = tree.find(xpath_dict['deferred_end_date'])
+            if start_date_node is not None and end_date_node is not None:  # there is a constraint forcing none or the two to be set
+                start_date = datetime.strptime(start_date_node.text.strip(), xpath_dict['date_format'])
+                end_date = datetime.strptime(end_date_node.text.strip(), xpath_dict['date_format'])
+        deferred_values = {
+            'deferred_start_date': start_date,
+            'deferred_end_date': end_date,
+        }
         line_vals = self._retrieve_line_vals(tree, document_type, qty_factor)
         if not line_vals.get('price_subtotal'):
             return None
 
-        return line_vals
+        return {
+            **line_vals,
+            **deferred_values,
+        }
 
     @api.model
     def _retrieve_rebate_val(self, tree, xpath_dict, quantity):
@@ -1224,7 +1242,7 @@ class AccountEdiCommon(models.AbstractModel):
 
         partner_bank_values['partner_banks'] = partner_banks
         if partner_banks:
-            collected_values['to_write']['partner_bank_id'] = partner_banks[:1].id
+            collected_values['to_write']['partner_bank_id'] = partner_banks.sorted(lambda bank: not bank.allow_out_payment)[:1].id
 
     def _import_retrieve_products_search_plan(self, collected_values):
         ProductProduct = self.env['product.product']
@@ -1334,9 +1352,6 @@ class AccountEdiCommon(models.AbstractModel):
                 for tax_values in line_collected_values['taxes_values']:
                     tax_values['account'] = account
             tax_values_list += line_collected_values['taxes_values']
-            for charge in line_collected_values['charges']:
-                if tax_values := charge.get('attempt_tax_values'):
-                    tax_values_list.append(tax_values)
         for allowance_charge_value in collected_values['allowances'] + collected_values['charges']:
             if tax_values := allowance_charge_value.get('taxes_values'):
                 tax_values_list.append(tax_values)
@@ -1475,6 +1490,10 @@ class AccountEdiCommon(models.AbstractModel):
 
         if name := collected_values.get('name'):
             base_line_kwargs['_create_values']['name'] = name
+        if deferred_start_date := to_write.get('deferred_start_date'):
+            base_line_kwargs['_create_values']['deferred_start_date'] = deferred_start_date
+        if deferred_end_date := to_write.get('deferred_end_date'):
+            base_line_kwargs['_create_values']['deferred_end_date'] = deferred_end_date
 
         base_line_kwargs['_create_values'] = {
             **base_line_kwargs['_create_values'],
