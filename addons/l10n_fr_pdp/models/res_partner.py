@@ -39,10 +39,10 @@ class ResPartner(models.Model):
         # Extend to rename the `peppol` option in the `invoice_sending_method` selection
         fields = super().fields_get(allfields, attributes)
         company = self.env.company
-        if not self.env.context.get("studio") and (company.country_code == 'FR' or company.sudo().pdp_identifier) and 'invoice_sending_method' in fields:
+        if not self.env.context.get("studio") and company._l10n_fr_pdp_uses_french_terminology() and 'invoice_sending_method' in fields:
             field = fields['invoice_sending_method']
             if 'selection' in field:
-                field['selection'] = [('peppol', self.env._('by Approved Platform')) if option[0] == 'peppol' else option for option in field['selection']]
+                field['selection'] = [('peppol', self.env._('by the Approved Platform')) if option[0] == 'peppol' else option for option in field['selection']]
         return fields
 
     # -------------------------------------------------------------------------
@@ -89,6 +89,10 @@ class ResPartner(models.Model):
 
     def _l10n_fr_pdp_get_base_identifier(self):
         self.ensure_one()
+
+        if not self._peppol_is_french_partner():
+            return None, None
+
         siret = self.company_registry if self.company_registry and siren_siret_re.match(self.company_registry) else ''
         siren = siret[:9]
         if len(siret) == 9:
@@ -114,7 +118,7 @@ class ResPartner(models.Model):
         if eas != '0225':
             return super()._build_error_peppol_endpoint(eas, endpoint)
         if not self.env["res.company"]._check_pdp_identifier(endpoint):
-            return self.env._("The Peppol endpoint is not valid. The expected format is: SIREN, SIREN_SIRET, SIREN_SIRET_CodeRoutage or SIREN_SuffixeAdressage")
+            return self.env._("The French e-invoicing identifier is not valid. The expected format is: SIREN, SIREN_SIRET, SIREN_SIRET_CodeRoutage or SIREN_SuffixeAdressage")
 
     def _get_edi_builder(self, invoice_edi_format):
         # EXTENDS 'account_edi_ubl_cii'
@@ -284,7 +288,7 @@ class ResPartner(models.Model):
         try:
             response = requests.get(endpoint, timeout=10)
             decoded_response = response.json()
-        except requests.exceptions.RequestException as e:
+        except (requests.exceptions.RequestException, ValueError) as e:
             _logger.warning("failed to query active annuaire lines for identifier %s: %s", siren, e)
             return {}
 

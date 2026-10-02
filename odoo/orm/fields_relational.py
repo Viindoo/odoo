@@ -514,7 +514,9 @@ class Many2one(_Relational):
                 sql = self._condition_to_sql_company(sql, field_expr, operator, value, model, alias, query)
             if can_be_null:
                 if positive:
-                    sql = SQL("(%s IS NOT NULL AND %s)", sql_field, sql)
+                    # PERF: Explicitly rejecting NULLs on the joined primary key allows PostgreSQL
+                    # to reduce the LEFT JOIN to an INNER JOIN and potentially choose a better plan.
+                    sql = SQL("(%s IS NOT NULL AND %s IS NOT NULL AND %s)", sql_field, SQL.identifier(coalias, 'id'), sql)
                 else:
                     sql = SQL("(%s IS NULL OR %s)", sql_field, sql)
             return sql
@@ -891,6 +893,11 @@ class One2many(_RelationalMulti):
     def setup_inverses(self, registry, inverses):
         if self.inverse_name:
             # link self to its inverse field and vice-versa
+            if self.manual and self.inverse_name not in registry[self.comodel_name]._fields:
+                # ignore manual fields (e.g. from Studio) that may reference a
+                # non-existent inverse field in the registry to avoid crashing
+                _logger.warning("%s: ignoring manual field with invalid inverse name %r", self, self.inverse_name)
+                return
             invf = registry[self.comodel_name]._fields[self.inverse_name]
             if isinstance(invf, (Many2one, Many2oneReference)):
                 # setting one2many fields only invalidates many2one inverses;

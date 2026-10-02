@@ -276,6 +276,21 @@ export class PosStore extends WithLazyGetterTrap {
     }
 
     async reloadData(fullReload = false) {
+        try {
+            await this.syncAllOrders();
+        } catch (error) {
+            logPosMessage("Store", "reloadData", "Failed to sync orders", CONSOLE_COLOR, [error]);
+        }
+        // Reloading wipes the local orders, a paid order must never be lost that way
+        if (this.models["pos.order"].some((o) => o.isUnsyncedPaid && o.state !== "cancel")) {
+            this.dialog.add(AlertDialog, {
+                title: _t("Reload Data"),
+                body: _t(
+                    "Some paid orders have not been synced to the server yet. Closing or reloading now may cause data loss."
+                ),
+            });
+            return;
+        }
         const orders = this.models["pos.order"].getAll();
         this.device.saveUnusedNumber(orders);
         await this.data.resetIndexedDB();
@@ -541,7 +556,11 @@ export class PosStore extends WithLazyGetterTrap {
 
         for (const exclusion of excl ||
             this.models["product.template.attribute.exclusion"].getAll()) {
-            const ptavId = exclusion.product_template_attribute_value_id.id;
+            // An exclusion can outlive its value in the local cache
+            const ptavId = exclusion.product_template_attribute_value_id?.id;
+            if (!ptavId) {
+                continue;
+            }
             for (const { id: valueId } of exclusion.value_ids) {
                 addExclusion(ptavId, valueId);
                 addExclusion(valueId, ptavId);
@@ -1051,7 +1070,7 @@ export class PosStore extends WithLazyGetterTrap {
                 related_lines
             );
             related_lines
-                .filter((line) => line.price_type !== "manual")
+                .filter((line) => line.price_type === "original")
                 .forEach((line) => line.setUnitPrice(price));
         }
 

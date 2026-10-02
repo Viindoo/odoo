@@ -513,6 +513,13 @@ class HrEmployee(models.Model):
             else:
                 version = employee.current_version_id
             employee.version_id = version
+            contract_type_field = self._fields.get('contract_type_id')
+            structure_type_field = self._fields.get('structure_type_id')
+            # Ensure the fields are fully initialized as computed and stored to prevent crashes during database setup.
+            if contract_type_field and contract_type_field.compute and contract_type_field.store:
+                self.env.add_to_compute(contract_type_field, employee)
+            if structure_type_field and structure_type_field.compute and structure_type_field.store:
+                self.env.add_to_compute(structure_type_field, employee)
 
     @api.depends("version_id.work_location_id.name")
     def _compute_work_location_name(self):
@@ -1171,10 +1178,15 @@ class HrEmployee(models.Model):
         # copy them to the cache of self; non-public data will be missing from
         # cache, and interpreted as an access error
         for fname in field_names:
-            values = self.env.cache.get_values(public, public._fields[fname])
+            public_field = public._fields[fname]
+            # only copy the values that are in cache: get_values() skips the
+            # missing ones, which would misalign values with self's ids
+            missing_ids = set(self.env.cache.get_missing_ids(public, public_field))
+            cached = public.browse(id_ for id_ in public._ids if id_ not in missing_ids) if missing_ids else public
+            values = self.env.cache.get_values(cached, public_field)
             if self._fields[fname].translate:
                 values = [(value.copy() if value else None) for value in values]
-            self.env.cache.update_raw(self, self._fields[fname], values)
+            self.env.cache.update_raw(self.browse(cached._ids), self._fields[fname], values)
 
     @api.model
     def notify_expiring_contract_work_permit(self):
@@ -1315,8 +1327,10 @@ We can redirect you to the public employee list."""
     def _verify_barcode(self):
         for employee in self:
             if employee.barcode:
-                if not (re.match(r'^[A-Za-z0-9]+$', employee.barcode) and len(employee.barcode) <= 18):
-                    raise ValidationError(_("The Badge ID must be alphanumeric without any accents and no longer than 18 characters."))
+                # [!-~] matches every printable ASCII character except the space,
+                # which is excluded because leading or trailing spaces are invisible
+                if not re.fullmatch(r'[!-~]{1,18}', employee.barcode):
+                    raise ValidationError(_("The Badge ID must contain only printable ASCII characters, without spaces, and be no longer than 18 characters."))
 
     @api.onchange('user_id')
     def _onchange_user(self):

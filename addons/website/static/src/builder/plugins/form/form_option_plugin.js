@@ -948,7 +948,7 @@ export class AddActionFieldAction extends BuilderAction {
             }
         }
         const fieldName = params.fieldName;
-        if (params.isSelect === "true") {
+        if (params.isSelect) {
             value = parseInt(value);
         }
         this.dependencies.websiteFormOption.addHiddenField(el, value, fieldName);
@@ -1263,12 +1263,18 @@ export class ToggleDescriptionAction extends BuilderAction {
         const description = fieldEl.querySelector(".s_website_form_field_description");
         const hasDescription = !!description;
         const field = getActiveField(fieldEl, { fields });
-        field.description = !hasDescription; // Will be changed to default description in qweb
+
+        if (hasDescription) {
+            description.classList.toggle("d-none");
+        } else {
+            field.description = true; // Will be changed to default description in qweb
+        }
+
         this.dependencies.websiteFormOption.replaceField(fieldEl, field, fields);
     }
     isApplied({ editingElement: fieldEl }) {
         const description = fieldEl.querySelector(".s_website_form_field_description");
-        return !!description;
+        return !!description && !description.classList.contains("d-none");
     }
 }
 export class SelectTextareaValueAction extends BuilderAction {
