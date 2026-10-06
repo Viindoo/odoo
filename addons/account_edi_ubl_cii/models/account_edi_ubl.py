@@ -264,6 +264,12 @@ class AccountEdiUBL(models.AbstractModel):
 
         new_base_lines = AccountTax._dispatch_taxes_into_new_base_lines(base_lines, company, exclude_function)
 
+        # fixed tax are not affected by discount, so the removed_tax_data_base_lines should get their discount remove
+        # to have the total equal to the fixed tax
+        for new_base_line in new_base_lines:
+            for removed_taxes_data_base_line in new_base_line['removed_taxes_data_base_lines']:
+                removed_taxes_data_base_line['discount'] = 0
+
         def aggregate_function(target_base_line, base_line):
             target_base_line.setdefault('_aggregated_quantity', 0.0)
             target_base_line['_aggregated_quantity'] += base_line['quantity']
@@ -2621,7 +2627,7 @@ class AccountEdiUBL(models.AbstractModel):
         tree = collected_values['tree']
         due_date_str = tree.findtext('./{*}DueDate')
         if not due_date_str:
-            due_date_str = tree.findtext('./{*}PaymentDueDate')
+            due_date_str = tree.findtext('./{*}PaymentMeans/{*}PaymentDueDate')
         if due_date_str:
             collected_values['to_write']['invoice_date_due'] = fields.Date.from_string(due_date_str)
 
