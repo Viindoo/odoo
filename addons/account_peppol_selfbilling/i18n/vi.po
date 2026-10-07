@@ -98,11 +98,11 @@ msgstr ""
 "        <br/><br/>\n"
 "        Đây là\n"
 "        <t t-if=\"object.name\">\n"
-"            hoá đơn tự xuất <span style=\"font-weight:bold;\" t-"
+"            hóa đơn tự lập <span style=\"font-weight:bold;\" t-"
 "out=\"object.name or ''\">INV/2021/05/0005</span> của bạn\n"
 "        </t>\n"
 "        <t t-else=\"\">\n"
-"            hoá đơn tự xuất của bạn\n"
+"            hóa đơn tự lập của bạn\n"
 "        </t>\n"
 "        <t t-if=\"object.invoice_origin\">\n"
 "            (với mã tham chiếu: <t t-out=\"object.invoice_origin or "
@@ -113,12 +113,12 @@ msgstr ""
 "143.750</span>\n"
 "        từ <t t-out=\"object.company_id.name or ''\">YourCompany</t>.\n"
 "        <t t-if=\"object.payment_state in ('paid', 'in_payment')\">\n"
-"            Hóa đơn tự xuất này đã được thanh toán.\n"
+"            Hóa đơn tự lập này đã được thanh toán.\n"
 "        </t>\n"
 "        <t t-if=\"hasattr(object, 'timesheet_count') and "
 "object.timesheet_count\">\n"
 "            <br/><br/>\n"
-"            PS: Bạn có thể xem lại bảng chấm công của mình <a t-att-href=\"'/"
+"            PS: Bạn có thể xem lại bảng giờ công của mình <a t-att-href=\"'/"
 "my/timesheets?search_in=invoice&amp;search=%s' % object.name\">trên cổng "
 "thông tin.</a>\n"
 "        </t>\n"
@@ -178,17 +178,56 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"    <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"        Xin chào\n"
+"        <t t-if=\"object.partner_id.parent_id\">\n"
+"            <t t-out=\"object.partner_id.name or ''\">Brandon Freeman</t> "
+"(<t t-out=\"object.partner_id.parent_id.name or ''\">Azure Interior</t>),\n"
+"        </t>\n"
+"        <t t-else=\"\">\n"
+"            <t t-out=\"object.partner_id.name or ''\">Brandon Freeman</t>,\n"
+"        </t>\n"
+"        <br/><br/>\n"
+"        Đây là\n"
+"        <t t-if=\"object.name\">\n"
+"            hóa đơn điều chỉnh giảm tự lập <span style=\"font-weight:bold;\" "
+"t-out=\"object.name or ''\">RINV/2021/05/0001</span> của bạn\n"
+"        </t>\n"
+"        <t t-else=\"\">\n"
+"            hóa đơn điều chỉnh giảm tự lập của bạn\n"
+"        </t>\n"
+"        <t t-if=\"object.invoice_origin\">\n"
+"            (với mã tham chiếu: <t t-out=\"object.invoice_origin or "
+"''\">SUB003</t>)\n"
+"        </t>\n"
+"        có số tiền là <span style=\"font-weight:bold;\" t-"
+"out=\"format_amount(object.amount_total, object.currency_id) or ''\">$ "
+"143,750.00</span>\n"
+"        từ <t t-out=\"object.company_id.name or ''\">YourCompany</t>.\n"
+"        <br/><br/>\n"
+"        Nếu bạn có bất kỳ thắc mắc nào, xin vui lòng liên hệ với chúng tôi.\n"
+"        <t t-if=\"not is_html_empty(object.invoice_user_id.signature)\" data-"
+"o-mail-quote-container=\"1\">\n"
+"            <br/><br/>\n"
+"            <div data-o-mail-quote=\"1\">--<br data-o-mail-quote=\"1\"/><t t-"
+"out=\"object.invoice_user_id.signature or ''\" data-o-mail-"
+"quote=\"1\">Mitchell Admin</t></div>\n"
+"        </t>\n"
+"    </p>\n"
+"</div>\n"
+"            "
 
 #. module: account_peppol_selfbilling
 #: model:ir.model,name:account_peppol_selfbilling.model_account_move_send
 msgid "Account Move Send"
-msgstr "Account Move Send"
+msgstr "Gửi hóa đơn"
 
 #. module: account_peppol_selfbilling
 #: model:ir.model.fields,field_description:account_peppol_selfbilling.field_account_bank_statement_line__can_send_as_self_invoice
 #: model:ir.model.fields,field_description:account_peppol_selfbilling.field_account_move__can_send_as_self_invoice
 msgid "Can Send As Self Invoice"
-msgstr ""
+msgstr "Có thể gửi dưới dạng hóa đơn tự lập"
 
 #. module: account_peppol_selfbilling
 #: model:ir.model,name:account_peppol_selfbilling.model_account_journal
@@ -204,17 +243,17 @@ msgstr "Bút toán"
 #: model:ir.model.fields,field_description:account_peppol_selfbilling.field_account_journal__is_self_billing
 #: model_terms:ir.ui.view,arch_db:account_peppol_selfbilling.report_invoice_document
 msgid "Self Billing"
-msgstr "Tự lập hoá đơn"
+msgstr "Tự lập hóa đơn"
 
 #. module: account_peppol_selfbilling
 #: model_terms:ir.ui.view,arch_db:account_peppol_selfbilling.report_invoice_document
 msgid "Self Billing Credit Note"
-msgstr "Giấy báo có tự lập"
+msgstr "Hóa đơn điều chỉnh giảm tự lập"
 
 #. module: account_peppol_selfbilling
 #: model:mail.template,name:account_peppol_selfbilling.email_template_edi_self_billing_credit_note
 msgid "Self-billing credit note: Sending"
-msgstr "Giấy báo có tự lập: Gửi"
+msgstr "Hóa đơn điều chỉnh giảm tự lập: Gửi"
 
 #. module: account_peppol_selfbilling
 #: model:mail.template,name:account_peppol_selfbilling.email_template_edi_self_billing_invoice
@@ -224,7 +263,8 @@ msgstr "Hóa đơn tự lập: Gửi"
 #. module: account_peppol_selfbilling
 #: model:mail.template,description:account_peppol_selfbilling.email_template_edi_self_billing_credit_note
 msgid "Sent to customers with the self-billing credit note in attachment"
-msgstr "Gửi cho khách hàng kèm theo giấy báo có tự lập trong tệp đính kèm"
+msgstr ""
+"Gửi cho khách hàng kèm theo hóa đơn điều chỉnh giảm tự lập trong tệp đính kèm"
 
 #. module: account_peppol_selfbilling
 #: model:mail.template,description:account_peppol_selfbilling.email_template_edi_self_billing_invoice
@@ -238,6 +278,9 @@ msgid ""
 "billing sending on Peppol, vendor bills will be available to be sent as self-"
 "billed invoices via Peppol."
 msgstr ""
+"Sổ nhật ký này dùng cho hóa đơn tự lập. Nếu công ty đã bật gửi hóa đơn tự "
+"lập qua Peppol, các hóa đơn mua hàng có thể được gửi dưới dạng hóa đơn tự "
+"lập qua Peppol."
 
 #. module: account_peppol_selfbilling
 #: model:ir.model,name:account_peppol_selfbilling.model_account_edi_xml_ubl_bis3
@@ -252,7 +295,7 @@ msgstr "Hóa đơn mua hàng"
 #. module: account_peppol_selfbilling
 #: model_terms:ir.ui.view,arch_db:account_peppol_selfbilling.report_invoice_document
 msgid "Vendor Credit Note"
-msgstr "Giấy báo có nhà cung cấp"
+msgstr "Điều chỉnh giảm hóa đơn mua"
 
 #. module: account_peppol_selfbilling
 #. odoo-python
@@ -266,8 +309,8 @@ msgid ""
 "{{ object.company_id.name }} Self-billing credit note (Ref {{ object.name or "
 "'n/a' }})"
 msgstr ""
-"{{ object.company_id.name }} Phiếu thẻ tín dụng tự lập (Tham khảo "
-"{{ object.name or 'n/a' }})"
+"{{ object.company_id.name }} Hóa đơn điều chỉnh giảm tự lập (Mã {{ "
+"object.name or 'n/a' }})"
 
 #. module: account_peppol_selfbilling
 #: model:mail.template,subject:account_peppol_selfbilling.email_template_edi_self_billing_invoice
@@ -275,8 +318,7 @@ msgid ""
 "{{ object.company_id.name }} Self-billing invoice (Ref {{ object.name or 'n/"
 "a' }})"
 msgstr ""
-"{{ object.company_id.name }} Hóa đơn tự lập (Tham khảo {{ object.name or 'n/"
-"a' }})"
+"{{ object.company_id.name }} Hóa đơn tự lập (Mã {{ object.name or 'n/a' }})"
 
 #~ msgid "Companies"
 #~ msgstr "Công ty"
