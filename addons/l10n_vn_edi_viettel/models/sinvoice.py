@@ -25,7 +25,7 @@ class L10n_Vn_Edi_ViettelSinvoiceTemplate(models.Model):
             ('2', '2 - Sales invoice'),
             ('3', '3 - Public assets sales'),
             ('4', '4 - National reserve sales'),
-            ('5', '5 - Invoice for national reserve sales'),
+            ('5', '5 - Other invoices (stamps, tickets, cards)'),
             ('6', '6 - Warehouse release note'),
         ],
         required=True,
