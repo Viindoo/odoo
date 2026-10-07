@@ -26,48 +26,51 @@ msgid ""
 "<br/>\n"
 "                        <strong>Description:</strong>"
 msgstr ""
+"<br/>\n"
+"                        <strong>Mô tả:</strong>"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.report_accounttest
 msgid "<strong>Name:</strong>"
-msgstr ""
+msgstr "<strong>Tên:</strong>"
 
 #. module: account_test
 #: model:ir.model,name:account_test.model_report_account_test_report_accounttest
 msgid "Account Test Report"
-msgstr ""
+msgstr "Báo cáo kiểm tra kế toán"
 
 #. module: account_test
 #: model:ir.model,name:account_test.model_accounting_assert_test
 msgid "Accounting Assert Test"
-msgstr ""
+msgstr "Phép kiểm tra kế toán"
 
 #. module: account_test
 #: model:ir.actions.act_window,name:account_test.action_accounting_assert
 #: model:ir.actions.report,name:account_test.account_assert_test_report
 #: model:ir.ui.menu,name:account_test.menu_action_license
 msgid "Accounting Tests"
-msgstr ""
+msgstr "Kiểm tra kế toán"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.report_accounttest
 msgid "Accounting tests on"
-msgstr ""
+msgstr "Kiểm tra kế toán vào ngày"
 
 #. module: account_test
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__active
 msgid "Active"
-msgstr "Có hiệu lực"
+msgstr "Đang hoạt động"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.accounting_assert_test_view_search
 msgid "Archived"
-msgstr ""
+msgstr "Đã lưu trữ"
 
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_03
 msgid "Check if movement lines are balanced and have the same date and period"
 msgstr ""
+"Kiểm tra các phát sinh kế toán có cân đối và cùng ngày, cùng kỳ hay không"
 
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_07
@@ -75,11 +78,14 @@ msgid ""
 "Check on bank statement that the Closing Balance = Starting Balance + sum of"
 " statement lines"
 msgstr ""
+"Kiểm tra trên sao kê ngân hàng: Số dư cuối kỳ = Số dư đầu kỳ + tổng các dòng "
+"sao kê"
 
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_06
 msgid "Check that paid/reconciled invoices are not in 'Open' state"
 msgstr ""
+"Kiểm tra các hóa đơn đã thanh toán/đã đối chiếu không ở trạng thái 'Mở'"
 
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_05_2
@@ -87,6 +93,8 @@ msgid ""
 "Check that reconciled account moves, that define Payable and Receivable "
 "accounts, are belonging to reconciled invoices"
 msgstr ""
+"Kiểm tra các bút toán đã đối chiếu có tài khoản phải trả và phải thu thuộc "
+"về các hóa đơn đã đối chiếu"
 
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_05
@@ -94,16 +102,18 @@ msgid ""
 "Check that reconciled invoice for Sales/Purchases has reconciled entries for"
 " Payable and Receivable Accounts"
 msgstr ""
+"Kiểm tra hóa đơn bán/mua đã đối chiếu có các bút toán đã đối chiếu cho tài "
+"khoản phải trả và phải thu"
 
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_01
 msgid "Check the balance: Debit sum = Credit sum"
-msgstr ""
+msgstr "Kiểm tra số dư: Tổng Nợ = Tổng Có"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.account_assert_form
 msgid "Code Help"
-msgstr ""
+msgstr "Trợ giúp về mã"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.account_assert_form
@@ -129,21 +139,46 @@ msgid ""
 "    cr.execute(sql)\n"
 "    result = cr.dictfetchall()"
 msgstr ""
+"Mã phải luôn gán một biến tên là `result` chứa kết quả kiểm tra, có thể là "
+"một danh sách hoặc\n"
+"một từ điển. Nếu `result` là danh sách rỗng, nghĩa là kiểm tra đã thành "
+"công. Nếu không, hệ thống sẽ\n"
+"cố gắng dịch và in nội dung bên trong `result`.\n"
+"\n"
+"Nếu kết quả kiểm tra là một từ điển, bạn có thể gán biến tên là "
+"`column_order` để chọn\n"
+"thứ tự in nội dung của `result`.\n"
+"\n"
+"Nếu cần, bạn cũng có thể dùng các biến sau trong mã:\n"
+"    * cr: con trỏ tới cơ sở dữ liệu\n"
+"    * uid: ID của người dùng hiện tại\n"
+"\n"
+"Trong mọi trường hợp, mã phải là các câu lệnh python hợp lệ với thụt lề đúng "
+"(nếu cần).\n"
+"\n"
+"Ví dụ: \n"
+"    sql = '''SELECT id, name, ref, date\n"
+"             FROM account_move_line \n"
+"             WHERE account_id IN (SELECT id FROM account_account WHERE type "
+"= 'view')\n"
+"          '''\n"
+"    cr.execute(sql)\n"
+"    result = cr.dictfetchall()"
 
 #. module: account_test
 #: model_terms:ir.actions.act_window,help:account_test.action_accounting_assert
 msgid "Create a new accounting test"
-msgstr ""
+msgstr "Tạo một kiểm tra kế toán mới"
 
 #. module: account_test
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__create_uid
 msgid "Created by"
-msgstr "Được tạo bởi"
+msgstr "Người tạo"
 
 #. module: account_test
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__create_date
 msgid "Created on"
-msgstr "Thời điểm tạo"
+msgstr "Ngày tạo"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.account_assert_form
@@ -177,17 +212,17 @@ msgstr "Sửa lần cuối"
 #. module: account_test
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__write_uid
 msgid "Last Updated by"
-msgstr "Cập nhật lần cuối bởi"
+msgstr "Người cập nhật cuối"
 
 #. module: account_test
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__write_date
 msgid "Last Updated on"
-msgstr "Cập nhật lần cuối"
+msgstr "Ngày cập nhật cuối"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.accounting_assert_test_view_search
 msgid "Name"
-msgstr ""
+msgstr "Tên"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.account_assert_form
@@ -202,7 +237,7 @@ msgstr "Mã Python"
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.accounting_assert_test_view_search
 msgid "Search Account Test"
-msgstr ""
+msgstr "Tìm kiếm kiểm tra kế toán"
 
 #. module: account_test
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__sequence
@@ -212,43 +247,43 @@ msgstr "Trình tự"
 #. module: account_test
 #: model:accounting.assert.test,name:account_test.account_test_01
 msgid "Test 1: General balance"
-msgstr ""
+msgstr "Kiểm tra 1: Số dư tổng quát"
 
 #. module: account_test
 #: model:accounting.assert.test,name:account_test.account_test_03
 msgid "Test 3: Movement lines"
-msgstr ""
+msgstr "Kiểm tra 3: Các phát sinh kế toán"
 
 #. module: account_test
 #: model:accounting.assert.test,name:account_test.account_test_05
 msgid ""
 "Test 5.1 : Payable and Receivable accountant lines of reconciled invoices"
-msgstr ""
+msgstr "Kiểm tra 5.1 : Các dòng phải trả và phải thu của hóa đơn đã đối chiếu"
 
 #. module: account_test
 #: model:accounting.assert.test,name:account_test.account_test_05_2
 msgid "Test 5.2 : Reconcilied invoices and Payable/Receivable accounts"
-msgstr ""
+msgstr "Kiểm tra 5.2 : Hóa đơn đã đối chiếu và tài khoản phải trả/phải thu"
 
 #. module: account_test
 #: model:accounting.assert.test,name:account_test.account_test_06
 msgid "Test 6 : Invoices status"
-msgstr ""
+msgstr "Kiểm tra 6 : Trạng thái hóa đơn"
 
 #. module: account_test
 #: model:accounting.assert.test,name:account_test.account_test_07
 msgid "Test 7 : Closing balance on bank statements"
-msgstr ""
+msgstr "Kiểm tra 7 : Số dư cuối kỳ trên sao kê ngân hàng"
 
 #. module: account_test
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__desc
 msgid "Test Description"
-msgstr ""
+msgstr "Mô tả kiểm tra"
 
 #. module: account_test
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__name
 msgid "Test Name"
-msgstr ""
+msgstr "Tên kiểm tra"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.account_assert_form
@@ -259,4 +294,4 @@ msgstr "Kiểm thử"
 #. module: account_test
 #: code:addons/account_test/report/report_account_test.py:0
 msgid "The test was passed successfully"
-msgstr ""
+msgstr "Kiểm tra đã đạt"

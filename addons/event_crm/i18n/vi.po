@@ -48,7 +48,7 @@ msgstr "<span class=\"o_stat_text\"> Người tham dự</span>"
 #. module: event_crm
 #: model_terms:ir.ui.view,arch_db:event_crm.event_registration_view_form
 msgid "<span class=\"o_stat_text\"> Leads</span>"
-msgstr "<span class=\"o_stat_text\">Lead</span>"
+msgstr "<span class=\"o_stat_text\">Tiềm năng</span>"
 
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_rule__active
@@ -84,7 +84,7 @@ msgstr "Tự động thêm những thẻ này vào tiềm năng được tạo."
 #. module: event_crm
 #: model:ir.model.fields,help:event_crm.field_event_lead_rule__lead_sales_team_id
 msgid "Automatically assign the created leads to this Sales Team."
-msgstr "Tự động phân công tiềm năng đã tạo cho đội kinh doanh này."
+msgstr "Tự động phân công tiềm năng đã tạo cho đội bán hàng này."
 
 #. module: event_crm
 #: model:ir.model.fields,help:event_crm.field_event_lead_rule__lead_user_id
@@ -96,7 +96,8 @@ msgstr "Tự động phân công tiềm năng đã tạo cho nhân viên kinh do
 #: code:addons/event_crm/models/event_event.py:0
 msgid "Aww! No Leads created, check your Lead Generation Rules and try again."
 msgstr ""
-"Ôi! Chưa có lead nào được tạo, hãy kiểm tra Quy tắc tạo lead và thử lại."
+"Ôi! Chưa có tiềm năng nào được tạo, hãy kiểm tra Quy tắc tạo tiềm năng và "
+"thử lại."
 
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_rule__company_id
@@ -126,12 +127,12 @@ msgstr "Tiềm năng được tạo"
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_rule__create_uid
 msgid "Created by"
-msgstr "Tạo bởi"
+msgstr "Người tạo"
 
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_rule__create_date
 msgid "Created on"
-msgstr "Tạo vào"
+msgstr "Ngày tạo"
 
 #. module: event_crm
 #: model_terms:ir.ui.view,arch_db:event_crm.event_lead_rule_view_search
@@ -147,7 +148,8 @@ msgid ""
 msgstr ""
 "Tạo: khi tạo người tham dự;\n"
 "Đã đăng ký: khi đăng ký thông tin người tham dự, thủ công hoặc tự động;\n"
-"Đã tham dự: khi người tham dự được xác nhận và đăng ký được đặt là hoàn tất;"
+"Đã tham dự: khi người tham dự được xác nhận và đăng ký được đặt là hoàn "
+"thành;"
 
 #. module: event_crm
 #: model:ir.model.fields,help:event_crm.field_event_lead_rule__lead_type
@@ -170,12 +172,12 @@ msgstr "Sự kiện"
 #. module: event_crm
 #: model:ir.actions.server,name:event_crm.ir_cron_generate_leads_ir_actions_server
 msgid "Event CRM: Generate Leads based on Rules"
-msgstr "CRM sự kiện: Tạo lead dựa trên Quy tắc"
+msgstr "CRM sự kiện: Tạo tiềm năng dựa trên Quy tắc"
 
 #. module: event_crm
 #: model:ir.model,name:event_crm.model_event_lead_request
 msgid "Event Lead Request"
-msgstr "Yêu cầu lead sự kiện"
+msgstr "Yêu cầu tiềm năng sự kiện"
 
 #. module: event_crm
 #: model:ir.model,name:event_crm.model_event_lead_rule
@@ -238,13 +240,14 @@ msgstr "Cho bất kỳ một sự kiện nào "
 #. module: event_crm
 #: model_terms:ir.ui.view,arch_db:event_crm.event_view_form
 msgid "Generate Leads"
-msgstr "Tạo lead"
+msgstr "Tạo tiềm năng"
 
 #. module: event_crm
 #. odoo-python
 #: code:addons/event_crm/models/event_event.py:0
 msgid "Got it! We've noted your request. Your leads will be created soon!"
-msgstr "Đã hiểu! Chúng tôi đã ghi nhận yêu cầu của bạn. Lead sẽ sớm được tạo!"
+msgstr ""
+"Đã hiểu! Chúng tôi đã ghi nhận yêu cầu của bạn. Tiềm năng sẽ sớm được tạo!"
 
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_request__id
@@ -260,17 +263,17 @@ msgstr "Nếu người tham dự đáp ứng những điều kiện này"
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_rule__write_uid
 msgid "Last Updated by"
-msgstr "Cập nhật lần cuối bởi"
+msgstr "Người cập nhật cuối"
 
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_rule__write_date
 msgid "Last Updated on"
-msgstr "Cập nhật lần cuối vào"
+msgstr "Ngày cập nhật cuối"
 
 #. module: event_crm
 #: model:ir.model.fields.selection,name:event_crm.selection__event_lead_rule__lead_type__lead
 msgid "Lead"
-msgstr "Lead"
+msgstr "Tiềm năng"
 
 #. module: event_crm
 #: model_terms:ir.ui.view,arch_db:event_crm.event_lead_rule_view_tree
@@ -285,28 +288,28 @@ msgstr "Giá trị mặc định tiềm năng"
 #. module: event_crm
 #: model:ir.ui.menu,name:event_crm.event_lead_rule_menu
 msgid "Lead Generation"
-msgstr "Tạo lead"
+msgstr "Tạo tiềm năng"
 
 #. module: event_crm
 #: model:ir.actions.act_window,name:event_crm.event_lead_rule_action
 #: model_terms:ir.ui.view,arch_db:event_crm.event_lead_rule_view_form
 msgid "Lead Generation Rule"
-msgstr "Quy tắc tạo lead"
+msgstr "Quy tắc tạo tiềm năng"
 
 #. module: event_crm
 #: model_terms:ir.ui.view,arch_db:event_crm.event_lead_rule_view_tree
 msgid "Lead Generation Rules"
-msgstr "Quy tắc tạo lead"
+msgstr "Quy tắc tạo tiềm năng"
 
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_rule__lead_type
 msgid "Lead Type"
-msgstr "Loại lead"
+msgstr "Loại tiềm năng"
 
 #. module: event_crm
 #: model:ir.model,name:event_crm.model_crm_lead
 msgid "Lead/Opportunity"
-msgstr "Lead/Cơ hội"
+msgstr "Tiềm năng/Cơ hội"
 
 #. module: event_crm
 #: model:ir.actions.act_window,name:event_crm.crm_lead_action_from_event
@@ -353,7 +356,7 @@ msgstr "Yêu cầu tạo hiện tại"
 #. odoo-python
 #: code:addons/event_crm/models/event_event.py:0
 msgid "Only Event Managers are allowed to re-generate all leads."
-msgstr "Chỉ Quản lý sự kiện mới được phép tạo lại tất cả lead."
+msgstr "Chỉ Quản lý sự kiện mới được phép tạo lại tất cả tiềm năng."
 
 #. module: event_crm
 #: model:ir.model.fields.selection,name:event_crm.selection__event_lead_rule__lead_type__opportunity
@@ -377,8 +380,8 @@ msgid ""
 "Per Attendee: A Lead is created for each Attendee (B2C).\n"
 "Per Order: A single Lead is created per Ticket Batch/Sale Order (B2B)"
 msgstr ""
-"Cho mỗi người tham dự: Tạo một lead cho mỗi người tham dự (B2C).\n"
-"Cho mỗi đơn hàng: Một lead được tạo cho một nhóm vé/Đơn bán hàng (B2B)."
+"Cho mỗi người tham dự: Tạo một tiềm năng cho mỗi người tham dự (B2C).\n"
+"Cho mỗi đơn hàng: Một tiềm năng được tạo cho một nhóm vé/Đơn bán (B2B)."
 
 #. module: event_crm
 #: model:ir.model.fields.selection,name:event_crm.selection__event_lead_rule__lead_creation_basis__order
@@ -438,7 +441,7 @@ msgstr "Quy tắc đã tạo ra tiềm năng này"
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_rule__lead_sales_team_id
 msgid "Sales Team"
-msgstr "Đội ngũ kinh doanh"
+msgstr "Đội bán hàng"
 
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_event_lead_rule__lead_user_id
@@ -453,7 +456,7 @@ msgstr "Tìm kiếm quy tắc tạo tiềm năng"
 #. module: event_crm
 #: model:ir.model.fields,help:event_crm.field_event_event__has_lead_request
 msgid "Set to True when a Lead Generation Request is currently running."
-msgstr "Đặt là True khi Yêu cầu tạo lead hiện đang chạy."
+msgstr "Đặt là True khi Yêu cầu tạo tiềm năng hiện đang chạy."
 
 #. module: event_crm
 #: model:ir.model.fields,field_description:event_crm.field_crm_lead__event_id
@@ -482,7 +485,7 @@ msgstr ""
 #. module: event_crm
 #: model_terms:ir.actions.act_window,help:event_crm.event_lead_rule_action
 msgid "Those automatically create leads when attendees register."
-msgstr "Tự động tạo tiềm năng khi người dùng đăng ký."
+msgstr "Tự động tạo tiềm năng khi người tham dự đăng ký."
 
 #. module: event_crm
 #: model_terms:ir.ui.view,arch_db:event_crm.event_lead_rule_view_search
@@ -504,7 +507,7 @@ msgstr "Khi"
 #. odoo-python
 #: code:addons/event_crm/models/event_event.py:0
 msgid "Yee-ha, %(leads_count)s Leads have been created!"
-msgstr "Tuyệt! %(leads_count)s lead đã được tạo!"
+msgstr "Tuyệt! %(leads_count)s tiềm năng đã được tạo!"
 
 #. module: event_crm
 #: model:ir.model.constraint,message:event_crm.constraint_event_lead_request_uniq_event

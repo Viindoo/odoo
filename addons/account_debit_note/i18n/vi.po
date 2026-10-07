@@ -28,7 +28,7 @@ msgstr "<span class=\"o_stat_text\">Hóa đơn điều chỉnh tăng</span>"
 #. module: account_debit_note
 #: model:ir.model,name:account_debit_note.model_account_debit_note
 msgid "Add Debit Note wizard"
-msgstr "Đồ thuật Tạo Hóa đơn điều chỉnh tăng"
+msgstr "Công cụ tạo hóa đơn điều chỉnh tăng"
 
 #. module: account_debit_note
 #: model_terms:ir.ui.view,arch_db:account_debit_note.view_account_debit_note
@@ -41,8 +41,8 @@ msgid ""
 "Check this box if you don't want to share the same sequence for invoices and"
 " debit notes made from this journal"
 msgstr ""
-"Chọn ô này nếu bạn không muốn dùng chung số thứ tự hóa đơn và giấy báo nợ "
-"được tạo từ sổ nhật ký này"
+"Chọn ô này nếu bạn không muốn dùng chung số thứ tự cho hóa đơn và hóa đơn "
+"điều chỉnh tăng được tạo từ sổ nhật ký này"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__copy_lines
@@ -58,30 +58,30 @@ msgstr "Mã quốc gia"
 #: model:ir.actions.act_window,name:account_debit_note.action_view_account_move_debit
 #: model_terms:ir.ui.view,arch_db:account_debit_note.view_account_debit_note
 msgid "Create Debit Note"
-msgstr "Tạo Hóa đơn điều chỉnh tăng"
+msgstr "Tạo hóa đơn điều chỉnh tăng"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__create_uid
 msgid "Created by"
-msgstr "Tạo bởi"
+msgstr "Người tạo"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__create_date
 msgid "Created on"
-msgstr "Tạo vào"
+msgstr "Ngày tạo"
 
 #. module: account_debit_note
 #: model:ir.actions.server,name:account_debit_note.action_move_debit_note
 #: model_terms:ir.ui.view,arch_db:account_debit_note.view_account_move_filter_debit
 #: model_terms:ir.ui.view,arch_db:account_debit_note.view_account_move_line_filter_debit
 msgid "Debit Note"
-msgstr "Giấy báo nợ"
+msgstr "Hóa đơn điều chỉnh tăng"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__date
 #: model_terms:ir.ui.view,arch_db:account_debit_note.view_account_debit_note
 msgid "Debit Note Date"
-msgstr "Ngày Hóa đơn điều chỉnh tăng"
+msgstr "Ngày hóa đơn điều chỉnh tăng"
 
 #. module: account_debit_note
 #. odoo-python
@@ -96,7 +96,7 @@ msgstr "Hóa đơn điều chỉnh tăng"
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_journal__debit_sequence
 msgid "Dedicated Debit Note Sequence"
-msgstr "Số thứ tự giấy báo nợ riêng"
+msgstr "Số thứ tự riêng cho hóa đơn điều chỉnh tăng"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__display_name
@@ -111,9 +111,7 @@ msgstr "ID"
 #. module: account_debit_note
 #: model:ir.model.fields,help:account_debit_note.field_account_debit_note__journal_id
 msgid "If empty, uses the journal of the journal entry to be debited."
-msgstr ""
-"Nếu để trống, sử dụng cùng sổ nhật ký với bút toán mà sẽ được ghi nợ bằng "
-"Hóa đơn điều chỉnh tăng."
+msgstr "Nếu để trống, sử dụng sổ nhật ký của bút toán được điều chỉnh tăng."
 
 #. module: account_debit_note
 #: model:ir.model.fields,help:account_debit_note.field_account_debit_note__copy_lines
@@ -121,9 +119,9 @@ msgid ""
 "In case you need to do corrections for every line, it can be in handy to "
 "copy them.  We won't copy them for debit notes from credit notes. "
 msgstr ""
-"Trong trường hợp bạn cần phải điều chỉnh tất cả các dòng, có thể có ích khi "
-"sao chép chúng. Hệ thống sẽ không sao chép Hóa đơn điều chỉnh giảm sang Hóa "
-"đơn điều chỉnh tăng."
+"Trong trường hợp bạn cần điều chỉnh tất cả các dòng, sao chép chúng có thể "
+"sẽ tiện hơn. Hệ thống sẽ không sao chép các dòng khi tạo hóa đơn điều chỉnh "
+"tăng từ hóa đơn điều chỉnh giảm."
 
 #. module: account_debit_note
 #: model:ir.model,name:account_debit_note.model_account_journal
@@ -133,7 +131,7 @@ msgstr "Sổ nhật ký"
 #. module: account_debit_note
 #: model:ir.model,name:account_debit_note.model_account_move
 msgid "Journal Entry"
-msgstr "Bút toán sổ nhật ký"
+msgstr "Bút toán"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__journal_type
@@ -143,34 +141,34 @@ msgstr "Kiểu sổ nhật ký"
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__write_uid
 msgid "Last Updated by"
-msgstr "Cập nhật lần cuối bởi"
+msgstr "Người cập nhật cuối"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__write_date
 msgid "Last Updated on"
-msgstr "Cập nhật lần cuối vào"
+msgstr "Ngày cập nhật cuối"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__move_ids
 msgid "Move"
-msgstr "Dịch chuyển"
+msgstr "Bút toán"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__move_type
 msgid "Move Type"
-msgstr "Loại phát sinh"
+msgstr "Loại bút toán"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_bank_statement_line__debit_note_count
 #: model:ir.model.fields,field_description:account_debit_note.field_account_move__debit_note_count
 msgid "Number of Debit Notes"
-msgstr "Số lượng Hóa đơn điều chỉnh tăng"
+msgstr "Số hóa đơn điều chỉnh tăng"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_bank_statement_line__debit_origin_id
 #: model:ir.model.fields,field_description:account_debit_note.field_account_move__debit_origin_id
 msgid "Original Invoice Debited"
-msgstr "Hóa đơn gốc mà tạo ra Hóa đơn điều chỉnh tăng"
+msgstr "Hóa đơn gốc được điều chỉnh tăng"
 
 #. module: account_debit_note
 #: model:ir.model.fields,field_description:account_debit_note.field_account_debit_note__reason
@@ -210,14 +208,14 @@ msgid ""
 "You can make a debit note only for a Customer Invoice, a Customer Credit "
 "Note, a Vendor Bill or a Vendor Credit Note."
 msgstr ""
-"Bạn chỉ có thể lập giấy báo nợ cho hóa đơn bán hàng, giấy báo có khách hàng,"
-" hóa đơn mua hàng hoặc giấy báo có nhà cung cấp."
+"Bạn chỉ có thể lập hóa đơn điều chỉnh tăng cho hóa đơn bán ra, điều chỉnh "
+"giảm hóa đơn bán, hóa đơn mua hàng hoặc điều chỉnh giảm hóa đơn mua."
 
 #. module: account_debit_note
 #. odoo-python
 #: code:addons/account_debit_note/wizard/account_debit_note.py:0
 msgid "You can only debit posted moves."
-msgstr "Bạn chỉ có thể tạo Hóa đơn điều chỉnh tăng từ các hóa đơn đã vào sổ."
+msgstr "Bạn chỉ có thể tạo hóa đơn điều chỉnh tăng từ các bút toán đã ghi sổ."
 
 #. module: account_debit_note
 #. odoo-python
@@ -226,5 +224,5 @@ msgid ""
 "You can't make a debit note for an invoice that is already linked to a debit"
 " note."
 msgstr ""
-"Bạn không thể tạo giấy báo nợ cho hóa đơn đã được liên kết với một giấy báo "
-"nợ."
+"Bạn không thể tạo hóa đơn điều chỉnh tăng cho hóa đơn đã được liên kết với "
+"một hóa đơn điều chỉnh tăng."

@@ -36,7 +36,7 @@ msgstr ""
 "                {{ (object.company_id.name + ': Chúng tôi rất vui mừng thông "
 "báo đơn hàng n° ' + object.origin + ' của bạn đã được vận chuyển.' if "
 "object.origin else object.company_id.name + ': Chúng tôi rất vui mừng thông "
-"báo đơn hàng của bạn đã được vận chuyển.') + (' Mã theo dõi đơn hàng là ' + "
+"báo đơn hàng của bạn đã được vận chuyển.') + (' Mã vận đơn của bạn là ' + "
 "(object.carrier_tracking_ref) + '.' if hasattr(object, "
 "'carrier_tracking_ref') and object.carrier_tracking_ref else '') }}\n"
 "            "
@@ -54,7 +54,7 @@ msgstr "Công ty"
 #. module: stock_sms
 #: model:ir.model,name:stock_sms.model_res_config_settings
 msgid "Config Settings"
-msgstr "Cài đặt cấu hình"
+msgstr "Thiết lập cấu hình"
 
 #. module: stock_sms
 #: model_terms:ir.ui.view,arch_db:stock_sms.view_confirm_stock_sms
@@ -69,12 +69,12 @@ msgstr "SMS xác nhận tồn kho"
 #. module: stock_sms
 #: model:ir.model.fields,field_description:stock_sms.field_confirm_stock_sms__create_uid
 msgid "Created by"
-msgstr "Được tạo bởi"
+msgstr "Người tạo"
 
 #. module: stock_sms
 #: model:ir.model.fields,field_description:stock_sms.field_confirm_stock_sms__create_date
 msgid "Created on"
-msgstr "Được tạo vào"
+msgstr "Ngày tạo"
 
 #. module: stock_sms
 #: model:sms.template,name:stock_sms.sms_template_data_stock_delivery
@@ -104,12 +104,12 @@ msgstr "ID"
 #. module: stock_sms
 #: model:ir.model.fields,field_description:stock_sms.field_confirm_stock_sms__write_uid
 msgid "Last Updated by"
-msgstr "Cập nhật lần cuối bởi"
+msgstr "Người cập nhật cuối"
 
 #. module: stock_sms
 #: model:ir.model.fields,field_description:stock_sms.field_confirm_stock_sms__write_date
 msgid "Last Updated on"
-msgstr "Cập nhật lần cuối vào"
+msgstr "Ngày cập nhật cuối"
 
 #. module: stock_sms
 #: model:ir.model.fields,field_description:stock_sms.field_confirm_stock_sms__pick_ids
@@ -139,7 +139,7 @@ msgstr "Mẫu SMS"
 #. module: stock_sms
 #: model:ir.model.fields,field_description:stock_sms.field_res_config_settings__stock_move_sms_validation
 msgid "SMS Validation with stock move"
-msgstr "Xác nhận SMS với điều chuyển tồn kho"
+msgstr "Xác nhận SMS với dịch chuyển kho"
 
 #. module: stock_sms
 #: model:ir.model.fields,help:stock_sms.field_res_company__stock_sms_confirmation_template_id
@@ -150,7 +150,7 @@ msgstr "SMS gửi tới khách hàng khi đơn hàng được giao."
 #. module: stock_sms
 #: model:ir.model,name:stock_sms.model_stock_picking
 msgid "Transfer"
-msgstr "Lệnh chuyển hàng"
+msgstr "Phiếu kho"
 
 #. module: stock_sms
 #: model_terms:ir.ui.view,arch_db:stock_sms.view_confirm_stock_sms
@@ -159,6 +159,6 @@ msgid ""
 "                This feature can easily be disabled from the Settings of "
 "Inventory or by clicking on \"Disable SMS\".<br/>"
 msgstr ""
-"Bạn chuẩn bị xác nhận Lệnh giao hàng này bằng Tin nhắn văn bản SMS.<br/>\n"
-"                Tính năng này có thể được tắt dễ dàng trong phần Cài đặt của "
-"ứng dụng Tồn kho hoặc bằng cách nhấp vào \"Tắt SMS\".<br/>"
+"Bạn chuẩn bị xác nhận phiếu xuất kho này bằng tin nhắn SMS.<br/>\n"
+"                Tính năng này có thể được tắt dễ dàng trong phần Thiết lập "
+"của ứng dụng Tồn kho hoặc bằng cách nhấp vào \"Tắt SMS\".<br/>"

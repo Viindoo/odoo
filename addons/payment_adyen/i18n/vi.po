@@ -28,10 +28,9 @@ msgid ""
 "                    the Capture Delay to manual on your Adyen account "
 "settings."
 msgstr ""
-"<strong>Cảnh báo:</strong> Để thu hồi số tiền theo cách thủ công, bạn cũng "
-"cần đặt\n"
-"                    Độ trễ thu hồi thành thủ công trên cài đặt tài khoản "
-"Adyen của mình."
+"<strong>Cảnh báo:</strong> Để thu tiền thủ công, bạn cũng cần đặt\n"
+"                    Capture Delay thành thủ công trong phần thiết lập tài "
+"khoản Adyen của mình."
 
 #. module: payment_adyen
 #. odoo-python
@@ -46,7 +45,7 @@ msgstr ""
 #. module: payment_adyen
 #: model:ir.model.fields,field_description:payment_adyen.field_payment_provider__adyen_api_key
 msgid "API Key"
-msgstr "Mã khóa API"
+msgstr "Khóa API"
 
 #. module: payment_adyen
 #: model:ir.model.fields,field_description:payment_adyen.field_payment_provider__adyen_api_url_prefix
@@ -92,7 +91,7 @@ msgstr "Không thể thiết lập kết nối với API."
 #. module: payment_adyen
 #: model:ir.model.fields,field_description:payment_adyen.field_payment_provider__adyen_hmac_key
 msgid "HMAC Key"
-msgstr "Mã khoá HMAC"
+msgstr "Mã khóa HMAC"
 
 #. module: payment_adyen
 #: model:ir.model.fields,field_description:payment_adyen.field_payment_capture_wizard__has_adyen_tx
@@ -103,7 +102,7 @@ msgstr "Có Adyen Tx"
 #. odoo-javascript
 #: code:addons/payment_adyen/static/src/js/payment_form.js:0
 msgid "Incorrect payment details"
-msgstr "Thông thanh toán không chính xác"
+msgstr "Thông tin thanh toán không chính xác"
 
 #. module: payment_adyen
 #: model_terms:ir.ui.view,arch_db:payment_adyen.payment_provider_form
@@ -124,12 +123,12 @@ msgstr "Không tìm thấy giao dịch nào khớp với mã %s."
 #. module: payment_adyen
 #: model:ir.model,name:payment_adyen.model_payment_capture_wizard
 msgid "Payment Capture Wizard"
-msgstr "Công cụ thu hồi thanh toán"
+msgstr "Công cụ thu tiền thanh toán"
 
 #. module: payment_adyen
 #: model:ir.model,name:payment_adyen.model_payment_provider
 msgid "Payment Provider"
-msgstr "Nhà cung cấp dịch vụ thanh toán"
+msgstr "Cổng thanh toán"
 
 #. module: payment_adyen
 #: model:ir.model,name:payment_adyen.model_payment_token
@@ -185,12 +184,12 @@ msgstr "Mã người mua"
 #. module: payment_adyen
 #: model:ir.model.fields,help:payment_adyen.field_payment_provider__adyen_api_key
 msgid "The API key of the webservice user"
-msgstr "Mã khóa API của người dùng dịch vụ web"
+msgstr "Khóa API của người dùng dịch vụ web"
 
 #. module: payment_adyen
 #: model:ir.model.fields,help:payment_adyen.field_payment_provider__adyen_hmac_key
 msgid "The HMAC key of the webhook"
-msgstr "Mã khoá HMAC của webhook"
+msgstr "Mã khóa HMAC của webhook"
 
 #. module: payment_adyen
 #. odoo-python
@@ -211,7 +210,7 @@ msgstr "URL cơ sở cho endpoint API"
 #. odoo-python
 #: code:addons/payment_adyen/models/payment_transaction.py:0
 msgid "The capture of the transaction with reference %s failed."
-msgstr "Việc thực hiện giao dịch có tham chiếu %s không thành công."
+msgstr "Việc thu tiền giao dịch có tham chiếu %s không thành công."
 
 #. module: payment_adyen
 #: model_terms:ir.ui.view,arch_db:payment_adyen.payment_capture_wizard_view_form
@@ -219,8 +218,8 @@ msgid ""
 "The capture or void of the transaction might take a few minutes to be\n"
 "                    processed by Adyen and reflected in Odoo."
 msgstr ""
-"Việc thu hồi hoặc vô hiệu giao dịch có thể mất vài phút để được\n"
-"                    xử lý qua Adyen và phản ánh trong Odoo."
+"Việc thu tiền hoặc hủy giao dịch có thể mất vài phút để được\n"
+"                    Adyen xử lý và phản ánh trong Odoo."
 
 #. module: payment_adyen
 #. odoo-python
@@ -229,7 +228,7 @@ msgid ""
 "The capture request of %(amount)s for the transaction with reference %(ref)s "
 "has been requested (%(provider_name)s)."
 msgstr ""
-"Yêu cầu thu hồi %(amount)s cho giao dịch với mã %(ref)s đã được gửi đi (%"
+"Yêu cầu thu tiền %(amount)s cho giao dịch có mã %(ref)s đã được gửi đi (%"
 "(provider_name)s)."
 
 #. module: payment_adyen
@@ -240,7 +239,7 @@ msgstr "Mã khóa khách hàng của người dùng dịch vụ web"
 #. module: payment_adyen
 #: model:ir.model.fields,help:payment_adyen.field_payment_provider__adyen_merchant_account
 msgid "The code of the merchant account to use with this provider"
-msgstr "Mã tài khoản người bán để sử dụng với nhà cung cấp này"
+msgstr "Mã tài khoản người bán để sử dụng với cổng thanh toán này"
 
 #. module: payment_adyen
 #. odoo-python
@@ -251,7 +250,7 @@ msgstr "Giao tiếp với API không thành công. Thông tin: %s"
 #. module: payment_adyen
 #: model:ir.model.fields,help:payment_adyen.field_payment_provider__code
 msgid "The technical code of this payment provider."
-msgstr "Mã kỹ thuật của nhà cung cấp dịch vụ thanh toán này."
+msgstr "Mã kỹ thuật của cổng thanh toán này."
 
 #. module: payment_adyen
 #. odoo-python
@@ -268,7 +267,7 @@ msgstr "Mã duy nhất của đối tác sở hữu token này"
 #. odoo-python
 #: code:addons/payment_adyen/models/payment_transaction.py:0
 msgid "The void of the transaction with reference %s failed."
-msgstr "Việc huỷ giao dịch có tham chiếu %s không thành công."
+msgstr "Việc hủy giao dịch có tham chiếu %s không thành công."
 
 #. module: payment_adyen
 #. odoo-python
