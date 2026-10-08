@@ -68,14 +68,19 @@ registry.category("web_tour.tours").add('website_sale_reorder_from_portal', {
             content: "Deleting All products from cart",
             trigger: 'div.js_cart_lines',
             run: async () => {
-                $('a.js_delete_product:first').click();
-                await new Promise((r) => setTimeout(r, 1000));
-                $('a.js_delete_product:first').click();
-                await new Promise((r) => setTimeout(r, 1000));
-                $('a.js_delete_product:first').click();
-                await new Promise((r) => setTimeout(r, 1000));
-                $('a.js_delete_product:first').click();
-                await new Promise((r) => setTimeout(r, 1000));
+                // The quantity change is debounced (500ms) then sent by RPC, and the
+                // input ignores changes until the answer comes back: a click sent after
+                // a fixed delay may hit the line still being removed and be lost, which
+                // leaves a line in the cart. Wait for the cart lines to be re-rendered
+                // (the clicked link is detached) before removing the next one. Removing
+                // the last line reloads the page, which ends this step.
+                let deleteLink;
+                while ((deleteLink = document.querySelector("a.js_delete_product"))) {
+                    deleteLink.click();
+                    while (deleteLink.isConnected) {
+                        await new Promise((r) => setTimeout(r, 50));
+                    }
+                }
             }
         },
         {
