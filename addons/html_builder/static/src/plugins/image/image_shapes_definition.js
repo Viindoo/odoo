@@ -413,7 +413,7 @@ export const imageShapeDefinitions = {
                         transform: false,
                     },
                     "html_builder/pattern/pattern_line_sun": {
-                        selectLabel: _t("Sun"),
+                        selectLabel: _t("Sunburst"),
                         animated: true,
                         transform: false,
                     },

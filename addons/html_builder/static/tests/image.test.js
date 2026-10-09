@@ -1,5 +1,5 @@
 import { expect, test, describe } from "@odoo/hoot";
-import { contains, dataURItoBlob, onRpc } from "@web/../tests/web_test_helpers";
+import { contains, dataURItoBlob, defineParams, onRpc } from "@web/../tests/web_test_helpers";
 import { dummyBase64Img, dummyCORSSrc, setupCORSProtectedImg, setupHTMLBuilder } from "./helpers";
 
 describe.current.tags("desktop");
@@ -49,4 +49,34 @@ test("Handle legacy image shapes from older versions", async () => {
     await waitSidebarUpdated();
 
     expect(":iframe img").toHaveCount(1);
+});
+
+test("the sun image shape is not labelled with the translation of the weekday Sun", async () => {
+    // The weekday "Sun" (Sunday) and the sun shape are different words in most languages.
+    defineParams({ translations: { Sun: "CN", Sunburst: "Mặt trời" } });
+    const shapeId = "html_builder/pattern/pattern_line_sun";
+    const testImageUrl = "/web/image/123/test_image.jpg";
+    onRpc(`/html_builder/static/image_shapes/pattern/pattern_line_sun.svg`, () => "");
+    onRpc(testImageUrl, () => dataURItoBlob(dummyBase64Img));
+    onRpc("/html_editor/get_image_info", () => ({
+        original: {
+            id: 123,
+            image_src: testImageUrl,
+            mimetype: "image/jpeg",
+        },
+    }));
+
+    const { waitSidebarUpdated } = await setupHTMLBuilder(`
+        <img class="img-fluid test-image"
+            src="${testImageUrl}"
+            data-original-id="123"
+            data-original-src="${testImageUrl}"
+            data-mimetype="image/jpeg"
+            data-shape="${shapeId}"
+            width="100" height="100">
+    `);
+    await contains(":iframe img.test-image").click();
+    await waitSidebarUpdated();
+
+    expect("[data-label='Shape'] .dropdown").toHaveText("Mặt trời");
 });
