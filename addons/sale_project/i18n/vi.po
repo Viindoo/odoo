@@ -53,7 +53,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale_project/models/project_project.py:0
 msgid "%(name)s's Sales Order Items"
-msgstr "Hạng mục đơn bán hàng của %(name)s"
+msgstr "Dòng đơn bán của %(name)s"
 
 #. module: sale_project
 #: model_terms:ir.ui.view,arch_db:sale_project.view_edit_project_inherit_form
@@ -64,9 +64,9 @@ msgid ""
 "the cancellation of the sales order.\" invisible=\"sale_order_state != "
 "'cancel'\"/>"
 msgstr ""
-"<span class=\"fa fa-exclamation-triangle text-warning\" title=\"Đơn bán hàng "
-"liên kết với dự án này đã bị hủy. Chúng tôi khuyên bạn nên cập nhật mục đơn "
-"bán hàng hoặc hủy dự án này cho phù hợp với việc hủy đơn bán hàng.\" "
+"<span class=\"fa fa-exclamation-triangle text-warning\" title=\"Đơn bán liên "
+"kết với dự án này đã bị hủy. Chúng tôi khuyên bạn nên cập nhật dòng đơn bán "
+"hoặc hủy dự án này cho phù hợp với việc hủy đơn bán.\" "
 "invisible=\"sale_order_state != 'cancel'\"/>"
 
 #. module: sale_project
@@ -78,9 +78,9 @@ msgid ""
 "cancellation of the sales order.\" invisible=\"sale_order_state != "
 "'cancel'\"/>"
 msgstr ""
-"<span class=\"fa fa-exclamation-triangle text-warning\" title=\"Đơn bán hàng "
-"liên kết với nhiệm vụ này đã bị hủy. Chúng tôi khuyên bạn nên cập nhật mục "
-"đơn bán hàng hoặc hủy nhiệm vụ này cho phù hợp với việc hủy đơn bán hàng.\" "
+"<span class=\"fa fa-exclamation-triangle text-warning\" title=\"Đơn bán liên "
+"kết với nhiệm vụ này đã bị hủy. Chúng tôi khuyên bạn nên cập nhật dòng đơn "
+"bán hoặc hủy nhiệm vụ này cho phù hợp với việc hủy đơn bán.\" "
 "invisible=\"sale_order_state != 'cancel'\"/>"
 
 #. module: sale_project
@@ -95,8 +95,7 @@ msgid ""
 "                        </span>"
 msgstr ""
 "<span class=\"o_stat_text\">\n"
-"                            <span class=\"o_stat_value\">0</span> đơn bán "
-"hàng\n"
+"                            <span class=\"o_stat_value\">0</span> đơn bán\n"
 "                        </span>\n"
 "                        <span class=\"o_stat_text\">\n"
 "                            Đặt là có thể tính phí\n"
@@ -110,7 +109,7 @@ msgid ""
 "                        </span>"
 msgstr ""
 "<span class=\"o_stat_text\">\n"
-"                            Đơn bán hàng\n"
+"                            Đơn bán\n"
 "                        </span>"
 
 #. module: sale_project
@@ -133,7 +132,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sale_project.project_sharing_inherit_project_task_view_form
 #: model_terms:ir.ui.view,arch_db:sale_project.view_sale_project_inherit_form
 msgid "<span class=\"o_stat_text\">Sales Order</span>"
-msgstr "<span class=\"o_stat_text\">Đơn bán hàng</span>"
+msgstr "<span class=\"o_stat_text\">Đơn bán</span>"
 
 #. module: sale_project
 #: model_terms:ir.ui.view,arch_db:sale_project.task_type_edit_inherit_sale_project
@@ -181,9 +180,9 @@ msgid ""
 "analytic distribution of this project will also serve as a reference for "
 "newly created sales order items."
 msgstr ""
-"Một nhiệm vụ sẽ được tạo cho dự án sau khi xác nhận đơn bán hàng. Phân phối "
-"phân tích của dự án này cũng sẽ đóng vai trò là tham chiếu cho các mục đơn "
-"bán hàng mới được tạo."
+"Một nhiệm vụ sẽ được tạo cho dự án sau khi xác nhận đơn bán. Phân bổ quản "
+"trị của dự án này cũng sẽ đóng vai trò là tham chiếu cho các dòng đơn bán "
+"mới được tạo."
 
 #. module: sale_project
 #: model:ir.model.fields,help:sale_project.field_sale_order_line__qty_delivered_method
@@ -202,9 +201,9 @@ msgstr ""
 "  - Thủ công: số lượng được nhập thủ công trên dòng\n"
 "  - Phân tích từ chi phí: số lượng dựa trên tổng các khoản chi phí đã ghi "
 "nhận\n"
-"  - Bảng chấm công: số lượng là tổng số giờ được ghi nhận của nhiệm vụ liên "
+"  - Bảng giờ công: số lượng là tổng số giờ được ghi nhận của nhiệm vụ liên "
 "kết với dòng bán hàng\n"
-"  - Dịch chuyển tồn kho: số lượng đến từ các phiếu xuất kho đã xác nhận\n"
+"  - Dịch chuyển kho: số lượng lấy từ các phiếu kho đã xác nhận\n"
 
 #. module: sale_project
 #. odoo-python
@@ -254,7 +253,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale_project/models/project_project.py:0
 msgid "Cost of Goods Sold Items"
-msgstr ""
+msgstr "Các khoản giá vốn hàng bán"
 
 #. module: sale_project
 #: model:ir.actions.server,name:sale_project.model_sale_order_action_create_project
@@ -282,7 +281,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale_project/models/project_project.py:0
 msgid "Create a customer invoice"
-msgstr "Tạo một hóa đơn bán hàng"
+msgstr "Tạo một hóa đơn bán ra"
 
 #. module: sale_project
 #. odoo-python
@@ -291,8 +290,8 @@ msgid ""
 "Create a project for the order with a task for each sales order line to "
 "track the time spent."
 msgstr ""
-"Tạo một dự án cho đơn hàng với nhiệm vụ cho mỗi dòng đơn bán hàng để theo "
-"dõi thời gian xử lý."
+"Tạo một dự án cho đơn hàng với nhiệm vụ cho mỗi dòng đơn bán để theo dõi "
+"thời gian xử lý."
 
 #. module: sale_project
 #. odoo-python
@@ -359,7 +358,7 @@ msgstr "Khách hàng"
 #. odoo-python
 #: code:addons/sale_project/models/project_project.py:0
 msgid "Customer Invoices"
-msgstr "Hóa đơn bán hàng"
+msgstr "Hóa đơn bán ra"
 
 #. module: sale_project
 #: model_terms:ir.ui.view,arch_db:sale_project.product_template_form_view_invoice_policy_inherit_sale_project
@@ -381,7 +380,7 @@ msgstr "Chiến dịch marketing số (dự án)"
 #. module: sale_project
 #: model_terms:ir.ui.view,arch_db:sale_project.view_order_simple_form
 msgid "Discard"
-msgstr "Huỷ bỏ"
+msgstr "Hủy bỏ"
 
 #. module: sale_project
 #: model:ir.model.fields,field_description:sale_project.field_account_move__display_name
@@ -406,13 +405,13 @@ msgstr ""
 #. module: sale_project
 #: model:ir.model.fields,field_description:sale_project.field_project_task__display_sale_order_button
 msgid "Display Sales Order"
-msgstr "Hiển thị đơn bán hàng"
+msgstr "Hiển thị đơn bán"
 
 #. module: sale_project
 #. odoo-python
 #: code:addons/sale_project/models/sale_order_line.py:0
 msgid "Done"
-msgstr "Hoàn tất"
+msgstr "Hoàn thành"
 
 #. module: sale_project
 #. odoo-python
@@ -466,7 +465,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale_project/models/product_template.py:0
 msgid "Invoice your milestones when they are reached."
-msgstr "Lập hoá đơn cho mốc thời gian khi đã đạt."
+msgstr "Lập hóa đơn cho mốc thời gian khi đã đạt."
 
 #. module: sale_project
 #: model_terms:ir.ui.view,arch_db:sale_project.project_project_view_form_simplified_inherit
@@ -479,7 +478,7 @@ msgstr "Lập hóa đơn thời gian và nguyên liệu cho khách hàng"
 #: code:addons/sale_project/static/src/components/project_right_side_panel/components/project_profitability_section.xml:0
 #: model_terms:ir.ui.view,arch_db:sale_project.project_update_default_description
 msgid "Invoiced"
-msgstr "Đã xuất hóa đơn"
+msgstr "Đã lập hóa đơn"
 
 #. module: sale_project
 #. odoo-python
@@ -492,7 +491,7 @@ msgstr "Hóa đơn"
 #. module: sale_project
 #: model_terms:ir.ui.view,arch_db:sale_project.product_template_form_view_invoice_policy_inherit_sale_project
 msgid "Invoicing Policy"
-msgstr "Chính sách xuất hóa đơn"
+msgstr "Chính sách lập hóa đơn"
 
 #. module: sale_project
 #: model:ir.model,name:sale_project.model_account_move
@@ -521,12 +520,12 @@ msgid ""
 "Create a task and track hours: Create a task on the sales order validation "
 "and track the work hours."
 msgstr ""
-"Đặt số lượng cho đơn hàng theo cách thủ công: Hoá đơn dựa trên số lượng được "
-"nhập theo cách thủ công mà không cần tạo tài khoản phân tích.\n"
-"Bảng chấm công theo hợp đồng: Hóa đơn dựa trên số giờ được theo dõi trên "
-"bảng chấm công có liên quan.\n"
-"Tạo một nhiệm vụ và theo dõi giờ: Tạo một nhiệm vụ trên xác nhận đơn bán "
-"hàng và theo dõi giờ làm việc."
+"Đặt số lượng cho đơn hàng theo cách thủ công: Hóa đơn dựa trên số lượng được "
+"nhập theo cách thủ công mà không cần tạo tài khoản quản trị.\n"
+"Giờ công theo hợp đồng: Hóa đơn dựa trên số giờ được theo dõi trên giờ công "
+"có liên quan.\n"
+"Tạo một nhiệm vụ và theo dõi giờ: Tạo một nhiệm vụ trên xác nhận đơn bán và "
+"theo dõi giờ làm việc."
 
 #. module: sale_project
 #. odoo-python
@@ -551,7 +550,7 @@ msgstr "Mốc thời gian"
 #. odoo-python
 #: code:addons/sale_project/models/sale_order_line.py:0
 msgid "New Sales Order Item"
-msgstr "Hạng mục đơn bán hàng mới"
+msgstr "Dòng đơn bán mới"
 
 #. module: sale_project
 #: model_terms:ir.ui.view,arch_db:sale_project.sale_project_view_form_simplified_template
@@ -609,7 +608,7 @@ msgstr "Dịch vụ sửa ống nước"
 #. odoo-python
 #: code:addons/sale_project/models/project_task.py:0
 msgid "Portal Sale Order"
-msgstr ""
+msgstr "Đơn bán trên cổng thông tin"
 
 #. module: sale_project
 #. odoo-python
@@ -634,9 +633,9 @@ msgid ""
 "generate analytic costs, will be re-invoiced in this sales order if they are "
 "set up for it."
 msgstr ""
-"Các sản phẩm được thêm vào phiếu xuất kho tồn kho, có loại hoạt động được "
-"cấu hình để tạo ra chi phí phân tích, sẽ được lập hóa đơn lại trong đơn bán "
-"hàng này nếu chúng được thiết lập cho mục đích này."
+"Các sản phẩm được thêm vào phiếu kho có loại nghiệp vụ được cấu hình để tạo "
+"chi phí quản trị sẽ được lập hóa đơn lại trong đơn bán này nếu được thiết "
+"lập cho mục đích đó."
 
 #. module: sale_project
 #: model:ir.model,name:sale_project.model_project_project
@@ -688,7 +687,7 @@ msgstr ""
 #. module: sale_project
 #: model:ir.model.fields,field_description:sale_project.field_project_task__project_sale_order_id
 msgid "Project's sale order"
-msgstr "Đơn bán hàng của dự án"
+msgstr "Đơn bán của dự án"
 
 #. module: sale_project
 #: model:ir.model.fields,field_description:sale_project.field_project_milestone__product_uom_qty
@@ -714,7 +713,7 @@ msgstr ""
 #. module: sale_project
 #: model_terms:ir.ui.view,arch_db:sale_project.view_edit_project_inherit_form
 msgid "Sales & Invoicing"
-msgstr "Bán hàng & hoá đơn"
+msgstr "Bán hàng & hóa đơn"
 
 #. module: sale_project
 #: model:ir.model,name:sale_project.model_sale_report
@@ -731,7 +730,7 @@ msgstr "Báo cáo phân tích bán hàng"
 #: model:ir.model.fields,field_description:sale_project.field_report_project_task_user__sale_order_id
 #: model:project.project,name:sale_project.so_template_project
 msgid "Sales Order"
-msgstr "Đơn bán hàng"
+msgstr "Đơn bán"
 
 #. module: sale_project
 #. odoo-python
@@ -743,12 +742,12 @@ msgstr "Đơn bán hàng"
 #: model_terms:ir.ui.view,arch_db:sale_project.project_sharing_inherit_project_task_view_form
 #: model_terms:ir.ui.view,arch_db:sale_project.view_sale_project_inherit_form
 msgid "Sales Order Item"
-msgstr "Hạng mục đơn bán hàng"
+msgstr "Dòng đơn bán"
 
 #. module: sale_project
 #: model:ir.model.fields,help:sale_project.field_project_milestone__sale_line_id
 msgid "Sales Order Item that will be updated once the milestone is reached."
-msgstr "Hạng mục đơn bán hàng sẽ được cập nhật sau khi đạt mốc thời gian."
+msgstr "Dòng đơn bán sẽ được cập nhật sau khi đạt mốc thời gian."
 
 #. module: sale_project
 #: model:ir.model.fields,help:sale_project.field_project_task__sale_line_id
@@ -762,13 +761,13 @@ msgid ""
 "also change or remove the sales order item of each timesheet entry "
 "individually."
 msgstr ""
-"Hạng mục đơn bán hàng mà thời gian dành cho nhiệm vụ này sẽ được cộng vào để "
-"lập hóa đơn cho khách hàng của bạn.\n"
-"Theo mặc định, hạng mục đơn bán hàng thiết lập trên dự án sẽ được chọn. "
-"Trong trường hợp không có, hạng mục đơn bán hàng trả trước cuối cùng còn "
-"thời gian sẽ được sử dụng.\n"
-"Xóa hạng mục đơn bán hàng để không tính phí nhiệm vụ này. Bạn cũng có thể "
-"thay đổi hoặc xóa hạng mục đơn bán hàng của từng mục nhập bảng chấm công."
+"Dòng đơn bán mà thời gian dành cho nhiệm vụ này sẽ được cộng vào để lập hóa "
+"đơn cho khách hàng của bạn.\n"
+"Theo mặc định, dòng đơn bán thiết lập trên dự án sẽ được chọn. Trong trường "
+"hợp không có, dòng đơn bán trả trước cuối cùng còn thời gian sẽ được sử "
+"dụng.\n"
+"Xóa dòng đơn bán để không tính phí nhiệm vụ này. Bạn cũng có thể thay đổi "
+"hoặc xóa dòng đơn bán của từng mục nhập bảng giờ công."
 
 #. module: sale_project
 #. odoo-javascript
@@ -777,12 +776,12 @@ msgstr ""
 #: code:addons/sale_project/static/src/components/project_right_side_panel/components/project_profitability_section.xml:0
 #: model_terms:ir.ui.view,arch_db:sale_project.project_update_default_description
 msgid "Sales Order Items"
-msgstr "Hạng mục đơn bán hàng"
+msgstr "Dòng đơn bán"
 
 #. module: sale_project
 #: model:ir.model,name:sale_project.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Dòng đơn bán hàng"
+msgstr "Dòng đơn bán"
 
 #. module: sale_project
 #. odoo-python
@@ -790,7 +789,7 @@ msgstr "Dòng đơn bán hàng"
 #: model:ir.embedded.actions,name:sale_project.project_embedded_action_sales_orders
 #: model:ir.embedded.actions,name:sale_project.project_embedded_action_sales_orders_dashboard
 msgid "Sales Orders"
-msgstr "Đơn bán hàng"
+msgstr "Đơn bán"
 
 #. module: sale_project
 #: model:ir.model.fields,help:sale_project.field_project_project__sale_line_id
@@ -801,16 +800,16 @@ msgid ""
 "It can be modified on each task and timesheet entry individually if "
 "necessary."
 msgstr ""
-"Hạng mục đơn bán hàng sẽ được chọn mặc định trên các nhiệm vụ và bảng chấm "
-"công của dự án này, trừ khi nhân viên được chỉ định trên bảng chấm công được "
-"liên kết rõ ràng với một hạng mục đơn bán hàng khác trong dự án.\n"
-"Bạn có thể sửa đổi trên từng nhiệm vụ và mục nhập bảng chấm công riêng lẻ "
-"nếu cần."
+"Dòng đơn bán sẽ được chọn mặc định trên các nhiệm vụ và bảng giờ công của dự "
+"án này, trừ khi nhân viên được chỉ định trên bảng giờ công được liên kết rõ "
+"ràng với một dòng đơn bán khác trong dự án.\n"
+"Bạn có thể sửa đổi trên từng nhiệm vụ và mục nhập bảng giờ công riêng lẻ nếu "
+"cần."
 
 #. module: sale_project
 #: model:ir.model.fields,help:sale_project.field_project_task__sale_order_id
 msgid "Sales order to which the task is linked."
-msgstr "Đơn bán hàng liên kết với nhiệm vụ."
+msgstr "Đơn bán liên kết với nhiệm vụ này."
 
 #. module: sale_project
 #: model:product.template,name:sale_project.product_product_screw_driver_product_template
@@ -839,7 +838,7 @@ msgstr "Chọn người để tính phí..."
 #: model:ir.model.fields,field_description:sale_project.field_product_product__service_policy
 #: model:ir.model.fields,field_description:sale_project.field_product_template__service_policy
 msgid "Service Invoicing Policy"
-msgstr "Chính sách xuất hóa đơn dịch vụ"
+msgstr "Chính sách lập hóa đơn dịch vụ"
 
 #. module: sale_project
 #. odoo-javascript
@@ -931,8 +930,8 @@ msgid ""
 "The project couldn't be created as the Sales Order must be confirmed or is "
 "already linked to a project."
 msgstr ""
-"Không thể tạo dự án vì Đơn bán hàng phải được xác nhận hoặc đã được liên kết "
-"với một dự án."
+"Không thể tạo dự án vì Đơn bán phải được xác nhận hoặc đã được liên kết với "
+"một dự án."
 
 #. module: sale_project
 #. odoo-python
@@ -949,7 +948,7 @@ msgstr "Việc cần làm"
 #. module: sale_project
 #: model:ir.model.fields,field_description:sale_project.field_project_task__task_to_invoice
 msgid "To invoice"
-msgstr "Cần lập hoá đơn"
+msgstr "Cần lập hóa đơn"
 
 #. module: sale_project
 #: model:ir.model.fields,field_description:sale_project.field_product_product__service_type
@@ -990,12 +989,12 @@ msgstr ""
 #: model:ir.embedded.actions,name:sale_project.project_embedded_action_vendor_bills
 #: model:ir.embedded.actions,name:sale_project.project_embedded_action_vendor_bills_dashboard
 msgid "Vendor Bills"
-msgstr "Hoá đơn mua hàng"
+msgstr "Hóa đơn mua hàng"
 
 #. module: sale_project
 #: model_terms:ir.ui.view,arch_db:sale_project.project_milestone_view_tree
 msgid "View Sales Order"
-msgstr "Xem đơn bán hàng"
+msgstr "Xem đơn bán"
 
 #. module: sale_project
 #: model:product.template,name:sale_project.product_service_create_project_and_task_product_template
@@ -1014,8 +1013,8 @@ msgid ""
 "You cannot link the order item %(order_id)s - %(product_id)s to this task "
 "because it is a re-invoiced expense."
 msgstr ""
-"Bạn không thể liên kết hạng mục đơn hàng %(order_id)s - %(product_id)s với "
-"nhiệm vụ này vì đây là một khoản chi phí được lập hoá đơn lại."
+"Bạn không thể liên kết dòng đơn hàng %(order_id)s - %(product_id)s với nhiệm "
+"vụ này vì đây là một khoản chi phí được lập hóa đơn lại."
 
 #. module: sale_project
 #. odoo-python

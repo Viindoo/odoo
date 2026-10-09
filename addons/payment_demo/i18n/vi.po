@@ -48,9 +48,9 @@ msgstr ""
 "toán\">\n"
 "                        Đang chờ\n"
 "                    </option>\n"
-"                    <option value=\"cancel\" title=\"Thanh toán bị huỷ bởi "
+"                    <option value=\"cancel\" title=\"Thanh toán bị hủy bởi "
 "khách hàng\">\n"
-"                        Đã huỷ\n"
+"                        Đã hủy\n"
 "                    </option>\n"
 "                    <option value=\"error\" title=\"Lỗi xử lý\">\n"
 "                        Lỗi\n"
@@ -105,7 +105,7 @@ msgstr "<small>Đường 2</small>"
 #. module: payment_demo
 #: model_terms:ir.ui.view,arch_db:payment_demo.payment_transaction_form
 msgid "Authorize"
-msgstr "Ủy quyền"
+msgstr "Cấp phép"
 
 #. module: payment_demo
 #: model_terms:ir.ui.view,arch_db:payment_demo.express_inline_form
@@ -120,12 +120,12 @@ msgstr "Hủy"
 #. module: payment_demo
 #: model:ir.model.fields.selection,name:payment_demo.selection__payment_token__demo_simulated_state__cancel
 msgid "Canceled"
-msgstr "Đã huỷ"
+msgstr "Đã hủy"
 
 #. module: payment_demo
 #: model:ir.model.fields,field_description:payment_demo.field_payment_transaction__capture_manually
 msgid "Capture Amount Manually"
-msgstr "Thu hồi số tiền theo cách thủ công"
+msgstr "Thu tiền thủ công"
 
 #. module: payment_demo
 #: model:ir.model.fields,help:payment_demo.field_payment_transaction__capture_manually
@@ -134,8 +134,8 @@ msgid ""
 "Use this if you want to charge your customers cards only when\n"
 "you are sure you can ship the goods to them."
 msgstr ""
-"Thu hồi số tiền ngay từ Odoo, khi giao hàng hoàn tất.\n"
-"Dùng tính năng này nếu bạn muốn tính phí khách hàng chỉ khi\n"
+"Thu tiền từ Odoo khi giao hàng hoàn thành.\n"
+"Dùng tính năng này nếu bạn muốn trừ tiền thẻ của khách hàng chỉ khi\n"
 "bạn chắc chắn có thể giao hàng cho họ."
 
 #. module: payment_demo
@@ -173,7 +173,7 @@ msgstr "Demo thanh toán nhanh"
 #. odoo-python
 #: code:addons/payment_demo/models/payment_provider.py:0
 msgid "Demo providers should never be enabled."
-msgstr "Không thể bật nhà cung cấp demo."
+msgstr "Không bao giờ được bật cổng thanh toán demo."
 
 #. module: payment_demo
 #: model:ir.model.fields,field_description:payment_demo.field_payment_provider__display_name
@@ -213,12 +213,12 @@ msgstr "Thanh toán bằng Demo"
 #. module: payment_demo
 #: model:ir.model,name:payment_demo.model_payment_provider
 msgid "Payment Provider"
-msgstr "Nhà cung cấp dịch vụ thanh toán"
+msgstr "Cổng thanh toán"
 
 #. module: payment_demo
 #: model:ir.model,name:payment_demo.model_payment_token
 msgid "Payment Token"
-msgstr "Mã thanh toán"
+msgstr "Token thanh toán"
 
 #. module: payment_demo
 #: model:ir.model,name:payment_demo.model_payment_transaction
@@ -245,7 +245,7 @@ msgid ""
 "b>."
 msgstr ""
 "Các khoản thanh toán được tiến hành bằng phương thức thanh toán này sẽ tự "
-"động <b>bị huỷ</b>."
+"động <b>bị hủy</b>."
 
 #. module: payment_demo
 #: model_terms:ir.ui.view,arch_db:payment_demo.token_inline_form
@@ -272,7 +272,7 @@ msgstr "Đang chờ"
 #. odoo-python
 #: code:addons/payment_demo/controllers/portal.py:0
 msgid "Provider %s is not properly configured."
-msgstr ""
+msgstr "Cổng thanh toán %s chưa được cấu hình đúng."
 
 #. module: payment_demo
 #: model_terms:ir.ui.view,arch_db:payment_demo.payment_transaction_form
@@ -297,7 +297,7 @@ msgstr "Trạng thái nên thiết lập cho các giao dịch được tạo t�
 #. module: payment_demo
 #: model:ir.model.fields,help:payment_demo.field_payment_provider__code
 msgid "The technical code of this payment provider."
-msgstr "Mã kỹ thuật của nhà cung cấp dịch vụ thanh toán này."
+msgstr "Mã kỹ thuật của cổng thanh toán này."
 
 #. module: payment_demo
 #: model_terms:ir.ui.view,arch_db:payment_demo.express_checkout_form
@@ -308,7 +308,7 @@ msgstr "Chưa xuất bản"
 #. odoo-javascript
 #: code:addons/payment_demo/static/src/interactions/express_checkout.js:0
 msgid "Validation Error"
-msgstr "Lỗi xác nhận"
+msgstr "Dữ liệu không hợp lệ"
 
 #. module: payment_demo
 #: model_terms:ir.ui.view,arch_db:payment_demo.payment_details
