@@ -31,8 +31,7 @@ msgstr ""
 msgid ""
 "%(credit_count)d credits will be consumed to find %(company_count)d "
 "companies."
-msgstr ""
-"%(credit_count)d tín dụng sẽ được sử dụng để tìm %(company_count)d công ty."
+msgstr "%(credit_count)d điểm sẽ được sử dụng để tìm %(company_count)d công ty."
 
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.enrich_company
@@ -53,8 +52,8 @@ msgid ""
 msgstr ""
 "<div style=\"margin: 0px; padding: 0px;\">\n"
 "    <p>Thân gửi,</p>\n"
-"    <p>Tài khoản Tạo lead IAP của bạn không còn tín dụng.<br/>\n"
-"    Bạn có thể nạp tín dụng cho tài khoản Tạo lead IAP trong phần cài đặt "
+"    <p>Tài khoản Tạo tiềm năng IAP của bạn đã hết điểm.<br/>\n"
+"    Bạn có thể nạp điểm cho tài khoản Tạo tiềm năng IAP trong phần thiết lập "
 "của ứng dụng CRM.<br/></p>\n"
 "    <p>Trân trọng,</p>\n"
 "    <p>Odoo S.A.</p>\n"
@@ -66,6 +65,8 @@ msgid ""
 "<i class=\"fa fa-fw me-2 fa-address-book text-primary\"/>\n"
 "                    <b>Address</b>"
 msgstr ""
+"<i class=\"fa fa-fw me-2 fa-address-book text-primary\"/>\n"
+"                    <b>Địa chỉ</b>"
 
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.enrich_company
@@ -73,6 +74,8 @@ msgid ""
 "<i class=\"fa fa-fw me-2 fa-cube text-primary\"/>\n"
 "                    <b>Industries</b>"
 msgstr ""
+"<i class=\"fa fa-fw me-2 fa-cube text-primary\"/>\n"
+"                    <b>Ngành nghề</b>"
 
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.enrich_company
@@ -80,6 +83,8 @@ msgid ""
 "<i class=\"fa fa-fw me-2 fa-globe text-primary\"/>\n"
 "                    <b>Website</b>"
 msgstr ""
+"<i class=\"fa fa-fw me-2 fa-globe text-primary\"/>\n"
+"                    <b>Trang web</b>"
 
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.enrich_company
@@ -87,6 +92,8 @@ msgid ""
 "<i class=\"fa fa-fw me-2 fa-solid fa-id-card text-primary\"/>\n"
 "                    <b>Tax ID</b>"
 msgstr ""
+"<i class=\"fa fa-fw me-2 fa-solid fa-id-card text-primary\"/>\n"
+"                    <b>Mã số thuế</b>"
 
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_form
@@ -96,7 +103,7 @@ msgstr "<span class=\"col-md-6\">Liên hệ thêm của từng công ty</span>"
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_form
 msgid "<span class=\"o_stat_text\">Leads</span>"
-msgstr "<span class=\"o_stat_text\">Lead</span>"
+msgstr "<span class=\"o_stat_text\">Tiềm năng</span>"
 
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_form
@@ -109,8 +116,8 @@ msgid ""
 "<span invisible=\"error_type != 'no_result'\">Your request did not return "
 "any result (no credits were used). Try removing some filters.</span>"
 msgstr ""
-"<span invisible=\"error_type != 'no_result'\">Yêu cầu của bạn không trả lại "
-"kết quả nào (không có tín dụng đã sử dụng). Hãy thử xóa một số bộ lọc.</span>"
+"<span invisible=\"error_type != 'no_result'\">Yêu cầu của bạn không trả về "
+"kết quả nào (không có điểm nào bị trừ). Hãy thử xóa một số bộ lọc.</span>"
 
 #. module: crm_iap_mine
 #: model:crm.iap.lead.industry,name:crm_iap_mine.crm_iap_mine_industry_238
@@ -130,7 +137,7 @@ msgstr "Ngân hàng & Bảo hiểm"
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_form
 msgid "Buy credits."
-msgstr "Mua tín dụng."
+msgstr "Mua thêm điểm."
 
 #. module: crm_iap_mine
 #: model:crm.iap.lead.role,name:crm_iap_mine.crm_iap_mine_role_1
@@ -140,12 +147,12 @@ msgstr "CEO"
 #. module: crm_iap_mine
 #: model:ir.model,name:crm_iap_mine.model_crm_iap_lead_industry
 msgid "CRM IAP Lead Industry"
-msgstr "Ngành nghề lead IAP trong CRM"
+msgstr "Ngành nghề tiềm năng IAP trong CRM"
 
 #. module: crm_iap_mine
 #: model:ir.model,name:crm_iap_mine.model_crm_iap_lead_mining_request
 msgid "CRM Lead Mining Request"
-msgstr "Yêu cầu khai thác lead trong CRM"
+msgstr "Yêu cầu tìm tiềm năng trong CRM"
 
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_form
@@ -227,7 +234,7 @@ msgstr "Quốc gia"
 #. odoo-python
 #: code:addons/crm_iap_mine/models/crm_iap_lead_mining_request.py:0
 msgid "Create a Lead Mining Request"
-msgstr "Tạo một yêu cầu khai thác lead"
+msgstr "Tạo một yêu cầu tìm kiếm tiềm năng"
 
 #. module: crm_iap_mine
 #: model:ir.model,website_form_label:crm_iap_mine.model_crm_lead
@@ -241,7 +248,7 @@ msgstr "Tạo cơ hội"
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_role__create_uid
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_seniority__create_uid
 msgid "Created by"
-msgstr "Được tạo bởi"
+msgstr "Người tạo"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_helpers__create_date
@@ -250,7 +257,7 @@ msgstr "Được tạo bởi"
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_role__create_date
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_seniority__create_date
 msgid "Created on"
-msgstr "Được tạo vào"
+msgstr "Ngày tạo"
 
 #. module: crm_iap_mine
 #: model:crm.iap.lead.role,name:crm_iap_mine.crm_iap_mine_role_4
@@ -281,7 +288,7 @@ msgstr "Dịch vụ tài chính và tài chính đa dạng"
 #: model:ir.model.fields.selection,name:crm_iap_mine.selection__crm_iap_lead_mining_request__state__done
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_search
 msgid "Done"
-msgstr "Hoàn tất"
+msgstr "Hoàn thành"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields.selection,name:crm_iap_mine.selection__crm_iap_lead_mining_request__state__draft
@@ -359,18 +366,18 @@ msgstr "Từ"
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_lead_view_tree_opportunity
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.view_crm_lead_kanban
 msgid "Generate Leads"
-msgstr "Tạo lead"
+msgstr "Tạo tiềm năng"
 
 #. module: crm_iap_mine
 #. odoo-python
 #: code:addons/crm_iap_mine/models/crm_iap_lead_mining_request.py:0
 msgid "Generate new leads based on their country, industry, size, etc."
-msgstr "Tạo lead mới dựa trên quốc gia, ngành nghề, quy mô,..."
+msgstr "Tạo tiềm năng mới dựa trên quốc gia, ngành nghề, quy mô,..."
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__lead_ids
 msgid "Generated Lead / Opportunity"
-msgstr "Tạo lead/cơ hội"
+msgstr "Tiềm năng/cơ hội đã tạo"
 
 #. module: crm_iap_mine
 #: model:crm.iap.lead.industry,name:crm_iap_mine.crm_iap_mine_industry_160
@@ -390,7 +397,7 @@ msgstr "Phương thức trợ giúp cho phân hệ crm_iap_mine"
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_form
 msgid "How many leads would you like?"
-msgstr "Bạn muốn có bao nhiêu lead?"
+msgstr "Bạn muốn có bao nhiêu tiềm năng?"
 
 #. module: crm_iap_mine
 #: model:crm.iap.lead.role,name:crm_iap_mine.crm_iap_mine_role_10
@@ -401,7 +408,7 @@ msgstr "Nhân sự"
 #: model:mail.template,name:crm_iap_mine.lead_generation_no_credits
 #: model:mail.template,subject:crm_iap_mine.lead_generation_no_credits
 msgid "IAP Lead Generation Notification"
-msgstr "Thông báo tạo lead IAP"
+msgstr "Thông báo tạo tiềm năng IAP"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_helpers__id
@@ -441,7 +448,7 @@ msgstr "Công nghệ thông tin"
 #. module: crm_iap_mine
 #: model:ir.model.fields.selection,name:crm_iap_mine.selection__crm_iap_lead_mining_request__error_type__credits
 msgid "Insufficient Credits"
-msgstr "Không đủ tín dụng"
+msgstr "Không đủ điểm"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_helpers__write_uid
@@ -450,7 +457,7 @@ msgstr "Không đủ tín dụng"
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_role__write_uid
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_seniority__write_uid
 msgid "Last Updated by"
-msgstr "Cập nhật lần cuối bởi"
+msgstr "Người cập nhật cuối"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_helpers__write_date
@@ -459,50 +466,50 @@ msgstr "Cập nhật lần cuối bởi"
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_role__write_date
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_seniority__write_date
 msgid "Last Updated on"
-msgstr "Cập nhật lần cuối vào"
+msgstr "Ngày cập nhật cuối"
 
 #. module: crm_iap_mine
 #: model:ir.model,name:crm_iap_mine.model_crm_lead
 msgid "Lead"
-msgstr "Lead"
+msgstr "Tiềm năng"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__lead_contacts_credits
 msgid "Lead Contacts Credits"
-msgstr "Tín dụng liên hệ lead"
+msgstr "Điểm liên hệ tiềm năng"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__lead_credits
 msgid "Lead Credits"
-msgstr "Tín dụng lead"
+msgstr "Điểm tiềm năng"
 
 #. module: crm_iap_mine
 #: model:ir.ui.menu,name:crm_iap_mine.crm_menu_lead_generation
 msgid "Lead Generation"
-msgstr "Tạo lead"
+msgstr "Tạo tiềm năng"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_lead__lead_mining_request_id
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_search
 msgid "Lead Mining Request"
-msgstr "Yêu cầu khai thác lead"
+msgstr "Yêu cầu tìm tiềm năng"
 
 #. module: crm_iap_mine
 #: model:ir.actions.act_window,name:crm_iap_mine.crm_iap_lead_mining_request_action
 #: model:ir.ui.menu,name:crm_iap_mine.crm_iap_lead_mining_request_menu_action
 msgid "Lead Mining Requests"
-msgstr "Yêu cầu khai thác lead"
+msgstr "Yêu cầu tìm tiềm năng"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__lead_total_credits
 msgid "Lead Total Credits"
-msgstr "Tổng số tín dụng lead"
+msgstr "Tổng điểm tiềm năng"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields.selection,name:crm_iap_mine.selection__crm_iap_lead_mining_request__lead_type__lead
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_search
 msgid "Leads"
-msgstr "Lead"
+msgstr "Tiềm năng"
 
 #. module: crm_iap_mine
 #: model:crm.iap.lead.role,name:crm_iap_mine.crm_iap_mine_role_12
@@ -513,7 +520,8 @@ msgstr "Hợp pháp"
 #. odoo-javascript
 #: code:addons/crm_iap_mine/static/src/js/tours/crm_iap_lead.js:0
 msgid "Looking for more opportunities?<br>Try the <b>Lead Generation</b> tool."
-msgstr "Bạn đang tìm kiếm thêm cơ hội?<br>Hãy dùng thử công cụ <b>Tạo lead</b>."
+msgstr ""
+"Bạn đang tìm kiếm thêm cơ hội?<br>Hãy dùng thử công cụ <b>Tạo tiềm năng</b>."
 
 #. module: crm_iap_mine
 #: model:crm.iap.lead.role,name:crm_iap_mine.crm_iap_mine_role_13
@@ -572,13 +580,13 @@ msgstr "Số lượng liên hệ"
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__lead_count
 msgid "Number of Generated Leads"
-msgstr "Số lượng lead đã tạo"
+msgstr "Số lượng tiềm năng đã tạo"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__lead_number
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_tree
 msgid "Number of Leads"
-msgstr "Số lượng lead"
+msgstr "Số lượng tiềm năng"
 
 #. module: crm_iap_mine
 #: model:crm.iap.lead.role,name:crm_iap_mine.crm_iap_mine_role_14
@@ -595,7 +603,7 @@ msgstr "Cơ hội"
 #. odoo-python
 #: code:addons/crm_iap_mine/models/crm_iap_lead_mining_request.py:0
 msgid "Opportunity created by Odoo Lead Generation"
-msgstr "Cơ hội được tạo bởi chức năng tạo lead của Odoo"
+msgstr "Cơ hội được tạo bởi chức năng tạo tiềm năng của Odoo"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__role_ids
@@ -605,7 +613,7 @@ msgstr "Vai trò khác"
 #. module: crm_iap_mine
 #: model:crm.iap.lead.role,name:crm_iap_mine.crm_iap_mine_role_15
 msgid "Owner"
-msgstr "Người phụ trách"
+msgstr "Chủ sở hữu"
 
 #. module: crm_iap_mine
 #: model:ir.model,name:crm_iap_mine.model_crm_iap_lead_role
@@ -714,13 +722,13 @@ msgstr "Bán"
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__team_id
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_search
 msgid "Sales Team"
-msgstr "Bộ phận sales"
+msgstr "Đội bán hàng"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__user_id
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_search
 msgid "Salesperson"
-msgstr "Nhân viên sales"
+msgstr "Nhân viên kinh doanh"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__seniority_id
@@ -746,7 +754,7 @@ msgstr "Phần mềm & dịch vụ"
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__state_ids
 msgid "States"
-msgstr "Tỉnh thành"
+msgstr "Tỉnh/TP"
 
 #. module: crm_iap_mine
 #: model:ir.model.fields,field_description:crm_iap_mine.field_crm_iap_lead_mining_request__state
@@ -782,7 +790,7 @@ msgstr "Dịch vụ viễn thông"
 #. odoo-python
 #: code:addons/crm_iap_mine/models/crm_iap_lead_mining_request.py:0
 msgid "This makes a total of %d credits for this request."
-msgstr "Như vậy tổng cộng là %d tín dụng cho yêu cầu này."
+msgstr "Như vậy tổng cộng là %d điểm cho yêu cầu này."
 
 #. module: crm_iap_mine
 #: model:crm.iap.lead.industry,name:crm_iap_mine.crm_iap_mine_industry_136
@@ -802,8 +810,8 @@ msgid ""
 "Up to %(credit_count)d additional credits will be consumed to identify %"
 "(contact_count)d contacts per company."
 msgstr ""
-"Cần sử dụng thêm tối đa %(credit_count)d tín dụng để xác định %"
-"(contact_count)d liên hệ cho mỗi công ty."
+"Cần sử dụng thêm tối đa %(credit_count)d điểm để xác định %(contact_count)d "
+"liên hệ cho mỗi công ty."
 
 #. module: crm_iap_mine
 #. odoo-javascript
@@ -814,7 +822,7 @@ msgstr "Bạn muốn nhắm mục tiêu tới ngành nghề nào?"
 #. module: crm_iap_mine
 #: model_terms:ir.ui.view,arch_db:crm_iap_mine.crm_iap_lead_mining_request_view_form
 msgid "You do not have enough credits to submit this request."
-msgstr "Bạn không có đủ tín dụng để gửi yêu cầu này."
+msgstr "Bạn không có đủ điểm để gửi yêu cầu này."
 
 #. module: crm_iap_mine
 #. odoo-python

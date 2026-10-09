@@ -50,13 +50,13 @@ msgstr "Tên hiển thị"
 #. module: sale_purchase
 #: model_terms:ir.ui.view,arch_db:sale_purchase.exception_sale_on_purchase_cancellation
 msgid "Exception(s) occurred on the purchase order(s):"
-msgstr "(Các) ngoại lệ đã xảy ra trên (các) đơn mua hàng:"
+msgstr "(Các) ngoại lệ đã xảy ra trên (các) đơn mua:"
 
 #. module: sale_purchase
 #: model_terms:ir.ui.view,arch_db:sale_purchase.exception_purchase_on_sale_cancellation
 #: model_terms:ir.ui.view,arch_db:sale_purchase.exception_purchase_on_sale_quantity_decreased
 msgid "Exception(s) occurred on the sale order(s):"
-msgstr "(Các) ngoại lệ đã xảy ra trên (các) đơn bán hàng:"
+msgstr "(Các) ngoại lệ đã xảy ra trên (các) đơn bán:"
 
 #. module: sale_purchase
 #: model_terms:ir.ui.view,arch_db:sale_purchase.exception_purchase_on_sale_cancellation
@@ -87,8 +87,9 @@ msgid ""
 "automatically created to buy the product. Tip: don't forget to set a vendor "
 "on the product."
 msgstr ""
-"Nếu đánh dấu, mỗi lần bạn bán sản phẩm này thông qua đơn bán hàng, RFQ sẽ tự "
-"động được tạo để mua sản phẩm. Mẹo: đừng quên đặt nhà cung cấp cho sản phẩm."
+"Nếu đánh dấu, mỗi lần bạn bán sản phẩm này thông qua đơn bán, yêu cầu báo "
+"giá sẽ tự động được tạo để mua sản phẩm. Mẹo: đừng quên đặt nhà cung cấp cho "
+"sản phẩm."
 
 #. module: sale_purchase
 #: model_terms:ir.ui.view,arch_db:sale_purchase.exception_purchase_on_sale_quantity_decreased
@@ -98,7 +99,7 @@ msgstr "Có thể cần thao tác thủ công."
 #. module: sale_purchase
 #: model:ir.model.fields,field_description:sale_purchase.field_sale_order__purchase_order_count
 msgid "Number of Purchase Order Generated"
-msgstr "Số lượng đơn mua hàng đã được tạo"
+msgstr "Số lượng đơn mua đã được tạo"
 
 #. module: sale_purchase
 #: model:ir.model.fields,field_description:sale_purchase.field_purchase_order__sale_order_count
@@ -108,7 +109,7 @@ msgstr "Số lượng bán hàng nguồn"
 #. module: sale_purchase
 #: model:ir.model.fields,field_description:sale_purchase.field_sale_order_line__purchase_line_count
 msgid "Number of generated purchase items"
-msgstr "Số lượng hạng mục mua hàng đã tạo"
+msgstr "Số dòng mua hàng đã tạo"
 
 #. module: sale_purchase
 #. odoo-python
@@ -119,7 +120,7 @@ msgstr "Số lượng hàng đã đặt đã giảm!"
 #. module: sale_purchase
 #: model:ir.model.fields,field_description:sale_purchase.field_purchase_order_line__sale_line_id
 msgid "Origin Sale Item"
-msgstr "Hạng mục bán hàng gốc"
+msgstr "Dòng bán hàng gốc"
 
 #. module: sale_purchase
 #. odoo-python
@@ -139,7 +140,7 @@ msgstr "Sản phẩm"
 #. odoo-python
 #: code:addons/sale_purchase/models/product_template.py:0
 msgid "Product that is not a service can not create RFQ."
-msgstr "Sản phẩm không phải là một dịch vụ không thể tạo RFQ."
+msgstr "Sản phẩm không phải là một dịch vụ không thể tạo yêu cầu báo giá."
 
 #. module: sale_purchase
 #: model_terms:ir.ui.view,arch_db:sale_purchase.sale_order_inherited_form_purchase
@@ -149,18 +150,18 @@ msgstr "Mua hàng"
 #. module: sale_purchase
 #: model:ir.model,name:sale_purchase.model_purchase_order
 msgid "Purchase Order"
-msgstr "Đơn mua hàng"
+msgstr "Đơn mua"
 
 #. module: sale_purchase
 #: model:ir.model,name:sale_purchase.model_purchase_order_line
 msgid "Purchase Order Line"
-msgstr "Dòng đơn mua hàng"
+msgstr "Dòng đơn mua"
 
 #. module: sale_purchase
 #. odoo-python
 #: code:addons/sale_purchase/models/sale_order.py:0
 msgid "Purchase Order generated from %s"
-msgstr "Đơn mua hàng được tạo từ %s"
+msgstr "Đơn mua được tạo từ %s"
 
 #. module: sale_purchase
 #: model:ir.model.fields,help:sale_purchase.field_sale_order_line__purchase_line_ids
@@ -179,23 +180,23 @@ msgstr "Tái đặt hàng"
 #. module: sale_purchase
 #: model:ir.model.fields,field_description:sale_purchase.field_purchase_order_line__sale_order_id
 msgid "Sale Order"
-msgstr "Đơn bán hàng"
+msgstr "Đơn bán"
 
 #. module: sale_purchase
 #: model:ir.model,name:sale_purchase.model_sale_order
 msgid "Sales Order"
-msgstr "Đơn bán hàng"
+msgstr "Đơn bán"
 
 #. module: sale_purchase
 #: model:ir.model,name:sale_purchase.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Dòng đơn bán hàng"
+msgstr "Dòng đơn bán"
 
 #. module: sale_purchase
 #. odoo-python
 #: code:addons/sale_purchase/models/purchase_order.py:0
 msgid "Sources Sale Orders %s"
-msgstr "Đơn bán hàng nguồn %s"
+msgstr "Đơn bán nguồn %s"
 
 #. module: sale_purchase
 #: model:ir.model.fields,field_description:sale_purchase.field_product_product__service_to_purchase
@@ -226,8 +227,7 @@ msgid ""
 "You are decreasing the ordered quantity! Do not forget to manually update "
 "the purchase order if needed."
 msgstr ""
-"Bạn đang giảm số lượng đã đặt! Đừng quên cập nhật thủ công đơn mua hàng nếu "
-"cần."
+"Bạn đang giảm số lượng đã đặt! Đừng quên cập nhật thủ công đơn mua nếu cần."
 
 #. module: sale_purchase
 #: model_terms:ir.ui.view,arch_db:sale_purchase.exception_purchase_on_sale_cancellation

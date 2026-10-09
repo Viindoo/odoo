@@ -613,7 +613,7 @@ msgstr "<strong>Không tìm thấy phương thức giao hàng nào phù hợp.</
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.total
 msgid "<strong>Total</strong>"
-msgstr "<strong>Tổng</strong>"
+msgstr "<strong>Tổng tiền</strong>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.cart_lines
@@ -707,7 +707,7 @@ msgstr ""
 "                    <t t-if=\"object.order_line\">\n"
 "                        <t t-foreach=\"object.website_order_line\" t-"
 "as=\"line\">\n"
-"                            <hr>\n"
+"                            <hr/>\n"
 "                            <table width=\"100%\">\n"
 "                                <tr>\n"
 "                                    <td style=\"padding: 10px; "
@@ -733,15 +733,15 @@ msgstr ""
 "                    </t>\n"
 "                    <div style=\"text-align: center; padding: 16px 0px 16px "
 "0px; font-size: 14px;\">\n"
-"                      <a t-attf-href=\"{{ object.get_base_url() }}/shop/"
+"                        <a t-attf-href=\"{{ object.get_base_url() }}/shop/"
 "cart?id={{ object.id }}&amp;access_token={{ object.access_token }}\" "
 "target=\"_blank\" t-attf-style=\"background-color: {"
 "{object.user_id.company_id.email_secondary_color or '#875A7B'}}; padding: "
 "8px 16px 8px 16px; text-decoration: none; color: {"
 "{object.user_id.company_id.email_primary_color or '#FFFFFF'}}; border-"
-"radius: 5px; font-size:13px;\"> \n"
+"radius: 5px; font-size:13px;\">\n"
 "                            Tiếp tục đặt hàng\n"
-"                       </a>\n"
+"                        </a>\n"
 "                    </div>\n"
 "                    <t t-set=\"company\" t-value=\"object.company_id or "
 "object.user_id.company_id or user.company_id\"/>\n"
@@ -765,9 +765,8 @@ msgid ""
 "This description will be copied to every Sales Order, Delivery Order and "
 "Customer Invoice/Credit Note"
 msgstr ""
-"Mô tả sản phẩm mà bạn muốn giới thiệu cho khách hàng của mình. Mô tả này sẽ "
-"được sao chép vào mọi đơn bán hàng, lệnh giao hàng và hóa đơn bán hàng/giấy "
-"báo có."
+"Mô tả sản phẩm mà bạn muốn gửi tới khách hàng. Mô tả này sẽ được sao chép "
+"vào mọi đơn bán, phiếu xuất kho và hóa đơn bán ra/hóa đơn điều chỉnh giảm."
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.product_title
@@ -892,7 +891,7 @@ msgstr "Tác vụ"
 #: model:ir.model.fields,field_description:website_sale.field_product_feed__message_needaction
 #: model:ir.model.fields,field_description:website_sale.field_product_template__message_needaction
 msgid "Action Needed"
-msgstr "Tác vụ cần thiết"
+msgstr "Cần xử lý"
 
 #. module: website_sale
 #. odoo-javascript
@@ -1018,7 +1017,7 @@ msgstr "Tất cả"
 #: model_terms:ir.ui.view,arch_db:website_sale.product_feed_form
 #: model_terms:ir.ui.view,arch_db:website_sale.product_feed_list
 msgid "All Categories"
-msgstr "Tất cả Các Nhóm"
+msgstr "Tất cả danh mục"
 
 #. module: website_sale
 #. odoo-javascript
@@ -1048,8 +1047,8 @@ msgid ""
 "Allow customers to pick up their online purchases at your store and pay in "
 "person"
 msgstr ""
-"Cho phép khách hàng đến cửa hàng của bạn để nhận đơn mua hàng online và "
-"thanh toán trực tiếp"
+"Cho phép khách hàng nhận hàng mua trực tuyến tại cửa hàng của bạn và thanh "
+"toán trực tiếp"
 
 #. module: website_sale
 #: model:ir.model.fields,help:website_sale.field_product_pricelist__selectable
@@ -1111,7 +1110,7 @@ msgstr "Chỉ định"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
 msgid "Assignment of online orders"
-msgstr "Phân công đơn hàng online"
+msgstr "Phân công đơn hàng trực tuyến"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_feed__message_attachment_count
@@ -1297,9 +1296,9 @@ msgid ""
 "amount)                            or free products."
 msgstr ""
 "Tăng doanh số của bạn với nhiều loại chương trình: Phiếu giảm giá, Khuyến "
-"mãi, Thẻ quà tặng, Chương trình khách hàng thân thiết. Các điều kiện cụ thể "
+"mại, Thẻ quà tặng, Chương trình khách hàng thân thiết. Các điều kiện cụ thể "
 "có thể được thiết lập (sản phẩm, khách hàng, số tiền mua tối thiểu, thời "
-"gian). Phần thưởng có thể là chiết khấu (% hoặc số tiền) hoặc sản phẩm miễn "
+"gian). Phần thưởng có thể là giảm giá (% hoặc số tiền) hoặc sản phẩm miễn "
 "phí."
 
 #. module: website_sale
@@ -1508,7 +1507,7 @@ msgstr "Đèn trần"
 #. odoo-javascript
 #: code:addons/website_sale/static/src/website_builder/products_design_panel.xml:0
 msgid "Center"
-msgstr "Trung tâm"
+msgstr "Giữa"
 
 #. module: website_sale
 #. odoo-javascript
@@ -1601,7 +1600,7 @@ msgstr "Giáng sinh"
 #. odoo-python
 #: code:addons/website_sale/const.py:0
 msgid "Classic"
-msgstr "Cơ bản"
+msgstr "Cổ điển"
 
 #. module: website_sale
 #. odoo-python
@@ -1613,7 +1612,7 @@ msgstr "Lưới cổ điển"
 #: model_terms:ir.ui.view,arch_db:website_sale.o_wsale_offcanvas
 #: model_terms:ir.ui.view,arch_db:website_sale.products
 msgid "Clear Filters"
-msgstr "Xoá bộ lọc"
+msgstr "Xóa bộ lọc"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.products
@@ -1682,7 +1681,7 @@ msgstr "Đóng"
 #. odoo-javascript
 #: code:addons/website_sale/static/src/js/location_selector/location_schedule/location_schedule.js:0
 msgid "Closed"
-msgstr "Đã chốt"
+msgstr "Đóng cửa"
 
 #. module: website_sale
 #. odoo-javascript
@@ -1705,7 +1704,7 @@ msgstr "Ô có thể gấp gọn"
 #. odoo-javascript
 #: code:addons/website_sale/static/src/website_builder/product_attribute_option.xml:0
 msgid "Color"
-msgstr "Màu sắc"
+msgstr "Màu"
 
 #. module: website_sale
 #. odoo-javascript
@@ -1738,8 +1737,8 @@ msgid ""
 "Comma-separated list of parts of product names, barcodes or internal "
 "reference"
 msgstr ""
-"Danh sách các phần tên sản phẩm, mã vạch hoặc mã tham chiếu nội bộ được phân "
-"tách bằng dấu phẩy"
+"Danh sách các phần tên sản phẩm, mã vạch hoặc mã nội bộ được phân tách bằng "
+"dấu phẩy"
 
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_res_company
@@ -1773,7 +1772,7 @@ msgstr "Thành phần"
 #. odoo-javascript
 #: code:addons/website_sale/static/src/interactions/checkout.js:0
 msgid "Computed after delivery"
-msgstr ""
+msgstr "Tính sau khi giao hàng"
 
 #. module: website_sale
 #. odoo-python
@@ -1789,7 +1788,7 @@ msgstr "Ghế phòng hội nghị"
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_res_config_settings
 msgid "Config Settings"
-msgstr "Cài đặt cấu hình"
+msgstr "Thiết lập cấu hình"
 
 #. module: website_sale
 #. odoo-javascript
@@ -1929,7 +1928,7 @@ msgstr "Tạo sản phẩm mới"
 #: model:ir.model.fields,field_description:website_sale.field_website_checkout_step__create_uid
 #: model:ir.model.fields,field_description:website_sale.field_website_sale_extra_field__create_uid
 msgid "Created by"
-msgstr "Được tạo bởi"
+msgstr "Người tạo"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.s_mega_menu_images_subtitles
@@ -1950,7 +1949,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:website_sale.field_website_checkout_step__create_date
 #: model:ir.model.fields,field_description:website_sale.field_website_sale_extra_field__create_date
 msgid "Created on"
-msgstr "Được tạo vào"
+msgstr "Ngày tạo"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.view_sales_order_filter_ecommerce_abondand
@@ -2113,7 +2112,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/website_sale/static/src/website_builder/product_ribbon_options.xml:0
 msgid "Delete Ribbon"
-msgstr "Xoá ruy-băng"
+msgstr "Xóa ruy-băng"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.address_on_checkout
@@ -2170,12 +2169,12 @@ msgstr "Mô tả"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.view_delivery_carrier_form_website_delivery
 msgid "Description displayed on the eCommerce and on online quotations."
-msgstr "Mô tả được hiển thị trên Thương mại điện tử và các báo giá online."
+msgstr "Mô tả được hiển thị trên Thương mại điện tử và các báo giá trực tuyến."
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_delivery_carrier__website_description
 msgid "Description for Online Quotations"
-msgstr "Mô tả cho báo giá online"
+msgstr "Mô tả cho báo giá trực tuyến"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_product__website_description
@@ -2232,14 +2231,14 @@ msgstr "Xác định thứ tự hiển thị trên trang web Thương mại đi�
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_digest_digest
 msgid "Digest"
-msgstr "Tóm tắt"
+msgstr "Bản tin tóm tắt"
 
 #. module: website_sale
 #. odoo-javascript
 #: code:addons/website_sale/static/src/website_builder/product_page_option.xml:0
 #: model:ir.model.fields.selection,name:website_sale.selection__res_config_settings__account_on_checkout__disabled
 msgid "Disabled"
-msgstr "Vô hiệu hoá"
+msgstr "Đã tắt"
 
 #. module: website_sale
 #: model:ir.model.fields.selection,name:website_sale.selection__website__account_on_checkout__disabled
@@ -2254,7 +2253,7 @@ msgstr "Mã giảm giá..."
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
 msgid "Discounts, Loyalty & Gift Card"
-msgstr "Chiết khấu, khách hàng thân thiết & thẻ quà tặng"
+msgstr "Giảm giá, khách hàng thân thiết & thẻ quà tặng"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.s_mega_menu_images_subtitles
@@ -2483,7 +2482,7 @@ msgstr "Thương mại điện tử: Khôi phục giỏ hàng"
 #: code:addons/website_sale/static/src/website_builder/product_ribbon_options.xml:0
 #: model_terms:ir.ui.view,arch_db:website_sale.payment_confirmation_status
 msgid "Edit"
-msgstr "Chỉnh sửa"
+msgstr "Sửa"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.address
@@ -2717,7 +2716,7 @@ msgstr "Người theo dõi"
 #: model:ir.model.fields,field_description:website_sale.field_product_feed__message_partner_ids
 #: model:ir.model.fields,field_description:website_sale.field_product_template__message_partner_ids
 msgid "Followers (Partners)"
-msgstr "Người theo dõi (Đối tác)"
+msgstr "Người theo dõi (đối tác)"
 
 #. module: website_sale
 #. odoo-javascript
@@ -3013,7 +3012,7 @@ msgid ""
 "If the setting is set, sent to authenticated visitors who abandoned their "
 "cart"
 msgstr ""
-"Nếu cài đặt này được thiết lập, gửi tới những khách truy cập xác thực bỏ dở "
+"Nếu thiết lập này được bật, gửi tới những khách truy cập đã xác thực bỏ dở "
 "giỏ hàng của họ"
 
 #. module: website_sale
@@ -3157,13 +3156,13 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
 msgid "Invoicing Policy"
-msgstr "Chính sách xuất hóa đơn"
+msgstr "Chính sách lập hóa đơn"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_feed__message_is_follower
 #: model:ir.model.fields,field_description:website_sale.field_product_template__message_is_follower
 msgid "Is Follower"
-msgstr "Là người theo dõi"
+msgstr "Đang theo dõi"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_delivery_carrier__is_published
@@ -3172,7 +3171,7 @@ msgstr "Là người theo dõi"
 #: model_terms:ir.ui.view,arch_db:website_sale.product_product_website_tree_view
 #: model_terms:ir.ui.view,arch_db:website_sale.product_template_view_tree_website_sale
 msgid "Is Published"
-msgstr "Được đăng"
+msgstr "Đã đăng"
 
 #. module: website_sale
 #. odoo-python
@@ -3291,7 +3290,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:website_sale.field_website_checkout_step__write_uid
 #: model:ir.model.fields,field_description:website_sale.field_website_sale_extra_field__write_uid
 msgid "Last Updated by"
-msgstr "Cập nhật lần cuối bởi"
+msgstr "Người cập nhật cuối"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_feed__write_date
@@ -3302,7 +3301,7 @@ msgstr "Cập nhật lần cuối bởi"
 #: model:ir.model.fields,field_description:website_sale.field_website_checkout_step__write_date
 #: model:ir.model.fields,field_description:website_sale.field_website_sale_extra_field__write_date
 msgid "Last Updated on"
-msgstr "Cập nhật lần cuối vào"
+msgstr "Ngày cập nhật cuối"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.sale_report_view_search_website
@@ -3440,7 +3439,7 @@ msgstr "Chế độ xem bản đồ"
 #: code:addons/website_sale/static/src/website_builder/dynamic_snippet_category_options.xml:0
 #: code:addons/website_sale/static/src/website_builder/product_image_option.xml:0
 msgid "Media"
-msgstr "Truyền thông"
+msgstr "Đa phương tiện"
 
 #. module: website_sale
 #: model:product.public.category,name:website_sale.public_category_cabinets_medicine
@@ -3627,7 +3626,7 @@ msgstr "Tiếp theo"
 #. odoo-javascript
 #: code:addons/website_sale/static/src/xml/website_sale_image_viewer.xml:0
 msgid "Next (Right-Arrow)"
-msgstr "Tiếp (Mũi tên-Sang phải)"
+msgstr "Tiếp (mũi tên phải)"
 
 #. module: website_sale
 #: model:product.public.category,name:website_sale.public_category_drawers_nightstand
@@ -3740,13 +3739,13 @@ msgstr "Số lượng giỏ hàng bỏ dở"
 #: model:ir.model.fields,field_description:website_sale.field_product_feed__message_needaction_counter
 #: model:ir.model.fields,field_description:website_sale.field_product_template__message_needaction_counter
 msgid "Number of Actions"
-msgstr "Số lượng tác vụ"
+msgstr "Số tác vụ"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_feed__message_has_error_counter
 #: model:ir.model.fields,field_description:website_sale.field_product_template__message_has_error_counter
 msgid "Number of errors"
-msgstr "Số lượng lỗi"
+msgstr "Số lỗi"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website__shop_ppr
@@ -3757,13 +3756,13 @@ msgstr "Số lượng cột lưới trên cửa hàng"
 #: model:ir.model.fields,help:website_sale.field_product_feed__message_needaction_counter
 #: model:ir.model.fields,help:website_sale.field_product_template__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr "Số lượng tin nhắn yêu cầu hành động"
+msgstr "Số tin nhắn cần xử lý"
 
 #. module: website_sale
 #: model:ir.model.fields,help:website_sale.field_product_feed__message_has_error_counter
 #: model:ir.model.fields,help:website_sale.field_product_template__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr "Số tin nhắn bị gửi lỗi"
+msgstr "Số tin nhắn gửi lỗi"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website__shop_ppg
@@ -3822,18 +3821,18 @@ msgstr ""
 #. module: website_sale
 #: model:ir.ui.menu,name:website_sale.menu_report_sales
 msgid "Online Sales"
-msgstr "Bán hàng online"
+msgstr "Bán hàng trực tuyến"
 
 #. module: website_sale
 #: model:ir.actions.act_window,name:website_sale.sale_report_action_dashboard
 msgid "Online Sales Analysis"
-msgstr "Phân tích bán hàng online"
+msgstr "Phân tích bán hàng trực tuyến"
 
 #. module: website_sale
 #. odoo-javascript
 #: code:addons/website_sale/static/src/js/client_actions/configurator/shopPageSelectionScreen.xml:0
 msgid "Online catalog"
-msgstr "Danh mục online"
+msgstr "Danh mục trực tuyến"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_sale_order__only_services
@@ -3866,7 +3865,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/website_sale/models/res_partner.py:0
 msgid "Open Sale Orders"
-msgstr "Mở đơn bán hàng"
+msgstr "Mở đơn bán"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.brand_promotion
@@ -3886,13 +3885,13 @@ msgid ""
 "Optimization required! Reduce the image size or increase your compression "
 "settings."
 msgstr ""
-"Yêu cầu tối ưu hóa! Giảm kích thước hình ảnh hoặc tăng cài đặt nén của bạn."
+"Yêu cầu tối ưu hóa! Giảm kích thước hình ảnh hoặc tăng thiết lập nén của bạn."
 
 #. module: website_sale
 #: model:ir.model.fields.selection,name:website_sale.selection__res_config_settings__account_on_checkout__optional
 #: model:ir.model.fields.selection,name:website_sale.selection__website__account_on_checkout__optional
 msgid "Optional"
-msgstr "Tuỳ chọn"
+msgstr "Tùy chọn"
 
 #. module: website_sale
 #. odoo-javascript
@@ -3949,7 +3948,7 @@ msgstr ""
 #. module: website_sale
 #: model:ir.actions.act_window,name:website_sale.sale_order_action_to_invoice
 msgid "Orders To Invoice"
-msgstr "Đơn hàng cần xuất hóa đơn"
+msgstr "Đơn hàng cần lập hóa đơn"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.price_dynamic_filter_template_product_product
@@ -3976,7 +3975,7 @@ msgstr "Hiệu ứng overlay"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.packaging_title
 msgid "Packaging"
-msgstr "Gói hàng"
+msgstr "Quy cách đóng gói"
 
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_website_page
@@ -3992,7 +3991,7 @@ msgstr ""
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__parent_id
 msgid "Parent"
-msgstr "Chính"
+msgstr "Cấp trên"
 
 #. module: website_sale
 #. odoo-javascript
@@ -4029,12 +4028,12 @@ msgstr "Phương thức thanh toán"
 #. module: website_sale
 #: model:ir.ui.menu,name:website_sale.menu_ecommerce_payment_providers
 msgid "Payment Providers"
-msgstr "Nhà cung cấp dịch vụ thanh toán"
+msgstr "Cổng thanh toán"
 
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_payment_token
 msgid "Payment Token"
-msgstr "Mã thanh toán"
+msgstr "Token thanh toán"
 
 #. module: website_sale
 #: model:ir.ui.menu,name:website_sale.menu_ecommerce_payment_tokens
@@ -4062,7 +4061,7 @@ msgstr "Hệ thống mở bằng bàn đạp"
 #. odoo-javascript
 #: code:addons/website_sale/static/src/js/website_sale_form_editor.js:0
 msgid "Phone Number"
-msgstr "Số Điện thoại"
+msgstr "Số điện thoại"
 
 #. module: website_sale
 #. odoo-javascript
@@ -4075,7 +4074,7 @@ msgstr "Vị trí nhận hàng"
 #: code:addons/website_sale/static/src/website_builder/product_attribute_option.xml:0
 #: code:addons/website_sale/static/src/website_builder/products_list_page_option.xml:0
 msgid "Pills"
-msgstr "Thuốc viên"
+msgstr "Viên"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.view_product_image_form
@@ -4136,7 +4135,7 @@ msgstr "Trước đó"
 #. odoo-javascript
 #: code:addons/website_sale/static/src/xml/website_sale_image_viewer.xml:0
 msgid "Previous (Left-Arrow)"
-msgstr "Trước (Mũi tên-Sang trái)"
+msgstr "Trước (mũi tên trái)"
 
 #. module: website_sale
 #. odoo-javascript
@@ -4248,7 +4247,7 @@ msgstr "Băng chuyền sản phẩm"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.sale_report_view_search_website
 msgid "Product Category"
-msgstr "Danh mục sản phẩm"
+msgstr "Nhóm sản phẩm"
 
 #. module: website_sale
 #. odoo-javascript
@@ -4536,7 +4535,7 @@ msgstr "Đã đăng"
 #. odoo-javascript
 #: code:addons/website_sale/static/src/website_builder/product_page_option.xml:0
 msgid "Purchase Options"
-msgstr "Tuỳ chọn mua hàng"
+msgstr "Tùy chọn mua hàng"
 
 #. module: website_sale
 #. odoo-javascript
@@ -4588,27 +4587,27 @@ msgstr "Radio"
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_template__rating_avg_text
 msgid "Rating Avg Text"
-msgstr "Đánh giá Nội dung trung bình"
+msgstr "Nội dung đánh giá trung bình"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_template__rating_last_feedback
 msgid "Rating Last Feedback"
-msgstr "Đánh giá Phản hồi cuối cùng"
+msgstr "Đánh giá phản hồi cuối cùng"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_template__rating_last_image
 msgid "Rating Last Image"
-msgstr "Đánh giá Hình ảnh cuối cùng"
+msgstr "Hình ảnh đánh giá gần nhất"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_template__rating_last_value
 msgid "Rating Last Value"
-msgstr "Đánh giá Giá trị cuối cùng"
+msgstr "Giá trị đánh giá gần nhất"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_template__rating_percentage_satisfaction
 msgid "Rating Satisfaction"
-msgstr "Đánh giá Mức độ hài lòng"
+msgstr "Mức độ hài lòng"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_template__rating_last_text
@@ -4693,7 +4692,7 @@ msgstr "Di dời và Vận chuyển"
 #: code:addons/website_sale/static/src/website_builder/product_image_option.xml:0
 #: model_terms:ir.ui.view,arch_db:website_sale.cart_lines
 msgid "Remove"
-msgstr "Xoá"
+msgstr "Xóa"
 
 #. module: website_sale
 #. odoo-javascript
@@ -4875,12 +4874,12 @@ msgstr "Mô tả bán hàng"
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_sale_order
 msgid "Sales Order"
-msgstr "Đơn bán hàng"
+msgstr "Đơn bán"
 
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Dòng đơn bán hàng"
+msgstr "Dòng đơn bán"
 
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_crm_team
@@ -4888,13 +4887,13 @@ msgstr "Dòng đơn bán hàng"
 #: model:ir.model.fields,field_description:website_sale.field_website__salesteam_id
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
 msgid "Sales Team"
-msgstr "Bộ phận sales"
+msgstr "Đội bán hàng"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_res_config_settings__salesperson_id
 #: model:ir.model.fields,field_description:website_sale.field_website__salesperson_id
 msgid "Salesperson"
-msgstr "Nhân viên sales"
+msgstr "Nhân viên kinh doanh"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.dynamic_filter_template_product_product_products_item
@@ -4910,7 +4909,7 @@ msgstr "Tìm kiếm"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.view_sales_order_filter_ecommerce_abondand
 msgid "Search Abandoned Sales Orders"
-msgstr "Tìm đơn bán hàng bỏ dở"
+msgstr "Tìm đơn bán bỏ dở"
 
 #. module: website_sale
 #. odoo-javascript
@@ -5022,7 +5021,7 @@ msgstr "Gửi email cho khách hàng bỏ dở giỏ hàng."
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__seo_name
 #: model:ir.model.fields,field_description:website_sale.field_product_template__seo_name
 msgid "Seo name"
-msgstr "Tên Seo"
+msgstr "Tên SEO"
 
 #. module: website_sale
 #. odoo-javascript
@@ -5065,7 +5064,7 @@ msgstr "Vận chuyển"
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_delivery_carrier
 msgid "Shipping Methods"
-msgstr "Phương thức vận chuyển"
+msgstr "Phương thức giao hàng"
 
 #. module: website_sale
 #. odoo-python
@@ -5542,7 +5541,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/website_sale/models/sale_order.py:0
 msgid "The delivery method is not compatible with your delivery address."
-msgstr ""
+msgstr "Phương thức giao hàng không tương thích với địa chỉ giao hàng của bạn."
 
 #. module: website_sale
 #. odoo-python
@@ -5552,9 +5551,9 @@ msgid ""
 "be fully updated. Consider refining the feed by adjusting the product "
 "categories."
 msgstr ""
-"Trang chủ %(feed_name)s chứa hơn %(limit)s sản phẩm, có thể chưa được cập "
-"nhật đầy đủ. Hãy cân nhắc tinh chỉnh trang chủ bằng cách điều chỉnh các danh "
-"mục sản phẩm."
+"Nguồn cấp dữ liệu %(feed_name)s chứa hơn %(limit)s sản phẩm, có thể chưa "
+"được cập nhật đầy đủ. Hãy cân nhắc tinh chỉnh nguồn cấp dữ liệu bằng cách "
+"điều chỉnh các danh mục sản phẩm."
 
 #. module: website_sale
 #: model:ir.model.fields,help:website_sale.field_product_product__website_url
@@ -5635,7 +5634,7 @@ msgstr "Đội ngũ"
 #: model_terms:ir.actions.act_window,help:website_sale.action_view_abandoned_tree
 msgid "The time to mark a cart as abandoned can be changed in the settings."
 msgstr ""
-"Có thể thay đổi thời gian để đánh dấu giỏ hàng là bỏ dở trong phần cài đặt."
+"Có thể thay đổi thời gian để đánh dấu giỏ hàng là bỏ dở trong phần thiết lập."
 
 #. module: website_sale
 #. odoo-python
@@ -5886,7 +5885,7 @@ msgstr "Đơn hàng chưa thanh toán"
 #: model_terms:ir.ui.view,arch_db:website_sale.product_product_view_form_normalized
 #: model_terms:ir.ui.view,arch_db:website_sale.products_item
 msgid "Unpublished"
-msgstr "Đã huỷ đăng"
+msgstr "Đã hủy đăng"
 
 #. module: website_sale
 #: model:ir.model.fields.selection,name:website_sale.selection__website__product_page_container__unset
@@ -6124,7 +6123,7 @@ msgstr "Menu trang web"
 #: model:ir.model.fields,field_description:website_sale.field_product_feed__website_message_ids
 #: model:ir.model.fields,field_description:website_sale.field_product_template__website_message_ids
 msgid "Website Messages"
-msgstr "Thông báo trên trang web"
+msgstr "Tin nhắn website"
 
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_product_public_category
@@ -6152,7 +6151,7 @@ msgstr "Cửa hàng trang web"
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_website_snippet_filter
 msgid "Website Snippet Filter"
-msgstr "Bộ lọc snippet trang web"
+msgstr "Bộ lọc đoạn mã trang web"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_delivery_carrier__website_url
@@ -6171,31 +6170,31 @@ msgstr "Khách truy cập trang web"
 #: model:ir.model.fields,help:website_sale.field_product_feed__website_message_ids
 #: model:ir.model.fields,help:website_sale.field_product_template__website_message_ids
 msgid "Website communication history"
-msgstr "Lịch sử trao đổi qua trang web"
+msgstr "Lịch sử trao đổi trên website"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__website_meta_description
 #: model:ir.model.fields,field_description:website_sale.field_product_template__website_meta_description
 msgid "Website meta description"
-msgstr "Mô tả meta trang web"
+msgstr "Mô tả meta của website"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__website_meta_keywords
 #: model:ir.model.fields,field_description:website_sale.field_product_template__website_meta_keywords
 msgid "Website meta keywords"
-msgstr "Từ khóa meta trang web"
+msgstr "Từ khóa meta của website"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__website_meta_title
 #: model:ir.model.fields,field_description:website_sale.field_product_template__website_meta_title
 msgid "Website meta title"
-msgstr "Tiêu đề meta trang web"
+msgstr "Tiêu đề meta của website"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_public_category__website_meta_og_img
 #: model:ir.model.fields,field_description:website_sale.field_product_template__website_meta_og_img
 msgid "Website opengraph image"
-msgstr "Hình ảnh opengraph trang web"
+msgstr "Hình ảnh OpenGraph của website"
 
 #. module: website_sale
 #: model:ir.model.fields,help:website_sale.field_account_bank_statement_line__website_id
@@ -6296,7 +6295,7 @@ msgstr "Không có đơn hàng từ trang web"
 #. module: website_sale
 #: model_terms:ir.actions.act_window,help:website_sale.sale_order_action_to_invoice
 msgid "You don't have any order to invoice from the website"
-msgstr "Không có đơn hàng cần xuất hóa đơn từ trang web"
+msgstr "Không có đơn hàng cần lập hóa đơn từ trang web"
 
 #. module: website_sale
 #: model:mail.template,subject:website_sale.mail_template_sale_cart_recovery
@@ -6354,7 +6353,7 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.payment_confirmation_status
 msgid "Your payment has been authorized."
-msgstr "Thanh toán của bạn đã được uỷ quyền."
+msgstr "Thanh toán của bạn đã được ủy quyền."
 
 #. module: website_sale
 #. odoo-javascript
@@ -6370,7 +6369,7 @@ msgstr "Giỏ hàng trước đó của bạn đã được hoàn thành."
 #. module: website_sale
 #: model:ir.ui.menu,name:website_sale.menu_delivery_zip_prefix
 msgid "Zip Prefix"
-msgstr "Tiền tố mã bưu điện"
+msgstr "Tiền tố mã bưu chính"
 
 #. module: website_sale
 #. odoo-javascript

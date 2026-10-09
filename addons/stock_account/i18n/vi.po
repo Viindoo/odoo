@@ -81,13 +81,13 @@ msgstr "Tài khoản"
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_account_chart_template
 msgid "Account Chart Template"
-msgstr "Mẫu sơ đồ tài khoản"
+msgstr "Mẫu hệ thống tài khoản"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_inventory_adjustment_name__accounting_date
 #: model:ir.model.fields,field_description:stock_account.field_stock_quant__accounting_date
 msgid "Accounting Date"
-msgstr "Ngày kế toán"
+msgstr "Ngày hạch toán"
 
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.view_location_form_inherit
@@ -116,7 +116,7 @@ msgstr ""
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_avco_report__added_value
 msgid "Added Value"
-msgstr "Giá trị gia tăng"
+msgstr "Giá trị cộng thêm"
 
 #. module: stock_account
 #: model:ir.actions.act_window,name:stock_account.product_value_action
@@ -144,29 +144,29 @@ msgid ""
 "Affect landed costs on reception operations and split them among products to "
 "update their cost price."
 msgstr ""
-"Phản ánh chi phí nhập kho trong các hoạt động nhận hàng và tách chúng theo "
-"sản phẩm để cập nhật giá thành."
+"Phân bổ chi phí về kho vào các nghiệp vụ nhận hàng và chia cho từng sản phẩm "
+"để cập nhật giá vốn."
 
 #. module: stock_account
 #. odoo-javascript
 #: code:addons/stock_account/static/src/stock_valuation/filters/filter_warehouses.xml:0
 msgid "All Warehouses"
-msgstr "Tất cả kho hàng"
+msgstr "Tất cả kho"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_account_analytic_account
 msgid "Analytic Account"
-msgstr "Tài khoản phân tích"
+msgstr "Tài khoản quản trị"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__analytic_account_line_ids
 msgid "Analytic Account Line"
-msgstr "Dòng tài khoản phân tích"
+msgstr "Phát sinh quản trị"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_account_analytic_plan
 msgid "Analytic Plans"
-msgstr "Kế hoạch phân tích"
+msgstr "Hệ thống tài khoản quản trị"
 
 #. module: stock_account
 #. odoo-javascript
@@ -192,7 +192,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:stock_account.field_product_product__avg_cost
 #: model:ir.model.fields,field_description:stock_account.field_stock_lot__avg_cost
 msgid "Average Cost"
-msgstr "Chi phí trung bình"
+msgstr "Giá vốn bình quân"
 
 #. module: stock_account
 #: model:ir.model.fields.selection,name:stock_account.selection__product_category__property_cost_method__average
@@ -200,7 +200,7 @@ msgstr "Chi phí trung bình"
 #: model:ir.model.fields.selection,name:stock_account.selection__res_company__cost_method__average
 #: model:ir.model.fields.selection,name:stock_account.selection__stock_quant__cost_method__average
 msgid "Average Cost (AVCO)"
-msgstr "Chi phí trung bình (AVCO)"
+msgstr "Bình quân gia quyền (AVCO)"
 
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.stock_account_report_invoice_document
@@ -268,12 +268,12 @@ msgstr ""
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_res_config_settings
 msgid "Config Settings"
-msgstr "Cài đặt cấu hình"
+msgstr "Thiết lập cấu hình"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_lot__standard_price
 msgid "Cost"
-msgstr "Chi phí"
+msgstr "Giá vốn"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_product__cost_method
@@ -291,7 +291,7 @@ msgstr "Chi phí sản xuất"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_category__property_cost_method
 msgid "Costing Method"
-msgstr "Phương pháp tính chi phí"
+msgstr "Phương pháp tính giá xuất kho"
 
 #. module: stock_account
 #: model:ir.model.fields,help:stock_account.field_account_account__account_stock_expense_id
@@ -309,12 +309,12 @@ msgstr "Mã quốc gia"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__create_uid
 msgid "Created by"
-msgstr "Được tạo bởi"
+msgstr "Người tạo"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__create_date
 msgid "Created on"
-msgstr "Được tạo vào"
+msgstr "Ngày tạo"
 
 #. module: stock_account
 #. odoo-javascript
@@ -363,7 +363,7 @@ msgid ""
 "inventory valuation. If empty, the inventory date will be used."
 msgstr ""
 "Ngày mà các bút toán kế toán sẽ được tạo trong trường hợp định giá tồn kho "
-"tự động. Nếu để trống, ngày kiểm kho sẽ được sử dụng."
+"tự động. Nếu để trống, ngày kiểm kê sẽ được sử dụng."
 
 #. module: stock_account
 #. odoo-javascript
@@ -380,7 +380,7 @@ msgstr "Mô tả"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_res_config_settings__group_lot_on_invoice
 msgid "Display Lots & Serial Numbers on Invoices"
-msgstr "Hiển thị số lô & sê-ri trên hoá đơn"
+msgstr "Hiển thị số lô & sê-ri trên hóa đơn"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_account_account__display_name
@@ -530,7 +530,7 @@ msgstr "Tham chiếu/Lý do điều chỉnh tồn kho"
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_location
 msgid "Inventory Locations"
-msgstr "Vị trí kiểm kho"
+msgstr "Vị trí kho"
 
 #. module: stock_account
 #. odoo-javascript
@@ -592,8 +592,8 @@ msgid ""
 "It exists closing entries after the selected date. Cancel them before "
 "generate an entry prior to them"
 msgstr ""
-"Có các giao dịch đóng sau ngày đã chọn. Hủy bỏ chúng trước khi tạo giao dịch "
-"trước đó"
+"Đã có bút toán khóa sổ sau ngày đã chọn. Hãy hủy các bút toán đó trước khi "
+"tạo bút toán trước ngày này."
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_account_move
@@ -619,17 +619,17 @@ msgstr ""
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_res_config_settings__module_stock_landed_costs
 msgid "Landed Costs"
-msgstr "Chi phí nhập kho"
+msgstr "Chi phí về kho"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__write_uid
 msgid "Last Updated by"
-msgstr "Cập nhật lần cuối bởi"
+msgstr "Người cập nhật cuối"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__write_date
 msgid "Last Updated on"
-msgstr "Cập nhật lần cuối vào"
+msgstr "Ngày cập nhật cuối"
 
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.view_location_form_inherit
@@ -669,7 +669,7 @@ msgstr "Hàng tháng"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__move_id
 msgid "Move"
-msgstr "Bút toán"
+msgstr "Dịch chuyển"
 
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.product_value_form_view
@@ -694,14 +694,14 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/stock_account/static/src/stock_valuation/filters/filter_options.xml:0
 msgid "Options"
-msgstr "Tuỳ chọn"
+msgstr "Tùy chọn"
 
 #. module: stock_account
 #: model:ir.model.fields.selection,name:stock_account.selection__product_category__property_valuation__periodic
 #: model:ir.model.fields.selection,name:stock_account.selection__product_template__valuation__periodic
 #: model:ir.model.fields.selection,name:stock_account.selection__res_company__inventory_valuation__periodic
 msgid "Periodic (at closing)"
-msgstr "Định kỳ (khi khoá sổ)"
+msgstr "Kiểm kê định kỳ (khi khóa sổ)"
 
 #. module: stock_account
 #: model:ir.model.fields,help:stock_account.field_product_category__property_valuation
@@ -712,10 +712,10 @@ msgid ""
 "inventory when a product is billed or invoiced.\n"
 "        "
 msgstr ""
-"Định kỳ: Các bút toán kế toán được đề xuất thủ công trong báo cáo định giá "
-"tồn kho.\n"
-"Thường xuyên: Một bút toán kế toán được tạo tự động để định giá tồn kho khi "
-"sản phẩm được lập hóa đơn hoặc xuất hóa đơn.\n"
+"Kiểm kê định kỳ: Các bút toán kế toán được đề xuất thủ công trong báo cáo "
+"định giá tồn kho.\n"
+"        Kê khai thường xuyên: Một bút toán kế toán được tạo tự động để định "
+"giá tồn kho khi sản phẩm được lập hóa đơn mua hoặc hóa đơn bán.\n"
 "        "
 
 #. module: stock_account
@@ -723,12 +723,12 @@ msgstr ""
 #: model:ir.model.fields.selection,name:stock_account.selection__product_template__valuation__real_time
 #: model:ir.model.fields.selection,name:stock_account.selection__res_company__inventory_valuation__real_time
 msgid "Perpetual (at invoicing)"
-msgstr "Tự động (khi xuất hoá đơn)"
+msgstr "Kê khai thường xuyên (khi lập hóa đơn)"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_picking_type
 msgid "Picking Type"
-msgstr "Kiểu lấy hàng"
+msgstr "Loại nghiệp vụ"
 
 #. module: stock_account
 #. odoo-python
@@ -771,12 +771,12 @@ msgstr "Sản phẩm"
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_product_category
 msgid "Product Category"
-msgstr "Danh mục sản phẩm"
+msgstr "Nhóm sản phẩm"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_move_line
 msgid "Product Moves (Stock Move Line)"
-msgstr "Điều chuyển sản phẩm (Dòng điều chuyển tồn kho)"
+msgstr "Dịch chuyển sản phẩm (Chi tiết dịch chuyển)"
 
 #. module: stock_account
 #. odoo-python
@@ -804,17 +804,17 @@ msgstr "Biến thể sản phẩm"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_res_company__account_production_wip_account_id
 msgid "Production WIP Account"
-msgstr "Tài khoản WIP sản xuất"
+msgstr "Tài khoản sản xuất dở dang"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_res_company__account_production_wip_overhead_account_id
 msgid "Production WIP Overhead Account"
-msgstr "Tài khoản chung WIP sản xuất"
+msgstr "Tài khoản chi phí sản xuất chung dở dang"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_quant
 msgid "Quants"
-msgstr "Quant"
+msgstr "Dòng tồn kho"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_avco_report__reference
@@ -844,7 +844,7 @@ msgstr ""
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_return_picking_line
 msgid "Return Picking Line"
-msgstr "Dòng phiếu trả hàng"
+msgstr "Chi tiết phiếu trả hàng"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_inventory_adjustment_name__should_show_accounting_date
@@ -858,7 +858,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:stock_account.selection__res_company__cost_method__standard
 #: model:ir.model.fields.selection,name:stock_account.selection__stock_quant__cost_method__standard
 msgid "Standard Price"
-msgstr "Giá tiêu chuẩn"
+msgstr "Giá định mức"
 
 #. module: stock_account
 #: model:ir.model.fields,help:stock_account.field_product_category__property_cost_method
@@ -871,12 +871,12 @@ msgid ""
 "that enter the company first will also leave it first.\n"
 "        "
 msgstr ""
-"Giá tiêu chuẩn: Sản phẩm được định giá theo giá vốn tiêu chuẩn được xác định "
-"cho sản phẩm.\n"
-"        Chi phí trung bình (AVCO): Sản phẩm được định giá theo chi phí bình "
+"Giá định mức: Sản phẩm được định giá theo giá định mức khai báo trên sản "
+"phẩm.\n"
+"        Bình quân gia quyền (AVCO): Sản phẩm được định giá theo giá bình "
 "quân gia quyền.\n"
-"        Nhập trước xuất trước (FIFO): Sản phẩm được định giá theo quy tắc "
-"những sản phẩm nào nhập vào công ty trước thì cũng sẽ xuất ra trước.\n"
+"        Nhập trước xuất trước (FIFO): Sản phẩm được định giá với giả định "
+"hàng nhập vào công ty trước sẽ được xuất ra trước.\n"
 "        "
 
 #. module: stock_account
@@ -912,7 +912,7 @@ msgstr "Sổ nhật ký tồn kho"
 #: model:ir.model.fields,field_description:stock_account.field_account_move__stock_move_ids
 #: model:ir.model.fields.selection,name:stock_account.selection__stock_avco_report__res_model_name__stock_move
 msgid "Stock Move"
-msgstr "Điều chuyển tồn kho"
+msgstr "Dịch chuyển kho"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_forecasted_product_product
@@ -1010,7 +1010,7 @@ msgstr "Tổng giá trị"
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_picking
 msgid "Transfer"
-msgstr "Lệnh chuyển hàng"
+msgstr "Phiếu kho"
 
 #. module: stock_account
 #: model:ir.model.fields,help:stock_account.field_stock_move__to_refund
@@ -1026,7 +1026,7 @@ msgstr "Kích hoạt giảm số lượng đã giao/nhận trong đơn bán/mua 
 #: model_terms:ir.ui.view,arch_db:stock_account.stock_avco_report_view_list
 #: model_terms:ir.ui.view,arch_db:stock_account.stock_move_view_list_valuation
 msgid "Unit Cost"
-msgstr "Chi phí đơn vị"
+msgstr "Giá vốn đơn vị"
 
 #. module: stock_account
 #: model:ir.actions.act_window,name:stock_account.stock_avco_report_action
@@ -1037,7 +1037,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__to_refund
 #: model:ir.model.fields,field_description:stock_account.field_stock_return_picking_line__to_refund
 msgid "Update quantities on SO/PO"
-msgstr "Cập nhật số lượng trên đơn bán/mua hàng"
+msgstr "Cập nhật số lượng trên đơn bán/đơn mua"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_category__anglo_saxon_accounting
@@ -1108,7 +1108,7 @@ msgstr ""
 "Giá trị của lô (được tính tự động trong AVCO).\n"
 "        Được sử dụng để định giá sản phẩm khi không biết chi phí mua hàng "
 "(ví dụ: điều chỉnh tồn kho).\n"
-"        Được sử dụng để tính toán lợi nhuận trên các đơn bán hàng."
+"        Được sử dụng để tính toán lợi nhuận trên các đơn bán."
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_account_account__account_stock_variation_id
@@ -1130,8 +1130,8 @@ msgid ""
 "When doing automated inventory valuation, this is the Accounting Journal in "
 "which entries will be automatically posted when stock moves are processed."
 msgstr ""
-"Khi thực hiện định giá tồn kho tự động, đây là Sổ nhật ký kế toán, trong đó "
-"các bút toán sẽ được tự động ghi sổ khi điều chuyển tồn kho được xử lý."
+"Khi định giá tồn kho tự động, đây là sổ nhật ký kế toán mà các bút toán sẽ "
+"được tự động ghi sổ vào khi dịch chuyển kho được xử lý."
 
 #. module: stock_account
 #: model:ir.model.fields,help:stock_account.field_product_category__property_price_difference_account_id
@@ -1141,8 +1141,8 @@ msgid ""
 "With perpetual valuation, this account will hold the price difference "
 "between the standard price and the bill price."
 msgstr ""
-"Với định giá thường xuyên, tài khoản này sẽ ghi nhận chênh lệch giá giữa giá "
-"tiêu chuẩn và giá trên hóa đơn."
+"Khi hạch toán tồn kho theo phương pháp kê khai thường xuyên, tài khoản này "
+"ghi nhận chênh lệch giữa giá tiêu chuẩn và giá trên hóa đơn mua."
 
 #. module: stock_account
 #. odoo-python

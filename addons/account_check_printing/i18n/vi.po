@@ -53,7 +53,7 @@ msgid ""
 "Adjust the margins of generated checks to make it fit your printer's "
 "settings."
 msgstr ""
-"Điều chỉnh lề của các séc đã tạo cho phù hợp với cài đặt máy in của bạn."
+"Điều chỉnh lề của séc được tạo cho phù hợp với thiết lập máy in của bạn."
 
 #. module: account_check_printing
 #: model:ir.model.fields,field_description:account_check_printing.field_account_payment__check_amount_in_words
@@ -64,7 +64,7 @@ msgstr "Tổng tiền bằng chữ"
 #. odoo-python
 #: code:addons/account_check_printing/models/account_payment.py:0
 msgid "Bills"
-msgstr "Hoá đơn"
+msgstr "Hóa đơn mua hàng"
 
 #. module: account_check_printing
 #: model_terms:ir.ui.view,arch_db:account_check_printing.print_pre_numbered_checks_view
@@ -159,17 +159,17 @@ msgstr "Công ty"
 #. module: account_check_printing
 #: model:ir.model,name:account_check_printing.model_res_config_settings
 msgid "Config Settings"
-msgstr "Cài đặt cấu hình"
+msgstr "Thiết lập cấu hình"
 
 #. module: account_check_printing
 #: model:ir.model.fields,field_description:account_check_printing.field_print_prenumbered_checks__create_uid
 msgid "Created by"
-msgstr "Được tạo bởi"
+msgstr "Người tạo"
 
 #. module: account_check_printing
 #: model:ir.model.fields,field_description:account_check_printing.field_print_prenumbered_checks__create_date
 msgid "Created on"
-msgstr "Được tạo vào"
+msgstr "Ngày tạo"
 
 #. module: account_check_printing
 #: model_terms:ir.ui.view,arch_db:account_check_printing.view_account_journal_form_inherited
@@ -224,12 +224,12 @@ msgstr "Sổ nhật ký"
 #. module: account_check_printing
 #: model:ir.model.fields,field_description:account_check_printing.field_print_prenumbered_checks__write_uid
 msgid "Last Updated by"
-msgstr "Cập nhật lần cuối bởi"
+msgstr "Người cập nhật cuối"
 
 #. module: account_check_printing
 #: model:ir.model.fields,field_description:account_check_printing.field_print_prenumbered_checks__write_date
 msgid "Last Updated on"
-msgstr "Cập nhật lần cuối vào"
+msgstr "Ngày cập nhật cuối"
 
 #. module: account_check_printing
 #: model:ir.model.fields,field_description:account_check_printing.field_account_journal__check_manual_sequencing
@@ -255,20 +255,21 @@ msgid ""
 "U.S. ISO20022: Pay in the US by submitting an ISO20022 file to your bank. "
 "Module account_iso20022 is necessary.\n"
 msgstr ""
-"Thủ công: Thanh toán hoặc Nhận thanh toán bằng bất kỳ phương thức nào bên "
+"Thủ công: Thanh toán hoặc nhận thanh toán bằng bất kỳ phương thức nào bên "
 "ngoài Odoo.\n"
-"Nhà cung cấp dịch vụ thanh toán: Mỗi nhà cung cấp dịch vụ thanh toán có "
-"Phương thức thanh toán riêng. Yêu cầu giao dịch trên/vào thẻ nhờ token thanh "
-"toán do đối tác lưu khi mua hoặc đăng ký online.\n"
-"Séc: Thanh toán hóa đơn bằng séc và in từ Odoo.\n"
-"Gửi tiền theo lô: Thu thập nhiều séc của khách hàng cùng một lúc để tạo và "
-"gửi tiền theo lô tới ngân hàng. Cần có phân hệ account_batch_payment.\n"
-"Chuyển tín dụng SEPA: Thanh toán trong khu vực SEPA bằng cách gửi tệp Chuyển "
-"tín dụng SEPA cho ngân hàng của bạn. Cần có phân hệ account_iso20022.\n"
+"Cổng thanh toán: Mỗi cổng thanh toán có phương thức thanh toán riêng. Yêu "
+"cầu giao dịch trên/vào thẻ nhờ token thanh toán do đối tác lưu khi mua hoặc "
+"đăng ký online.\n"
+"Séc: Thanh toán hóa đơn mua hàng bằng séc và in từ Odoo.\n"
+"Nộp theo lô: Thu thập nhiều séc của khách hàng cùng một lúc để tạo và nộp "
+"theo lô tới ngân hàng. Cần có phân hệ account_batch_payment.\n"
+"Chuyển khoản tín dụng SEPA: Thanh toán trong khu vực SEPA bằng cách gửi tệp "
+"chuyển khoản tín dụng SEPA cho ngân hàng của bạn. Cần có phân hệ "
+"account_iso20022.\n"
 "Ghi nợ trực tiếp SEPA: Nhận thanh toán trong khu vực SEPA nhờ vào giấy ủy "
-"nhiệm mà đối tác sẽ cấp cho bạn. Cần có phân hệ account_iso20022.\n"
-"Chuẩn ISO20022 tại Hoa Kỳ: Thực hiện thanh toán trong nước bằng cách gửi tệp "
-"ISO20022 tới ngân hàng của bạn. Cần có phân hệ account_iso20022.\n"
+"quyền mà đối tác sẽ cấp cho bạn. Cần có phân hệ account_iso20022.\n"
+"ISO20022 Hoa Kỳ: Thanh toán tại Hoa Kỳ bằng cách gửi tệp ISO20022 tới ngân "
+"hàng của bạn. Cần có phân hệ account_iso20022.\n"
 
 #. module: account_check_printing
 #: model:ir.model.fields,field_description:account_check_printing.field_res_company__account_check_printing_multi_stub
@@ -292,7 +293,7 @@ msgstr "Số séc kế tiếp chỉ được chứa chữ số."
 #. module: account_check_printing
 #: model:ir.model.fields.selection,name:account_check_printing.selection__res_company__account_check_printing_layout__disabled
 msgid "None"
-msgstr "Không"
+msgstr "Không có"
 
 #. module: account_check_printing
 #: model:ir.model.fields,field_description:account_check_printing.field_account_payment__payment_method_line_id
@@ -359,7 +360,7 @@ msgstr "In séc được đánh số trước"
 #. odoo-python
 #: code:addons/account_check_printing/models/account_payment.py:0
 msgid "Refunds"
-msgstr "Hoàn tiền"
+msgstr "Điều chỉnh giảm"
 
 #. module: account_check_printing
 #: model:ir.model.fields,field_description:account_check_printing.field_res_company__account_check_printing_margin_right
@@ -375,7 +376,7 @@ msgid ""
 "In order to disable the printing feature, select 'None'."
 msgstr ""
 "Chọn định dạng tương ứng với tờ séc mà bạn sẽ in séc.\n"
-"Để tắt tính năng in, hãy chọn 'Không'."
+"Để tắt tính năng in, hãy chọn 'Không có'."
 
 #. module: account_check_printing
 #: model_terms:ir.ui.view,arch_db:account_check_printing.view_account_payment_form_inherited
@@ -399,8 +400,8 @@ msgid ""
 "Something went wrong with Check Layout, please select another layout in "
 "Invoicing/Accounting Settings and try again."
 msgstr ""
-"Đã xảy ra sự cố với Bố cục séc, vui lòng chọn bố cục khác trong Cài đặt hóa "
-"đơn/kế toán và thử lại."
+"Đã xảy ra sự cố với Bố cục séc, vui lòng chọn bố cục khác trong Thiết lập "
+"Hóa đơn/Kế toán và thử lại."
 
 #. module: account_check_printing
 #. odoo-python
@@ -467,8 +468,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_check_printing.print_pre_numbered_checks_view
 msgid ""
 "This will allow to save on payments the number of the corresponding check."
-msgstr ""
-"Điều này sẽ cho phép tiết kiệm số séc tương ứng trên các khoản thanh toán."
+msgstr "Thao tác này cho phép lưu số séc tương ứng vào các khoản thanh toán."
 
 #. module: account_check_printing
 #: model_terms:ir.ui.view,arch_db:account_check_printing.view_account_payment_form_inherited
@@ -478,7 +478,7 @@ msgstr "Bỏ đánh dấu đã gửi"
 #. module: account_check_printing
 #: model_terms:ir.ui.view,arch_db:account_check_printing.view_account_payment_form_inherited
 msgid "Void Check"
-msgstr "Séc trống"
+msgstr "Hủy séc"
 
 #. module: account_check_printing
 #. odoo-python
@@ -487,8 +487,8 @@ msgid ""
 "You have to choose a check layout. For this, go in Invoicing/Accounting "
 "Settings, search for 'Checks layout' and set one."
 msgstr ""
-"Bạn phải chọn một bố cục séc. Để tiến hành, hãy đi đến Cài đặt hóa đơn/Kế "
-"toán, tìm kiếm 'Bố cục séc' và thiết lập một bố cục."
+"Bạn phải chọn một bố cục séc. Để làm việc này, hãy vào Thiết lập Hóa đơn/Kế "
+"toán, tìm 'Bố cục séc' và thiết lập một bố cục."
 
 #. module: account_check_printing
 #. odoo-python
