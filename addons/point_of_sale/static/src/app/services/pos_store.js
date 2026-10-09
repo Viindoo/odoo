@@ -13,7 +13,8 @@ import {
     orderUsageUTCtoLocalUtil,
 } from "@point_of_sale/utils";
 import { HWPrinter } from "@point_of_sale/app/utils/printer/hw_printer";
-import { ConnectionLostError } from "@web/core/network/rpc";
+import { ConnectionLostError, RPCError } from "@web/core/network/rpc";
+import { browser } from "@web/core/browser/browser";
 import { OrderReceipt } from "@point_of_sale/app/screens/receipt_screen/receipt/order_receipt";
 import { _t } from "@web/core/l10n/translation";
 import { OpeningControlPopup } from "@point_of_sale/app/components/popups/opening_control_popup/opening_control_popup";
@@ -676,7 +677,6 @@ export class PosStore extends WithLazyGetterTrap {
                 this.removeOrder(order, false);
                 this.removePendingOrder(order);
             }
-            await Promise.all(ordersToDelete.map((order) => this.recycleOrderNumber(order)));
         }
 
         return true;
@@ -1377,18 +1377,8 @@ export class PosStore extends WithLazyGetterTrap {
             return;
         }
 
-        const removed = this.data.localDeleteCascade(order);
-        this.recycleOrderNumber(order);
-        return removed;
-    }
-    /**
-     * Recycle the receipt number only once the order is gone from IndexedDB,
-     * otherwise a reload restores it next to a new order using the same number.
-     */
-    recycleOrderNumber(order) {
-        return this.data
-            .deleteRecordsInIndexedDB("pos.order", [order.uuid])
-            .then(() => this.device.saveUnusedNumber([order]));
+        this.device.saveUnusedNumber([order]);
+        return this.data.localDeleteCascade(order);
     }
 
     /**
@@ -1455,6 +1445,7 @@ export class PosStore extends WithLazyGetterTrap {
     }
     setNextOrderRefs(order) {
         const deviceIdentifier = this.device.identifier;
+        this.device.removeUsedNumbers(this.models["pos.order"].getAll());
         const number = `${this.device.useNext()}`.padStart(6, "0");
         const configId = this.config.id;
         const year2Digits = DateTime.now().year.toString().slice(-2);
@@ -1655,6 +1646,7 @@ export class PosStore extends WithLazyGetterTrap {
                     }
                 }
 
+                this.device.removeUsedNumbers(newData["pos.order"]);
                 await this.postSyncAllOrders(newData["pos.order"]);
                 this.removePendingOrder(order);
                 syncedOrders.push(...newData["pos.order"]);
@@ -2285,8 +2277,21 @@ export class PosStore extends WithLazyGetterTrap {
             this.dialog.add(RetryPrintPopup, {
                 message: failedReceipts,
                 canRetry: true,
-                retry: () => {
-                    this.printChanges(order, orderChange, reprint, retryPrinters);
+                retry: async () => {
+                    const isRetryPrinted = await this.printChanges(
+                        order,
+                        orderChange,
+                        reprint,
+                        retryPrinters
+                    );
+                    if (
+                        isRetryPrinted &&
+                        !isPrinted &&
+                        this.models["pos.order"].getBy("uuid", order.uuid)
+                    ) {
+                        order.updateLastOrderChange();
+                        this.syncAllOrders({ orders: [order] });
+                    }
                 },
             });
         }
@@ -3151,6 +3156,17 @@ export class PosStore extends WithLazyGetterTrap {
         return (
             (await this.data.orm.searchCount("pos.session", [["id", "=", this.session.id]])) === 0
         );
+    }
+
+    async reloadIfSessionDeleted(error) {
+        if (
+            error instanceof RPCError &&
+            error.data.name === "odoo.exceptions.MissingError" &&
+            (await this.isSessionDeleted())
+        ) {
+            return browser.location.reload();
+        }
+        throw error;
     }
 
     weighProduct() {
