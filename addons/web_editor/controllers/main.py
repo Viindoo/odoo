@@ -593,6 +593,12 @@ class Web_Editor(http.Controller):
             # empty record set.
             request.env[fields['res_model']].browse(fields['res_id']).check_access_rights('write')
 
+            mimetype_exempt = any(
+                request.env.user.has_group(group) for group in attachment._get_mimetype_exempt_groups()
+            )
+            if not mimetype_exempt:
+                request.env['ir.ui.view'].sudo(False).check_access_rights('write')
+
             # Sudo because restricted editor will not be able to copy the record
             attachment = attachment.sudo().copy(fields).sudo(False)
             # Override mimetype with SUPERUSER if it was forced to plain text
@@ -865,6 +871,8 @@ class Web_Editor(http.Controller):
 
     @http.route("/web_editor/generate_text", type="json", auth="user")
     def generate_text(self, prompt, conversation_history):
+        if not request.env.user._is_internal():
+            raise AccessError(_("Only internal users can use AI text generation."))
         try:
             IrConfigParameter = request.env['ir.config_parameter'].sudo()
             olg_api_endpoint = IrConfigParameter.get_param('web_editor.olg_api_endpoint', DEFAULT_OLG_ENDPOINT)
