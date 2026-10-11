@@ -626,7 +626,11 @@ export class PosStore extends WithLazyGetterTrap {
     }
     async afterOrderDeletion() {
         if (!this.config.module_pos_restaurant) {
-            this.setOrder(this.getOpenOrders().at(-1) || this.addNewOrder());
+            const newOrder = this.getOpenOrders().at(-1) || this.addNewOrder();
+            this.setOrder(newOrder);
+            if (this.router.state.current === "ProductScreen") {
+                this.navigate("ProductScreen", { orderUuid: newOrder.uuid });
+            }
         }
     }
 
@@ -3185,7 +3189,9 @@ export class PosStore extends WithLazyGetterTrap {
     clickSaveOrder() {
         this.syncAllOrders({ orders: [this.getOrder()] });
         this.notification.add(_t("Order saved for later"), { type: "success" });
-        this.setOrder(this.getEmptyOrder());
+        const newOrder = this.getEmptyOrder();
+        this.setOrder(newOrder);
+        this.navigate("ProductScreen", { orderUuid: newOrder.uuid });
         this.mobile_pane = "right";
     }
     canEditPayment(order) {
@@ -3219,6 +3225,30 @@ export class PosStore extends WithLazyGetterTrap {
         const available = this.getAvailableCategories();
         const availableIds = new Set(available.map((c) => c.id));
         return available.filter((c) => !c.parent_id || !availableIds.has(c.parent_id.id));
+    }
+
+    async ensureRefundedOrderLoaded(order) {
+        if (!order?.isRefund || order.refunded_order_id || this.data.network.offline) {
+            return order;
+        }
+
+        const refundedOrderId = order.raw.refunded_order_id;
+        if (!refundedOrderId) {
+            return order;
+        }
+
+        try {
+            await this.data.loadServerOrders([["id", "=", refundedOrderId]]);
+        } catch (error) {
+            logPosMessage(
+                "Store",
+                "ensureRefundedOrderLoaded",
+                `Could not load refunded order ${refundedOrderId}`,
+                CONSOLE_COLOR,
+                [error]
+            );
+        }
+        return order;
     }
 }
 
