@@ -95,7 +95,7 @@ class TestPdpMessage(TestL10nFrPdpCommon, TestAccountMoveSendCommon):
 
         if r.path_url.startswith('/api/pdp/1/annuaire_lookup?pdp_identifier='):
             identifier = parse_qs(r.path_url.rsplit('?')[1])['pdp_identifier'][0]
-            return cls._get_annuaire_lookup_response(identifier, "968515759_96851575905823")
+            return cls._get_annuaire_lookup_response(identifier, "334175221_33417522105821")
         elif r.path_url.startswith('/api/pdp/1/lookup?peppol_identifier='):
             identifier = parse_qs(r.path_url.rsplit('?')[1])['peppol_identifier'][0]
             return cls._get_peppol_lookup_response(identifier, "0208:0239843188")
@@ -270,6 +270,31 @@ class TestPdpMessage(TestL10nFrPdpCommon, TestAccountMoveSendCommon):
             [{
                 'peppol_move_state': 'done',
                 'pdp_ppf_move_state': 'in_progress',
+                'peppol_message_uuid': FAKE_UUID[0],
+            }],
+        )
+        self.assertTrue(bool(move.ubl_cii_xml_id))
+
+    def test_pdp_send_success_message_peppol(self):
+        # should be able to send valid invoices correctly
+        # attachment should be generated
+        # peppol_move_state should be set to done
+        # pdp_ppf_move_state should be `False`
+        move = self._create_invoice(partner_id=self.belgian_partner.id)
+        move.action_post()
+
+        wizard = self.create_send_and_print(move)
+        self.assertEqual(wizard.invoice_edi_format, 'ubl_bis3')
+        wizard.sending_methods = ['peppol']
+
+        wizard.action_send_and_print()
+
+        self.env['account_edi_proxy_client.user']._cron_peppol_get_message_status()
+        self.assertRecordValues(
+            move,
+            [{
+                'peppol_move_state': 'done',
+                'pdp_ppf_move_state': False,
                 'peppol_message_uuid': FAKE_UUID[0],
             }],
         )
