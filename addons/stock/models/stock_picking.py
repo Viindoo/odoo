@@ -14,7 +14,6 @@ from odoo.exceptions import UserError
 from odoo.fields import Domain, Command
 from odoo.tools import format_datetime, format_date, groupby, OrderedSet, SQL
 from odoo.tools.float_utils import float_compare, float_is_zero
-from odoo.tools.misc import clean_context
 
 
 class StockPickingType(models.Model):
@@ -1186,8 +1185,6 @@ class StockPicking(models.Model):
             after_vals['location_id'] = vals['location_id']
         if vals.get('location_dest_id'):
             after_vals['location_dest_id'] = vals['location_dest_id']
-        if 'partner_id' in vals:
-            after_vals['partner_id'] = vals['partner_id']
         if after_vals:
             self.move_ids.filtered(lambda move: move.location_dest_usage != 'inventory').write(after_vals)
         if vals.get('move_ids'):
@@ -1802,8 +1799,6 @@ class StockPicking(models.Model):
 
     def action_put_in_pack(self, *, package_id=False, package_type_id=False, package_name=False):
         self.ensure_one()
-        if self.env.context.get('sml_specific_default'):
-            self = self.with_context(clean_context(self.env.context))
         if self.state not in ('done', 'cancel'):
             return self.move_line_ids.action_put_in_pack(package_id=package_id, package_type_id=package_type_id, package_name=package_name)
 
