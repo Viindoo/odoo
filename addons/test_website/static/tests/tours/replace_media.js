@@ -75,7 +75,13 @@ registerWebsitePreviewTour('test_replace_media', {
     {
         content: "Open MediaDialog from an image",
         trigger: "button[data-action-id='replaceMedia']",
-        run: "click",
+        async run(actions) {
+            // Mark the options container of the image about to be replaced:
+            // once the replacement is done, a new container is mounted for
+            // the new image, but the old one stays displayed until then.
+            this.anchor.closest(".options-container").dataset.tourReplacedMedia = "";
+            await actions.click();
+        },
     },
     {
         content: "select svg",
@@ -87,8 +93,11 @@ registerWebsitePreviewTour('test_replace_media', {
         trigger: ":iframe .s_picture figure img[data-shape]",
     },
     {
-        content: "ensure image size is displayed",
-        trigger: ".o_customize_tab [data-container-title='Image'] span[title='Size']",
+        // The container of the replaced image can still be displayed on a slow
+        // runner: the next replacement would then target a detached element.
+        content: "ensure the options of the new image are displayed",
+        trigger:
+            ".o_customize_tab [data-container-title='Image']:not([data-tour-replaced-media]) span[title='Size']",
     },
     {
         content: "replace image",
