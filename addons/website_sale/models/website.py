@@ -438,7 +438,7 @@ class Website(models.Model):
                                 'id': cat.id,
                             }
                             for cat in ecommerce_categories
-                        ])
+                        ], ensure_ascii=False)
 
                 if footer_updated:
                     footer_view.write({'arch': etree.tostring(arch_tree)})
@@ -1080,11 +1080,10 @@ class Website(models.Model):
         return '64px'
 
     def _get_basic_feed_product_domain(self):
-        return Domain.AND([
-            Domain('is_published', '=', True),
-            Domain('type', 'in', ('consu', 'combo')),
-            self.website_domain(),
-        ])
+        return (
+            Domain("type", "in", {"consu", "combo"})
+            & self.with_user(self.user_id).sale_product_domain()
+        )
 
     def _default_feed_is_valid(self):
         self.ensure_one()
