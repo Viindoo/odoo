@@ -247,6 +247,14 @@ registerWebsitePreviewTour(
             run: "click",
         },
         {
+            // Applying the filter reloads the list. Selecting a row before
+            // the reloaded list is rendered would lose the selection, and
+            // the "Actions" menu would not show up.
+            content: "Wait for the list to be reloaded with the 'My Website' filter",
+            trigger:
+                ".o_list_table:not(:has(.o_data_cell[name=website_id]:contains('Test Website')))",
+        },
+        {
             content: "Click on Home Page",
             trigger: `.o_list_renderer ${homePage} td.o_list_record_selector input[type="checkbox"]`,
             run: "click",
