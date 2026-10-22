@@ -294,7 +294,9 @@ export class PosOrderline extends PosOrderlineAccounting {
                     this,
                     related_lines
                 );
-                related_lines.forEach((line) => line.setUnitPrice(price));
+                related_lines
+                    .filter((line) => line.price_type === "original")
+                    .forEach((line) => line.setUnitPrice(price));
             } else {
                 this.setUnitPrice(
                     productTemplate.getPrice(
@@ -389,16 +391,26 @@ export class PosOrderline extends PosOrderlineAccounting {
         });
     }
 
-    setUnitPrice(price) {
-        const ProductPrice = this.models["decimal.precision"].find(
+    get unitPricePrecision() {
+        const productPrice = this.models["decimal.precision"].find(
             (dp) => dp.name === "Product Price"
         );
+        if (
+            this.extra_tax_data?.price_unit !== undefined &&
+            this.currency.precision < productPrice.precision
+        ) {
+            return this.currency;
+        }
+        return productPrice;
+    }
+
+    setUnitPrice(price) {
         const parsed_price = !isNaN(price)
             ? price
             : isNaN(parseFloat(price))
             ? 0
             : parseFloat("" + price);
-        this.price_unit = ProductPrice.round(parsed_price || 0);
+        this.price_unit = this.unitPricePrecision.round(parsed_price || 0);
     }
 
     displayDiscountPolicy() {

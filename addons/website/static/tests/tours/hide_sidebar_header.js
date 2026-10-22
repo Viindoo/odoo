@@ -26,6 +26,7 @@ registerWebsitePreviewTour(
         {
             content: "Wait for the builder to mount after iframe reload",
             trigger: ":iframe body.editor_enable",
+            timeout: 30000, // SCSS compilation might take some time
         },
         {
             content: "Check that the header changed to 'Sidebar'",
