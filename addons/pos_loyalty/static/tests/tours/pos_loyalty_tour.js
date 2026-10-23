@@ -244,6 +244,7 @@ registry.category("web_tour.tours").add("PosLoyaltyTour6", {
             PaymentScreen.clickValidate(),
             ReceiptScreen.isShown(),
             PosLoyalty.isLoyaltyPointsAvailable(),
+            Chrome.waitOrdersSynced(),
             Utils.refresh(),
             ReceiptScreen.isShown(),
             PosLoyalty.isLoyaltyPointsAvailable(),
@@ -342,17 +343,23 @@ registry.category("web_tour.tours").add("PosLoyaltyTour11.1", {
             ProductScreen.totalAmountIs("150.00"),
             PosLoyalty.isRewardButtonHighlighted(false),
             PosLoyalty.finalizeOrder("Cash", "150"),
+            Chrome.waitOrdersSynced(),
             refresh(),
             Chrome.clickOrders(),
             TicketScreen.selectFilter("Paid"),
             Chrome.waitRequest(),
             {
                 trigger: "body",
-                run: () => {
-                    const order = posmodel.data.models["pos.order"]
-                        .getAll()
-                        .filter((o) => o.state === "paid")[0];
-                    if (!order.new_coupon_info && !order.raw.new_coupon_info) {
+                async run({ waitUntil }) {
+                    const hasNextOrderCoupon = () => {
+                        const order = posmodel.data.models["pos.order"]
+                            .getAll()
+                            .find((o) => o.state === "paid");
+                        return order && (order.new_coupon_info || order.raw.new_coupon_info);
+                    };
+                    try {
+                        await waitUntil(hasNextOrderCoupon, { timeout: 8000 });
+                    } catch {
                         throw Error("Next order coupon is missing");
                     }
                 },
