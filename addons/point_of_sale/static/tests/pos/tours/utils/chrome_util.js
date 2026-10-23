@@ -127,6 +127,27 @@ export function startPoS() {
         },
     ];
 }
+export function waitRegisterOpened() {
+    return {
+        content: "Wait until the register is opened",
+        // The popup closes only after set_opening_control returned; a reload must not overtake it
+        trigger: negate(".modal .opening-notes-container"),
+    };
+}
+export function waitOrdersSynced() {
+    return {
+        content: "Wait until the orders are synced with the server",
+        trigger: "body",
+        async run({ waitUntil }) {
+            await waitUntil(
+                () =>
+                    posmodel.syncingOrders.size === 0 &&
+                    posmodel.data.network.unsyncData.length === 0,
+                { timeout: 10000 }
+            );
+        },
+    };
+}
 export function clickBtn(name, { expectUnloadPage = false } = {}) {
     return {
         content: `Click on ${name}`,
