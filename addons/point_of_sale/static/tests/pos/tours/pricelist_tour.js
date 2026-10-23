@@ -20,6 +20,7 @@ registry.category("web_tour.tours").add("pos_pricelist", {
             Pricelist.setUp(),
             Pricelist.waitForUnitTest(),
             Dialog.confirm("Open Register"),
+            Chrome.waitRegisterOpened(),
             OfflineUtil.setOfflineMode(),
             // ensure that even after refreshing the page while being offline all data is correctly reloaded
             refresh(),
