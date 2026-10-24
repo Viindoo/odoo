@@ -1,4 +1,5 @@
 import {
+    Component,
     onMounted,
     onPatched,
     onWillUnmount,
@@ -6,6 +7,7 @@ import {
     useEffect,
     useRef,
     useState,
+    xml,
 } from "@odoo/owl";
 
 import { browser } from "@web/core/browser/browser";
@@ -13,6 +15,8 @@ import { _t } from "@web/core/l10n/translation";
 import { Deferred } from "@web/core/utils/concurrency";
 import { makeDraggableHook } from "@web/core/utils/draggable_hook_builder_owl";
 import { useService } from "@web/core/utils/hooks";
+import { clamp } from "@web/core/utils/numbers";
+import { closestScrollableY } from "@web/core/utils/scrolling";
 
 export function useLazyExternalListener(target, eventName, handler, eventParams) {
     const boundHandler = handler.bind(useComponent());
@@ -116,6 +120,16 @@ export function useHover(refNames, { onHover, onAway, stateObserver, onHovering 
         },
         _count: 0,
         _isHover: false,
+        addTarget(target) {
+            targets.push(target);
+            target.ref.el.addEventListener("mouseenter", onmouseenter, true);
+            target.ref.el.addEventListener("mouseleave", onmouseleave, true);
+            return () => {
+                target.ref.el.removeEventListener("mouseenter", onmouseenter, true);
+                target.ref.el.removeEventListener("mouseleave", onmouseleave, true);
+                targets.splice(targets.indexOf(target), 1);
+            };
+        },
     });
     function setHover(hovering) {
         if (hovering && !wasHovering) {
@@ -190,14 +204,29 @@ export function useHover(refNames, { onHover, onAway, stateObserver, onHovering 
     }
 
     if (stateObserver) {
-        useEffect(() => {
-            if (lastHoveredTarget && !lastHoveredTarget.ref.el) {
+        useEffect((open) => {
+            if ((lastHoveredTarget && !lastHoveredTarget.ref.el) || !open) {
                 setHover(false);
                 lastHoveredTarget = null;
             }
         }, stateObserver);
     }
     return state;
+}
+
+export class UseHoverOverlay extends Component {
+    static props = ["slots", "hover"];
+    static template = xml`<div t-ref="root"><t t-slot="default"/></div>`;
+
+    setup() {
+        super.setup();
+        this.root = useRef("root");
+        let removeTarget;
+        onMounted(() => {
+            removeTarget = this.props.hover.addTarget({ ref: { el: this.root.el } });
+        });
+        onWillUnmount(() => removeTarget?.());
+    }
 }
 
 /**
@@ -255,6 +284,22 @@ export function useVisible(refName, cb, { ready = true } = {}) {
     return state;
 }
 
+function needsScrollToCenter(el) {
+    const scrollable = closestScrollableY(el.parentElement);
+    if (!scrollable) {
+        return false;
+    }
+    const { height, top } = el.getBoundingClientRect();
+    const center =
+        scrollable.getBoundingClientRect().top + scrollable.clientTop + scrollable.clientHeight / 2;
+    const target = clamp(
+        scrollable.scrollTop + top + height / 2 - center,
+        0,
+        scrollable.scrollHeight - scrollable.clientHeight
+    );
+    return Math.abs(target - scrollable.scrollTop) >= Math.max(2, 2 / window.devicePixelRatio);
+}
+
 export function useMessageHighlight(duration = 2000) {
     let timeout;
     const notification = useState(useService("notification"));
@@ -301,13 +346,22 @@ export function useMessageHighlight(duration = 2000) {
             const scrollPromise = new Deferred();
             state.scrollPromise = scrollPromise;
             if ("onscrollend" in window) {
-                document.addEventListener("scrollend", scrollPromise.resolve, {
-                    capture: true,
-                    once: true,
-                });
+                const { top } = el.getBoundingClientRect();
+                const onScrollEnd = () => {
+                    if (el.getBoundingClientRect().top !== top) {
+                        scrollPromise.resolve();
+                    }
+                };
+                document.addEventListener("scrollend", onScrollEnd, { capture: true });
+                scrollPromise.then(() =>
+                    document.removeEventListener("scrollend", onScrollEnd, { capture: true })
+                );
             } else {
                 // To remove when safari will support the "scrollend" event.
                 setTimeout(scrollPromise.resolve, 250);
+            }
+            if (!needsScrollToCenter(el)) {
+                scrollPromise.resolve();
             }
             el.scrollIntoView({ behavior: "smooth", block: "center" });
             return scrollPromise;
