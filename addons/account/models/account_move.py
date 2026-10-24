@@ -3810,7 +3810,7 @@ class AccountMove(models.Model):
             if partial_values['is_exchange']:
                 partial_values['amount'] = abs(partial_values['aml'].balance)
 
-        return partial_values_list
+        return sorted(partial_values_list, key=lambda vals: (vals['aml'].date, vals['aml'].id))
 
     def _get_reconciled_invoices_partials(self):
         ''' Helper to retrieve the details about reconciled invoices.
@@ -3843,8 +3843,8 @@ class AccountMove(models.Model):
             group = (move.line_ids + reverse_move.line_ids) \
                 .filtered(lambda l: not l.reconciled) \
                 .sorted(lambda l: l.account_type not in ('asset_receivable', 'liability_payable')) \
-                .grouped(lambda l: (l.account_id, l.currency_id))
-            for (account, _currency), lines in group.items():
+                .grouped(lambda l: (l.account_id, l.currency_id, l.partner_id))
+            for (account, _currency, _partner), lines in group.items():
                 if (
                     all(not line.reconciled for line in lines) # if it was reconciled due to a previous group
                     and account.reconcile or account.account_type in ('asset_cash', 'liability_credit_card')
