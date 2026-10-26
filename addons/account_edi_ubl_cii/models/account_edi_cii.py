@@ -284,16 +284,22 @@ class AccountEdiCii(models.AbstractModel):
 
     def _cii_get_line_specified_trade_product_node(self, vals, base_line):
         product = base_line['product_id']
+        line_name = base_line['name'] or ''
+        name, description = line_name, None
+        if product:
+            line_without_name = line_name.removeprefix(f'{product.display_name}\n')
+            if line_without_name != line_name:
+                name, description = product.display_name, line_without_name.strip()
         return {
             'ram:GlobalID': {
                 '_text': product.barcode,
                 'schemeID': "0160",
             } if product.barcode else None,
             'ram:SellerAssignedID': {'_text': product.default_code} if product.default_code else None,
-            'ram:Name': {'_text': base_line['name']},
+            'ram:Name': {'_text': name},
             'ram:Description': {
-                '_text': html2plaintext(product.description),
-            } if product.description else None,
+                '_text': description,
+            } if description else None,
         }
 
     def _cii_get_gross_price_product_trade_price_node(self, vals, base_line):
@@ -473,6 +479,11 @@ class AccountEdiCii(models.AbstractModel):
             },
         }
 
+    def _cii_is_vat_void(self, vat):
+        """Whether `vat` is one of Odoo's conventional values meaning "not subject to VAT"
+        (as opposed to a real, missing, or invalid VAT number)."""
+        return not vat or vat in ['/', 'na', 'NA']
+
     def _cii_get_seller_trade_party_node(self, vals):
         invoice = vals['invoice']
         supplier = vals['supplier']
@@ -483,6 +494,12 @@ class AccountEdiCii(models.AbstractModel):
             scheme_id = "0002"
             legal_organization_val = legal_organization_val[:9]
         supplier_vat = invoice.fiscal_position_id.foreign_vat or commercial_partner.vat
+        if self._cii_is_vat_void(supplier_vat):
+            supplier_vat = None
+        # Beyond the seller's VAT (handled separately): the German Steuernummer, if set.
+        seller_extra_tax_registrations = []
+        if (stnr := invoice.company_id._get_l10n_de_stnr()):
+            seller_extra_tax_registrations.append({'scheme': 'FC', 'value': stnr})
         return self._cii_get_partner_trade_party_node(vals, {
             'gln': False,
             'name': supplier.name,
@@ -503,9 +520,13 @@ class AccountEdiCii(models.AbstractModel):
             'peppol_eas': supplier.peppol_eas,
             'peppol_endpoint': supplier.peppol_endpoint,
             'partner_tax_registration': supplier_vat,
+            'extra_partner_tax_registrations': seller_extra_tax_registrations,
         })
 
     def _cii_get_partner_trade_party_node(self, vals, partner_values):
+        tax_registrations = partner_values.get('extra_partner_tax_registrations', [])
+        if (vat := partner_values.get('partner_tax_registration', '')) and not self._cii_is_vat_void(vat):
+            tax_registrations.insert(0, {'scheme': 'VA', 'value': vat})
         return {
             'ram:ID': {
                 'schemeID': '0088',
@@ -526,12 +547,14 @@ class AccountEdiCii(models.AbstractModel):
                     '_text': partner_values['peppol_endpoint'],
                 },
             } if partner_values['peppol_eas'] and partner_values['peppol_endpoint'] else None,
-            'ram:SpecifiedTaxRegistration': {
-                'ram:ID': {
-                    '_text': partner_values['partner_tax_registration'],
-                    'schemeID': 'VA',
-                },
-            } if partner_values['partner_tax_registration'] else None,
+            'ram:SpecifiedTaxRegistration': [
+                {
+                    'ram:ID': {
+                        '_text': tax_registration['value'],
+                        'schemeID': tax_registration['scheme'],
+                    },
+                } for tax_registration in tax_registrations
+            ],
         }
 
     def _cii_get_defined_trade_contact_node(self, vals, contact_values):
@@ -565,6 +588,7 @@ class AccountEdiCii(models.AbstractModel):
         if siret.is_valid(legal_organization_val):
             scheme_id = "0002"
             legal_organization_val = legal_organization_val[:9]
+        buyer_vat = customer.vat if not self._cii_is_vat_void(customer.vat) else None
         return self._cii_get_partner_trade_party_node(vals, {
             'gln': False,
             'name': name,
@@ -584,7 +608,7 @@ class AccountEdiCii(models.AbstractModel):
             },
             'peppol_eas': customer.peppol_eas,
             'peppol_endpoint': customer.peppol_endpoint,
-            'partner_tax_registration': customer.vat,
+            'partner_tax_registration': buyer_vat,
         })
 
     def _cii_get_applicable_header_trade_delivery_node(self, vals):
@@ -1283,7 +1307,13 @@ class AccountEdiCii(models.AbstractModel):
             # discount_amount = 300.0
             if not currency.is_zero(price_subtotal):
                 price_unit = round((price_subtotal + price_discount_amount) / price_quantity, 2)
-                discount_amount += price_discount_amount * quantity / price_quantity
+                line_price_discount_amount = price_discount_amount * quantity / price_quantity
+
+                line_total_discount_amount = (price_unit * quantity) - subtotal
+                rounding_tolerance = max(currency.rounding, 0.01) * abs(quantity) / price_quantity
+                if price_discount_amount and currency.compare_amounts(abs(line_total_discount_amount - line_price_discount_amount), rounding_tolerance) <= 0:
+                    line_price_discount_amount = line_total_discount_amount
+                discount_amount += line_price_discount_amount
         else:
             quantity = 0.0
             price_unit = 0.0
