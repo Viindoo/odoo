@@ -59,12 +59,14 @@ class ResCompany(models.Model):
         compute='_compute_account_peppol_contact_email', store=True, readonly=False,
         help='Primary contact email for Peppol connection related communications and notifications.\n'
              'In particular, this email is used by Odoo to reconnect your Peppol account in case of database change.',
+        groups='base.group_user',
     )
     account_peppol_migration_key = fields.Char(string="Migration Key", groups="base.group_system")
     account_peppol_phone_number = fields.Char(
         string='Mobile number',
         compute='_compute_account_peppol_phone_number', store=True, readonly=False,
         help='This number is used for identification purposes only.',
+        groups='base.group_user',
     )
     account_peppol_proxy_state = fields.Selection(
         selection=[
@@ -433,6 +435,8 @@ class ResCompany(models.Model):
             raise UserError(_("The database you are trying to connect to is not suitable for Peppol."))
         if not can_connect_vals.get('auth_required'):
             return None
+        if can_connect_vals.get('kyc_error'):
+            raise UserError(_("Cannot initiate KYC for your selected scheme. Please try a different one"))
         available_auths = can_connect_vals.get('available_auths') or {}
         auth = available_auths.get('generic') or next(iter(available_auths.values()), None)
         if not auth or not auth.get('authorization_url'):

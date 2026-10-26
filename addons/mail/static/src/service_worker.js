@@ -42,6 +42,21 @@ async function openDiscussChannel(channelId, action) {
     targetClient.postMessage({ action: "OPEN_CHANNEL", data: { id: channelId } });
 }
 
+async function openRecord(model, resId) {
+    const targetClient = (
+        await self.clients.matchAll({ type: "window", includeUncontrolled: true })
+    ).find((client) => /^\/(odoo|scoped_app)(\/|$)/.test(new URL(client.url).pathname));
+    if (!targetClient) {
+        const modelPath = model.includes(".") ? model : `m-${model}`;
+        await self.clients.openWindow(`/odoo/${modelPath}/${resId}`);
+        return;
+    }
+    await targetClient.focus();
+    if (model && resId) {
+        targetClient.postMessage({ action: "OPEN_RECORD", data: { id: resId, model } });
+    }
+}
+
 self.addEventListener("notificationclick", (event) => {
     event.notification.close();
     if (event.notification.data) {
@@ -49,8 +64,7 @@ self.addEventListener("notificationclick", (event) => {
         if (model === "discuss.channel") {
             event.waitUntil(openDiscussChannel(res_id, action));
         } else {
-            const modelPath = model.includes(".") ? model : `m-${model}`;
-            clients.openWindow(`/odoo/${modelPath}/${res_id}`);
+            event.waitUntil(openRecord(model, res_id));
         }
     }
 });
@@ -74,7 +88,7 @@ self.addEventListener("message", ({ data }) => {
 });
 
 async function handlePushEvent(notification) {
-    const { model, res_id } = notification.options?.data || {};
+    const { model, res_id, message_id } = notification.options?.data || {};
     const correlationId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     let timeoutId;
     let promResolve;
@@ -92,7 +106,7 @@ async function handlePushEvent(notification) {
             clients.forEach((client) =>
                 client.postMessage({
                     type: "notification-display-request",
-                    payload: { correlationId, model, res_id },
+                    payload: { correlationId, model, res_id, message_id },
                 })
             );
         });

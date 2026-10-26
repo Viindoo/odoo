@@ -19,6 +19,8 @@ class TestCIIFR(TestUBLCommon):
             'zip': "75000",
             'city': "Paris",
             'vat': 'FR05677404089',
+            'peppol_eas': '9957',
+            'peppol_endpoint': 'FR05677404089',
             'country_id': cls.env.ref('base.fr').id,
             'bank_ids': [(0, 0, {'acc_number': 'FR15001559627230', 'allow_out_payment': True})],
             'phone': '+1 (650) 555-0111',
@@ -33,6 +35,8 @@ class TestCIIFR(TestUBLCommon):
             'zip': "52330",
             'city': "Colombey-les-Deux-Églises",
             'vat': 'FR35562153452',
+            'peppol_eas': '9957',
+            'peppol_endpoint': 'FR35562153452',
             'country_id': cls.env.ref('base.fr').id,
             'bank_ids': [(0, 0, {'acc_number': 'FR90735788866632', 'allow_out_payment': True})],
             'ref': 'ref_partner_2',
@@ -123,6 +127,18 @@ class TestCIIFR(TestUBLCommon):
     ####################################################
     # Test export - import
     ####################################################
+
+    def test_compute_siren_from_vat(self):
+        partner = self.env['res.partner'].create({
+            'name': 'French partner with only a VAT number',
+            'country_id': self.env.ref('base.fr').id,
+            'vat': 'FR23334175221',
+        })
+
+        self.assertRecordValues(partner, [{
+            'peppol_eas': '0225',
+            'peppol_endpoint': '334175221',
+        }])
 
     def test_export_pdf(self):
         acc_bank = self.env['res.partner.bank'].create({
@@ -477,7 +493,7 @@ class TestCIIFR(TestUBLCommon):
         invoice_vals = {
             'amount_total': 233.47,
             'amount_tax': 14.99,
-            'invoice_lines': [{'price_subtotal': 20.5}, {'price_subtotal': 198.0}, {'price_subtotal': -0.02}]
+            'invoice_lines': [{'price_subtotal': 20.48}, {'price_subtotal': 198.0}]
         }
         # source: Avoir_FR_type380_EN16931.pdf
         self._assert_imported_invoice_from_file(

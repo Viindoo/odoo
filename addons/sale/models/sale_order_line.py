@@ -955,7 +955,7 @@ class SaleOrderLine(models.Model):
             qty_invoiced = 0.0
             invoice_lines = line._get_invoice_lines()
             if line.is_downpayment:
-                if not line.currency_id.is_zero(sum(invoice_lines.filtered(lambda l: l.move_id.state != 'cancel').mapped('balance'))):
+                if not line.currency_id.is_zero(sum(invoice_lines.filtered(lambda l: l.move_id.state != 'cancel' or l.move_id.payment_state == 'invoicing_legacy').mapped('balance'))):
                     line.qty_invoiced = 1
                 else:
                     line.qty_invoiced = 0
@@ -1454,10 +1454,18 @@ class SaleOrderLine(models.Model):
                 'sale_line_ids': [Command.link(self.id)],
                 **optional_values,
             }
+        product = self.product_id.with_context(
+            lang=self.order_id._get_lang(),
+            partner_id=self.order_id.partner_id.id,
+            company_id=self.company_id.id,
+        )
+        display_name = product.with_context(partner_id=False, seller_id=False).display_name
+        if not display_name or display_name not in self.name:
+            display_name = product.display_name
         res = {
             'display_type': self.display_type or 'product',
             'sequence': self.sequence,
-            'name': self.env['account.move.line']._get_journal_items_full_name(self.name, self.product_id.display_name),
+            'name': self.env['account.move.line']._get_journal_items_full_name(self.name, display_name),
             'product_id': self.product_id.id,
             'product_uom_id': self.product_uom.id,
             'quantity': self.qty_to_invoice,
