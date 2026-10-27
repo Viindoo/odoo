@@ -1,6 +1,7 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
+import { user } from "@web/core/user";
 import {
     clickOnSave,
     registerWebsitePreviewTour,
@@ -34,7 +35,15 @@ registerWebsitePreviewTour('website_crm_pre_tour', {
 
 registry.category("web_tour.tours").add('website_crm_tour', {
     url: '/contactus',
-    steps: () => [{
+    steps: () => [
+// The form of a logged user is prefilled once s_website_form receives the user data it asks for in
+// willStart, and that resets the fields: whatever was typed before the answer is lost, and a lead
+// left with the user's own phone or email gets the user as partner. Wait for that prefill first.
+...(user.userId ? [{
+    content: "Wait the form is patched with the user's values before editing it",
+    trigger: "form#contactus_form input[name=contact_name]:value(/.+/)",
+}] : []),
+{
     content: "Complete name",
     trigger: "input[name=contact_name]",
     run: "edit John Smith",
