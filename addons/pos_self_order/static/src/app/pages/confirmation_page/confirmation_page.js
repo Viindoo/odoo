@@ -28,7 +28,7 @@ export class ConfirmationPage extends Component {
                     this.setDefautLanguage();
                 }, 5000);
 
-                setTimeout(() => this.printOrderAfterTime(), 500);
+                this.printTimeout = setTimeout(() => this.printOrderAfterTime(), 500);
                 this.defaultTimeout = setTimeout(() => {
                     this.router.navigate("default");
                 }, 30000);
@@ -36,6 +36,7 @@ export class ConfirmationPage extends Component {
         });
         onWillUnmount(() => {
             clearTimeout(this.defaultTimeout);
+            clearTimeout(this.printTimeout);
         });
 
         onMounted(async () => {
@@ -54,7 +55,7 @@ export class ConfirmationPage extends Component {
                     this.updateHasPaper(true);
                 }
             } else {
-                setTimeout(() => this.printOrderAfterTime(), 500);
+                this.printTimeout = setTimeout(() => this.printOrderAfterTime(), 500);
             }
         } catch (e) {
             if (e.errorCode === "EPTR_REC_EMPTY") {

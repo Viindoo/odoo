@@ -5,7 +5,7 @@ import * as ConfirmationPage from "@pos_self_order/../tests/tours/utils/confirma
 import * as LandingPage from "@pos_self_order/../tests/tours/utils/landing_page_util";
 import * as ProductPage from "@pos_self_order/../tests/tours/utils/product_page_util";
 import * as Numpad from "@point_of_sale/../tests/tours/utils/numpad_util";
-import { queryFirst } from "@odoo/hoot-dom";
+import { queryFirst, waitUntil } from "@odoo/hoot-dom";
 
 //
 const clickOrderNowAndWaitLocation = (location = "Take Out") => [
@@ -122,6 +122,16 @@ registry.category("web_tour.tours").add("self_simple_order", {
         Utils.clickBtn("Pay"),
         Utils.clickBtn("Close"),
         Utils.checkIsNoBtn("My Order"),
+        {
+            content: "Wait for the receipt printing to finish",
+            trigger: "body",
+            async run() {
+                const printer = odoo.__WOWL_DEBUG__.root.env.services.printer;
+                await waitUntil(
+                    () => !queryFirst(".confirmation-page") && !printer.state.isPrinting
+                );
+            },
+        },
     ],
 });
 
