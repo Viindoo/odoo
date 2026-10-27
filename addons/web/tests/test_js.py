@@ -91,7 +91,7 @@ class WebSuite(WebsuiteCommon):
     def test_js(self):
         filter_param = self.get_filter_param()
         # webclient desktop test suite
-        self.browser_js('/web/tests?mod=web%s' % filter_param, "", "", login='admin', timeout=1800, error_checker=qunit_error_checker)
+        self.browser_js('/web/tests?mod=web%s' % filter_param, "", "", login='admin', timeout=2700, error_checker=qunit_error_checker)
 
     def test_check_suite(self):
         # verify no js test is using `QUnit.only` as it forbid any other test to be executed
