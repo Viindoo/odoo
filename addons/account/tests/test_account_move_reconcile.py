@@ -5861,6 +5861,10 @@ class TestAccountMoveReconcile(AccountTestInvoicingCommon):
         `invoice_ids` on the payment) is kept when the invoice is unreconciled from a credit note. """
         invoice = self._create_invoice_one_line(price_unit=500, date='2024-01-01', post=True)
 
+        self.company_data['default_journal_bank'].inbound_payment_method_line_ids += self.env['account.payment.method.line'].create({
+            'name': 'Manual without outstanding',
+            'payment_method_id': self.env.ref('account.account_payment_method_manual_in').id,
+        })
         # No outstanding account, so no journal entry on the payment
         with patch.object(self.env.registry['account.move'], '_get_invoice_in_payment_state', lambda _: 'in_payment'):
             payment = self.create_move_payment(invoice, 500)
