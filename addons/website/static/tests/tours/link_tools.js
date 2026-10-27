@@ -265,6 +265,13 @@ wTourUtils.registerWebsitePreviewTour('link_tools', {
     },
     clickOnImgStep,
     {
+        // The editor activates the clicked blocks one after the other: let
+        // it show the options of the image before the next click, see below.
+        content: "Wait for the options of the image",
+        trigger: "we-customizeblock-option.snippet-option-ReplaceMedia",
+        isCheck: true,
+    },
+    {
         // URL transformation into link should persist, without the need for
         // input at input[name=url]
         content: "Check that link was created",
@@ -274,6 +281,15 @@ wTourUtils.registerWebsitePreviewTour('link_tools', {
     {
         content: "Click on link to open the link tools",
         trigger: "iframe .s_text_image p a",
+    },
+    {
+        // The options of the image come with a URL picker, and closing it
+        // hides the URL suggestions of the link tools when they are shown.
+        // When the activation of the link's block ends late (loaded machine),
+        // it closes that picker while the steps below use the link tools.
+        content: "Wait for the options of the link's block to replace the ones of the image",
+        trigger: ".o_we_customize_panel:not(:has(we-customizeblock-option.snippet-option-ReplaceMedia))",
+        isCheck: true,
     },
     // 8. Check that http links are not coerced to https and vice-versa.
     {
