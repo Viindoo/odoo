@@ -1410,8 +1410,13 @@ export class PosStore extends Reactive {
             });
         }
     }
-    async getServerOrders() {
-        return await this.loadServerOrders(this.getServerOrdersDomain().toList());
+    getServerOrders() {
+        this.serverOrdersPromise ||= this.loadServerOrders(
+            this.getServerOrdersDomain().toList()
+        ).finally(() => {
+            this.serverOrdersPromise = null;
+        });
+        return this.serverOrdersPromise;
     }
     getServerOrdersDomain() {
         return new Domain([

@@ -78,7 +78,7 @@ export class TicketScreen extends Component {
 
         onMounted(this.onMounted);
         onWillStart(async () => {
-            if (this.pos._shouldLoadOrders() && !this.pos.loadingOrderState) {
+            if (this.pos._shouldLoadOrders()) {
                 try {
                     this.pos.setLoadingOrderState(true);
                     await this.pos.getServerOrders();
