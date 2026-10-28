@@ -28,8 +28,10 @@ class TestL10n(TransactionCase):
             }
             for template_code, template in matching_country_templates
         ])
+        # templates also fill fields of account_accountant (e.g. the deferred accounts)
+        check_fields_complete = 'account_accountant' in installed_modules
         for (template_code, template), company in zip(matching_country_templates, companies):
-            cls.env['account.chart.template'].with_context(l10n_check_fields_complete=True).try_loading(template_code, company, install_demo=False)
+            cls.env['account.chart.template'].with_context(l10n_check_fields_complete=check_fields_complete).try_loading(template_code, company, install_demo=False)
 
     def _test_domestic_fiscal_position(self):
         for company in self.companies:
