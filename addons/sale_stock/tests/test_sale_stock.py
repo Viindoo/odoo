@@ -1500,7 +1500,12 @@ class TestSaleStock(TestSaleStockCommon, ValuationReconciliationTestCommon):
         so = so_form.save()
         so.action_confirm()
 
-        _, pack_picking, pick_picking = so.picking_ids
+        # the order of so.picking_ids depends on whether the field was in cache before the
+        # pickings were created (a module whose field depends on sale_id.date_order has the
+        # confirmation read it): pick the pickings by type rather than by position
+        warehouse = self.warehouse_3_steps_pull
+        pick_picking = so.picking_ids.filtered(lambda p: p.picking_type_id == warehouse.pick_type_id)
+        pack_picking = so.picking_ids.filtered(lambda p: p.picking_type_id == warehouse.pack_type_id)
         (pick_picking + pack_picking).move_ids.write({'quantity': 5, 'picked': True})
         (pick_picking + pack_picking).button_validate()
         with Form(so) as so_form:
