@@ -328,6 +328,8 @@ class TestSequenceMixin(TestSequenceMixinCommon):
 
     def test_journal_sequence_format(self):
         """Test different format of sequences and what it becomes on another period"""
+        # 'JRNL/2015-16' is only read as a fiscal year range by account_accountant
+        self.ensure_installed('account_accountant')
         sequences = [
             ('JRNL/2016/00001', 'JRNL/2016/00002', 'JRNL/2016/00003', 'JRNL/2017/00001'),
             ('JRNL/2015-2016/00001', 'JRNL/2015-2016/00002', 'JRNL/2016-2017/00001', 'JRNL/2016-2017/00002'),
