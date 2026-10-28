@@ -102,6 +102,8 @@ class TestLeaveOutsideSchedule(TestHrHolidaysCommon):
         self.assertEqual(leave.number_of_hours, 4)
 
     def test_hour_unit_working_time_outside_schedule_no_validation_error_on_approve(self):
+        if self.env['ir.module.module']._get('hr_holidays_gantt').state != 'installed':
+            self.skipTest("The request hours are set from the request duration at creation by hr_holidays_gantt")
         leave = self.env['hr.leave'].with_context(tracking_disable=True).create({
             'employee_id': self.employee_emp.id,
             'work_entry_type_id': self.working_time_type_hour.id,
@@ -149,6 +151,8 @@ class TestLeaveOutsideSchedule(TestHrHolidaysCommon):
         """ For a fully flexible employee, a full-duration hour-unit working
         time request is centered around noon rather than anchored at
         midnight (which would always render as a half-day gantt pill). """
+        if self.env['ir.module.module']._get('hr_holidays_gantt').state != 'installed':
+            self.skipTest("The request hours are set from the request duration at creation by hr_holidays_gantt")
         fully_flexible_calendar = self.env['resource.calendar'].create({
             'name': 'Fully Flexible Calendar',
             'company_id': self.company.id,
