@@ -1437,7 +1437,7 @@ class Request:
             session.context['lang'] = self.default_lang()
 
         dbname = None
-        host = self.httprequest.environ['HTTP_HOST']
+        host = self.httprequest.environ.get('HTTP_HOST', '')
         if session.db and db_filter([session.db], host=host):
             dbname = session.db
         else:
