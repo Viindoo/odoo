@@ -1,5 +1,6 @@
 /** @odoo-module */
 
+import { rpcBus } from "@web/core/network/rpc";
 import { delay } from "@web/core/utils/concurrency";
 import {
     insertSnippet,
@@ -169,7 +170,38 @@ const setSlideUrl = (urlText) => [
     {
         content: "Enter the URL to be linked with the slide",
         trigger: "div[data-action-id='setSlideAnchorUrl'] input[title='Your URL']",
-        run: `edit ${urlText} && press Tab`,
+        async run(helpers) {
+            // Tab waits for the URL suggestions, requested 250 ms after the
+            // last keystroke, and commits the first one. Wait for them too:
+            // otherwise that commit can land once the page is saved and the
+            // builder destroyed.
+            const pending = new Set();
+            let settle;
+            const onRequest = ({ detail }) => {
+                if (detail.url === "/website/get_suggested_links") {
+                    pending.add(detail.data.id);
+                }
+            };
+            const onResponse = ({ detail }) => {
+                if (pending.delete(detail.data.id) && !pending.size) {
+                    settle?.();
+                }
+            };
+            rpcBus.addEventListener("RPC:REQUEST", onRequest);
+            rpcBus.addEventListener("RPC:RESPONSE", onResponse);
+            try {
+                await helpers.edit(urlText);
+                await helpers.press("Tab");
+                // Let the debounced suggestions request go out.
+                await delay(300);
+                if (pending.size) {
+                    await new Promise((resolve) => (settle = resolve));
+                }
+            } finally {
+                rpcBus.removeEventListener("RPC:REQUEST", onRequest);
+                rpcBus.removeEventListener("RPC:RESPONSE", onResponse);
+            }
+        },
     },
 ];
 
