@@ -186,6 +186,11 @@ class TestSaleStockMargin(TestStockValuationCommon):
         self.assertAlmostEqual(order_line.margin, 10)
         self.assertAlmostEqual(sale_order.margin, 10)
 
+    # Validating the picking dates its moves twice: once when they are done, once more
+    # with the picking's own date_done. On a slow machine the second lands in a later
+    # second, which replays the valuation and costs the oversold unit at the average
+    # price of the stack instead of the last receipt price.
+    @freeze_time()
     def test_sale_stock_margin_5(self):
         sale_order = self._create_sale_order()
         product_1 = self._create_product()
