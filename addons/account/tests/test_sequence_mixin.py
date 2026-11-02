@@ -1327,7 +1327,10 @@ class TestSequenceMixinConcurrency(TransactionCase):
             moves.posted_before = False
             moves.unlink()
             journal = env['account.journal'].browse(self.data['journal_id'])
-            journal.unlink()
+            # This cursor commits: skip the payment provider check of the unlink,
+            # whose read of every provider's journal creates (and so commits)
+            # their missing payment method lines, which later tests then see.
+            journal.with_context(force_delete=True).unlink()
             account = env['account.account'].browse(self.data['account_id'])
             account.unlink()
         for env in self.data['envs']:
