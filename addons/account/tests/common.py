@@ -1041,8 +1041,10 @@ class AccountTestInvoicingCommon(ProductCommon):
         if widget_vals:
             current_amounts = {vals['move_id']: vals['amount'] for vals in widget_vals['content']}
             expected_exchange_info = expected_exchange_info or {'line_ids': [], 'exchange_amount': 0.0}
+            # The widget lists the exchange lines in the order the database returned them.
+            expected_exchange_info = {**expected_exchange_info, 'line_ids': sorted(expected_exchange_info['line_ids'])}
             current_exchange_info = {
-                'line_ids': widget_vals['exchange_info']['line_ids'],
+                'line_ids': sorted(widget_vals['exchange_info']['line_ids']),
                 'exchange_amount': widget_vals['exchange_info']['exchange_amount'],
             }
         else:
