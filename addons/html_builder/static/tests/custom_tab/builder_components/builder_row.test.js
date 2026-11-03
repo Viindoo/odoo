@@ -24,6 +24,26 @@ function reapplyCollapseTransition() {
 
 const ONE_ROW_HEIGHT = 32; // $o-hb-row-min-height (28px) + the row's 4px padding-top.
 
+/**
+ * Resolves with the height targeted by the next height transition of a
+ * collapse content, read when that transition starts: the only moment it can
+ * be observed whatever the speed of the machine, as the transition runs in
+ * real time.
+ */
+function nextCollapseHeightTransition() {
+    return new Promise((resolve) => {
+        queryOne(".options-container").addEventListener(
+            "transitionrun",
+            function onTransitionRun(ev) {
+                if (ev.propertyName === "height" && ev.target.matches(".hb-collapse-content")) {
+                    ev.currentTarget.removeEventListener("transitionrun", onTransitionRun);
+                    resolve(ev.target.style.height);
+                }
+            }
+        );
+    });
+}
+
 describe.current.tags("desktop");
 
 test("show row title", async () => {
@@ -261,21 +281,21 @@ describe("BuilderRow with collapse content", () => {
         expect(".options-container").toBeVisible();
         expect(".o_hb_collapse_toggler:not(.d-none)").not.toHaveClass("active");
         expect(".options-container button[data-class-action='b']").toHaveCount(0);
+        let transition = nextCollapseHeightTransition();
         await contains(".o_hb_collapse_toggler:not(.d-none)").click();
         expect(".o_hb_collapse_toggler:not(.d-none)").toHaveClass("active");
         expect(".options-container button[data-class-action='b']").toBeVisible();
-        const contentEl = queryOne(".options-container .hb-collapse-content");
-        expect(contentEl.style.height).toBe(`${ONE_ROW_HEIGHT}px`);
-        expect(parseFloat(getComputedStyle(contentEl).height)).toBeLessThan(ONE_ROW_HEIGHT);
-        // Collapsing pins the measured height, then targets 0 for the CSS transition.
+        // Expanding animates the height from 0 to the measured one.
+        expect(await transition).toBe(`${ONE_ROW_HEIGHT}px`);
+        // Collapsing pins the measured height, then animates it to 0.
+        transition = nextCollapseHeightTransition();
         await contains(".o_hb_collapse_toggler:not(.d-none)").click();
-        expect(contentEl.style.height).toBe("0px");
-        expect(parseFloat(getComputedStyle(contentEl).height)).toBeGreaterThan(0);
+        expect(await transition).toBe("0px");
         advanceTime(400); // wait for the collapse transition to be over
         await animationFrame();
         expect(".o_hb_collapse_toggler:not(.d-none)").not.toHaveClass("active");
         expect(".options-container button[data-class-action='b']").toHaveCount(0);
-        expect(parseFloat(getComputedStyle(contentEl).height)).toBe(NaN);
+        expect(".options-container .hb-collapse-content").toHaveCount(0);
     });
 
     test("Click on toggler collapses / expands the BuilderRow (with observeCollapseContent)", async () => {
@@ -292,11 +312,12 @@ describe("BuilderRow with collapse content", () => {
         // The content is never unmounted here, only hidden: it starts collapsed at 0.
         const contentEl = queryOne(".options-container .hb-collapse-content");
         expect(contentEl.style.height).toBe("0px");
+        const transition = nextCollapseHeightTransition();
         await contains(".o_hb_collapse_toggler:not(.d-none)").click();
         expect(".o_hb_collapse_toggler:not(.d-none)").toHaveClass("active");
         expect(".options-container button[data-class-action='b']").toBeVisible();
-        expect(contentEl.style.height).toBe(`${ONE_ROW_HEIGHT}px`);
-        expect(parseFloat(getComputedStyle(contentEl).height)).toBeLessThan(ONE_ROW_HEIGHT);
+        // Expanding animates the height from 0 to the measured one.
+        expect(await transition).toBe(`${ONE_ROW_HEIGHT}px`);
         await contains(".o_hb_collapse_toggler:not(.d-none)").click();
         expect(".o_hb_collapse_toggler:not(.d-none)").not.toHaveClass("active");
         advanceTime(400); // wait for the collapse transition to be over

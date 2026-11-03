@@ -258,7 +258,7 @@ class TestWebsiteSalePerformanceWithPricelist(TestWebsiteSalePerformanceWithPric
     def _get_product_page_queries(self):
         res = super()._get_product_page_queries()
         res["product_pricelist_item"] += 1
-        if "website_sale_subscription" not in self.installed_modules:
+        if self._has_demo_data() and "website_sale_subscription" not in self.installed_modules:
             # FIXME VFE magic comeback when sub is installed makes no **** sense
             # Seems to come from the `website_sale` template, not the sub override strangely
             # The rules are fixed, product currency (through _get_main_company) does not have to be

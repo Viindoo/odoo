@@ -328,6 +328,8 @@ class TestSequenceMixin(TestSequenceMixinCommon):
 
     def test_journal_sequence_format(self):
         """Test different format of sequences and what it becomes on another period"""
+        # 'JRNL/2015-16' is only read as a fiscal year range by account_accountant
+        self.ensure_installed('account_accountant')
         sequences = [
             ('JRNL/2016/00001', 'JRNL/2016/00002', 'JRNL/2016/00003', 'JRNL/2017/00001'),
             ('JRNL/2015-2016/00001', 'JRNL/2015-2016/00002', 'JRNL/2016-2017/00001', 'JRNL/2016-2017/00002'),
@@ -1325,7 +1327,10 @@ class TestSequenceMixinConcurrency(TransactionCase):
             moves.posted_before = False
             moves.unlink()
             journal = env['account.journal'].browse(self.data['journal_id'])
-            journal.unlink()
+            # This cursor commits: skip the payment provider check of the unlink,
+            # whose read of every provider's journal creates (and so commits)
+            # their missing payment method lines, which later tests then see.
+            journal.with_context(force_delete=True).unlink()
             account = env['account.account'].browse(self.data['account_id'])
             account.unlink()
         for env in self.data['envs']:

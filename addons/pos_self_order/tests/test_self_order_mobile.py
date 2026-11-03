@@ -234,6 +234,11 @@ class TestSelfOrderMobile(SelfOrderCommonTest):
             delete_mobile_order_from_backend,
             create=True,
         ):
+            # The routing map is cached (the "routing" ormcache) with the controller
+            # endpoints baked in. When it was already built, the endpoint patched
+            # above is unknown to it and the tour's call to it gets a 404.
+            self.env.transaction.invalidate_ormcache('routing')
+            self.addCleanup(self.env.transaction.invalidate_ormcache, 'routing')
             self.start_tour(self_route, 'test_delete_mobile_order_from_backend')
 
     def test_self_order_pay_warns_on_stale_cart(self):
@@ -263,6 +268,9 @@ class TestSelfOrderMobile(SelfOrderCommonTest):
             self.env['pos.order.line'].sudo().browse(line_id).write({'qty': qty})
 
         with patch.object(PosSelfOrderController, 'modify_line_qty_from_backend', modify_line_qty_from_backend, create=True):
+            # See test_delete_mobile_order_from_backend.
+            self.env.transaction.invalidate_ormcache('routing')
+            self.addCleanup(self.env.transaction.invalidate_ormcache, 'routing')
             self.start_tour(self_route, 'self_order_mobile_pay_warns_on_stale_cart')
 
     def test_self_order_snooze_service(self):
