@@ -747,7 +747,15 @@ registry.category("web_tour.tours").add("test_loyalty_in_trusted_pos", {
             Dialog.confirm("Open Register"),
             Chrome.clickMenuOption("Orders"),
             TicketScreen.selectOrder("-0001"),
-            TicketScreen.loadSelectedOrder(),
+            ProductScreen.clickReview(),
+            {
+                // The shared draft order loads without its lines (search_read links
+                // only already-loaded records); they stream in after the mobile pane
+                // switch, so the Load Order button needs extra time on a loaded runner.
+                trigger: ".ticket-screen .pads .button.validation.load-order-button",
+                timeout: 30000,
+                run: "click",
+            },
             PosLoyalty.hasRewardLine("10% on Whiteboard Pen", "-10.00"),
             PosLoyalty.pointsAwardedAre("90"),
             ProductScreen.clickPayButton(),
