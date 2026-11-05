@@ -501,7 +501,7 @@ class AccountEdiCii(models.AbstractModel):
         if (stnr := invoice.company_id._get_l10n_de_stnr()):
             seller_extra_tax_registrations.append({'scheme': 'FC', 'value': stnr})
         return self._cii_get_partner_trade_party_node(vals, {
-            'gln': False,
+            'gln': supplier.peppol_endpoint if supplier.peppol_eas == '0088' else None,
             'name': supplier.name,
             'partner_specified_legal_organization': legal_organization_val,
             'partner_specified_legal_organization_scheme': scheme_id,
@@ -528,7 +528,7 @@ class AccountEdiCii(models.AbstractModel):
         if (vat := partner_values.get('partner_tax_registration', '')) and not self._cii_is_vat_void(vat):
             tax_registrations.insert(0, {'scheme': 'VA', 'value': vat})
         return {
-            'ram:ID': {
+            'ram:GlobalID': {
                 'schemeID': '0088',
                 '_text': partner_values['gln'],
             } if partner_values['gln'] else None,
@@ -590,7 +590,7 @@ class AccountEdiCii(models.AbstractModel):
             legal_organization_val = legal_organization_val[:9]
         buyer_vat = customer.vat if not self._cii_is_vat_void(customer.vat) else None
         return self._cii_get_partner_trade_party_node(vals, {
-            'gln': False,
+            'gln': customer.peppol_endpoint if customer.peppol_eas == '0088' else None,
             'name': name,
             'partner_specified_legal_organization': legal_organization_val,
             'partner_specified_legal_organization_scheme': scheme_id,
@@ -620,10 +620,9 @@ class AccountEdiCii(models.AbstractModel):
         }
 
     def _cii_get_ship_to_trade_party_node(self, vals):
-        invoice = vals['invoice']
         partner_shipping = vals['partner_shipping']
         return self._cii_get_partner_trade_party_node(vals, {
-            'gln': 'global_location_number' in invoice.partner_shipping_id._fields and invoice.partner_shipping_id.global_location_number,
+            'gln': 'global_location_number' in partner_shipping._fields and partner_shipping.global_location_number,
             'name': partner_shipping.name,
             'partner_specified_legal_organization': False,
             'partner_specified_legal_organization_scheme': None,
@@ -794,21 +793,31 @@ class AccountEdiCii(models.AbstractModel):
             }
 
     def _cii_add_monetary_summation_grand_total_amount_node(self, vals):
+        # [BR-CO-15] BT-112 (Grand total) = BT-109 (Tax basis total) + BT-110 (Tax total).
         vals['monetary_summation_node']['ram:GrandTotalAmount'] = {
             '_text': FloatFmt(sum(vals['monetary_summation_node'].get(node, {}).get('_text', 0.0)
-            for node in ['ram:LineTotalAmount', 'ram:TaxTotalAmount', 'ram:RoundingAmount']), max_dp=2),
+            for node in ['ram:LineTotalAmount', 'ram:TaxTotalAmount']), max_dp=2),
         }
 
     def _cii_add_monetary_summation_total_prepaid_amount(self, vals):
-        prepaid_amount = vals['monetary_summation_node']['ram:GrandTotalAmount']['_text'] - vals['invoice'].amount_residual
-        vals['monetary_summation_node']['ram:TotalPrepaidAmount'] = {
+        # [BR-CO-16] is equivalent to: BT-113 (Prepaid) = BT-112 (Grand total) + BT-114 (Rounding) - BT-115 (Amount due).
+        node = vals['monetary_summation_node']
+        prepaid_amount = (
+            node['ram:GrandTotalAmount']['_text']
+            + node.get('ram:RoundingAmount', {}).get('_text', 0.0)
+            - vals['invoice'].amount_residual
+        )
+        node['ram:TotalPrepaidAmount'] = {
             '_text': FloatFmt(prepaid_amount, max_dp=2),
         }
 
     def _cii_add_monetary_summation_due_payable_amount_node(self, vals):
+        # [BR-CO-16] BT-115 (Amount due) = BT-112 (Grand total) - BT-113 (Prepaid) + BT-114 (Rounding).
+        node = vals['monetary_summation_node']
         vals['monetary_summation_node']['ram:DuePayableAmount'] = {
-            '_text': FloatFmt(vals['monetary_summation_node']['ram:GrandTotalAmount']['_text'] -
-                              vals['monetary_summation_node']['ram:TotalPrepaidAmount']['_text'], max_dp=2),
+            '_text': FloatFmt(node['ram:GrandTotalAmount']['_text']
+                              - node['ram:TotalPrepaidAmount']['_text']
+                              + node.get('ram:RoundingAmount', {}).get('_text', 0.0), max_dp=2),
         }
 
     def _cii_constraints(self, invoice, vals):
@@ -1306,7 +1315,7 @@ class AccountEdiCii(models.AbstractModel):
             # quantity = 6.0
             # discount_amount = 300.0
             if not currency.is_zero(price_subtotal):
-                price_unit = round((price_subtotal + price_discount_amount) / price_quantity, 2)
+                price_unit = (price_subtotal + price_discount_amount) / price_quantity
                 line_price_discount_amount = price_discount_amount * quantity / price_quantity
 
                 line_total_discount_amount = (price_unit * quantity) - subtotal
@@ -1331,6 +1340,9 @@ class AccountEdiCii(models.AbstractModel):
         # Turn discount_amount to a percentage
         gross_subtotal = price_unit * quantity
         discount = (discount_amount * 100 / gross_subtotal) if gross_subtotal else 0.0
+
+        # TODO remove this when France enforce stricter rules
+        quantity, discount, price_unit = self._import_fix_line_price_unit_quantity_discount(quantity, discount, price_unit, line_total_amount, currency)
 
         to_write = collected_values['to_write']
         to_write['quantity'] = quantity
