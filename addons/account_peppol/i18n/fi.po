@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-07 17:38+0000\n"
-"PO-Revision-Date: 2026-10-20 09:31+0000\n"
+"POT-Creation-Date: 2026-10-30 17:39+0000\n"
+"PO-Revision-Date: 2026-10-31 10:33+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Finnish <https://translate.odoo.com/projects/odoo-18/"
 "account_peppol/fi/>\n"
@@ -37,8 +37,8 @@ msgstr ""
 #. module: account_peppol
 #. odoo-python
 #: code:addons/account_peppol/wizard/account_move_send_wizard.py:0
-msgid " (Customer not on Peppol)"
-msgstr " (Asiakas ei ole Peppolissa)"
+msgid " (Customer not on %(network_name)s)"
+msgstr " (Asiakas ei ole verkossa %(network_name)s)"
 
 #. module: account_peppol
 #. odoo-python
@@ -51,6 +51,12 @@ msgstr " (Demo)"
 #: code:addons/account_peppol/wizard/account_move_send_wizard.py:0
 msgid " (Missing %(eas)s)"
 msgstr " (Puuttuu %(eas)s)"
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/wizard/account_move_send_wizard.py:0
+msgid " (Previously sent)"
+msgstr " (Aiemmin lähetetty)"
 
 #. module: account_peppol
 #. odoo-python
@@ -91,8 +97,8 @@ msgid ""
 "<u>mandatory as of January 2026</u> - don't wait to register."
 msgstr ""
 "<br/>\n"
-"                                Belgiassa sähköinen laskutus tulee <u>"
-"pakolliseksi tammikuussa 2026</u> - älä lykkää rekisteröitymistä."
+"                                Belgiassa sähköinen laskutus tulee "
+"<u>pakolliseksi tammikuussa 2026</u> - älä lykkää rekisteröitymistä."
 
 #. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.account_peppol_view_move_form
@@ -104,8 +110,8 @@ msgid ""
 "                        The invoice will be sent automatically via Peppol\n"
 "                    </span>"
 msgstr ""
-"<span class=\"mx-1\" invisible=\"'demo_' not in peppol_message_uuid\"> (Demo)"
-"</span>\n"
+"<span class=\"mx-1\" invisible=\"'demo_' not in peppol_message_uuid\"> "
+"(Demo)</span>\n"
 "                    <span class=\"text-muted mx-3\" "
 "invisible=\"peppol_move_state != 'to_send'\">\n"
 "                        Lasku lähetetään automaattisesti Peppolin kautta\n"
@@ -118,6 +124,8 @@ msgid ""
 "A 0% tax cannot use Tax Category 'S' (Standard). Please update the Tax "
 "Category in the Advanced Options of the tax configuration."
 msgstr ""
+"0% verossa ei voi käyttää verokategoriaa 'S' (Perus). Päivitä verokategoria "
+"verokonfiguraation lisäasetuksista."
 
 #. module: account_peppol
 #. odoo-python
@@ -231,6 +239,13 @@ msgstr ""
 "Mahdollistaa laskujen lähettämisen ja vastaanottamisen PEPPOL-verkon kautta"
 
 #. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid ""
+"Authentication is required but not available. Please contact Odoo support."
+msgstr ""
+
+#. module: account_peppol
 #: model:ir.model.fields,field_description:account_peppol.field_res_partner__available_peppol_edi_formats
 #: model:ir.model.fields,field_description:account_peppol.field_res_users__available_peppol_edi_formats
 msgid "Available Peppol Edi Formats"
@@ -244,11 +259,8 @@ msgstr "Käytettävissä olevat Peppol-lähetystavat"
 
 #. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.peppol_registration_form
-msgid ""
-"By clicking the button below I accept that Odoo may process my e-invoices."
-msgstr ""
-"Klikkaamalla alla olevaa painiketta hyväksyn, että Odoo voi käsitellä "
-"verkkolaskujani."
+msgid "By clicking the button below:"
+msgstr "Klikkaamalla alla olevaa painiketta:"
 
 #. module: account_peppol
 #: model:ir.model.fields.selection,name:account_peppol.selection__res_company__account_peppol_proxy_state__receiver
@@ -278,8 +290,15 @@ msgstr "Peruuta PEPPOL"
 #. module: account_peppol
 #. odoo-python
 #: code:addons/account_peppol/models/account_move.py:0
-msgid "Cannot cancel an entry that has already been sent to PEPPOL"
-msgstr "Ei voi peruuttaa kirjausta, joka on jo lähetetty PEPPOLiin"
+msgid "Cannot cancel an entry that has already been sent via %(network_name)s"
+msgstr "%(network_name)s kautta lähetettyä kirjausta ei voi peruuttaa"
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid ""
+"Cannot initiate KYC for your selected scheme. Please try a different one"
+msgstr ""
 
 #. module: account_peppol
 #. odoo-python
@@ -369,9 +388,15 @@ msgid "Contact email and phone number are required."
 msgstr "Yhteyshenkilön sähköpostiosoite ja puhelinnumero vaaditaan."
 
 #. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid "Could not connect to Peppol proxy"
+msgstr ""
+
+#. module: account_peppol
 #. odoo-javascript
 #: code:addons/account_peppol/static/src/components/peppol_info/peppol_info.xml:0
-msgid "Create, send and receive e-invoices for free."
+msgid "Create, send, and receive e-invoices for free."
 msgstr "Luo, lähetä ja vastaanota verkkolaskuja ilmaiseksi."
 
 #. module: account_peppol
@@ -502,9 +527,21 @@ msgstr "Virhe"
 
 #. module: account_peppol
 #. odoo-python
+#: code:addons/account_peppol/models/account_edi_proxy_user.py:0
+msgid "Error importing %(proxy_type)s document (UUID: %(uuid)s):"
+msgstr ""
+
+#. module: account_peppol
+#. odoo-python
 #: code:addons/account_peppol/models/account_move_send.py:0
 msgid "Errors occurred while creating the EDI document (format: %s):"
 msgstr "EDI-asiakirjan luomisessa tapahtui virheitä (muoto: %s):"
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/tools/peppol_iap_connector.py:0
+msgid "Failed to connect to Odoo Peppol Proxy."
+msgstr "Yhteyden muodostaminen Odoo Peppol -välityspalvelimeen epäonnistui."
 
 #. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.account_journal_dashboard_kanban_view
@@ -524,11 +561,13 @@ msgid ""
 "reason code is 'VATEX-EU-O'. You can change this in the Advanced Options of "
 "the tax configuration."
 msgstr ""
+"Verolle/veroille %(taxes)s: Verokategoriaa 'O' on käytettävä, kun "
+"vapautusperusteen koodi on 'VATEX-EU-O'. Voit muuttaa tämän "
+"verokonfiguraation lisäasetuksista."
 
 #. module: account_peppol
 #. odoo-python
-#: code:addons/account_peppol/models/account_move_send.py:0
-#: code:addons/account_peppol/wizard/peppol_registration.py:0
+#: code:addons/account_peppol/models/res_config_settings.py:0
 msgid "France - E-Invoicing (Approved Platform)"
 msgstr "Ranskan sähköinen laskutus (hyväksytty alusta)"
 
@@ -543,6 +582,12 @@ msgstr "Ilmainen Odoossa"
 #: code:addons/account_peppol/static/src/components/peppol_info/peppol_info.xml:0
 msgid "Fully automated"
 msgstr "Täysin automatisoitu"
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_config_settings.py:0
+msgid "Go to module"
+msgstr "Siirry moduuliin"
 
 #. module: account_peppol
 #. odoo-javascript
@@ -571,30 +616,18 @@ msgid ""
 "If you are not subject to VAT, you should not have a VAT number on your "
 "company/contacts and your clients should not have one either."
 msgstr ""
+"Jos et ole ALV-velvollinen, yritykselläsi/yhteystiedoissasi tai "
+"asiakkaillasi ei pitäisi olla ALV-numeroa."
 
 #. module: account_peppol
 #. odoo-python
 #: code:addons/account_peppol/controllers/portal.py:0
-msgid "If you want to be invoiced by Peppol, your configuration must be valid."
-msgstr ""
-"Asetustesi on oltava kelvollisia, jos haluat Peppolin laskuttavan sinua."
-
-#. module: account_peppol
-#. odoo-python
-#: code:addons/account_peppol/wizard/peppol_registration.py:0
 msgid ""
-"If you want to register for the French e-invoicing, first install the PDP "
-"module: France - E-Invoicing (Approved Platform)."
+"If you want to be invoiced via %(network_name)s, your configuration must be "
+"valid."
 msgstr ""
-
-#. module: account_peppol
-#. odoo-python
-#: code:addons/account_peppol/wizard/peppol_registration.py:0
-msgid ""
-"If you want to register for the French e-invoicing, first install the PDP "
-"module: France - E-Invoicing (Approved Platform).\n"
-"The module was not found. Please update the available apps first."
-msgstr ""
+"Jos haluat laskutuksen tapahtuvan %(network_name)s kautta, asetusten on "
+"oltava kunnossa."
 
 #. module: account_peppol
 #: model:ir.model.fields.selection,name:account_peppol.selection__res_company__account_peppol_proxy_state__in_verification
@@ -608,17 +641,13 @@ msgstr "Saapuvat laskut -lehti"
 
 #. module: account_peppol
 #. odoo-python
-#: code:addons/account_peppol/wizard/peppol_registration.py:0
-msgid "Install module"
-msgstr ""
-
-#. module: account_peppol
-#. odoo-python
 #: code:addons/account_peppol/models/account_move_send.py:0
-msgid "Invoice %s exceeds the size limit of 64 MB to be sent via Peppol."
+msgid ""
+"Invoice %(invoice_name)s exceeds the size limit of 64 MB to be sent via %"
+"(network_name)s."
 msgstr ""
-"Laskun %s koko ylittää Peppolin kautta lähetettävien tiedostojen 64 MB:n "
-"rajan."
+"Lasku %(invoice_name)s ylittää 64 Mt kokorajoituksen, jotta sen voisi "
+"lähettää %(network_name)s kautta."
 
 #. module: account_peppol
 #. odoo-python
@@ -627,6 +656,8 @@ msgid ""
 "Invoice lines using Tax Category 'O' cannot use a percentage-based tax. "
 "Please update the tax type in Advanced Options."
 msgstr ""
+"Verokategorian 'O' laskurivit eivät voi käyttää prosenttipohjaista veroa. "
+"Päivitä verotyyppi lisäasetuksista."
 
 #. module: account_peppol
 #. odoo-python
@@ -635,6 +666,8 @@ msgid ""
 "Invoice lines with Tax Category 'Exempt from VAT' must have a tax rate of 0. "
 "You can change this in the Advanced Options of the tax configuration."
 msgstr ""
+"Verokategorian 'ALV-vapaa' laskurivien verokannan on oltava 0. Voit muuttaa "
+"tämän verokonfiguraation lisäasetuksista."
 
 #. module: account_peppol
 #. odoo-python
@@ -643,6 +676,8 @@ msgid ""
 "Invoice lines with Tax Category 'Reverse charge' must have a tax rate of 0. "
 "You can change this in the Advanced Options of the tax configuration."
 msgstr ""
+"Verokategorian 'Käänteinen verovelvollisuus' laskurivien verokannan on "
+"oltava 0. Voit muuttaa tämän verokonfiguraation lisäasetuksista."
 
 #. module: account_peppol
 #: model:ir.model.fields,field_description:account_peppol.field_res_partner__invoice_sending_method
@@ -699,7 +734,7 @@ msgstr "Siirtymisavain"
 msgid ""
 "Missing Buyer Country. Please add the Country Code to the client's contact "
 "information."
-msgstr ""
+msgstr "Ostajan maa puuttuu. Lisää maakoodi asiakkaan yhteystietoihin."
 
 #. module: account_peppol
 #. odoo-python
@@ -708,6 +743,8 @@ msgid ""
 "Missing Invoiced Item VAT category code. Action Required: Install the module "
 "account_edi_ubl_cii_tax_extension."
 msgstr ""
+"Laskutettavan tuotteen ALV-kategoriakoodi puuttuu. Vaadittu toimenpide: "
+"Asenna moduli account_edi_ubl_cii_tax_extension."
 
 #. module: account_peppol
 #. odoo-python
@@ -716,6 +753,8 @@ msgid ""
 "Missing Reverse Charge details. Please set the Exemption Reason to 'Reverse "
 "charge' in the Advanced Options of the tax configuration."
 msgstr ""
+"Käänteisen verovelvollisuuden tietoja puuttuu. Aseta vapautusperusteeksi "
+"'Käänteinen verovelvollisuus' verokonfiguraation lisäasetuksista."
 
 #. module: account_peppol
 #. odoo-python
@@ -724,6 +763,8 @@ msgid ""
 "Missing VAT category code. Action Required: Install the module "
 "account_edi_ubl_cii_tax_extension."
 msgstr ""
+"ALV-kategoriakoodi puuttuu. Vaadittu toimenpide: Asenna moduli "
+"account_edi_ubl_cii_tax_extension."
 
 #. module: account_peppol
 #: model:ir.model.fields,field_description:account_peppol.field_peppol_registration__phone_number
@@ -750,8 +791,8 @@ msgstr "Odoo-demon tunnus"
 #. module: account_peppol
 #. odoo-javascript
 #: code:addons/account_peppol/static/src/components/peppol_info/peppol_info.xml:0
-msgid "Odoo keeps you up to date with the new regulation."
-msgstr "Odoo pitää sinut ajan tasalla uusista sännöksistä."
+msgid "Odoo keeps you up to date with new regulations."
+msgstr "Odoo pitää sinut ajan tasalla uusista säädöksistä."
 
 #. module: account_peppol
 #: model:ir.model.fields.selection,name:account_peppol.selection__account_edi_proxy_client_user__proxy_type__peppol
@@ -763,24 +804,6 @@ msgstr "PEPPOL"
 #: model:ir.model.fields,field_description:account_peppol.field_res_config_settings__account_peppol_purchase_journal_id
 msgid "PEPPOL Purchase Journal"
 msgstr "PEPPOLin ostopäiväkirja"
-
-#. module: account_peppol
-#. odoo-javascript
-#: code:addons/account_peppol/static/src/components/peppol_info/peppol_info.xml:0
-msgid ""
-"PEPPOL allows for complete automation of sending and receiving e-invoices."
-msgstr ""
-"PEPPOL mahdollistaa verkkolaskujen lähettämisen ja vastaanottamisen "
-"täydellisen automatisoinnin."
-
-#. module: account_peppol
-#. odoo-javascript
-#: code:addons/account_peppol/static/src/components/peppol_info/peppol_info.xml:0
-msgid ""
-"PEPPOL is the secure standard for e-invoices used in EU and across the world."
-msgstr ""
-"PEPPOL on sähköisten laskujen turvallinen standardi EU:ssa ja muualla "
-"maailmassa."
 
 #. module: account_peppol
 #: model:ir.model.fields,field_description:account_peppol.field_account_bank_statement_line__peppol_message_uuid
@@ -826,8 +849,9 @@ msgstr "Kumppani ei voi vastaanottaa muotoa"
 #. module: account_peppol
 #. odoo-python
 #: code:addons/account_peppol/wizard/account_move_send_wizard.py:0
-msgid "Partner doesn't have a valid Peppol configuration."
-msgstr "Kumppanilla ei ole kelvollisia Peppol-asetuksia."
+msgid "Partner doesn't have a valid configuration for %(network_name)s."
+msgstr ""
+"Kumppanilla ei ole kelvollista konfiguraatiota kohteelle %(network_name)s."
 
 #. module: account_peppol
 #: model:ir.model.fields.selection,name:account_peppol.selection__res_partner__peppol_verification_state__not_valid
@@ -846,6 +870,12 @@ msgstr "Odottaa vastaanottoa"
 
 #. module: account_peppol
 #. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid "Peppol"
+msgstr "Peppol"
+
+#. module: account_peppol
+#. odoo-python
 #: code:addons/account_peppol/wizard/peppol_registration.py:0
 msgid "Peppol Address should be provided."
 msgstr "Peppol-osoite on annettava."
@@ -854,6 +884,12 @@ msgstr "Peppol-osoite on annettava."
 #: model:ir.model.fields,field_description:account_peppol.field_res_company__peppol_can_send
 msgid "Peppol Can Send"
 msgstr "Peppol voi lähettää"
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid "Peppol EAS and/or Endpoint identifier"
+msgstr "Peppol EAS ja/tai päätepisteen tunniste"
 
 #. module: account_peppol
 #: model:ir.model.fields,field_description:account_peppol.field_peppol_registration__peppol_eas
@@ -932,6 +968,15 @@ msgid "Peppol Use Parent Company"
 msgstr "Emoyhtiön Peppol-käyttö"
 
 #. module: account_peppol
+#. odoo-javascript
+#: code:addons/account_peppol/static/src/components/peppol_info/peppol_info.xml:0
+msgid ""
+"Peppol allows for complete automation of sending and receiving e-invoices."
+msgstr ""
+"Peppol mahdollistaa sähköisten laskujen lähettämisen ja vastaanottamisen "
+"täyden automatisoinnin."
+
+#. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.portal_my_details_fields
 msgid "Peppol e-Address (EAS)"
 msgstr "Peppolin sähköinen osoite (EAS)"
@@ -949,6 +994,15 @@ msgstr "Peppolin sähköinen osoite (EAS)"
 #: code:addons/account_peppol/tools/peppol_errors.py:0
 msgid "Peppol error:"
 msgstr ""
+
+#. module: account_peppol
+#. odoo-javascript
+#: code:addons/account_peppol/static/src/components/peppol_info/peppol_info.xml:0
+msgid ""
+"Peppol is the secure standard for e-invoices used in EU and across the world."
+msgstr ""
+"Peppol on sähköisten laskujen turvallinen standardi EU:ssa ja muualla "
+"maailmassa."
 
 #. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.account_journal_dashboard_kanban_view
@@ -1009,6 +1063,12 @@ msgstr ""
 #: code:addons/account_peppol/models/res_company.py:0
 msgid "Please install the phonenumbers library."
 msgstr "Asenna puhelinnumerokirjasto."
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/wizard/peppol_registration.py:0
+msgid "Please make sure the Contact email is a valid email address."
+msgstr "Varmista, että yhteyshenkilön sähköpostiosoite on kelvollinen."
 
 #. module: account_peppol
 #. odoo-python
@@ -1184,8 +1244,8 @@ msgstr ""
 #. module: account_peppol
 #. odoo-python
 #: code:addons/account_peppol/controllers/portal.py:0
-msgid "That country is not available for Peppol."
-msgstr "Kyseinen maa ei ole saatavilla Peppolissa."
+msgid "That country is not available with %(network_name)s."
+msgstr "Kyseinen maa ei ole käytettävissä %(network_name)s kanssa."
 
 #. module: account_peppol
 #. odoo-python
@@ -1200,6 +1260,8 @@ msgid ""
 "The Peppol endpoint is missing in the XML file. Action Required: Update the "
 "account and account_edi_ubl_cii modules to resolve this."
 msgstr ""
+"Peppol-päätepiste puuttuu XML-tiedostosta. Vaadittu toimenpide: Päivitä "
+"kirjanpito- ja account_edi_ubl_cii-moduulit tämän ratkaisemiseksi."
 
 #. module: account_peppol
 #. odoo-python
@@ -1208,6 +1270,15 @@ msgid ""
 "The Tax Category must be 'AE' when using Exemption Reason code 'VATEX-EU-"
 "AE'. You can change this in the Advanced Options of the tax configuration."
 msgstr ""
+"Verokategorian on oltava 'AE', kun käytetään vapautusperusteen koodia 'VATEX-"
+"EU-AE'. Voit muuttaa tätä verokonfiguraation lisäasetuksista."
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid "The database you are trying to connect to is not suitable for Peppol."
+msgstr ""
+"Yrität muodostaa yhteyttä tietokantaan, joka ei sovellu Peppol-käyttöön."
 
 #. module: account_peppol
 #. odoo-javascript
@@ -1232,6 +1303,8 @@ msgid ""
 "The exemption reason code is invalid. Action Required: Install the module "
 "account_edi_ubl_cii_tax_extension."
 msgstr ""
+"Vapautusperusteen koodi on virheellinen. Vaadittu toimenpide: Asenna moduuli "
+"account_edi_ubl_cii_tax_extension."
 
 #. module: account_peppol
 #. odoo-python
@@ -1260,16 +1333,14 @@ msgstr ""
 #: code:addons/account_peppol/models/account_move_send.py:0
 msgid ""
 "The partner has indicated it does not accept this document type, so you "
-"cannot send this invoice via Peppol."
+"cannot send this invoice via %(network_name)s."
 msgstr ""
-"Kumppani on ilmoittanut, ettei hyväksy tätä asiakirjatyyppiä. Et siis voi "
-"lähettää tätä laskua Peppolin kautta."
 
 #. module: account_peppol
 #. odoo-python
 #: code:addons/account_peppol/models/account_move_send.py:0
-msgid "The partner is missing Peppol EAS and/or Endpoint identifier."
-msgstr "Yhteistyökumppanilta puuttuu Peppol EAS ja/tai Endpoint-tunniste."
+msgid "The partner is missing their %(identifier_name)s."
+msgstr ""
 
 #. module: account_peppol
 #. odoo-python
@@ -1291,9 +1362,18 @@ msgid "The verification code is not correct"
 msgstr "Tarkistuskoodi ei ole oikea"
 
 #. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/account_edi_proxy_user.py:0
+msgid ""
+"There was an error while importing the bill, you can find attached the "
+"incoming XML"
+msgstr "Virhe laskua tuotaessa, löydät saapuvan XML-tiedoston liitteenä"
+
+#. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.peppol_registration_form
 msgid "This branch company will use the active Peppol connection found on"
-msgstr "Tämä tytäryhtiö käyttää aktiivista Peppol-yhteyttä, joka löytyy täältä:"
+msgstr ""
+"Tämä tytäryhtiö käyttää aktiivista Peppol-yhteyttä, joka löytyy täältä:"
 
 #. module: account_peppol
 #. odoo-python
@@ -1343,11 +1423,24 @@ msgstr "Määritä tälle kumppanille maa luodaksesi kokonaisia sähköisiä las
 
 #. module: account_peppol
 #. odoo-python
-#: code:addons/account_peppol/wizard/peppol_registration.py:0
-msgid "To use the Approved Platform for French E-Invoicing install the module"
+#: code:addons/account_peppol/models/res_config_settings.py:0
+msgid ""
+"To use the Approved Platform for French E-Invoicing install the module '%s'."
 msgstr ""
-"Asenna moduuli käyttääksesi hyväksyttyä alustaa Ranskan sähköiselle "
-"laskutukselle"
+"Käyttääksesi hyväksyttyä alustaa ranskalaista sähköistä laskutusta varten, "
+"asenna moduuli '%s'."
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_config_settings.py:0
+msgid ""
+"To use the Approved Platform for French E-Invoicing install the module "
+"'%s'.\n"
+"The module was not found. Please update the app list first."
+msgstr ""
+"Käyttääksesi hyväksyttyä alustaa ranskalaista sähköistä laskutusta varten, "
+"asenna moduuli '%s'.\n"
+"Moduulia ei löytynyt. Päivitä sovellusluettelo ensin."
 
 #. module: account_peppol
 #. odoo-python
@@ -1393,9 +1486,9 @@ msgstr "Päivitä"
 
 #. module: account_peppol
 #. odoo-python
-#: code:addons/account_peppol/wizard/peppol_registration.py:0
-msgid "Update Apps List"
-msgstr "Päivitä sovelluslista"
+#: code:addons/account_peppol/models/res_config_settings.py:0
+msgid "Update App List"
+msgstr "Päivitä sovellusluettelo"
 
 #. module: account_peppol
 #: model:ir.model.fields,field_description:account_peppol.field_peppol_registration__use_parent_connection
@@ -1449,7 +1542,7 @@ msgstr ""
 #. module: account_peppol
 #. odoo-javascript
 #: code:addons/account_peppol/static/src/components/peppol_info/peppol_info.xml:0
-msgid "What is Peppol and why it's great ?"
+msgid "What is Peppol and why is it great?"
 msgstr "Mikä on Peppol ja miksi se on hyvä?"
 
 #. module: account_peppol
@@ -1461,19 +1554,26 @@ msgstr "Miksi minun pitäisi käyttää Ranskan sähköistä laskutusta?"
 #. module: account_peppol
 #. odoo-python
 #: code:addons/account_peppol/models/account_move_send.py:0
-msgid "Why should I use PEPPOL ?"
-msgstr "Miksi minun kannattaa käyttää PEPPOLia?"
+msgid "Why should I use Peppol?"
+msgstr "Miksi minun pitäisi käyttää Peppolia?"
 
 #. module: account_peppol
 #. odoo-python
 #: code:addons/account_peppol/models/account_move_send.py:0
-msgid "Why should you use it ?"
-msgstr "Miksi sinun kannattaa käyttää sitä?"
+msgid "Why should you use it?"
+msgstr "Miksi sinun pitäisi käyttää sitä?"
 
 #. module: account_peppol
 #: model:ir.model.fields,field_description:account_peppol.field_account_peppol_service__wizard_id
 msgid "Wizard"
 msgstr "Ohjattu toiminto"
+
+#. module: account_peppol
+#: model_terms:ir.ui.view,arch_db:account_peppol.peppol_registration_form
+msgid ""
+"You accept that any fraudulent activity or spam will result in immediate and "
+"permanent exclusion from the Peppol network."
+msgstr ""
 
 #. module: account_peppol
 #. odoo-python
@@ -1490,6 +1590,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_peppol.res_config_settings_view_form
 msgid "You are sending from"
 msgstr "Lähetät osoitteesta"
+
+#. module: account_peppol
+#: model_terms:ir.ui.view,arch_db:account_peppol.peppol_registration_form
+msgid ""
+"You authorize Odoo to act as your Peppol Service Provider to send and "
+"receive e-invoices on your behalf."
+msgstr ""
 
 #. module: account_peppol
 #. odoo-python
@@ -1536,6 +1643,13 @@ msgstr ""
 "tyypin muuttamista."
 
 #. module: account_peppol
+#: model_terms:ir.ui.view,arch_db:account_peppol.peppol_registration_form
+msgid ""
+"You confirm that you are authorized to register this company on the Peppol "
+"network as a legal representative."
+msgstr ""
+
+#. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.res_config_settings_view_form
 msgid ""
 "You registration has been rejected, the reason has been sent to you via "
@@ -1546,6 +1660,13 @@ msgstr ""
 "Rekisteröitymisesi on hylätty, syy on lähetetty sähköpostitse.\n"
 "                            Ota yhteyttä asiakaspalveluumme, jos tarvitset "
 "lisäapua."
+
+#. module: account_peppol
+#: model_terms:ir.ui.view,arch_db:account_peppol.peppol_registration_form
+msgid ""
+"You remain fully responsible for the content, accuracy, and legal compliance "
+"of your invoices."
+msgstr ""
 
 #. module: account_peppol
 #. odoo-javascript
@@ -1591,9 +1712,43 @@ msgstr ""
 "vastaanottamista varten. Rekisteröimme sinut vain lähettäjäksi."
 
 #. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid "Your identifier does not have a valid format."
+msgstr ""
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid "Your identifier does not have a valid format. Expected format: %s."
+msgstr ""
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid "Your identifier is invalid."
+msgstr "Tunnisteesi on virheellinen."
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/models/res_company.py:0
+msgid "Your identifier you entered is invalid for Peppol."
+msgstr "Antamasi tunniste ei ole Peppol-kelvollinen."
+
+#. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.res_config_settings_view_form
 msgid "Your migration key is:"
 msgstr "Siirtymisavaimesi on:"
+
+#. module: account_peppol
+#. odoo-python
+#: code:addons/account_peppol/wizard/peppol_registration.py:0
+msgid ""
+"Your registration has been rejected. Please contact the support for further "
+"assistance."
+msgstr ""
+"Rekisteröitymisesi on hylätty. Ota yhteyttä asiakastukeen saadaksesi "
+"lisäapua."
 
 #. module: account_peppol
 #. odoo-python
@@ -1634,16 +1789,14 @@ msgid "and send invoices via Peppol on their behalf."
 msgstr "ja lähetä laskuja Peppolin kautta heidän puolestaan."
 
 #. module: account_peppol
-#. odoo-python
-#: code:addons/account_peppol/controllers/portal.py:0
 #: model:ir.model.fields.selection,name:account_peppol.selection__res_partner__invoice_sending_method__peppol
 msgid "by Peppol"
 msgstr "Peppol"
 
 #. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.mail_notification_layout_with_responsible_signature_and_peppol
-msgid "could not be sent via Peppol"
-msgstr "ei voi lähettää Peppolin kautta"
+msgid "could not be sent via"
+msgstr "ei voitu lähettää käyttäen"
 
 #. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.res_config_settings_view_form
@@ -1652,8 +1805,8 @@ msgstr "laskut ja hyvityslaskut."
 
 #. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.mail_notification_layout_with_responsible_signature_and_peppol
-msgid "sent via Peppol"
-msgstr "lähetetty Peppolilla"
+msgid "sent via"
+msgstr "lähetetty käyttäen"
 
 #. module: account_peppol
 #: model_terms:ir.ui.view,arch_db:account_peppol.mail_notification_layout_with_responsible_signature_and_peppol
@@ -1664,6 +1817,87 @@ msgstr "laskujen lähettämiseksi, mutta tämä"
 #: model_terms:ir.ui.view,arch_db:account_peppol.mail_notification_layout_with_responsible_signature_and_peppol
 msgid "uses"
 msgstr "käyttää"
+
+#~ msgid " (Customer not on Peppol)"
+#~ msgstr " (Asiakas ei ole Peppolissa)"
+
+#~ msgid ""
+#~ "By clicking the button below I accept that Odoo may process my e-invoices."
+#~ msgstr ""
+#~ "Klikkaamalla alla olevaa painiketta hyväksyn, että Odoo voi käsitellä "
+#~ "verkkolaskujani."
+
+#~ msgid "Cannot cancel an entry that has already been sent to PEPPOL"
+#~ msgstr "Ei voi peruuttaa kirjausta, joka on jo lähetetty PEPPOLiin"
+
+#~ msgid "Create, send and receive e-invoices for free."
+#~ msgstr "Luo, lähetä ja vastaanota verkkolaskuja ilmaiseksi."
+
+#~ msgid ""
+#~ "If you want to be invoiced by Peppol, your configuration must be valid."
+#~ msgstr ""
+#~ "Asetustesi on oltava kelvollisia, jos haluat Peppolin laskuttavan sinua."
+
+#~ msgid "Invoice %s exceeds the size limit of 64 MB to be sent via Peppol."
+#~ msgstr ""
+#~ "Laskun %s koko ylittää Peppolin kautta lähetettävien tiedostojen 64 MB:n "
+#~ "rajan."
+
+#~ msgid "Odoo keeps you up to date with the new regulation."
+#~ msgstr "Odoo pitää sinut ajan tasalla uusista sännöksistä."
+
+#~ msgid ""
+#~ "PEPPOL allows for complete automation of sending and receiving e-invoices."
+#~ msgstr ""
+#~ "PEPPOL mahdollistaa verkkolaskujen lähettämisen ja vastaanottamisen "
+#~ "täydellisen automatisoinnin."
+
+#~ msgid ""
+#~ "PEPPOL is the secure standard for e-invoices used in EU and across the "
+#~ "world."
+#~ msgstr ""
+#~ "PEPPOL on sähköisten laskujen turvallinen standardi EU:ssa ja muualla "
+#~ "maailmassa."
+
+#~ msgid "Partner doesn't have a valid Peppol configuration."
+#~ msgstr "Kumppanilla ei ole kelvollisia Peppol-asetuksia."
+
+#~ msgid "That country is not available for Peppol."
+#~ msgstr "Kyseinen maa ei ole saatavilla Peppolissa."
+
+#~ msgid ""
+#~ "The partner has indicated it does not accept this document type, so you "
+#~ "cannot send this invoice via Peppol."
+#~ msgstr ""
+#~ "Kumppani on ilmoittanut, ettei hyväksy tätä asiakirjatyyppiä. Et siis voi "
+#~ "lähettää tätä laskua Peppolin kautta."
+
+#~ msgid "The partner is missing Peppol EAS and/or Endpoint identifier."
+#~ msgstr "Yhteistyökumppanilta puuttuu Peppol EAS ja/tai Endpoint-tunniste."
+
+#~ msgid ""
+#~ "To use the Approved Platform for French E-Invoicing install the module"
+#~ msgstr ""
+#~ "Asenna moduuli käyttääksesi hyväksyttyä alustaa Ranskan sähköiselle "
+#~ "laskutukselle"
+
+#~ msgid "Update Apps List"
+#~ msgstr "Päivitä sovelluslista"
+
+#~ msgid "What is Peppol and why it's great ?"
+#~ msgstr "Mikä on Peppol ja miksi se on hyvä?"
+
+#~ msgid "Why should I use PEPPOL ?"
+#~ msgstr "Miksi minun kannattaa käyttää PEPPOLia?"
+
+#~ msgid "Why should you use it ?"
+#~ msgstr "Miksi sinun kannattaa käyttää sitä?"
+
+#~ msgid "could not be sent via Peppol"
+#~ msgstr "ei voi lähettää Peppolin kautta"
+
+#~ msgid "sent via Peppol"
+#~ msgstr "lähetetty Peppolilla"
 
 #~ msgid "Peppol error: %s"
 #~ msgstr "Peppol-virhe: %s"
