@@ -29,6 +29,13 @@ registry.category("web_tour.tours").add('autocomplete_tour', {
     trigger: 'input[name="street"]',
     run: 'text add more'
 }, {
+    // After re-typing, wait for the results list to be present before clicking.
+    // Without this guard the click can land on a stale element that is being replaced
+    // by the new debounced request, causing _perform_complete_place_search to never fire.
+    content: 'Wait for results after second input',
+    trigger: '.js_autocomplete_result',
+    run: function () {}
+}, {
     content: 'Click on the first result',
     trigger: '.js_autocomplete_result'
 }, {
