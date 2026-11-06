@@ -82,7 +82,8 @@ registry.category("web_tour.tours").add("hr_skills_event_onsite_tour", {
         },
         {
             content: "Ensure we now have the new event as an option",
-            trigger: "div[name='event_id'] ul",
+            // the dropdown opens with the create option before the search has answered
+            trigger: "div[name='event_id'] ul:has(li:contains('Event1'))",
             async run() {
                 const liList = document.querySelectorAll("div[name='event_id'] ul>li");
                 if (liList.length !== 2) {
