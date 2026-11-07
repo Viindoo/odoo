@@ -6,6 +6,7 @@ from odoo.addons.account_edi_ubl_cii.models.account_edi_common import FloatFmt
 PDP_CUSTOMIZATION_ID = 'urn:cen.eu:en16931:2017#conformant#urn.cpro.gouv.fr:1p0:extended-ctc-fr'  # Not accepted by SuperPDP due to missing validator
 
 CPRO_CUSTOMIZATION_ID = 'urn:cen.eu:en16931:2017#conformant#urn.cpro.gouv.fr:1p0:extended-ctc-fr'
+EN16931_CUSTOMIZATION_ID = 'urn:cen.eu:en16931:2017'
 CPRO_INVOICE_IDENTIFIER = f'busdox-docid-qns::urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##{CPRO_CUSTOMIZATION_ID}::2.1'
 
 PAID_STATES = frozenset({'in_payment', 'paid'})
@@ -193,6 +194,21 @@ class AccountEdiXmlUbl21Fr(models.AbstractModel):
             },
         }
 
+    def _ubl_add_accounting_supplier_party_tax_scheme_nodes(self, vals):
+        # EXTENDS account.edi.xml.ubl_bis3
+        super()._ubl_add_accounting_supplier_party_tax_scheme_nodes(vals)
+        partner = vals['party_vals']['partner']
+        commercial_partner = partner.commercial_partner_id
+        siret = commercial_partner._l10n_fr_get_siret()
+
+        if (not commercial_partner.vat or commercial_partner.vat == '/') and siret:
+            vals['party_node']['cac:PartyTaxScheme'] = [{
+                'cbc:CompanyID': {'_text': siret},
+                'cac:TaxScheme': {
+                    'cbc:ID': {'_text': 'TAX'},
+                },
+            }]
+
     def _ubl_add_line_price_node(self, vals, in_foreign_currency=True):
         # OVERRIDE
         line_node = vals['line_node']
@@ -281,3 +297,8 @@ class AccountEdiXmlUbl21Fr(models.AbstractModel):
                 invoice._sync_dynamic_lines(container),
             ):
                 downpayment_lines.move_id = invoice.id
+
+    def _fix_price_unit_quantity_discount(self, quantity, discount, price_unit, line_extension_amount, currency):
+        # EXTENDS account.edi.ubl
+        # TODO: Remove this when french enforces stricter rules
+        return self._import_fix_line_price_unit_quantity_discount(quantity, discount, price_unit, line_extension_amount, currency)

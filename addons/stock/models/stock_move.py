@@ -234,8 +234,15 @@ class StockMove(models.Model):
             elif move.picking_type_id:
                 location_dest = move.picking_type_id.default_location_dest_id
             is_move_to_interco_transit = False
-            if location_dest:
-                is_move_to_interco_transit = location_dest._child_of(customer_loc) and move.location_final_id == inter_comp_location
+            if location_dest and move.location_final_id and inter_comp_location:
+                location_final = move.location_final_id
+                # The inter-company transit or a sublocation set up like it (transit, no company)
+                is_move_to_interco_transit = (
+                    location_dest._child_of(customer_loc)
+                    and location_final._child_of(inter_comp_location)
+                    and location_final.usage == 'transit'
+                    and not location_final.company_id
+                )
             if location_dest and move.location_final_id and (move.location_final_id._child_of(location_dest) or is_move_to_interco_transit):
                 # Force the location_final as dest in the following cases:
                 # - The location_final is a sublocation of destination -> Means we reached the end
@@ -922,6 +929,7 @@ Please change the quantity done or the rounding precision in your settings.""",
         orderpoints = self._get_orderpoints_to_update()
         orderpoints.invalidate_recordset(['qty_to_order', 'qty_forecast'])
         self.env.add_to_compute(self.env['stock.warehouse.orderpoint']._fields['qty_to_order_computed'], orderpoints)
+        self.env.add_to_compute(self.env['stock.warehouse.orderpoint']._fields['deadline_date'], orderpoints)
 
     def _get_orderpoints_to_update(self):
         domains = []
@@ -1543,6 +1551,8 @@ Please change the quantity done or the rounding precision in your settings.""",
             ('picking_type_id', '=', self.picking_type_id.id),
             ('printed', '=', False),
             ('state', 'in', ['draft', 'confirmed', 'waiting', 'partially_available', 'assigned'])]
+        if self.partner_id:
+            domain += [('partner_id', '=', self.partner_id.id)]
         return domain
 
     def _search_picking_for_assignation(self):
@@ -2354,6 +2364,7 @@ Please change the quantity done or the rounding precision in your settings.""",
         orderpoints = self._get_orderpoints_to_update()
         res = super().unlink()
         self.env.add_to_compute(self.env['stock.warehouse.orderpoint']._fields['qty_to_order_computed'], orderpoints)
+        self.env.add_to_compute(self.env['stock.warehouse.orderpoint']._fields['deadline_date'], orderpoints)
         return res
 
     def _prepare_move_split_vals(self, qty):
@@ -2829,6 +2840,16 @@ Please change the quantity done or the rounding precision in your settings.""",
     def _visible_quantity(self):
         self.ensure_one()
         return self.quantity
+
+    def _is_return(self):
+        """ A return of a return is a new shipment, so only odd positions in a return chain are returns """
+        self.ensure_one()
+        seen = set()
+        move = self
+        while move.origin_returned_move_id and move.id not in seen:
+            seen.add(move.id)
+            move = move.origin_returned_move_id
+        return len(seen) % 2 == 1
 
     def _is_incoming(self):
         self.ensure_one()
