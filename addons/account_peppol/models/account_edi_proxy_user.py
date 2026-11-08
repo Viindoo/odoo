@@ -3,6 +3,7 @@
 import re
 import logging
 from datetime import timedelta
+from markupsafe import Markup
 
 from odoo import _, api, fields, models, modules, tools
 from odoo.exceptions import UserError
@@ -272,10 +273,28 @@ class Account_Edi_Proxy_ClientUser(models.Model):
             move.is_in_extractable_state = False
 
         try:
-            move._extend_with_attachments(files_data, new=True)
+            if not move._extend_with_attachments(files_data, new=True):
+                move.peppol_move_state = 'error'
+                move.message_post(
+                    body=self.env._("There was an error while importing the bill, you can find attached the incoming XML"),
+                )
             move._autopost_bill()
-        except Exception:
-            _logger.exception("Unexpected error occurred during the import of bill with id %s", move.id)
+        except Exception as err:
+            _logger.exception(
+                "Unexpected error occurred during the import of bill with id %s (%s uuid: %s, attachment: %s)",
+                move.id, self.proxy_type, uuid, attachment.id,
+            )
+            move._message_log(
+                body=Markup("%s<br/>%s") % (
+                    self.env._(
+                        "Error importing %(proxy_type)s document (UUID: %(uuid)s):",
+                        proxy_type=dict(self._fields['proxy_type']._description_selection(self.env))[self.proxy_type],
+                        uuid=uuid,
+                    ),
+                    str(err)
+                ),
+                attachment_ids=attachment.ids,
+            )
         attachment.write({'res_model': 'account.move', 'res_id': move.id})
         return {'uuid': uuid, 'move': move}
 
@@ -534,6 +553,10 @@ class Account_Edi_Proxy_ClientUser(models.Model):
         # DEPRECATED - to remove in master
         self.ensure_one()
 
+    def _get_peppol_supported_document_types(self):
+        self.ensure_one()
+        return self.company_id._peppol_supported_document_types()
+
     def _peppol_register_sender_as_receiver(self):
         self.ensure_one()
         company = self.company_id
@@ -555,7 +578,7 @@ class Account_Edi_Proxy_ClientUser(models.Model):
             endpoint=self._get_peppol_proxy_endpoint('1/register_sender_as_receiver'),
             params={
                 'migration_key': company.sudo().account_peppol_migration_key,
-                'supported_identifiers': list(company._peppol_supported_document_types())
+                'supported_identifiers': list(self._get_peppol_supported_document_types())
             },
         )
         # once we sent the migration key over, we don't need it

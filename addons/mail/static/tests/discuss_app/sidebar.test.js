@@ -2,6 +2,7 @@ import {
     click,
     contains,
     defineMailModels,
+    hover,
     insertText,
     listenStoreFetch,
     openDiscuss,
@@ -15,7 +16,7 @@ import {
 import { DISCUSS_SIDEBAR_COMPACT_LS } from "@mail/core/public_web/discuss_app_model";
 import { describe, expect, test } from "@odoo/hoot";
 import { animationFrame, drag, press, queryFirst, waitFor } from "@odoo/hoot-dom";
-import { Deferred, mockDate } from "@odoo/hoot-mock";
+import { advanceTime, Deferred, mockDate } from "@odoo/hoot-mock";
 import {
     asyncStep,
     Command,
@@ -1298,6 +1299,74 @@ test("Can make sidebar smaller", async () => {
     });
 });
 
+async function hoverFloatingPanelThenLeave(trigger, panelContent) {
+    await hover(trigger);
+    await contains(`.o-mail-DiscussSidebar-floatingMenu ${panelContent}`);
+    await hover(`.o-mail-DiscussSidebar-floatingMenu ${panelContent}`);
+    await advanceTime(500);
+    await contains(`.o-mail-DiscussSidebar-floatingMenu ${panelContent}`);
+    await hover(".o-mail-DiscussSidebar-floatingMenu");
+    await advanceTime(500);
+    await contains(`.o-mail-DiscussSidebar-floatingMenu ${panelContent}`);
+    await hover(".o-mail-DiscussContent");
+    await contains(".o-mail-DiscussSidebar-floatingMenu", { count: 0 });
+}
+
+test("Compact sidebar channel panel closes when the mouse leaves it", async () => {
+    const pyEnv = await startServer();
+    pyEnv["discuss.channel"].create({ name: "general", channel_type: "channel" });
+    browser.localStorage.setItem(DISCUSS_SIDEBAR_COMPACT_LS, true);
+    await start();
+    await openDiscuss();
+    await hoverFloatingPanelThenLeave(".o-mail-DiscussSidebarChannel", "span:text('general')");
+});
+
+test("Compact sidebar sub-channel panel closes when the mouse leaves it", async () => {
+    const pyEnv = await startServer();
+    const channelId = pyEnv["discuss.channel"].create({ name: "Main Channel" });
+    const subChannelId = pyEnv["discuss.channel"].create({
+        name: "Sub Channel",
+        parent_channel_id: channelId,
+    });
+    browser.localStorage.setItem(DISCUSS_SIDEBAR_COMPACT_LS, true);
+    await start();
+    await openDiscuss(subChannelId);
+    await hoverFloatingPanelThenLeave(
+        ".o-mail-DiscussSidebarSubchannel",
+        ".user-select-none:text('Sub Channel')"
+    );
+});
+
+test("Compact sidebar category panel closes when the mouse leaves it", async () => {
+    browser.localStorage.setItem(DISCUSS_SIDEBAR_COMPACT_LS, true);
+    await start();
+    await openDiscuss();
+    await hoverFloatingPanelThenLeave(
+        ".o-mail-DiscussSidebarCategory-channel",
+        "span:text('Channels')"
+    );
+});
+
+test("Compact sidebar mailbox panel closes when the mouse leaves it", async () => {
+    browser.localStorage.setItem(DISCUSS_SIDEBAR_COMPACT_LS, true);
+    await start();
+    await openDiscuss();
+    await hoverFloatingPanelThenLeave(
+        ".o-mail-Mailbox[data-mailbox-id='starred']",
+        "span:text('Starred messages')"
+    );
+});
+
+test("Compact sidebar meeting panel closes when the mouse leaves it", async () => {
+    browser.localStorage.setItem(DISCUSS_SIDEBAR_COMPACT_LS, true);
+    await start();
+    await openDiscuss();
+    await hoverFloatingPanelThenLeave(
+        ".o-mail-DiscussSidebar button[data-hotkey='m']",
+        "span:text('New Meeting')"
+    );
+});
+
 test("Sidebar compact is locally persistent (saved in local storage)", async () => {
     browser.localStorage.setItem(DISCUSS_SIDEBAR_COMPACT_LS, true);
     await start();
@@ -1317,6 +1386,46 @@ test("Sidebar compact is locally persistent (saved in local storage)", async () 
     });
     await contains(".o-mail-DiscussSidebar.o-compact");
     expect(browser.localStorage.getItem(DISCUSS_SIDEBAR_COMPACT_LS)).toBe("true");
+});
+
+test("Compact sidebar search panel opens on hover and closes when the mouse leaves it", async () => {
+    browser.localStorage.setItem(DISCUSS_SIDEBAR_COMPACT_LS, true);
+    await start();
+    await openDiscuss();
+    await hover(".o-mail-DiscussSearch-inputContainer");
+    await contains(".o-mail-DiscussSidebar-floatingMenu span:text('Search conversations')");
+    await hover(".o-mail-DiscussSidebar-floatingMenu span:text('Search conversations')");
+    await advanceTime(500);
+    await contains(".o-mail-DiscussSidebar-floatingMenu span:text('Search conversations')");
+    await hover(".o-mail-DiscussContent");
+    await contains(".o-mail-DiscussSidebar-floatingMenu", { count: 0 });
+});
+
+test("Compact sidebar search panel closes when clicking search", async () => {
+    browser.localStorage.setItem(DISCUSS_SIDEBAR_COMPACT_LS, true);
+    await start();
+    await openDiscuss();
+    await hover(".o-mail-DiscussSearch-inputContainer");
+    await contains(".o-mail-DiscussSidebar-floatingMenu span:text('Search conversations')");
+    await click(".o-mail-DiscussSearch-inputContainer");
+    await contains(".o_command_palette");
+    await contains(".o-mail-DiscussSidebar-floatingMenu", { count: 0 });
+    await hover(".o_command_palette");
+    await press("Escape");
+    await contains(".o_command_palette", { count: 0 });
+    await hover(".o-mail-DiscussSearch-inputContainer");
+    await contains(".o-mail-DiscussSidebar-floatingMenu span:text('Search conversations')");
+});
+
+test("Compact sidebar search panel closes when the mouse goes to the command palette", async () => {
+    browser.localStorage.setItem(DISCUSS_SIDEBAR_COMPACT_LS, true);
+    await start();
+    await openDiscuss();
+    await hover(".o-mail-DiscussSearch-inputContainer");
+    await contains(".o-mail-DiscussSidebar-floatingMenu span:text('Search conversations')");
+    await press(["control", "k"]);
+    await hover(".o_command_palette");
+    await contains(".o-mail-DiscussSidebar-floatingMenu", { count: 0 });
 });
 
 test("Sidebar compact is crosstab synced", async () => {

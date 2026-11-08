@@ -357,6 +357,11 @@ def reshape_text(text):
     if first_letter_is_rtl and no_letter_is_ltr:
         text = reshape(text)
         text = text[::-1]
+        # Numbers are written left-to-right even inside right-to-left text,
+        # so restore the original order of their digits after the flip.
+        text = re.sub(r'\d+(?:[.,:/\u00A0\u060C\u066B\u066C\u202F]\d+)*', lambda match: match[0][::-1], text)
+        # Brackets are mirrored in right-to-left text.
+        text = text.translate(str.maketrans('()[]{}<>«»', ')(][}{><»«'))
 
     return text
 
@@ -598,7 +603,12 @@ class OdooPdfFileWriter(PdfFileWriter):
             # First browse through all the pages of the pdf file, to get a reference to all the fonts used in the PDF.
             for page in pages:
                 for font in page.getObject()['/Resources']['/Font'].values():
-                    for descendant in font.getObject()['/DescendantFonts']:
+                    font = font.getObject()
+                    # Only composite (Type0) fonts have descendant fonts with a /W widths array to rewrite. Simple
+                    # fonts (e.g. Type1, TrueType) store their widths in /Widths, or not at all for the standard 14.
+                    if '/DescendantFonts' not in font:
+                        continue
+                    for descendant in font['/DescendantFonts']:
                         fonts[descendant.idnum] = descendant.getObject()
 
             # Then for each font, rewrite the width array with the information taken directly from the font file.
@@ -657,8 +667,9 @@ class OdooPdfFileWriter(PdfFileWriter):
 
                 annot[NameObject('/F')] = NumberObject(flags)
 
-        outlines = self._root_object['/Outlines'].getObject()
-        outlines[NameObject('/Count')] = NumberObject(1)
+        if '/Outlines' in self._root_object:
+            outlines = self._root_object['/Outlines'].getObject()
+            outlines[NameObject('/Count')] = NumberObject(1)
 
         # [6.7.2.2-1] include a MarkInfo dictionary containing "Marked" with true value
         mark_info = DictionaryObject({NameObject("/Marked"): BooleanObject(True)})

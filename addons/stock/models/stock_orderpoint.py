@@ -120,8 +120,8 @@ class StockWarehouseOrderpoint(models.Model):
         for orderpoint in self:
             orderpoint.show_supply_warning = not orderpoint.rule_ids
 
-    @api.depends('location_id', 'product_min_qty', 'route_id', 'product_id.route_ids', 'product_id.stock_move_ids.date',
-                 'product_id.stock_move_ids.state', 'product_id.seller_ids', 'product_id.seller_ids.delay', 'company_id.horizon_days')
+    @api.depends('location_id', 'product_min_qty', 'route_id', 'product_id.route_ids', 'product_id.seller_ids',
+    'product_id.seller_ids.delay', 'company_id.horizon_days')
     def _compute_deadline_date(self):
         """ This function first checks if the qty_on_hand is less than the product_min_qty. If it is the case,
         the deadline_date is set to the current day. Afterwards if there are still orderpoints to compute,
@@ -479,6 +479,7 @@ class StockWarehouseOrderpoint(models.Model):
         self.ensure_one()
         return {
             'days_to_order': self.days_to_order,
+            'orderpoint_id': self,
         }
 
     def _get_product_context(self):
@@ -786,6 +787,7 @@ class StockWarehouseOrderpoint(models.Model):
     def _get_multiple_rounded_qty(self, qty_to_order):
         replenishment_multiple = self.replenishment_uom_id or self._get_replenishment_multiple_alternative(qty_to_order)
         if replenishment_multiple:
+            qty_to_order = self.product_id.uom_id.round(qty_to_order)
             # Replace the UP by DOWN if we don't want to order more quantity than product_max_qty
             qty_to_order = self.product_id.uom_id._compute_quantity(qty_to_order, replenishment_multiple)
             qty_to_order = fields.Float.round(qty_to_order, precision_digits=0, rounding_method="UP")
