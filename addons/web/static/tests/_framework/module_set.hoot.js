@@ -12,7 +12,9 @@ import {
     watchKeys,
     watchListeners,
 } from "@odoo/hoot";
+import { collectGarbageAndReport } from "@web/../lib/hoot/core/gc";
 
+import { disposeBootstrapInstances } from "./bootstrap.hoot";
 import { mockBrowserFactory } from "./mock_browser.hoot";
 import { mockCurrencyFactory } from "./mock_currency.hoot";
 import { mockFunctionsFactory } from "./mock_functions.hoot";
@@ -353,6 +355,34 @@ function resolveAddonDependencies(dependencies) {
 }
 
 /**
+ * @param {Map<string, OdooModuleFactory>} factories
+ */
+function sortModuleNames(factories) {
+    function findJob() {
+        for (const job of remainingJobs) {
+            if (factories.get(job).deps.every((dep) => sortedNames.has(dep))) {
+                return job;
+            }
+        }
+        return null;
+    }
+
+    /** @type {Set<string>} */
+    const remainingJobs = new Set();
+    /** @type {Set<string>} */
+    const sortedNames = new Set();
+    for (const name of factories.keys()) {
+        remainingJobs.add(name);
+        let job;
+        while ((job = findJob())) {
+            remainingJobs.delete(job);
+            sortedNames.add(job);
+        }
+    }
+    return sortedNames;
+}
+
+/**
  * @param {Record<string, unknown>>} model
  */
 function unfreezeModel(model) {
@@ -363,51 +393,6 @@ function unfreezeModel(model) {
         }
     }
     return { ...model, fields };
-}
-
-/**
- * This method tries to manually run the garbage collector (if exposed) and logs
- * the current heap size (if available). It is meant to be called right after a
- * suite's module set has been fully executed.
- *
- * This is used for debugging memory leaks, or if the containing process running
- * unit tests doesn't know how much available memory it actually has.
- *
- * To enable this feature, the containing process must simply use the `--expose-gc`
- * flag.
- *
- * @param {string} label
- * @param {number} [testCount]
- */
-async function __gcAndLogMemory(label, testCount) {
-    if (typeof window.gc !== "function") {
-        return;
-    }
-
-    // Cleanup last retained textarea
-    const textarea = document.createElement("textarea");
-    document.body.appendChild(textarea);
-    textarea.value = "aaa";
-    textarea.focus();
-    textarea.remove();
-
-    // Run garbage collection
-    await window.gc({ type: "major", execution: "async" });
-
-    // Log memory usage
-    const logs = [
-        `[MEMINFO] ${label} (after GC)`,
-        "- used:",
-        window.performance.memory.usedJSHeapSize,
-        "- total:",
-        window.performance.memory.totalJSHeapSize,
-        "- limit:",
-        window.performance.memory.jsHeapSizeLimit,
-    ];
-    if (Number.isInteger(testCount)) {
-        logs.push("- tests:", testCount);
-    }
-    console.log(...logs);
 }
 
 /** @extends {OdooModuleLoader} */
@@ -673,26 +658,16 @@ export async function runTests(options) {
     }
 
     // Sort modules to accelerate loading time
-    /** @type {Record<string, Deferred>} */
-    const defs = {};
+    sortedModuleNames.push(...sortModuleNames(loader.factories));
+
+    // Register test modules
     /** @type {string[]} */
     const testModuleNames = [];
-    for (const [name, { deps }] of loader.factories) {
-        // Register test module
+    for (const name of loader.factories.keys()) {
         if (name.endsWith(fileSuffix)) {
-            const baseName = name.slice(0, -fileSuffix.length);
-            testModuleNames.push(baseName);
+            testModuleNames.push(name.slice(0, -fileSuffix.length));
         }
-
-        // Register module dependencies
-        const [modDef, ...depDefs] = [name, ...deps].map((dep) => (defs[dep] ||= new Deferred()));
-        Promise.all(depDefs).then(() => {
-            sortedModuleNames.push(name);
-            modDef.resolve();
-        });
     }
-
-    await Promise.all(Object.values(defs));
 
     // Dry run
     const { suites } = await dryRun(() => describeDrySuite(fileSuffix, testModuleNames));
@@ -729,7 +704,8 @@ export async function runTests(options) {
         const running = await start(suite);
 
         await moduleSetLoader.cleanup();
-        await __gcAndLogMemory(suite.fullName, suite.reporting.tests);
+        disposeBootstrapInstances();
+        await collectGarbageAndReport(suite.fullName, suite.reporting.tests);
 
         if (!running) {
             break;
@@ -748,7 +724,7 @@ export async function runTests(options) {
         templateModule.clearProcessedTemplates();
     }
 
-    await __gcAndLogMemory("tests done");
+    await collectGarbageAndReport("tests done");
 
     // Report last, as the server kills the browser on the result report.
     await stop();
