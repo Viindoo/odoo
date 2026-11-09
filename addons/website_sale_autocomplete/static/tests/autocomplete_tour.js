@@ -1,13 +1,8 @@
 /** @odoo-module */
 
 import { registry } from "@web/core/registry";
-import { TourError } from "@web_tour/tour_service/tour_utils";
 import tourUtils from '@website_sale/js/tours/tour_utils';
 
-
-function fail (errorMessage) {
-    throw new TourError(errorMessage);
-}
 
 registry.category("web_tour.tours").add('autocomplete_tour', {
     test: true,
@@ -29,40 +24,23 @@ registry.category("web_tour.tours").add('autocomplete_tour', {
     trigger: 'input[name="street"]',
     run: 'text add more'
 }, {
-    // After re-typing, wait for the results list to be present before clicking.
-    // Without this guard the click can land on a stale element that is being replaced
-    // by the new debounced request, causing _perform_complete_place_search to never fire.
-    content: 'Wait for results after second input',
-    trigger: '.js_autocomplete_result',
-    run: function () {}
-}, {
     content: 'Click on the first result',
     trigger: '.js_autocomplete_result'
-}, {
-    content: 'Verify the autocomplete box disappeared',
-    trigger: 'body:not(:has(.js_autocomplete_result))'
-}, { // Verify test data has been input
+},
+// The click empties the dropdown at once, but the fields are only filled when
+// /autocomplete/address_full answers, and the debounced search of "add more" may
+// still render a fresh dropdown afterwards: neither "the box disappeared" nor an
+// immediate read of the fields is reliable, so wait for the expected values.
+{ // Verify test data has been input
     content: 'Check Street & number have been set',
-    trigger: 'input[name="street"]',
-    run: function () {
-        if (this.$anchor.val() !== '42 A fictional Street') {
-            fail('Street value is not correct : ' + this.$anchor.val())
-        }
-    }
+    trigger: 'input[name="street"]:propValue(42 A fictional Street)',
+    run: function () {}
 }, {
     content: 'Check City is not empty anymore',
-    trigger: 'input[name="city"]',
-    run: function () {
-        if (this.$anchor.val() !== 'A Fictional City') {
-            fail('Street value is not correct : ' + this.$anchor.val())
-        }
-    }
+    trigger: 'input[name="city"]:propValue(A Fictional City)',
+    run: function () {}
 }, {
     content: 'Check Zip code is not empty anymore',
-    trigger: 'input[name="zip"]',
-    run: function () {
-        if (this.$anchor.val() !== '12345') {
-            fail('Street value is not correct : ' + this.$anchor.val())
-        }
-    }
+    trigger: 'input[name="zip"]:propValue(12345)',
+    run: function () {}
 }]});
