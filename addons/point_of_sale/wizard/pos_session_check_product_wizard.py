@@ -13,7 +13,7 @@ class PosSessionCheckProductWizard(models.TransientModel):
     def load_demo_products(self):
         if not self.env.user.has_group("point_of_sale.group_pos_user"):
             raise AccessDenied()
-        convert.convert_file(self.env.cr, 'point_of_sale', 'data/point_of_sale_onboarding.xml', None, mode='init', kind='data')
+        convert.convert_file(self.env.cr, 'point_of_sale', 'data/point_of_sale_onboarding.xml', None, mode='init', noupdate=True, kind='data')
         return self.open_ui()
 
     def open_ui(self):
