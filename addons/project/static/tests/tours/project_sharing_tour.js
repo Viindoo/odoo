@@ -1,4 +1,4 @@
-import { delay } from "@web/core/utils/concurrency";
+import { rpcBus } from "@web/core/network/rpc";
 import { registry } from "@web/core/registry";
 import { stepUtils } from "@web_tour/tour_utils";
 
@@ -230,6 +230,9 @@ registry.category("web_tour.tours").add("test_04_project_sharing_chatter_message
     ],
 });
 
+// Settled once the server has answered the mention search of "@xxx" in the tour below.
+let mentionSearchAnswered;
+
 registry.category("web_tour.tours").add("portal_project_sharing_chatter_mention_users", {
     url: "/my/projects",
     steps: () => [
@@ -240,15 +243,27 @@ registry.category("web_tour.tours").add("portal_project_sharing_chatter_mention_
         },
         { trigger: ".o_project_sharing" },
         { trigger: ".o_kanban_record:contains('Test Task')", run: "click" },
-        { trigger: ".o-mail-Composer-input", run: "edit @xxx" },
+        {
+            trigger: ".o-mail-Composer-input",
+            async run(helpers) {
+                mentionSearchAnswered = new Promise((resolve) => {
+                    const onResponse = ({ detail }) => {
+                        if (detail.data.params.method === "get_mention_suggestions") {
+                            rpcBus.removeEventListener("RPC:RESPONSE", onResponse);
+                            resolve();
+                        }
+                    };
+                    rpcBus.addEventListener("RPC:RESPONSE", onResponse);
+                });
+                await helpers.edit("@xxx");
+            },
+        },
         {
             trigger: "body:not(:has(.o-mail-Composer-suggestion))",
-            run: async () => {
-                const delay_fetch = odoo.loader.modules.get(
-                    "@mail/core/common/suggestion_hook"
-                ).DELAY_FETCH;
-                await delay(delay_fetch);
-            },
+            // The search is sent DELAY_FETCH after the last key and answered later still. An answer
+            // that comes once the next term is typed closes the search of that term, which is then
+            // never fetched: wait for the answer, not for the delay.
+            run: () => mentionSearchAnswered,
         },
         { trigger: ".o-mail-Composer-input", run: "edit @Georges" },
         { trigger: ".o-mail-Composer-suggestion:contains('Georges')" },
