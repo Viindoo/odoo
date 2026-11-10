@@ -1,4 +1,4 @@
-import { describe, expect } from "@odoo/hoot";
+import { describe, expect, test } from "@odoo/hoot";
 import { waitUntil } from "@odoo/hoot-dom";
 import { advanceTime } from "@odoo/hoot-mock";
 import { browser } from "@web/core/browser/browser";
@@ -62,6 +62,8 @@ onlineTest("basic peer to peer connection", async () => {
     network.close();
 });
 
+// 90 real connections: the duration follows the CPU left to the browser, over 20 seconds if starved
+test.timeout(60_000);
 onlineTest("mesh peer to peer connections", async () => {
     await mountWebClient();
     const channelId = 2;
