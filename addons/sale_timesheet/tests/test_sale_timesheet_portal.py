@@ -28,7 +28,8 @@ class TestPortalSaleTimesheet(TestProjectSharingCommon, TestCommonSaleTimesheet)
             'project_id': self.project_portal.id,
             'task_id': self.task_portal.id,
             'employee_id': self.employee_user.id,
-            'validated': True,
+            # field of the enterprise timesheet_grid
+            **({'validated': True} if 'validated' in self.env['account.analytic.line']._fields else {}),
         })
 
         timesheets = self.env['account.analytic.line'].search(timesheet_domain)
