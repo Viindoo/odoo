@@ -8,8 +8,12 @@ registry.category("web_tour.tours").add("im_livechat_session_history_open", {
     steps: () => [
         {
             trigger: "body",
-            async run() {
+            async run({ waitUntil }) {
                 await whenReady();
+                // The tour starts once its service is ready, which can be before the web client is
+                // mounted (a slow willStart, e.g. a systray item on a busy machine): wait for the
+                // root this step reads, within the 10 s of the step.
+                await waitUntil(() => odoo.__WOWL_DEBUG__?.root, { timeout: 8000 });
                 const busService = odoo.__WOWL_DEBUG__.root.env.services.bus_service;
                 patchWithCleanup(busService, {
                     addChannel(channel) {
