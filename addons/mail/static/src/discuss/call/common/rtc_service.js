@@ -403,6 +403,8 @@ export class Rtc extends Record {
             fallbackMode: false,
             isPipMode: false,
             isFullscreen: false,
+            /** Mirrors `screenTrack.enabled`, which a template cannot observe. */
+            isScreenTrackPaused: false,
         });
         this.blurManager = undefined;
     }
@@ -552,8 +554,14 @@ export class Rtc extends Record {
         this.setPttReleaseTimeout();
     }
 
+    /** @param {boolean} paused */
+    setScreenTrackPaused(paused) {
+        this.state.screenTrack.enabled = !paused;
+        this.state.isScreenTrackPaused = paused;
+    }
+
     showMirroringWarning() {
-        this.state.screenTrack.enabled = false;
+        this.setScreenTrackPaused(true);
         const trackEndedFn = () => this.removeMirroringWarning?.();
         this.removeMirroringWarning = this.overlay.add(
             CallInfiniteMirroringWarning,
@@ -653,21 +661,24 @@ export class Rtc extends Record {
     async leaveCall(channel = this.state.channel) {
         this.store.fullscreenChannel = null;
         this.state.hasPendingRequest = true;
-        await this.rpcLeaveCall(channel);
-        this.endCall(channel);
-        this.state.hasPendingRequest = false;
+        try {
+            await this.rpcLeaveCall(channel);
+        } finally {
+            this.endCall(channel);
+            this.state.hasPendingRequest = false;
+        }
     }
 
     /**
      * @param {import("models").Thread} [channel]
      */
     endCall(channel = this.state.channel) {
-        this._endHost();
         if (channel.self_member_id) {
             channel.self_member_id.rtc_inviting_session_id = undefined;
         }
         channel.activeRtcSession = undefined;
         if (channel.eq(this.state.channel)) {
+            this._endHost();
             this.state.logs.end = new Date().toISOString();
             this.dumpLogs();
             this.pttExtService.unsubscribe();
@@ -1066,7 +1077,7 @@ export class Rtc extends Record {
                 this.crossTabInitDeferred.resolve();
                 return;
             case CROSS_TAB_HOST_MESSAGE.CLOSE: {
-                if (this._remotelyHostedSessionId !== hostedSessionId) {
+                if (this.isHost || this._remotelyHostedSessionId !== hostedSessionId) {
                     return;
                 }
                 this.clear();
@@ -1471,18 +1482,22 @@ export class Rtc extends Record {
             this.notification.add(_t("Your browser does not support webRTC."), { type: "warning" });
             return;
         }
-        this.pttExtService.subscribe();
         this.state.hasPendingRequest = true;
-        const data = await rpc(
-            "/mail/rtc/channel/join_call",
-            {
-                camera,
-                channel_id: channel.id,
-                check_rtc_session_ids: channel.rtc_session_ids.map((session) => session.id),
-            },
-            { silent: true }
-        );
-        this.state.hasPendingRequest = false;
+        let data;
+        try {
+            data = await rpc(
+                "/mail/rtc/channel/join_call",
+                {
+                    camera,
+                    channel_id: channel.id,
+                    check_rtc_session_ids: channel.rtc_session_ids.map((session) => session.id),
+                },
+                { silent: true }
+            );
+        } finally {
+            this.state.hasPendingRequest = false;
+        }
+        this.pttExtService.subscribe();
         // Initializing a new session implies closing the current session.
         this.clear();
         this.state.channel = channel;
@@ -1946,6 +1961,10 @@ export class Rtc extends Record {
                     this.state.screenTrack = undefined;
                     closeStream(this.state.sourceScreenStream);
                     this.state.sourceScreenStream = null;
+                    if (this.state.screenAudioTrack) {
+                        this.state.screenAudioTrack = undefined;
+                        this.updateAudioTrack();
+                    }
                     break;
                 }
             }
@@ -2042,6 +2061,7 @@ export class Rtc extends Record {
                 Object.assign(this.state, {
                     sourceScreenStream: sourceStream,
                     screenTrack: outputTrack,
+                    isScreenTrackPaused: false,
                     screenAudioTrack: screenAudioTrack,
                     sendScreen: Boolean(outputTrack),
                     isScreenSourceExternal: Boolean(sourceStream) && env?.pipWindow,
@@ -2075,6 +2095,8 @@ export class Rtc extends Record {
             this.state.audioTrack = destination.stream.getAudioTracks()[0];
         } else {
             this.state.audioTrack = micAudioTrack ?? screenAudioTrack;
+            this.audioContext?.close();
+            this.audioContext = undefined;
         }
         await this.network?.updateUpload("audio", this.state.audioTrack);
     }
@@ -2082,7 +2104,9 @@ export class Rtc extends Record {
     async resetMicAudioTrack({ force = false }) {
         this.state.micAudioTrack?.stop();
         this.state.micAudioTrack = undefined;
-        this.state.audioTrack?.stop();
+        if (this.state.audioTrack !== this.state.screenAudioTrack) {
+            this.state.audioTrack?.stop();
+        }
         this.state.audioTrack = undefined;
         if (!this.state.channel) {
             return;
@@ -2102,6 +2126,7 @@ export class Rtc extends Record {
                 }
             } catch {
                 this.showMediaUnavailableWarning({ microphone: true });
+                this.updateAudioTrack();
                 return;
             }
             if (!this.localSession) {
@@ -2118,6 +2143,8 @@ export class Rtc extends Record {
             micAudioTrack.enabled = !this.localSession.isMute && this.localSession.isTalking;
             this.state.micAudioTrack = micAudioTrack;
             this.linkVoiceActivationDebounce();
+            this.updateAudioTrack();
+        } else {
             this.updateAudioTrack();
         }
     }
@@ -2390,7 +2417,7 @@ export const rtcService = {
             } else if (!rtc.state.isFullscreen) {
                 rtc.removeMirroringWarning?.();
                 if (wasFullscreen && rtc.state.screenTrack) {
-                    rtc.state.screenTrack.enabled = true;
+                    rtc.setScreenTrackPaused(false);
                 }
             }
         });
