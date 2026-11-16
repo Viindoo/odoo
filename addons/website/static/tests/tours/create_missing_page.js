@@ -5,6 +5,12 @@ import {
     clickOnSave,
 } from "@website/js/tours/tour_utils";
 
+// The menus of the installed apps can make the list longer than the dialog,
+// which then shows its end: the drop on the first item would land outside the list.
+function scrollMenuListToTop(helpers) {
+    helpers.anchor.closest(".modal-body").scrollTop = 0;
+}
+
 registerWebsitePreviewTour(
     "create_missing_page",
     {
@@ -60,6 +66,7 @@ registerWebsitePreviewTour(
             content: "Drag the new menu item at the top",
             trigger: '.oe_menu_editor li:contains("Zoé’s Diner") .oi-draggable',
             run(helpers) {
+                scrollMenuListToTop(helpers);
                 return helpers.drag_and_drop('.oe_menu_editor li:contains("Home") .oi-draggable', {
                     position: {
                         top: 20,
@@ -156,6 +163,7 @@ registerWebsitePreviewTour(
             content: "Drag the new menu item at the top",
             trigger: '.oe_menu_editor li:contains("The Sea Hotel") .oi-draggable',
             run(helpers) {
+                scrollMenuListToTop(helpers);
                 return helpers.drag_and_drop(
                     '.oe_menu_editor li:contains("Zoé’s Diner") .oi-draggable',
                     {
