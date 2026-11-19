@@ -40,7 +40,7 @@ msgstr " Bản ghi"
 #: model:ir.model.fields,field_description:hr.field_res_company__hr_presence_control_email_amount
 #: model:ir.model.fields,field_description:hr.field_res_config_settings__hr_presence_control_email_amount
 msgid "# emails to send"
-msgstr "# Gửi email tới"
+msgstr "Số email cần gửi"
 
 #. module: hr
 #. odoo-python
@@ -336,6 +336,10 @@ msgid ""
 "is_trusted_bank_account\" class=\"text-success\">Trusted</span>\n"
 "                                                </span>"
 msgstr ""
+"<span class=\"d-flex w-50\">\n"
+"                                                    <span invisible=\"is_trusted_bank_account\" class=\"text-muted\">Không tin cậy</span>\n"
+"                                                    <span invisible=\"not is_trusted_bank_account\" class=\"text-success\">Tin cậy</span>\n"
+"                                                </span>"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
@@ -355,7 +359,7 @@ msgstr "<span class=\"o_stat_text\">Liên hệ</span>"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form_smartbutton_inherited
 msgid "<span class=\"o_stat_text\">Contacts</span>"
-msgstr "<span class=\"o_stat_text\">Liên lạc</span>"
+msgstr "<span class=\"o_stat_text\">Liên hệ</span>"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_partner_view_form
@@ -402,12 +406,12 @@ msgstr ""
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "<span invisible=\"not contract_date_start\">to</span>"
-msgstr ""
+msgstr "<span invisible=\"not contract_date_start\">đến</span>"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "<span>Contract Overview</span>"
-msgstr ""
+msgstr "<span>Tổng quan hợp đồng</span>"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
@@ -870,7 +874,7 @@ msgstr "Phân bổ"
 #: model:ir.model.fields,field_description:hr.field_hr_employee__allowed_country_state_ids
 #: model:ir.model.fields,field_description:hr.field_hr_version__allowed_country_state_ids
 msgid "Allowed Country State"
-msgstr ""
+msgstr "Tỉnh/TP được phép"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_bank_account_allocation_wizard_line__amount
@@ -895,6 +899,7 @@ msgid ""
 "An employee cannot have multiple active versions sharing the same effective "
 "date."
 msgstr ""
+"Một nhân viên không thể có nhiều phiên bản đang hiệu lực cùng ngày hiệu lực."
 
 #. module: hr
 #. odoo-python
@@ -1063,7 +1068,7 @@ msgstr "Số tệp đính kèm"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_users_view_form_preferences
 msgid "Attendance PIN"
-msgstr ""
+msgstr "Mã PIN chấm công"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
@@ -1160,22 +1165,22 @@ msgstr "Tài khoản ngân hàng"
 #: code:addons/hr/models/hr_employee.py:0
 #: model_terms:ir.ui.view,arch_db:hr.view_bank_account_allocation_wizard
 msgid "Bank Account Allocation"
-msgstr ""
+msgstr "Phân bổ tài khoản ngân hàng"
 
 #. module: hr
 #: model:ir.model,name:hr.model_hr_bank_account_allocation_wizard_line
 msgid "Bank Account Allocation Line (Wizard)"
-msgstr ""
+msgstr "Dòng phân bổ tài khoản ngân hàng (công cụ)"
 
 #. module: hr
 #: model:ir.model,name:hr.model_hr_bank_account_allocation_wizard
 msgid "Bank Account Allocation Wizard"
-msgstr ""
+msgstr "Công cụ phân bổ tài khoản ngân hàng"
 
 #. module: hr
 #: model:ir.actions.act_window,name:hr.action_bank_account_allocation_wizard
 msgid "Bank Account Allocations"
-msgstr ""
+msgstr "Phân bổ tài khoản ngân hàng"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__bank_account_ids
@@ -1189,6 +1194,7 @@ msgstr "Tài khoản ngân hàng"
 msgid ""
 "Bank account %s not found within the salary distribution of the employee"
 msgstr ""
+"Không tìm thấy tài khoản ngân hàng %s trong phần chia lương của nhân viên"
 
 #. module: hr
 #: model:ir.model,name:hr.model_base
@@ -1225,6 +1231,8 @@ msgstr "Dựa trên trạng thái người dùng trong hệ thống"
 msgid ""
 "Before creating a new contract, close the current one by setting an end date."
 msgstr ""
+"Trước khi tạo hợp đồng mới, hãy đóng hợp đồng hiện tại bằng cách đặt ngày "
+"kết thúc."
 
 #. module: hr
 #. odoo-javascript
@@ -1281,6 +1289,7 @@ msgstr ""
 #: code:addons/hr/models/hr_version.py:0
 msgid "Cannot archive all the active versions of an employee."
 msgstr ""
+"Không thể lưu trữ tất cả các phiên bản đang hiệu lực của một nhân viên."
 
 #. module: hr
 #. odoo-python
@@ -1297,6 +1306,8 @@ msgid ""
 "Cannot modify multiple versions contract dates with different contracts at "
 "once."
 msgstr ""
+"Không thể sửa đồng thời ngày hợp đồng của nhiều phiên bản thuộc các hợp đồng"
+" khác nhau."
 
 #. module: hr
 #. odoo-python
@@ -1309,6 +1320,7 @@ msgstr ""
 #: code:addons/hr/models/hr_version.py:0
 msgid "Cannot unassign all the active versions of an employee."
 msgstr ""
+"Không thể bỏ gán tất cả các phiên bản đang hiệu lực của một nhân viên."
 
 #. module: hr
 #: model:ir.module.module,summary:base.module_hr
@@ -1444,7 +1456,7 @@ msgstr "Mã quốc gia của công ty"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.print_employee_badge
 msgid "Company Logo"
-msgstr "Logo Công ty"
+msgstr "Logo công ty"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_config_settings__company_tz
@@ -1469,7 +1481,7 @@ msgstr "Nhân viên công ty"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__complete_name
 msgid "Complete Name"
-msgstr "Tên Đầy đủ"
+msgstr "Tên đầy đủ"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_consultant
@@ -1570,13 +1582,13 @@ msgstr "Ngày kết thúc hợp đồng"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
 msgid "Contract Expiration Notice Period"
-msgstr "Giai đoạn thông báo hết hạn hợp đồng"
+msgstr "Thời hạn thông báo hết hạn hợp đồng"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_company__contract_expiration_notice_period
 #: model:ir.model.fields,field_description:hr.field_res_config_settings__contract_expiration_notice_period
 msgid "Contract Expiry Notice Period"
-msgstr "Giai đoạn thông báo hết hạn hợp đồng"
+msgstr "Thời hạn thông báo hết hạn hợp đồng"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.hr_contract_template_form_view
@@ -1607,7 +1619,7 @@ msgstr "Ngày bắt đầu hợp đồng"
 #: model:ir.model.fields,field_description:hr.field_hr_version__contract_template_id
 #: model_terms:ir.ui.view,arch_db:hr.hr_contract_template_form_view
 msgid "Contract Template"
-msgstr "Hợp đồng mẫu"
+msgstr "Mẫu hợp đồng"
 
 #. module: hr
 #: model:ir.actions.act_window,name:hr.action_hr_contract_templates
@@ -1942,13 +1954,13 @@ msgid ""
 "Define the allowed IP to be displayed as Present. In case of multiple "
 "addresses, separate them by a coma."
 msgstr ""
-"Xác định IP được phép hiển thị là Hiện tại. Trong trường hợp có nhiều địa "
-"chỉ, hãy phân tách chúng bằng dấu phẩy."
+"Xác định IP được phép hiển thị là Có mặt. Trong trường hợp có nhiều địa chỉ,"
+" hãy phân tách chúng bằng dấu phẩy."
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
 msgid "Define the minimum number of sent emails to be displayed as Present."
-msgstr "Xác định số lượng email đã gửi tối thiểu sẽ được hiển thị là Hiện tại."
+msgstr "Xác định số lượng email đã gửi tối thiểu sẽ được hiển thị là Có mặt."
 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_resource_resource__calendar_id
@@ -2188,7 +2200,7 @@ msgstr "Hiển thị tên avatar"
 #. odoo-python
 #: code:addons/hr/models/hr_version.py:0
 msgid "Divorced"
-msgstr "Ly hôn"
+msgstr "Đã ly hôn"
 
 #. module: hr
 #. odoo-python
@@ -2227,7 +2239,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/hr/models/hr_employee.py:0
 msgid "Each amount percentage must be a number between 0 and 100."
-msgstr ""
+msgstr "Tỷ lệ phần trăm của mỗi khoản phải là một số từ 0 đến 100."
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_consultant
@@ -2271,7 +2283,7 @@ msgstr "Ăn uống"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Education"
-msgstr "Giáo dục"
+msgstr "Học vấn"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__date_version
@@ -2354,7 +2366,7 @@ msgstr "Nhân viên"
 #. odoo-python
 #: code:addons/hr/models/hr_version.py:0
 msgid "Employee %s must always have at least one active version."
-msgstr ""
+msgstr "Nhân viên %s phải luôn có ít nhất một phiên bản đang hiệu lực."
 
 #. module: hr
 #: model:ir.model,name:hr.model_hr_employee_category
@@ -2380,7 +2392,7 @@ msgstr ""
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.print_employee_badge
 msgid "Employee Image"
-msgstr "Hình nhân viên"
+msgstr "Ảnh nhân viên"
 
 #. module: hr
 #: model:ir.model,name:hr.model_hr_employee_location
@@ -2414,7 +2426,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:hr.hr_version_graph_view
 #: model_terms:ir.ui.view,arch_db:hr.hr_version_pivot_view
 msgid "Employee Records"
-msgstr ""
+msgstr "Hồ sơ nhân viên"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__versions_count
@@ -2425,7 +2437,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:hr.field_account_setup_bank_manual_config__employee_salary_amount_is_percentage
 #: model:ir.model.fields,field_description:hr.field_res_partner_bank__employee_salary_amount_is_percentage
 msgid "Employee Salary Amount Is Percentage"
-msgstr ""
+msgstr "Số tiền lương của nhân viên là tỷ lệ phần trăm"
 
 #. module: hr
 #: model:ir.actions.act_window,name:hr.open_view_categ_form
@@ -2458,7 +2470,7 @@ msgstr ""
 #: model:ir.model.fields,help:hr.field_res_users__bank_account_ids
 #: model:ir.model.fields,help:hr.field_res_users__employee_bank_account_ids
 msgid "Employee bank accounts to pay salaries"
-msgstr ""
+msgstr "Tài khoản ngân hàng của nhân viên để trả lương"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_cto
@@ -2477,12 +2489,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:hr.hr_contract_template_form_view
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Employee will be excluded from Pay Runs"
-msgstr ""
+msgstr "Nhân viên sẽ bị loại khỏi các kỳ lương"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_users__employee_bank_account_ids
 msgid "Employee's Bank Accounts"
-msgstr ""
+msgstr "Tài khoản ngân hàng của nhân viên"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.hr_employee_public_view_form
@@ -2588,7 +2600,7 @@ msgstr "Ngày kết thúc hợp đồng (nếu là một hợp đồng có thờ
 #: model:ir.model.fields,help:hr.field_hr_employee__trial_date_end
 #: model:ir.model.fields,help:hr.field_hr_version__trial_date_end
 msgid "End date of the trial period (if there is one)."
-msgstr "Ngày kết thúc thời hạn thử việc(nếu có)."
+msgstr "Ngày kết thúc thời gian thử việc (nếu có)."
 
 #. module: hr
 #. odoo-javascript
@@ -2614,7 +2626,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:hr.field_hr_employee__trial_date_end
 #: model:ir.model.fields,field_description:hr.field_hr_version__trial_date_end
 msgid "End of Trial Period"
-msgstr "Kết thúc Thử việc"
+msgstr "Kết thúc thời gian thử việc"
 
 #. module: hr
 #. odoo-python
@@ -2646,7 +2658,7 @@ msgid ""
 "(e.g., Aadhaar, SIN, NIN). This is used for official records and statutory "
 "compliance."
 msgstr ""
-"Nhập số Chứng minh nhân dâncủa nhân viên do chính phủ cấp (ví dụ: Aadhaar, "
+"Nhập số định danh quốc gia của nhân viên do chính phủ cấp (ví dụ: Aadhaar, "
 "SIN, NIN). Thông tin này được sử dụng cho hồ sơ chính thức và tuân thủ pháp "
 "lý."
 
@@ -2675,7 +2687,7 @@ msgstr "Mở rộng vốn kiến thức về các ngành kinh doanh khác nhau"
 msgid ""
 "Expected number of employees for this job position after new recruitment."
 msgstr ""
-"Số lượng nhân viên dự kiến cho Vị trí công việc này sau khi tuyển dụng."
+"Số lượng nhân viên dự kiến cho vị trí công việc này sau khi tuyển dụng."
 
 #. module: hr
 #. odoo-javascript
@@ -2886,8 +2898,8 @@ msgid ""
 "For %(channels)s, channel_type should be 'channel' to have the department "
 "auto-subscription."
 msgstr ""
-"Đối với %(channels)s, channel_type phải là 'kênh' để có đăng ký tự động theo "
-"phòng ban."
+"Đối với %(channels)s, channel_type phải là 'channel' để có đăng ký tự động "
+"theo phòng ban."
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee_public__phone_formatted
@@ -2944,7 +2956,7 @@ msgstr "Tạo"
 #. odoo-python
 #: code:addons/hr/models/res_partner.py:0
 msgid "Go to contact"
-msgstr ""
+msgstr "Đi tới liên hệ"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_marketing
@@ -2976,12 +2988,12 @@ msgstr "Phòng ban"
 #. module: hr
 #: model:ir.actions.server,name:hr.ir_cron_data_employee_notify_expiring_contract_work_permit_ir_actions_server
 msgid "HR Employee: Notify Expiring Contract or Work Permit"
-msgstr ""
+msgstr "Nhân viên: Thông báo hợp đồng hoặc giấy phép lao động sắp hết hạn"
 
 #. module: hr
 #: model:ir.actions.server,name:hr.ir_cron_data_employee_update_current_version_ir_actions_server
 msgid "HR Employee: Update Current Version"
-msgstr ""
+msgstr "Nhân viên: Cập nhật phiên bản hiện tại"
 
 #. module: hr
 #. odoo-javascript
@@ -3024,7 +3036,7 @@ msgstr "Có tin nhắn"
 #: model:ir.model.fields,field_description:hr.field_hr_employee__has_multiple_bank_accounts
 #: model:ir.model.fields,field_description:hr.field_res_partner_bank__employee_has_multiple_bank_accounts
 msgid "Has Multiple Bank Accounts"
-msgstr ""
+msgstr "Có nhiều tài khoản ngân hàng"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_developer
@@ -3041,7 +3053,7 @@ msgstr "Tuyển dụng"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_hr_job_form
 msgid "Hiring Process"
-msgstr ""
+msgstr "Quy trình tuyển dụng"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
@@ -3098,13 +3110,13 @@ msgstr "Hiển thị biểu tượng nhân sự"
 #. module: hr
 #: model:ir.model,name:hr.model_hr_manager_department_report
 msgid "Hr Manager Department Report"
-msgstr "Báo cáo phòng nhân sự"
+msgstr "Báo cáo phòng ban của quản lý nhân sự"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__hr_presence_state
 #: model:ir.model.fields,field_description:hr.field_hr_employee_public__hr_presence_state
 msgid "Hr Presence State"
-msgstr "Hr trạng thái hiện diện"
+msgstr "Trạng thái hiện diện nhân sự"
 
 #. module: hr
 #: model:ir.ui.menu,name:hr.menu_hr_main
@@ -3335,7 +3347,7 @@ msgstr "Hiện tại"
 #: model:ir.model.fields,field_description:hr.field_hr_employee__is_custom_job_title
 #: model:ir.model.fields,field_description:hr.field_hr_version__is_custom_job_title
 msgid "Is Custom Job Title"
-msgstr ""
+msgstr "Là chức danh tùy chỉnh"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__message_is_follower
@@ -3387,12 +3399,12 @@ msgstr "Là hệ thống"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__is_trusted_bank_account
 msgid "Is Trusted Bank Account"
-msgstr ""
+msgstr "Là tài khoản ngân hàng tin cậy"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee_public__is_user
 msgid "Is User"
-msgstr ""
+msgstr "Là người dùng"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
@@ -3647,7 +3659,7 @@ msgstr "Địa điểm"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_work_location__location_number
 msgid "Location Number"
-msgstr "Số vị trí"
+msgstr "Số địa điểm"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee_location__work_location_type
@@ -3680,7 +3692,7 @@ msgstr "Tệp đính kèm chính"
 #: model_terms:ir.ui.view,arch_db:hr.res_users_view_form
 #: model_terms:ir.ui.view,arch_db:hr.res_users_view_form_preferences
 msgid "Main Work Location"
-msgstr ""
+msgstr "Địa điểm làm việc chính"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_developer
@@ -3922,7 +3934,7 @@ msgstr "Hợp đồng mới"
 #. odoo-javascript
 #: code:addons/hr/static/src/components/versions_timeline/versions_timeline.xml:0
 msgid "New Employee Record"
-msgstr ""
+msgstr "Hồ sơ nhân viên mới"
 
 #. module: hr
 #: model:ir.actions.act_window,name:hr.action_open_hr_employee_create_version_wizard
@@ -4000,7 +4012,7 @@ msgstr "Không tìm thấy mẫu nào"
 #. odoo-javascript
 #: code:addons/hr/static/src/components/versions_timeline/versions_timeline.js:0
 msgid "No contract"
-msgstr ""
+msgstr "Không có hợp đồng"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_consultant
@@ -4015,7 +4027,7 @@ msgstr ""
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "No user linked"
-msgstr ""
+msgstr "Chưa liên kết người dùng"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_consultant
@@ -4094,7 +4106,7 @@ msgstr ""
 #. module: hr
 #: model:ir.model.fields,help:hr.field_hr_job__no_of_employee
 msgid "Number of employees currently occupying this job position."
-msgstr "Số lượng nhân viên hiện có của Vị trí công việc này."
+msgstr "Số lượng nhân viên hiện có của vị trí công việc này."
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__message_has_error_counter
@@ -4274,6 +4286,8 @@ msgstr "Onboarding/Offboarding"
 #: code:addons/hr/models/hr_employee.py:0
 msgid "Only HR users can access first version date on an employee."
 msgstr ""
+"Chỉ người dùng nhân sự mới xem được ngày của phiên bản đầu tiên của nhân "
+"viên."
 
 #. module: hr
 #: model:ir.model.constraint,message:hr.constraint_hr_employee_location_uniq_exceptional_per_day
@@ -4302,13 +4316,13 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/hr/static/src/core/web/avatar_card/avatar_card_patch.xml:0
 msgid "Open Contact Profile"
-msgstr ""
+msgstr "Mở hồ sơ liên hệ"
 
 #. module: hr
 #. odoo-javascript
 #: code:addons/hr/static/src/core/web/avatar_card/avatar_card_patch.xml:0
 msgid "Open Employee Profile (activates company)"
-msgstr ""
+msgstr "Mở hồ sơ nhân viên (kích hoạt công ty)"
 
 #. module: hr
 #. odoo-python
@@ -4348,7 +4362,7 @@ msgstr "Sản phẩm"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_filter
 msgid "Out of Contract"
-msgstr "Không có hợp đồng"
+msgstr "Ngoài thời hạn hợp đồng"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_hrm
@@ -4390,7 +4404,7 @@ msgstr "Phòng ban cấp trên"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__parent_path
 msgid "Parent Path"
-msgstr "Tuyến chính"
+msgstr "Đường dẫn cấp trên"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_trainee
@@ -4401,7 +4415,7 @@ msgstr "Tham gia các cuộc họp và thảo luận của bộ phận"
 #: model:ir.model.fields,help:hr.field_hr_employee__user_partner_id
 #: model:ir.model.fields,help:hr.field_hr_employee_public__user_partner_id
 msgid "Partner-related data of the user"
-msgstr "Đối tác liên hệ dữ liệu với tài khoản"
+msgstr "Dữ liệu đối tác của người dùng"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_marketing
@@ -4412,7 +4426,7 @@ msgstr "Yêu thích các sản phẩm phần mềm"
 #: model:ir.model.fields,field_description:hr.field_hr_employee__passport_expiration_date
 #: model:ir.model.fields,field_description:hr.field_hr_version__passport_expiration_date
 msgid "Passport Expiration Date"
-msgstr ""
+msgstr "Ngày hết hạn hộ chiếu"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__passport_id
@@ -4424,7 +4438,7 @@ msgstr "Số hộ chiếu"
 #: model_terms:ir.ui.view,arch_db:hr.hr_contract_template_form_view
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Pay Category"
-msgstr ""
+msgstr "Nhóm lương"
 
 #. module: hr
 #. odoo-javascript
@@ -4634,7 +4648,7 @@ msgstr "Kinh nghiệm thực tập hoặc dự án trước đây"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__primary_bank_account_id
 msgid "Primary Bank Account"
-msgstr ""
+msgstr "Tài khoản ngân hàng chính"
 
 #. module: hr
 #: model:ir.actions.report,name:hr.hr_employee_print_badge
@@ -4696,28 +4710,28 @@ msgstr "Điện thoại cá nhân"
 #: model:ir.model.fields,field_description:hr.field_hr_version__private_state_id
 #: model:ir.model.fields,field_description:hr.field_res_users__private_state_id
 msgid "Private State"
-msgstr "Bang cá nhân"
+msgstr "Tỉnh/TP cá nhân"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__private_street
 #: model:ir.model.fields,field_description:hr.field_hr_version__private_street
 #: model:ir.model.fields,field_description:hr.field_res_users__private_street
 msgid "Private Street"
-msgstr "Phố cá nhân"
+msgstr "Đường cá nhân"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__private_street2
 #: model:ir.model.fields,field_description:hr.field_hr_version__private_street2
 #: model:ir.model.fields,field_description:hr.field_res_users__private_street2
 msgid "Private Street2"
-msgstr "Phố cá nhân 2"
+msgstr "Đường 2 cá nhân"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__private_zip
 #: model:ir.model.fields,field_description:hr.field_hr_version__private_zip
 #: model:ir.model.fields,field_description:hr.field_res_users__private_zip
 msgid "Private Zip"
-msgstr "Zip cá nhân"
+msgstr "Mã bưu chính cá nhân"
 
 #. module: hr
 #: model:hr.department,name:hr.dep_ps
@@ -4806,7 +4820,7 @@ msgstr "Bạn đã sẵn sàng để tuyển dụng một cách hiệu quả ch�
 #. odoo-javascript
 #: code:addons/hr/static/src/views/hr_employee_action_helper/hr_employee_action_helper.xml:0
 msgid "Ready to start your experience?"
-msgstr ""
+msgstr "Sẵn sàng bắt đầu trải nghiệm của bạn?"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_consultant
@@ -4957,7 +4971,7 @@ msgstr "Lịch làm việc"
 #. module: hr
 #: model:ir.model,name:hr.model_resource_calendar_leaves
 msgid "Resource Time Off Detail"
-msgstr "Chi tiết ngày nghỉ của tài nguyên"
+msgstr "Chi tiết ngày nghỉ của nguồn lực"
 
 #. module: hr
 #: model:ir.model,name:hr.model_resource_calendar
@@ -5011,17 +5025,17 @@ msgstr "Lỗi gửi SMS"
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 #: model_terms:ir.ui.view,arch_db:hr.view_partner_bank_form_inherit_hr
 msgid "Salary Allocation"
-msgstr ""
+msgstr "Phân bổ lương"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__salary_distribution
 msgid "Salary Distribution"
-msgstr ""
+msgstr "Phân chia lương"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.hr_contract_template_form_view
 msgid "Salary Information"
-msgstr "Thông tin Lương"
+msgstr "Thông tin lương"
 
 #. module: hr
 #: model:ir.model,name:hr.model_hr_payroll_structure_type
@@ -5174,7 +5188,7 @@ msgstr ""
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.hr_version_search_view
 msgid "Show all records whose next activity date is past"
-msgstr ""
+msgstr "Hiển thị mọi bản ghi có ngày hoạt động tiếp theo đã qua"
 
 #. module: hr
 #. odoo-javascript
@@ -5232,7 +5246,7 @@ msgstr "Thể thao"
 #: model:ir.model.fields,field_description:hr.field_hr_employee__spouse_birthdate
 #: model:ir.model.fields,field_description:hr.field_hr_version__spouse_birthdate
 msgid "Spouse Birthdate"
-msgstr "Ngày sinh vợ/ chồng"
+msgstr "Ngày sinh vợ/chồng"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__spouse_complete_name
@@ -5268,12 +5282,13 @@ msgstr ""
 msgid ""
 "Start date (%(start)s) must be earlier than contract end date (%(end)s)."
 msgstr ""
+"Ngày bắt đầu (%(start)s) phải sớm hơn ngày kết thúc hợp đồng (%(end)s)."
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_users_view_form_preferences
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "State"
-msgstr "Trạng thái"
+msgstr "Tỉnh/TP"
 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_hr_department__activity_state
@@ -5337,7 +5352,7 @@ msgstr "Nhân viên cấp dưới"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_hr_job_form
 msgid "Summary"
-msgstr "Tổng kết"
+msgstr "Tóm tắt"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__sunday_location_id
@@ -5508,7 +5523,7 @@ msgstr ""
 #. module: hr
 #: model:ir.model.constraint,message:hr.constraint_hr_version_check_contract_start_date_defined
 msgid "The contract must have a start date."
-msgstr ""
+msgstr "Hợp đồng phải có ngày bắt đầu."
 
 #. module: hr
 #. odoo-python
@@ -5545,6 +5560,8 @@ msgid ""
 "The employee is already in contract on %s. Please select a date outside "
 "existing contracts"
 msgstr ""
+"Nhân viên đã có hợp đồng vào ngày %s. Vui lòng chọn một ngày nằm ngoài các "
+"hợp đồng hiện có"
 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_hr_employee__legal_name
@@ -5577,7 +5594,7 @@ msgstr "Các trường sau đây đã được sửa đổi bởi %s"
 #. odoo-python
 #: code:addons/hr/models/hr_employee_departure.py:0
 msgid "The following users have been archived: %s"
-msgstr ""
+msgstr "Các người dùng sau đây đã được lưu trữ: %s"
 
 #. module: hr
 #. odoo-python
@@ -5593,13 +5610,13 @@ msgstr ""
 #: model:ir.model.constraint,message:hr.constraint_hr_job_name_company_uniq
 msgid "The name of the job position must be unique per department in company!"
 msgstr ""
-"Tên của Vị trí công việc phải là duy nhất đối với mỗi phòng ban trong công "
+"Tên của vị trí công việc phải là duy nhất đối với mỗi phòng ban trong công "
 "ty!"
 
 #. module: hr
 #: model:res.groups,comment:hr.group_hr_user
 msgid "The user will be able to create and edit employees."
-msgstr ""
+msgstr "Người dùng sẽ có thể tạo và chỉnh sửa nhân viên."
 
 #. module: hr
 #: model:res.groups,comment:hr.group_hr_manager
@@ -5607,8 +5624,8 @@ msgid ""
 "The user will have access to the human resources configuration as well as "
 "statistic reports."
 msgstr ""
-"Người có thể thiết lập cấu hình của chức năng HR, cũng như là các báo cáo "
-"thống kê."
+"Người dùng sẽ có quyền truy cập cấu hình nhân sự cũng như các báo cáo thống "
+"kê."
 
 #. module: hr
 #: model:ir.model.constraint,message:hr.constraint_hr_version_check_wage_positive
@@ -5667,7 +5684,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/hr/models/hr_employee.py:0
 msgid "This field %(field_name)s doesn't exist on this model (hr.version)."
-msgstr ""
+msgstr "Trường %(field_name)s không tồn tại trên mô hình này (hr.version)."
 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_hr_employee__tz
@@ -5807,13 +5824,14 @@ msgstr "Tổng số nhân viên dự kiến"
 #. odoo-python
 #: code:addons/hr/wizard/hr_bank_account_wizard.py:0
 msgid "Total percentage allocation must equal 100%."
-msgstr ""
+msgstr "Tổng tỷ lệ phân bổ phải bằng 100%."
 
 #. module: hr
 #. odoo-python
 #: code:addons/hr/models/hr_employee.py:0
 msgid "Total salary distribution on bank accounts must be exactly 100%."
 msgstr ""
+"Tổng tỷ lệ chia lương trên các tài khoản ngân hàng phải đúng bằng 100%."
 
 #. module: hr
 #: model:hr.job,name:hr.job_trainee
@@ -5840,7 +5858,7 @@ msgstr "Liên kết đúng (true)"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Trust Bank Account"
-msgstr "Tài khoản ngân hàng tin cậy"
+msgstr "Tin cậy tài khoản ngân hàng"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_bank_account_allocation_wizard_line__trusted
@@ -5910,7 +5928,7 @@ msgstr ""
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Untrust Bank Account"
-msgstr "Tài khoản ngân hàng không tin cậy"
+msgstr "Bỏ tin cậy tài khoản ngân hàng"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_trainee
@@ -5941,7 +5959,7 @@ msgstr "Người dùng"
 #. odoo-python
 #: code:addons/hr/models/hr_employee_departure.py:0
 msgid "User Archive Notification"
-msgstr ""
+msgstr "Thông báo lưu trữ người dùng"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__user_state
@@ -6083,12 +6101,12 @@ msgstr ""
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__version_revision
 msgid "Version Revision"
-msgstr ""
+msgstr "Bản sửa đổi phiên bản"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.hr_version_list_view
 msgid "View"
-msgstr ""
+msgstr "Xem"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.hr_contract_type_view_tree
@@ -6100,7 +6118,7 @@ msgstr ""
 #: code:addons/hr/static/src/core/web/avatar_card/avatar_card_patch.xml:0
 #: code:addons/hr/static/src/core/web/thread_actions.js:0
 msgid "View Profile"
-msgstr ""
+msgstr "Xem hồ sơ"
 
 #. module: hr
 #. odoo-javascript
@@ -6111,7 +6129,7 @@ msgstr ""
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Visa & Work Permit"
-msgstr ""
+msgstr "Visa & giấy phép lao động"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__visa_expire
@@ -6206,8 +6224,8 @@ msgid ""
 "Whether the employee is a member of the active user's department or one of "
 "it's child department."
 msgstr ""
-"Cho dù nhân viên là thành viên của phòng ban của người dùng đang hoạt động "
-"hay một trong những phòng ban cấp dưới của nó."
+"Cho biết nhân viên có thuộc phòng ban của người dùng đang hoạt động hoặc một"
+" trong các phòng ban cấp dưới của phòng ban đó hay không."
 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_res_partner__employee
@@ -6305,7 +6323,7 @@ msgstr "Địa điểm làm việc"
 #: model_terms:ir.ui.view,arch_db:hr.res_users_view_form_preferences
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Work Mobile"
-msgstr "Di động"
+msgstr "Di động công việc"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
@@ -6325,13 +6343,13 @@ msgstr "Ngày hết hạn giấy phép lao động"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
 msgid "Work Permit Expiration Notice Period"
-msgstr "Giai đoạn thông báo hết hạn giấy phép lao động"
+msgstr "Thời hạn thông báo hết hạn giấy phép lao động"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_company__work_permit_expiration_notice_period
 #: model:ir.model.fields,field_description:hr.field_res_config_settings__work_permit_expiration_notice_period
 msgid "Work Permit Expiry Notice Period"
-msgstr "Giai đoạn thông báo hết hạn giấy phép lao động"
+msgstr "Thời hạn thông báo hết hạn giấy phép lao động"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__permit_no
@@ -6353,7 +6371,7 @@ msgstr "Hoạt động theo lịch về giấy phép lao động"
 #: model_terms:ir.ui.view,arch_db:hr.res_users_view_form_preferences
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Work Phone"
-msgstr "Điện thoại công ty"
+msgstr "Điện thoại công việc"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee_public__work_phone_formatted
@@ -6460,6 +6478,8 @@ msgid ""
 "You cannot delete contact that are linked to an employee, please archive "
 "them instead."
 msgstr ""
+"Bạn không thể xóa liên hệ đang liên kết với nhân viên, hãy lưu trữ chúng "
+"thay thế."
 
 #. module: hr
 #. odoo-python
@@ -6470,6 +6490,10 @@ msgid ""
 "\n"
 "Affected contact(s): %(names)s"
 msgstr ""
+"Bạn không thể xóa (các) liên hệ đang liên kết với (các) nhân viên.\n"
+"Vui lòng lưu trữ chúng thay thế.\n"
+"\n"
+"Liên hệ bị ảnh hưởng: %(names)s"
 
 #. module: hr
 #. odoo-python
@@ -6501,7 +6525,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/hr/wizard/hr_bank_account_allocation_wizard_line.py:0
 msgid "You do not have the rights to trust or un-trust accounts."
-msgstr ""
+msgstr "Bạn không có quyền đánh dấu tin cậy hoặc bỏ tin cậy tài khoản."
 
 #. module: hr
 #: model_terms:hr.job,description:hr.job_trainee
@@ -6638,19 +6662,19 @@ msgstr ""
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 msgid "e.g. Founder, Motorized, Building B, ..."
-msgstr ""
+msgstr "VD: Người sáng lập, Đi xe cơ giới, Tòa B,..."
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_users_view_form_preferences
 msgid "e.g. John Doe"
-msgstr "vd: John Doe"
+msgstr "VD: John Doe"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.hr_employee_public_view_form
 #: model_terms:ir.ui.view,arch_db:hr.view_employee_form
 #: model_terms:ir.ui.view,arch_db:hr.view_hr_job_form
 msgid "e.g. Sales Manager"
-msgstr "VD: Quản lý Sales"
+msgstr "VD: Quản lý bán hàng"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_hr_job_form
