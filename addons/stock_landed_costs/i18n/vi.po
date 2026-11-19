@@ -39,13 +39,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/stock_landed_costs/models/stock_move.py:0
 msgid "+ %(value)s (Landed Cost: %(landed_cost)s)"
-msgstr ""
+msgstr "+ %(value)s (Chi phí về kho: %(landed_cost)s)"
 
 #. module: stock_landed_costs
 #. odoo-python
 #: code:addons/stock_landed_costs/models/stock_move.py:0
 msgid "+ %(value)s from %(vendor_bill)s (Landed Cost: %(landed_cost)s)"
-msgstr ""
+msgstr "+ %(value)s từ %(vendor_bill)s (Chi phí về kho: %(landed_cost)s)"
 
 #. module: stock_landed_costs
 #: model_terms:ir.ui.view,arch_db:stock_landed_costs.stock_landed_cost_view_kanban
@@ -113,6 +113,8 @@ msgid ""
 "Additional landed costs:\n"
 "%(landed_cost)s"
 msgstr ""
+"Chi phí về kho bổ sung:\n"
+"%(landed_cost)s"
 
 #. module: stock_landed_costs
 #: model_terms:ir.ui.view,arch_db:stock_landed_costs.view_product_landed_cost_form
@@ -310,7 +312,7 @@ msgstr "Nháp"
 #: model:ir.model.fields.selection,name:stock_landed_costs.selection__product_template__split_method_landed_cost__equal
 #: model:ir.model.fields.selection,name:stock_landed_costs.selection__stock_landed_cost_lines__split_method__equal
 msgid "Equal"
-msgstr "Bằng"
+msgstr "Chia đều"
 
 #. module: stock_landed_costs
 #: model:ir.model.fields,help:stock_landed_costs.field_stock_landed_cost_lines__split_method
@@ -321,10 +323,9 @@ msgid ""
 "By Weight: Cost will be divided depending on its weight.\n"
 "By Volume: Cost will be divided depending on its volume."
 msgstr ""
-"Bằng nhau: Chi phí sẽ được chia đều.\n"
+"Chia đều: Chi phí sẽ được chia đều.\n"
 "Theo số lượng: Chi phí sẽ được chia theo số lượng sản phẩm.\n"
-"Theo giá vốn hiện tại: Chi phí sẽ được chia theo giá vốn hiện tại của sản "
-"phẩm.\n"
+"Theo giá vốn hiện tại: Chi phí sẽ được chia theo giá vốn hiện tại của sản phẩm.\n"
 "Theo khối lượng: Chi phí sẽ được chia theo khối lượng hàng hóa.\n"
 "Theo thể tích: Chi phí sẽ được chia theo thể tích hàng hóa."
 
@@ -619,7 +620,7 @@ msgstr "Vui lòng cấu hình Tài khoản chi phí tồn kho cho sản phẩm: 
 #. odoo-python
 #: code:addons/stock_landed_costs/models/stock_landed_cost.py:0
 msgid "Please define %s on which those additional costs should apply."
-msgstr "Vui lòng xác định %s mà chi phí bổ sung nên được áp dụng."
+msgstr "Vui lòng chọn %s để áp dụng các chi phí bổ sung này."
 
 #. module: stock_landed_costs
 #: model:ir.model.fields.selection,name:stock_landed_costs.selection__stock_landed_cost__state__done
@@ -772,7 +773,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:stock_landed_costs.field_stock_landed_cost__valuation_adjustment_lines
 #: model_terms:ir.ui.view,arch_db:stock_landed_costs.view_stock_landed_cost_form
 msgid "Valuation Adjustments"
-msgstr "Điều chỉnh giá trị"
+msgstr "Điều chỉnh định giá"
 
 #. module: stock_landed_costs
 #: model:ir.model.fields,field_description:stock_landed_costs.field_stock_landed_cost__vendor_bill_id
