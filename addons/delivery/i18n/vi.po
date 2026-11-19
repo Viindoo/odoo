@@ -148,6 +148,8 @@ msgstr "Phụ thu thêm"
 #: model:ir.model.fields,help:delivery.field_delivery_carrier__allow_cash_on_delivery
 msgid "Allow customers to choose Cash on Delivery as their payment method."
 msgstr ""
+"Cho phép khách hàng chọn Thanh toán khi nhận hàng làm phương thức thanh "
+"toán."
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_carrier__amount
@@ -243,7 +245,7 @@ msgstr "Chọn điểm nhận hàng"
 #: code:addons/delivery/static/src/js/location_selector/location_selector_dialog/location_selector_dialog.js:0
 #: code:addons/delivery/static/src/js/location_selector/map_container/map_container.js:0
 msgid "Choose this location"
-msgstr "Chọn vị trí này"
+msgstr "Chọn địa điểm này"
 
 #. module: delivery
 #. odoo-javascript
@@ -349,7 +351,7 @@ msgstr "Phí vận chuyển"
 #: model:ir.model.fields,field_description:delivery.field_choose_delivery_carrier__delivery_message
 #: model:ir.model.fields,field_description:delivery.field_sale_order__delivery_message
 msgid "Delivery Message"
-msgstr "Tin nhắn vận chuyển"
+msgstr "Thông báo giao hàng"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_carrier__name
@@ -472,6 +474,13 @@ msgstr "Lỗi: phương thức giao hàng này không hỗ trợ địa chỉ n�
 #: code:addons/delivery/models/delivery_carrier.py:0
 msgid "Error: this delivery method is not available."
 msgstr "Lỗi: phương thức giao hàng này không khả dụng."
+
+#. module: delivery
+#: model:ir.model.fields,help:delivery.field_delivery_carrier__invoice_policy
+msgid ""
+"Estimated Cost: the customer will be invoiced the estimated cost of the "
+"shipping."
+msgstr "Phí dự tính: khách hàng sẽ nhận được hóa đơn phí giao hàng dự tính."
 
 #. module: delivery
 #: model:ir.model.fields,help:delivery.field_delivery_carrier__invoice_policy
@@ -607,12 +616,12 @@ msgstr "Cấp độ tích hợp"
 #. odoo-python
 #: code:addons/delivery/models/delivery_carrier.py:0
 msgid "Invalid source document type"
-msgstr ""
+msgstr "Loại chứng từ nguồn không hợp lệ"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_choose_delivery_carrier__invoicing_message
 msgid "Invoicing Message"
-msgstr "Nội dung hóa đơn"
+msgstr "Thông báo hóa đơn"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_carrier__invoice_policy
@@ -623,12 +632,12 @@ msgstr "Chính sách lập hóa đơn"
 #: model:ir.model.fields,field_description:delivery.field_res_partner__is_pickup_location
 #: model:ir.model.fields,field_description:delivery.field_res_users__is_pickup_location
 msgid "Is Pickup Location"
-msgstr "Là vị trí nhận hàng"
+msgstr "Là địa điểm nhận hàng"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_sale_order_line__is_delivery
 msgid "Is a Delivery"
-msgstr "Là kiểu giao hàng"
+msgstr "Là phí giao hàng"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_choose_delivery_carrier__write_uid
@@ -740,7 +749,7 @@ msgstr "Không có điểm nhận hàng khả dụng cho địa chỉ giao hàng
 #. odoo-javascript
 #: code:addons/delivery/static/src/js/location_selector/location_selector_dialog/location_selector_dialog.js:0
 msgid "No result"
-msgstr "Không kết quả"
+msgstr "Không có kết quả"
 
 #. module: delivery
 #. odoo-python
@@ -758,7 +767,7 @@ msgstr "Giờ mở cửa"
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_price_rule__operator
 msgid "Operator"
-msgstr "Người phụ trách"
+msgstr "Toán tử"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_choose_delivery_carrier__order_id
@@ -779,12 +788,12 @@ msgstr "Giao dịch thanh toán"
 #. odoo-javascript
 #: code:addons/delivery/static/src/js/location_selector/location_selector_dialog/location_selector_dialog.js:0
 msgid "Pickup Location"
-msgstr "Vị trí nhận hàng"
+msgstr "Địa điểm nhận hàng"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_sale_order__pickup_location_data
 msgid "Pickup Location Data"
-msgstr "Dữ liệu vị trí nhận hàng"
+msgstr "Dữ liệu địa điểm nhận hàng"
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_delivery_carrier_form
@@ -968,7 +977,7 @@ msgstr "The Poste"
 #. module: delivery
 #: model_terms:payment.provider,pending_msg:delivery.payment_provider_cod
 msgid "The delivery staff will collect payment upon delivery."
-msgstr ""
+msgstr "Nhân viên giao hàng sẽ thu tiền khi giao hàng."
 
 #. module: delivery
 #: model:ir.model.fields,help:delivery.field_delivery_carrier__excluded_tag_ids
@@ -1099,7 +1108,7 @@ msgstr "Thể tích"
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_carrier__volume_uom_name
 msgid "Volume unit of measure label"
-msgstr "Nhãn đơn vị đo thể tích"
+msgstr "Nhãn đơn vị tính thể tích"
 
 #. module: delivery
 #: model:ir.model.fields.selection,name:delivery.selection__delivery_price_rule__variable__weight
@@ -1185,7 +1194,7 @@ msgstr "Tiền tố mã bưu chính"
 #. odoo-python
 #: code:addons/delivery/models/payment_provider.py:0
 msgid "cash on delivery not allowed by selected delivery method"
-msgstr ""
+msgstr "phương thức giao hàng đã chọn không cho phép thanh toán khi nhận hàng"
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_delivery_carrier_form
