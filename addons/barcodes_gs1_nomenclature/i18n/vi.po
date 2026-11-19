@@ -42,8 +42,8 @@ msgid ""
 "Alternative regex delimiter for the FNC1. The separator must not match the "
 "begin/end of any related rules pattern."
 msgstr ""
-"Dấu phân cách biểu thức chính quy thay thế cho FNC1 . Ký tự phân tách không "
-"được khớp với phần đầu/cuối của bất kỳ mẫu quy tắc liên quan nào."
+"Ký tự phân tách biểu thức chính quy thay thế cho FNC1. Ký tự phân tách không"
+" được khớp với phần đầu/cuối của bất kỳ mẫu quy tắc liên quan nào."
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields,field_description:barcodes_gs1_nomenclature.field_barcode_rule__associated_uom_id
@@ -95,7 +95,7 @@ msgstr "Mã hóa"
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__expiration_date
 msgid "Expiration Date"
-msgstr "Ngày hết hạn"
+msgstr "Hạn sử dụng"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields,field_description:barcodes_gs1_nomenclature.field_barcode_nomenclature__gs1_separator_fnc1
@@ -157,13 +157,18 @@ msgstr "Địa điểm"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__lot
+msgid "Lot number"
+msgstr "Số lô"
+
+#. module: barcodes_gs1_nomenclature
+#: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__lot
 msgid "Lot"
 msgstr "Lô"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__gs1_content_type__measure
 msgid "Measure"
-msgstr "Chỉ số"
+msgstr "Số đo"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__gs1_content_type__identifier
@@ -173,7 +178,7 @@ msgstr "Mã dạng số"
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__pack_date
 msgid "Pack Date"
-msgstr "Ngày đóng hàng"
+msgstr "Ngày đóng gói"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields.selection,name:barcodes_gs1_nomenclature.selection__barcode_rule__type__package
@@ -195,8 +200,8 @@ msgstr "Số lượng"
 #: code:addons/barcodes_gs1_nomenclature/models/barcode_nomenclature.py:0
 msgid "The FNC1 Separator Alternative is not a valid Regex: %(error)s"
 msgstr ""
-"Thay thế dấu phân cách FNC1 không phải là một biểu thức chính quy hợp lệ: %"
-"(error)s"
+"Ký tự phân tách FNC1 thay thế không phải là biểu thức chính quy hợp lệ: "
+"%(error)s"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields,help:barcodes_gs1_nomenclature.field_barcode_rule__gs1_content_type
@@ -207,11 +212,11 @@ msgid ""
 "unit;        * Numeric Identifier: fixed length barcode following a specific "
 "encoding;        * Alpha-Numeric Name: variable length barcode."
 msgstr ""
-"Loại nội dung GS1 xác định loại dữ liệu mà quy tắc sẽ xử lý mã vạch "
-"thành:       * Ngày: mã vạch sẽ được chuyển đổi thành ngày giờ của "
-"Odoo;         * Đơn vị tính: giá trị của mã vạch liên quan đến một đơn vị cụ "
-"thể;         * Mã dạng số: mã vạch có độ dài cố định theo một cách mã hóa cụ "
-"thể;       * Tên chứa chữ và số: mã vạch có độ dài không cố định."
+"Loại nội dung GS1 xác định loại dữ liệu mà quy tắc sẽ xử lý mã vạch thành:"
+"       * Ngày: mã vạch sẽ được chuyển đổi thành ngày giờ của Odoo;         *"
+" Số đo: giá trị của mã vạch liên quan đến một đơn vị cụ thể;         * Mã "
+"dạng số: mã vạch có độ dài cố định theo một cách mã hóa cụ thể;       * Tên "
+"chứa chữ và số: mã vạch có độ dài không cố định."
 
 #. module: barcodes_gs1_nomenclature
 #. odoo-python
@@ -244,10 +249,8 @@ msgid ""
 "value can't be casted as a measure."
 msgstr ""
 "Đã xảy ra lỗi với mẫu quy tắc mã vạch \"%s\".\n"
-"Nếu quy tắc này sử dụng số thập phân, hãy đảm bảo rằng ký tự cuối cùng của "
-"Mã ứng dụng phải là một chữ số.\n"
-"Ngoài ra, hãy đảm bảo các giá trị có thể khớp phải là chữ số, nếu không, giá "
-"trị không thể được sử dụng làm đơn vị tính."
+"Nếu quy tắc này sử dụng số thập phân, hãy đảm bảo rằng ký tự cuối cùng của Mã ứng dụng phải là một chữ số.\n"
+"Ngoài ra, hãy đảm bảo các giá trị có thể khớp phải là chữ số, nếu không, giá trị không thể được dùng làm số đo."
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields,help:barcodes_gs1_nomenclature.field_barcode_nomenclature__is_gs1_nomenclature
@@ -278,8 +281,7 @@ msgid ""
 "This rule will apply only if the barcode is encoded with the specified "
 "encoding"
 msgstr ""
-"Quy tắc này sẽ chỉ áp dụng nếu mã vạch được mã hóa bằng cách mã hóa được chỉ "
-"định"
+"Quy tắc này chỉ áp dụng nếu mã vạch được mã hóa theo kiểu mã hóa đã chỉ định"
 
 #. module: barcodes_gs1_nomenclature
 #: model:ir.model.fields,field_description:barcodes_gs1_nomenclature.field_barcode_rule__type
