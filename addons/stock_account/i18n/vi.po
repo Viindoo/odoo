@@ -63,7 +63,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/stock_account/models/stock_quant.py:0
 msgid " [Accounted on %s]"
-msgstr " [Hạch toán trên %s]"
+msgstr " [Hạch toán ngày %s]"
 
 #. module: stock_account
 #. odoo-python
@@ -85,7 +85,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/stock_account/models/stock_move.py:0
 msgid "%(quantity)s %(uom)s at product's cost"
-msgstr ""
+msgstr "%(quantity)s %(uom)s theo giá vốn sản phẩm"
 
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.view_move_form
@@ -114,6 +114,7 @@ msgid ""
 "A lot/serial number is required for product '%s' as it has lot valuation "
 "enabled."
 msgstr ""
+"Sản phẩm '%s' bắt buộc có số lô/sê-ri vì đã bật định giá theo lô/sê-ri."
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_avco_report__avco_value
@@ -156,7 +157,7 @@ msgstr ""
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_avco_report__quantity
 msgid "Added Quantity"
-msgstr ""
+msgstr "Số lượng cộng thêm"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_avco_report__added_value
@@ -174,13 +175,13 @@ msgstr "Điều chỉnh định giá"
 #. odoo-python
 #: code:addons/stock_account/models/stock_move.py:0
 msgid "Adjust Valuation: %(product)s"
-msgstr ""
+msgstr "Điều chỉnh định giá: %(product)s"
 
 #. module: stock_account
 #. odoo-python
 #: code:addons/stock_account/models/stock_move.py:0
 msgid "Adjusted on %(date)s by %(user)s"
-msgstr ""
+msgstr "Điều chỉnh ngày %(date)s bởi %(user)s"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__adjustment
@@ -258,7 +259,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/stock_account/models/res_company.py:0
 msgid "Closing: Location Reclassification - [%(account)s]"
-msgstr ""
+msgstr "Khóa sổ: Phân loại lại theo địa điểm - [%(account)s]"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_res_company
@@ -276,7 +277,7 @@ msgstr "Tiền tệ của công ty"
 #: model:ir.model.fields,field_description:stock_account.field_product_value__computed_value_description
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__value_computed_justification
 msgid "Computed Value Description"
-msgstr ""
+msgstr "Diễn giải giá trị tính toán"
 
 #. module: stock_account
 #. odoo-python
@@ -285,6 +286,8 @@ msgid ""
 "Computed value: %(value)s\n"
 "%(description)s"
 msgstr ""
+"Giá trị tính toán: %(value)s\n"
+"%(description)s"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_res_config_settings
@@ -302,7 +305,7 @@ msgstr "Giá vốn"
 #: model:ir.model.fields,field_description:stock_account.field_res_company__cost_method
 #: model:ir.model.fields,field_description:stock_account.field_stock_quant__cost_method
 msgid "Cost Method"
-msgstr "Phương pháp tính chi phí"
+msgstr "Phương pháp tính giá xuất kho"
 
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.view_location_form_inherit
@@ -352,12 +355,12 @@ msgstr "Giá trị hiện tại"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__current_value_description
 msgid "Current Value Description"
-msgstr ""
+msgstr "Diễn giải giá trị hiện tại"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__current_value_details
 msgid "Current Value Details"
-msgstr ""
+msgstr "Chi tiết giá trị hiện tại"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__date
@@ -428,6 +431,8 @@ msgid ""
 "Expense account used to re-qualify products removed from stock and sent to "
 "this location"
 msgstr ""
+"Tài khoản chi phí dùng để phân loại lại giá trị sản phẩm xuất khỏi kho và "
+"chuyển đến địa điểm này"
 
 #. module: stock_account
 #: model:ir.model.fields.selection,name:stock_account.selection__product_category__property_cost_method__fifo
@@ -441,7 +446,7 @@ msgstr "Nhập trước xuất trước (FIFO)"
 #. odoo-python
 #: code:addons/stock_account/models/product_value.py:0
 msgid "For %(quantity)s %(uom)s (%(price_unit)s per %(uom)s)"
-msgstr ""
+msgstr "Cho %(quantity)s %(uom)s (%(price_unit)s mỗi %(uom)s)"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_account_analytic_account__id
@@ -475,13 +480,15 @@ msgid ""
 "If checked, the product will be valued using the Anglo-Saxon accounting "
 "method."
 msgstr ""
+"Nếu được chọn, sản phẩm sẽ được định giá theo phương pháp kế toán Anglo-"
+"Saxon."
 
 #. module: stock_account
 #: model:ir.model.fields,help:stock_account.field_product_product__lot_valuated
 #: model:ir.model.fields,help:stock_account.field_product_template__lot_valuated
 #: model:ir.model.fields,help:stock_account.field_stock_lot__lot_valuated
 msgid "If checked, the valuation will be specific by Lot/Serial number."
-msgstr "Nếu được chọn, định giá sẽ cụ thể theo số Lô/sê-ri."
+msgstr "Nếu được chọn, định giá sẽ tính riêng theo từng số lô/sê-ri."
 
 #. module: stock_account
 #: model:ir.model.fields,help:stock_account.field_stock_move__order_partner_id
@@ -494,7 +501,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/stock_account/models/stock_location.py:0
 msgid "Invalid search operator or value"
-msgstr ""
+msgstr "Toán tử hoặc giá trị tìm kiếm không hợp lệ"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_inventory_adjustment_name
@@ -532,27 +539,27 @@ msgstr ""
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__is_dropship
 msgid "Is Dropship"
-msgstr ""
+msgstr "Là giao thẳng"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__is_in
 msgid "Is Incoming (valued)"
-msgstr ""
+msgstr "Là nhập kho (được định giá)"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__is_out
 msgid "Is Outgoing (valued)"
-msgstr ""
+msgstr "Là xuất kho (được định giá)"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__is_valued
 msgid "Is Valued"
-msgstr ""
+msgstr "Được định giá"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_location__is_valued
 msgid "Is valued inside the company"
-msgstr ""
+msgstr "Được định giá trong công ty"
 
 #. module: stock_account
 #. odoo-python
@@ -569,7 +576,7 @@ msgstr "Phát sinh kế toán"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_avco_report__justification
 msgid "Justification"
-msgstr ""
+msgstr "Diễn giải"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_res_config_settings__module_stock_landed_costs
@@ -589,7 +596,7 @@ msgstr "Ngày cập nhật cuối"
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.view_location_form_inherit
 msgid "Loss Account"
-msgstr "Tài khoản lỗ"
+msgstr "Tài khoản thất thoát"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__lot_id
@@ -609,7 +616,7 @@ msgstr "Số lô & sê-ri sẽ xuất hiện trên hóa đơn"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__value_manual
 msgid "Manual Value"
-msgstr ""
+msgstr "Giá trị nhập thủ công"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__move_id
@@ -625,7 +632,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:stock_account.field_product_value__new_value
 #: model_terms:ir.ui.view,arch_db:stock_account.product_value_form_view
 msgid "New Value"
-msgstr ""
+msgstr "Giá trị mới"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__old_cost
@@ -641,7 +648,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/stock_account/models/stock_move.py:0
 msgid "Only is set (= True) is supported in search for remaining_qty."
-msgstr ""
+msgstr "Tìm kiếm trên remaining_qty chỉ hỗ trợ điều kiện được đặt (= True)."
 
 #. module: stock_account
 #: model:ir.model.fields,help:stock_account.field_stock_move__origin_company_id
@@ -709,7 +716,7 @@ msgstr "Số lượng sản phẩm đã cập nhật"
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__product_value_ids
 #: model:ir.model.fields.selection,name:stock_account.selection__stock_avco_report__res_model_name__product_value
 msgid "Product Value"
-msgstr ""
+msgstr "Giá trị sản phẩm"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_product_product
@@ -727,7 +734,7 @@ msgstr ""
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_res_company__account_production_wip_account_id
 msgid "Production WIP Account"
-msgstr "Tài khoản sản xuất dở dang"
+msgstr "Tài khoản chi phí sản xuất dở dang"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_res_company__account_production_wip_overhead_account_id
@@ -752,7 +759,7 @@ msgstr "Tham chiếu"
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.view_move_search
 msgid "Remaining"
-msgstr ""
+msgstr "Còn lại"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__remaining_qty
@@ -767,12 +774,12 @@ msgstr "Giá trị còn lại"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_avco_report__res_model_name
 msgid "Resource Model Name"
-msgstr ""
+msgstr "Tên mô hình nguồn"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_inventory_adjustment_name__should_show_accounting_date
 msgid "Should Show Accounting Date"
-msgstr ""
+msgstr "Hiển thị ngày hạch toán"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__standard_price
@@ -793,7 +800,7 @@ msgstr ""
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_avco_report
 msgid "Stock AVCO Justifier"
-msgstr ""
+msgstr "Diễn giải giá vốn bình quân (AVCO)"
 
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_move
@@ -850,6 +857,8 @@ msgstr ""
 #: model:ir.model.fields,help:stock_account.field_stock_move__value
 msgid "The current value of the move. It's zero if the move is not valued."
 msgstr ""
+"Giá trị hiện tại của dịch chuyển. Bằng 0 nếu dịch chuyển không được định "
+"giá."
 
 #. module: stock_account
 #. odoo-javascript
@@ -874,7 +883,7 @@ msgstr "Tổng số lượng"
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.stock_move_view_list_valuation
 msgid "Total Remaining Qty"
-msgstr ""
+msgstr "Tổng số lượng còn lại"
 
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.stock_move_view_list_valuation
@@ -905,7 +914,7 @@ msgstr "Phiếu kho"
 msgid ""
 "Trigger a decrease of the delivered/received quantity in the associated Sale "
 "Order/Purchase Order"
-msgstr "Kích hoạt giảm số lượng đã giao/nhận trong đơn bán/mua hàng liên kết"
+msgstr "Kích hoạt giảm số lượng đã giao/nhận trong đơn bán/đơn mua liên quan"
 
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.product_product_stock_tree_inherit_stock_account
@@ -917,7 +926,7 @@ msgstr "Giá vốn đơn vị"
 #. module: stock_account
 #: model:ir.actions.act_window,name:stock_account.stock_avco_report_action
 msgid "Unit Cost History"
-msgstr ""
+msgstr "Lịch sử giá vốn đơn vị"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__to_refund
@@ -927,7 +936,7 @@ msgstr "Cập nhật số lượng trên đơn bán/đơn mua"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_category__anglo_saxon_accounting
 msgid "Use Anglo-Saxon Accounting"
-msgstr ""
+msgstr "Sử dụng kế toán Anglo-Saxon"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__user_id
@@ -958,7 +967,7 @@ msgstr "Tiền tệ định giá"
 #: model:ir.model.fields,field_description:stock_account.field_product_template__lot_valuated
 #: model:ir.model.fields,field_description:stock_account.field_stock_lot__lot_valuated
 msgid "Valuation by Lot/Serial"
-msgstr ""
+msgstr "Định giá theo lô/sê-ri"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_value__value
@@ -972,7 +981,7 @@ msgstr "Giá trị"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__value_justification
 msgid "Value Description"
-msgstr ""
+msgstr "Diễn giải giá trị"
 
 #. module: stock_account
 #. odoo-javascript
@@ -984,7 +993,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/stock_account/models/stock_move.py:0
 msgid "Value based on original move %(reference)s"
-msgstr ""
+msgstr "Giá trị dựa trên dịch chuyển gốc %(reference)s"
 
 #. module: stock_account
 #. odoo-python
@@ -1019,7 +1028,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/stock_account/models/stock_move.py:0
 msgid "You can only adjust valuation for one move at a time."
-msgstr ""
+msgstr "Bạn chỉ có thể điều chỉnh định giá cho từng dịch chuyển một."
 
 #. module: stock_account
 #. odoo-python
@@ -1029,6 +1038,8 @@ msgid ""
 "quantities without a lot/serial number:\n"
 "%s"
 msgstr ""
+"Bạn không thể bật định giá theo lô/sê-ri vì các sản phẩm sau có số lượng hiện có không gắn số lô/sê-ri:\n"
+"%s"
 
 #. module: stock_account
 #. odoo-python
@@ -1037,6 +1048,8 @@ msgid ""
 "You cannot modify the scheduled date of operation %s because it falls within "
 "a locked fiscal period."
 msgstr ""
+"Bạn không thể thay đổi ngày dự kiến của nghiệp vụ %s vì ngày đó nằm trong kỳ"
+" kế toán đã khóa sổ."
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__account_move_id
