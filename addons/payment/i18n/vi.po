@@ -29,9 +29,7 @@ msgstr ""
 #: model_terms:ir.actions.act_window,help:payment.action_payment_method
 msgid ""
 "<i class=\"oi me-1\" data-icon=\"east\"></i> Configure a payment provider"
-msgstr ""
-"<i class=\"oi me-1\" data-icon=\"east\"></i> Cấu hình nhà cung cấp dịch vụ "
-"thanh toán"
+msgstr "<i class=\"oi me-1\" data-icon=\"east\"></i> Cấu hình cổng thanh toán"
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.payment_capture_wizard_view_form
@@ -43,7 +41,7 @@ msgid ""
 msgstr ""
 "<i class=\"oi oe_inline\" data-icon=\"info\" "
 "invisible=\"support_partial_capture != 'full_only'\" title=\"Một số giao "
-"dịch bạn định thu hồi chỉ có thể được thu đầy đủ. Hãy xử lý các giao dịch "
+"dịch bạn định thu tiền chỉ có thể được thu toàn bộ. Hãy xử lý các giao dịch "
 "một cách riêng lẻ để thu tiền từng phần.\"/>"
 
 #. module: payment
@@ -53,8 +51,8 @@ msgid ""
 "method\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-"
 "delay=\"0\"/>"
 msgstr ""
-"<i class=\"oi oi-filled\" data-icon=\"delete\" title=\"Xoá phương thức thanh "
-"toán\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-"
+"<i class=\"oi oi-filled\" data-icon=\"delete\" title=\"Xóa phương thức thanh"
+" toán\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-"
 "delay=\"0\"/>"
 
 #. module: payment
@@ -77,14 +75,10 @@ msgid ""
 "                                and should be tested on a test database "
 "first."
 msgstr ""
-"<i class=\"oi\" data-icon=\"warning\"/> Các thuộc tính này được thiết lập "
-"để\n"
-"                                khớp hành vi của nhà cung cấp và hành vi "
-"tích hợp của họ với\n"
-"                                Odoo liên quan đến phương thức thanh toán "
-"này. Mọi thay đổi đều có thể\n"
-"                                tạo ra lỗi và trước tiên phải được kiểm tra "
-"trên cơ sở dữ liệu kiểm thử."
+"<i class=\"oi\" data-icon=\"warning\"/> Các thuộc tính này được thiết lập để\n"
+"                                khớp hành vi của cổng thanh toán và hành vi tích hợp của họ với\n"
+"                                Odoo liên quan đến phương thức thanh toán này. Mọi thay đổi đều có thể\n"
+"                                tạo ra lỗi và trước tiên phải được kiểm tra trên cơ sở dữ liệu kiểm thử."
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.method_form
@@ -165,7 +159,7 @@ msgstr ""
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.no_pms_available_warning
 msgid "<strong>No payment providers are configured</strong>"
-msgstr ""
+msgstr "<strong>Chưa cấu hình cổng thanh toán nào</strong>"
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.payment_capture_wizard_view_form
@@ -197,6 +191,8 @@ msgid ""
 "                        supported; please use the <em>Duplicate</em> action "
 "instead."
 msgstr ""
+"<strong>Cảnh báo:</strong> Không hỗ trợ tạo cổng thanh toán từ đầu;\n"
+"                        vui lòng sử dụng thao tác <em>Nhân bản</em> thay thế."
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.pay
@@ -433,6 +429,8 @@ msgid ""
 "you want to charge your customers cards only when you are sure you can ship "
 "the goods to them."
 msgstr ""
+"Thu tiền từ Odoo khi giao hàng hoàn thành. Dùng tính năng này nếu bạn muốn "
+"trừ tiền thẻ của khách hàng chỉ khi bạn chắc chắn có thể giao hàng cho họ."
 
 #. module: payment
 #: model:ir.model.fields,field_description:payment.field_payment_transaction__child_transaction_count
@@ -970,7 +968,7 @@ msgstr "Hỗ trợ thu tiền thủ công"
 #. odoo-python
 #: code:addons/payment/const.py:0
 msgid "Manual capture not supported"
-msgstr ""
+msgstr "Không hỗ trợ thu tiền thủ công"
 
 #. module: payment
 #. odoo-python
@@ -2093,6 +2091,7 @@ msgid ""
 "This action will also archive %s tokens that are registered with this "
 "provider."
 msgstr ""
+"Tác vụ này cũng sẽ lưu trữ %s token đã được đăng ký với cổng thanh toán này."
 
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_provider__allow_tokenization
@@ -2102,6 +2101,10 @@ msgid ""
 "saved in the provider's database, allowing the customer to reuse it for a "
 "next purchase."
 msgstr ""
+"Điều này kiểm soát việc khách hàng có thể lưu phương thức thanh toán của họ "
+"dưới dạng token thanh toán hay không. Token thanh toán là một liên kết ẩn "
+"danh đến thông tin phương thức thanh toán được lưu trong cơ sở dữ liệu của "
+"cổng thanh toán, cho phép khách hàng sử dụng lại cho lần mua hàng tiếp theo."
 
 #. module: payment
 #: model:ir.model.fields,help:payment.field_payment_provider__allow_express_checkout
@@ -2182,13 +2185,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/payment/const.py:0
 msgid "Tokenization not supported"
-msgstr ""
+msgstr "Không hỗ trợ token hóa"
 
 #. module: payment
 #. odoo-python
 #: code:addons/payment/const.py:0
 msgid "Tokenization without payment no supported"
-msgstr ""
+msgstr "Không hỗ trợ token hóa không có thanh toán"
 
 #. module: payment
 #: model_terms:ir.ui.view,arch_db:payment.payment_provider_form
@@ -2333,6 +2336,8 @@ msgid ""
 "You can't unarchive tokens linked to inactive payment methods or archived "
 "providers."
 msgstr ""
+"Bạn không thể hủy lưu trữ các token liên kết với phương thức thanh toán "
+"không hoạt động hoặc cổng thanh toán đã lưu trữ."
 
 #. module: payment
 #. odoo-python
@@ -2354,6 +2359,8 @@ msgstr "Không thể xóa phương thức thanh toán mặc định."
 msgid ""
 "You cannot delete the payment provider %s; archive or uninstall it instead."
 msgstr ""
+"Bạn không thể xóa cổng thanh toán %s; thay vào đó hãy lưu trữ hoặc gỡ cài "
+"đặt cổng thanh toán này."
 
 #. module: payment
 #. odoo-python

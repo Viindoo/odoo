@@ -760,6 +760,10 @@ msgid ""
 "Otherwise, this includes goods stored in any Stock Location with 'internal' "
 "type."
 msgstr ""
+"Số lượng có sẵn (được tính bằng Số lượng hiện có - Số lượng đã giữ - Số lượng cần rút khỏi kho)\n"
+"Đối với một Địa điểm tồn kho, số lượng này bao gồm số lượng được lưu trữ trong địa điểm này, hoặc các địa điểm con của nó.\n"
+"Đối với một Kho, số lượng này bao gồm số lượng được lưu trữ trong Địa điểm tồn kho của Kho này, hoặc các địa điểm con của nó.\n"
+"Nếu không, số lượng này bao gồm số lượng được lưu trữ trong bất kỳ Địa điểm tồn kho nào có loại là 'nội bộ'."
 
 #. module: product
 #. odoo-javascript
@@ -1840,14 +1844,10 @@ msgid ""
 "Otherwise, this includes goods stored in any Stock Location with 'internal' "
 "type."
 msgstr ""
-"Số lượng dự kiến (được tính bằng Số lượng hiện có - Số lượng sắp xuất + Số "
-"lượng sắp nhập - Số lượng cần loại bỏ)\n"
-"Đối với một Vị trí tồn kho, số lượng này bao gồm số lượng được lưu trữ trong "
-"vị trí này, hoặc các vị trí phụ của nó.\n"
-"Đối với một Kho hàng, số lượng này bao gồm số lượng được lưu trữ trong Vị "
-"trí tồn kho của Kho hàng này, hoặc các vị trí phụ của nó.\n"
-"Nếu không, số lượng này bao gồm số lượng được lữu trữ trong bất kỳ Vị trí "
-"tồn kho nào có loại là 'nội bộ'."
+"Số lượng dự kiến (được tính bằng Số lượng hiện có - Số lượng sắp xuất + Số lượng sắp nhập - Số lượng cần rút khỏi kho)\n"
+"Đối với một Địa điểm tồn kho, số lượng này bao gồm số lượng được lưu trữ trong địa điểm này, hoặc các địa điểm con của nó.\n"
+"Đối với một Kho, số lượng này bao gồm số lượng được lưu trữ trong Địa điểm tồn kho của Kho này, hoặc các địa điểm con của nó.\n"
+"Nếu không, số lượng này bao gồm số lượng được lưu trữ trong bất kỳ Địa điểm tồn kho nào có loại là 'nội bộ'."
 
 #. module: product
 #: model_terms:ir.ui.view,arch_db:product.product_view_list_qty
@@ -2032,6 +2032,11 @@ msgid ""
 "Fixed Price: a set amount, ignoring the base price entirely.\n"
 "Activate the discount settings to show the discount to the customer."
 msgstr ""
+"Cách tính giá từ giá cơ sở.\n"
+"Chiết khấu: một tỷ lệ phần trăm được trừ đi.\n"
+"Phụ thu: một tỷ lệ phần trăm được cộng thêm.\n"
+"Giá cố định: một số tiền định sẵn, bỏ qua hoàn toàn giá cơ sở.\n"
+"Kích hoạt thiết lập chiết khấu để hiển thị chiết khấu cho khách hàng."
 
 #. module: product
 #: model:ir.model.fields,field_description:product.field_ir_attachment__id
@@ -2539,7 +2544,7 @@ msgstr ""
 #: model:ir.model.fields,help:product.field_product_product__activity_type_icon
 #: model:ir.model.fields,help:product.field_product_template__activity_type_icon
 msgid "Material Symbols icon e.g. checklist"
-msgstr ""
+msgstr "Biểu tượng Material Symbols, ví dụ: checklist"
 
 #. module: product
 #: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
@@ -4092,7 +4097,7 @@ msgstr "Giá trị mẫu"
 #. odoo-python
 #: code:addons/product/models/product_pricelist.py:0
 msgid "Template for Pricelists"
-msgstr ""
+msgstr "Mẫu bảng giá"
 
 #. module: product
 #. odoo-python
@@ -4104,7 +4109,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/product/models/product_supplierinfo.py:0
 msgid "Template for Vendor Pricelists"
-msgstr ""
+msgstr "Mẫu bảng giá nhà cung cấp"
 
 #. module: product
 #. odoo-python

@@ -151,6 +151,8 @@ msgid ""
 "%s is more than %s% of the order's total amount. Are you sure of this tip "
 "amount?"
 msgstr ""
+"%s lớn hơn %s% tổng số tiền của đơn hàng. Bạn có chắc chắn về số tiền tip "
+"này không?"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -351,8 +353,8 @@ msgid ""
 "<i class=\"oi me-1\" data-icon=\"info\" title=\"This setting is common to "
 "all PoS.\" pos-data-toggle=\"tooltip\"/>"
 msgstr ""
-"<i class=\"oi me-1\" data-icon=\"info\" title=\"Cài đặt này dùng chung cho "
-"tất cả POS.\" pos-data-toggle=\"tooltip\"/>"
+"<i class=\"oi me-1\" data-icon=\"info\" title=\"Thiết lập này dùng chung cho"
+" tất cả POS.\" pos-data-toggle=\"tooltip\"/>"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.ticket_validation_screen
@@ -401,9 +403,7 @@ msgid ""
 "toggle=\"tooltip\"/>"
 msgstr ""
 "<span class=\"o_form_label\">Mã vạch</span>\n"
-"                                    <i class=\"oi oi-filled me-1\" data-"
-"icon=\"info\" title=\"Cài đặt này dùng chung cho tất cả POS.\" pos-data-"
-"toggle=\"tooltip\"/>"
+"                                    <i class=\"oi oi-filled me-1\" data-icon=\"info\" title=\"Thiết lập này dùng chung cho tất cả POS.\" pos-data-toggle=\"tooltip\"/>"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_pos_printer_kanban
@@ -1251,8 +1251,7 @@ msgid ""
 "orders will be available in the next session.\n"
 "The page will now, be reloaded."
 msgstr ""
-"Đã xảy ra lỗi khi đóng phiên. Nhưng đừng lo, các đơn hàng chưa đồng bộ sẽ "
-"xuất hiện trong phiên tiếp theo.\n"
+"Đã xảy ra lỗi khi đóng ca. Nhưng đừng lo, các đơn hàng chưa đồng bộ sẽ xuất hiện trong ca tiếp theo.\n"
 "Giờ đây, trang này sẽ được tải lại."
 
 #. module: point_of_sale
@@ -1718,7 +1717,7 @@ msgstr "Phiếu tạm tính"
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_config__iface_printbill
 #: model:ir.model.fields,field_description:point_of_sale.field_res_config_settings__pos_iface_printbill
 msgid "Bill Printing"
-msgstr "In phiếu tạm tính"
+msgstr "In phiếu tính tiền"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.ticket_validation_screen
@@ -3128,7 +3127,7 @@ msgstr "Màn hình khách hàng"
 #. odoo-javascript
 #: code:addons/point_of_sale/static/src/app/customer_display/customer_display_qr_code_popup.js:0
 msgid "Customer Display opened in a new window"
-msgstr ""
+msgstr "Màn hình khách hàng được mở trong một cửa sổ mới"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -4263,7 +4262,7 @@ msgstr "Lấy hóa đơn của tôi"
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_config__basic_receipt
 #: model:ir.model.fields,field_description:point_of_sale.field_res_config_settings__pos_basic_receipt
 msgid "Gift Receipt"
-msgstr ""
+msgstr "Phiếu tính tiền quà tặng"
 
 #. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_pos_category__sequence
@@ -4961,6 +4960,8 @@ msgstr "Phát sinh kế toán"
 #: model:ir.model.fields,help:point_of_sale.field_res_config_settings__pos_journal_id
 msgid "Journal used for customer invoices and refunds credit notes. "
 msgstr ""
+"Sổ nhật ký dùng cho hóa đơn khách hàng và hóa đơn điều chỉnh giảm hoàn tiền."
+" "
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.res_config_settings_view_form
@@ -5157,6 +5158,11 @@ msgid ""
 "payment method.\n"
 "Only cash and bank journals are allowed."
 msgstr ""
+"Để trống để sử dụng tài khoản phải thu của khách hàng.\n"
+"Xác định sổ nhật ký nơi ghi sổ các khoản thanh toán lũy kế (hoặc thanh toán đơn lẻ nếu Định danh khách hàng là đúng) sau khi đóng ca.\n"
+"Đối với sổ nhật ký tiền mặt, chúng tôi ghi trực tiếp vào tài khoản mặc định trên sổ kế toán thông qua giao dịch ngân hàng.\n"
+"Đối với sổ nhật ký ngân hàng, chúng tôi ghi vào tài khoản tiền đang chuyển được chỉ định trong phương thức thanh toán này.\n"
+"Chỉ cho phép sổ nhật ký tiền mặt và ngân hàng."
 
 #. module: point_of_sale
 #: model:product.template,name:point_of_sale.letter_tray_product_template
@@ -5459,7 +5465,7 @@ msgstr "Lãi gộp & giá vốn"
 #. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_pos_session__activity_type_icon
 msgid "Material Symbols icon e.g. checklist"
-msgstr ""
+msgstr "Biểu tượng Material Symbols, ví dụ: checklist"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -6216,6 +6222,115 @@ msgid ""
 "interaction history, profiles, and more.\n"
 "\n"
 msgstr ""
+"POS Odoo\n"
+"-----------------------------\n"
+"\n"
+"POS của Odoo\n"
+"giới thiệu một giao diện tối ưu mà không cần cài đặt, có thể hoạt động\n"
+"kể cả khi có và không có kết nối mạng trên các phần cứng hiện đại.\n"
+"\n"
+"Ứng dụng này tích hợp hoàn toàn với tồn kho và kế toán của doanh nghiệp, cung cấp cho bạn \n"
+"số liệu thống kê và hợp nhất theo thời gian thực giữa tất cả các cửa hàng mà không gặp rắc rối \n"
+"khi tích hợp một số ứng dụng.\n"
+"\n"
+"Làm việc với phần cứng bạn đã có\n"
+"----------------------------------------\n"
+"\n"
+"### Trong trình duyệt web của bạn\n"
+"\n"
+"POS của Odoo là một ứng dụng web có khả năng chạy trên mọi thiết bị có thể hiển thị \n"
+"các trang web mà không cần hoặc chỉ cần thiết lập không nhiều.\n"
+"\n"
+"### Màn hình Cảm ứng hay Bàn phím?\n"
+"\n"
+"POS hoạt động hoàn hảo trên mọi loại thiết bị hỗ trợ cảm ứng, dù là\n"
+"máy tính bảng cảm ứng đa điểm như iPad hay thiết bị đầu cuối màn hình cảm ứng \n"
+"không bàn phím.\n"
+"\n"
+"### Cân và Máy in\n"
+"\n"
+"Máy quét và máy in mã vạch được hỗ trợ sẵn mà không cần thiết lập. \n"
+"Có thể sử dụng cân, hộp đựng tiền và các thiết bị ngoại vi khác với \n"
+"API proxy.\n"
+"\n"
+"Có và không có kết nối mạng\n"
+"------------------\n"
+"\n"
+"### POS của Odoo vẫn đáng tin cậy ngay cả khi bạn không có kết nối mạng.\n"
+"\n"
+"Triển khai các cửa hàng mới chỉ với kết nối mạng: **không cần cài đặt, không \n"
+"yêu cầu phần cứng riêng**. Ứng dụng hoạt động với mọi **iPad, máy tính bảng, máy tính xách tay** hay \n"
+"máy POS công nghiệp.\n"
+"\n"
+"Mặc dù cần có kết nối mạng để khởi động POS, nhưng ứng dụng sẽ \n"
+"vẫn hoạt động ngay cả sau khi ngắt kết nối hoàn toàn.\n"
+"\n"
+"\n"
+"Giao diện Người dùng Tối ưu\n"
+"----------------------------\n"
+"\n"
+"### Đơn giản và đẹp mắt\n"
+"\n"
+"Hãy nói lời tạm biệt với những phần mềm POS kém bắt mắt, lỗi thời và tận hưởng giao diện web Odoo \n"
+"được thiết kế cho các nhà bán lẻ hiện đại.\n"
+"\n"
+"### Thiết kế vì năng suất\n"
+"\n"
+"Dù dùng cho nhà hàng hay cửa hàng, bạn có thể kích hoạt nhiều đơn hàng \n"
+"cùng lúc để không khiến khách hàng phải chờ đợi.\n"
+"\n"
+"### Tìm kiếm cực nhanh\n"
+"\n"
+"Quét các sản phẩm, duyệt qua các danh mục phân cấp hoặc nhận thông tin nhanh \n"
+"về các sản phẩm bằng bộ lọc cực tốc độ trên tất cả sản phẩm.\n"
+"\n"
+"Tích hợp Quản lý Tồn kho \n"
+"-------------------------------\n"
+"\n"
+"Hợp nhất tất cả đội bán hàng trong thời gian thực: cửa hàng, thương mại điện tử, đội \n"
+"bán hàng. Kiểm soát tồn kho theo thời gian thực và dự báo chính xác để quản lý \n"
+"mua sắm.\n"
+"\n"
+"Hệ thống quản lý kho toàn diện nằm trong tầm tay bạn: nhận thông tin về \n"
+"trạng thái còn hàng của sản phẩm, kích hoạt yêu cầu mua sắm,...\n"
+"\n"
+"Cung cấp dịch vụ khách hàng tại cửa hàng\n"
+"----------------------------------\n"
+"\n"
+"Mang lại trải nghiệm tốt đẹp cho khách mua hàng của bạn bằng cách tích hợp các dịch vụ \n"
+"khách hàng tại cửa hàng. Xử lý các khoản bồi thường, theo dõi bảo hành, theo dõi khiếu nại \n"
+"của khách hàng, lập kế hoạch phiếu xuất kho,...\n"
+"\n"
+"Tích hợp Hóa đơn & Kế toán\n"
+"----------------------------------\n"
+"\n"
+"Xuất hóa đơn cho khách hàng chỉ trong vài cú nhấp chuột. Kiểm soát doanh số bán hàng và tiền mặt \n"
+"trong thời gian thực và sử dụng tính năng báo cáo hiệu quả của Odoo để đưa ra các quyết định \n"
+"thông minh hơn nhằm cải thiện hiệu quả cho cửa hàng.\n"
+"\n"
+"Không gặp rắc rối khi phải tích hợp phần mềm: toàn bộ hoạt động bán hàng và \n"
+"tồn kho của bạn sẽ tự động được ghi nhận trong sổ cái.\n"
+"\n"
+"Dữ liệu của Tất cả Cửa hàng được Hợp nhất\n"
+"------------------------------\n"
+"\n"
+"Các sản phẩm mới, chiến lược giá và khuyến mãi được áp dụng tự động cho những\n"
+"cửa hàng đã chọn. Làm việc trên một cơ sở khách hàng thống nhất. Không cần giao diện phức tạp \n"
+"để thí điểm chiến lược toàn cầu giữa tất cả các cửa hàng.\n"
+"\n"
+"Với Odoo làm backend, bạn nắm trong tay một hệ thống đã được chứng minh là hoàn toàn phù hợp với\n"
+"các cửa hàng nhỏ và cả những công ty đa quốc gia lớn.\n"
+"\n"
+"Hiểu rõ Khách hàng của Bạn - trong và ngoài cửa hàng\n"
+"--------------------------------------\n"
+"\n"
+"Các thương hiệu thành công tích hợp mọi mối quan hệ khách hàng trên mọi \n"
+"kênh của họ để phát triển hồ sơ khách hàng một cách chính xác và giao tiếp với khách mua hàng \n"
+"khi họ đưa ra quyết định mua hàng, tại cửa hàng hay online.\n"
+"\n"
+"Với Odoo, bạn có được cái nhìn bao quát về khách hàng, bao gồm dữ liệu bán hàng trên nhiều kênh, \n"
+"lịch sử tương tác, hồ sơ,...\n"
+"\n"
 
 #. module: point_of_sale
 #. odoo-javascript
@@ -7473,7 +7588,7 @@ msgstr ""
 #. module: point_of_sale
 #: model:ir.model,name:point_of_sale.model_pos_order_line
 msgid "Point of Sale Order Line"
-msgstr ""
+msgstr "Dòng đơn hàng POS"
 
 #. module: point_of_sale
 #: model:ir.model,name:point_of_sale.model_pos_order_receipt
@@ -7919,6 +8034,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:point_of_sale.res_config_settings_view_form
 msgid "Print gift ticket without prices. Can be used for gifts."
 msgstr ""
+"In phiếu tính tiền quà tặng không có giá. Có thể áp dụng cho quà tặng."
 
 #. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_res_company__point_of_sale_use_ticket_qr_code
@@ -10092,8 +10208,8 @@ msgid ""
 "To find more details on the error reason, please search online for: Epson "
 "ePoS error %s "
 msgstr ""
-"Mã lỗi sau đây được máy in hiển thị: %s Để tìm hiểu thêm chi tiết về nguyên "
-"nhân gây lỗi, vui lòng tìm kiếm trực tuyến với từ khóa: Lỗi Epson ePoS %s "
+"Máy in báo mã lỗi sau đây: %s \n"
+"Để biết chi tiết về nguyên nhân lỗi, vui lòng tìm kiếm trực tuyến với từ khóa: Epson ePoS error %s "
 
 #. module: point_of_sale
 #. odoo-python
@@ -10581,11 +10697,9 @@ msgid ""
 " Please pay the exact amount or add a cash payment method in the point of "
 "sale settings."
 msgstr ""
-"Không có phương thức thanh toán bằng tiền mặt nào có sẵn tại POS này để xử "
-"lý tiền thừa.\n"
+"Không có phương thức thanh toán tiền mặt nào khả dụng tại điểm bán hàng này để trả tiền thừa.\n"
 "\n"
-"Vui lòng thanh toán đúng số tiền hoặc thêm phương thức thanh toán bằng tiền "
-"mặt trong cài đặt của POS."
+" Vui lòng thanh toán đúng số tiền hoặc thêm phương thức thanh toán tiền mặt trong thiết lập POS"
 
 #. module: point_of_sale
 #. odoo-python
@@ -11680,6 +11794,9 @@ msgid ""
 "to snatch a hamburger from a customer’s hand mid-bite; chaos will ensue as "
 "ketchup and mayo go flying everywhere!"
 msgstr ""
+"Bạn không thể lưu trữ/xóa (các) sản phẩm đang có trong một ca POS đang hoạt động.\n"
+"\n"
+"Việc lưu trữ/xóa một sản phẩm hiện có trong ca không khác nào bạn cố gắng giật chiếc bánh hamburger mà khách hàng đang cắn dở; rồi hỗn loạn sẽ xảy ra khi sốt cà chua và mayo bay tứ tung!"
 
 #. module: point_of_sale
 #. odoo-python
@@ -11694,6 +11811,8 @@ msgid ""
 "You cannot close the POS when invoices are not posted.\n"
 "Invoices: %(invoices)s"
 msgstr ""
+"Bạn không thể đóng POS khi hóa đơn chưa được ghi sổ.\n"
+"Hóa đơn: %(invoices)s"
 
 #. module: point_of_sale
 #. odoo-python

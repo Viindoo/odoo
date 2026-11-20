@@ -71,6 +71,10 @@ msgid ""
 "* The 'Done' status is set when repairing is completed.\n"
 "* The 'Cancelled' status is used when user cancel repair order."
 msgstr ""
+"* Trạng thái 'Mới' được sử dụng khi người dùng đang nhập một lệnh sửa chữa mới và chưa xác nhận.\n"
+"* Trạng thái 'Đã xác nhận' được sử dụng khi người dùng xác nhận lệnh sửa chữa.\n"
+"* Trạng thái 'Hoàn thành' được đặt khi việc sửa chữa hoàn thành.\n"
+"* Trạng thái 'Đã hủy' được sử dụng khi người dùng hủy lệnh sửa chữa."
 
 #. module: repair
 #: model_terms:ir.ui.view,arch_db:repair.report_repairorder
@@ -744,7 +748,7 @@ msgstr "Lô/sê-ri"
 #. module: repair
 #: model:ir.model.fields,help:repair.field_repair_order__activity_type_icon
 msgid "Material Symbols icon e.g. checklist"
-msgstr ""
+msgstr "Biểu tượng Material Symbols, ví dụ: checklist"
 
 #. module: repair
 #: model:ir.model.fields,field_description:repair.field_repair_order__message_has_error
@@ -1194,7 +1198,7 @@ msgstr "Dịch vụ sửa chữa"
 #. module: repair
 #: model:ir.model,name:repair.model_repair_tags
 msgid "Repair Tag"
-msgstr ""
+msgstr "Thẻ sửa chữa"
 
 #. module: repair
 #: model:ir.module.module,summary:base.module_repair
@@ -1206,6 +1210,8 @@ msgstr ""
 #: code:addons/repair/models/repair.py:0
 msgid "Repair must be confirmed in order to end reparation."
 msgstr ""
+"Lệnh sửa chữa phải ở trạng thái 'Đã xác nhận' trước khi có thể kết thúc việc"
+" sửa chữa."
 
 #. module: repair
 #. odoo-python

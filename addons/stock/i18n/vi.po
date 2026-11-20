@@ -590,6 +590,44 @@ msgid ""
 "</div>\n"
 "        "
 msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"    <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"        Xin chào <t t-out=\"object.partner_id.name or ''\">Brandon Freeman</t>,<br><br>\n"
+"        <t t-if=\"hasattr(object, 'delivery_type') and object.delivery_type == 'in_store'\">\n"
+"            Đơn hàng của bạn đã được nhận.\n"
+"        </t>\n"
+"        <t t-else=\"\">\n"
+"            Chúng tôi vui mừng thông báo với bạn rằng đơn hàng của bạn đã được vận chuyển.\n"
+"        </t>\n"
+"        <t t-if=\"hasattr(object, 'carrier_tracking_ref') and object.carrier_tracking_ref\">\n"
+"            Mã số theo dõi đơn hàng của bạn là\n"
+"            <strong>\n"
+"            <t t-if=\"object.carrier_tracking_url\">\n"
+"                <t t-set=\"multiple_carrier_tracking\" t-value=\"object.get_multiple_carrier_tracking()\"></t>\n"
+"                <t t-if=\"multiple_carrier_tracking\">\n"
+"                    <t t-foreach=\"multiple_carrier_tracking\" t-as=\"line\">\n"
+"                        <br><a t-att-href=\"line[1]\" target=\"_blank\" t-out=\"line[0] or ''\"></a>\n"
+"                    </t>\n"
+"                </t>\n"
+"                <t t-else=\"\">\n"
+"                    <a t-attf-href=\"{{ object.carrier_tracking_url }}\" target=\"_blank\" t-out=\"object.carrier_tracking_ref or ''\"></a>.\n"
+"                </t>\n"
+"            </t>\n"
+"            <t t-else=\"\">\n"
+"                <t t-out=\"object.carrier_tracking_ref or ''\"></t>.\n"
+"            </t>\n"
+"            </strong>\n"
+"        </t>\n"
+"        <br><br>\n"
+"        Vui lòng xem phiếu xuất kho được đính kèm trong thư này để biết thêm chi tiết.<br><br>\n"
+"        Cảm ơn bạn!\n"
+"        <t t-if=\"user.signature\">\n"
+"            <br>\n"
+"            <div data-o-mail-quote=\"1\">--<br data-o-mail-quote=\"1\"><t t-out=\"user.signature or ''\">Mitchell Admin</t></div>\n"
+"        </t>\n"
+"    </p>\n"
+"</div>\n"
+"        "
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_picking_batch_card
@@ -605,6 +643,8 @@ msgid ""
 "                                All products could not be reserved. Click on "
 "the \"Reserve\" button to try to reserve products."
 msgstr ""
+"<i class=\"oi\" data-icon=\"warning\"/>\n"
+"                                Không thể giữ hàng cho tất cả sản phẩm. Hãy bấm nút \"Giữ hàng\" để thử giữ hàng."
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_picking_type_kanban
@@ -1497,7 +1537,7 @@ msgstr "Luôn luôn"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
 msgid "Annual Inventory Date"
-msgstr ""
+msgstr "Ngày kiểm kê hằng năm"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_company__annual_inventory_month
@@ -1990,7 +2030,7 @@ msgstr "Phiếu kho gộp"
 #: model:ir.model,name:stock.model_stock_add_to_wave
 #: model:ir.model,name:stock.model_stock_picking_to_batch
 msgid "Batch Transfer Line"
-msgstr ""
+msgstr "Chi tiết phiếu kho gộp"
 
 #. module: stock
 #: model:ir.actions.act_window,name:stock.stock_picking_batch_action
@@ -3344,7 +3384,7 @@ msgstr "Phiếu xuất kho"
 #. odoo-python
 #: code:addons/stock/models/stock_lot.py:0
 msgid "Delivery move lines of %s"
-msgstr ""
+msgstr "Chi tiết dịch chuyển xuất kho của %s"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_lot__delivery_count
@@ -5110,7 +5150,7 @@ msgstr "Yêu cầu kiểm kê"
 #: model:ir.model,name:stock.model_stock_route
 #, fuzzy
 msgid "Inventory Route"
-msgstr "Tuyến tồn kho"
+msgstr "Tuyến cung ứng"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_stock_quant_form_editable
@@ -5995,14 +6035,14 @@ msgstr "Tháng 3"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
 msgid "Mark as To Do"
-msgstr ""
+msgstr "Đánh dấu cần làm"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_lot__activity_type_icon
 #: model:ir.model.fields,help:stock.field_stock_picking__activity_type_icon
 #: model:ir.model.fields,help:stock.field_stock_picking_batch__activity_type_icon
 msgid "Material Symbols icon e.g. checklist"
-msgstr ""
+msgstr "Biểu tượng Material Symbols, ví dụ: checklist"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_replenishment_info__product_max_qty
@@ -6145,6 +6185,8 @@ msgid ""
 "demand covered by the Minimum Level is > Replenishment Lead Times - "
 "Availability Time."
 msgstr ""
+"Mức tồn kho dự kiến tối thiểu sẽ kích hoạt việc bổ sung hàng.\n"
+"Tồn kho an toàn được tính vào mức tối thiểu để bao phủ các tình huống bất thường nếu số ngày nhu cầu được bao phủ bởi Mức tối thiểu lớn hơn Thời gian cung ứng bổ sung hàng - Thời gian sẵn có."
 
 #. module: stock
 #: model:ir.model,name:stock.model_stock_warehouse_orderpoint
@@ -6679,12 +6721,9 @@ msgid ""
 "                                        barcode operator and configure the "
 "routing of the reports."
 msgstr ""
-"Odoo mở bản xem trước PDF theo mặc định. Nếu bạn (chỉ dành cho người dùng "
-"Enterprise) muốn in ngay lập tức,\n"
-"                                        hãy cài đặt ứng dụng IoT trên máy "
-"tính nằm trên cùng mạng cục bộ với\n"
-"                                        máy quét mã vạch và cấu hình đường "
-"dẫn chuyển tiếp cho các báo cáo."
+"Hệ thống mở bản xem trước PDF theo mặc định. Nếu bạn (chỉ dành cho người dùng Enterprise) muốn in ngay lập tức,\n"
+"                                        hãy cài đặt Ứng dụng IoT trên một máy tính nằm trong cùng mạng cục bộ với\n"
+"                                        thiết bị mã vạch, và cấu hình định tuyến báo cáo."
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_delivery_document
@@ -7598,7 +7637,7 @@ msgstr ""
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_picking
 msgid "Presence depends on the operation category."
-msgstr ""
+msgstr "Có hiển thị hay không tùy thuộc vào loại nghiệp vụ."
 
 #. module: stock
 #. odoo-python
@@ -10082,12 +10121,12 @@ msgstr "Tồn kho cần giữ:"
 #: model:ir.actions.act_window,name:stock.stock_quant_action
 #: model:ir.ui.menu,name:stock.menu_valuation
 msgid "Stock by Location"
-msgstr ""
+msgstr "Tồn kho theo địa điểm"
 
 #. module: stock
 #: model:ir.model,name:stock.model_stock_replenishment_info
 msgid "Stock delivery time information"
-msgstr ""
+msgstr "Thông tin thời gian giao hàng"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_picking_batch__move_line_ids
@@ -10319,6 +10358,8 @@ msgid ""
 "Technical field holding the tracking method. False on a storable product "
 "means it's tracked by quantity only."
 msgstr ""
+"Trường kỹ thuật lưu phương thức theo dõi. Giá trị False trên sản phẩm lưu "
+"kho nghĩa là sản phẩm chỉ được theo dõi theo số lượng."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking__show_check_availability
@@ -10326,6 +10367,8 @@ msgid ""
 "Technical field used to compute whether the button \"Reserve\" should be "
 "displayed."
 msgstr ""
+"Trường kỹ thuật được sử dụng để tính toán xem nút \"Giữ hàng\" có được hiển "
+"thị hay không."
 
 #. module: stock
 #. odoo-python
@@ -10831,6 +10874,8 @@ msgid ""
 "This location will be used as the source location for stock moves generated "
 "by an inventory adjustment."
 msgstr ""
+"Địa điểm này sẽ được sử dụng làm địa điểm nguồn cho các dịch chuyển kho được"
+" tạo ra bởi điều chỉnh tồn kho."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_product_product__property_stock_production
@@ -10839,6 +10884,8 @@ msgid ""
 "This location will be used as the source location for stock moves generated "
 "by a manufacturing order."
 msgstr ""
+"Địa điểm này sẽ được sử dụng làm địa điểm nguồn cho các dịch chuyển kho được"
+" tạo ra bởi lệnh sản xuất."
 
 #. module: stock
 #. odoo-python
@@ -11521,6 +11568,8 @@ msgid ""
 "Unless previously specified by the source document, this will be the default "
 "shipping policy for this operation type."
 msgstr ""
+"Trừ khi được chỉ định trước trong chứng từ gốc, đây sẽ là chính sách giao "
+"hàng mặc định cho loại nghiệp vụ này."
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
@@ -12271,6 +12320,8 @@ msgid ""
 "You can't deactivate the multi-location feature if you have more than one "
 "warehouse per company"
 msgstr ""
+"Bạn không thể tắt tính năng đa địa điểm nếu bạn có nhiều hơn một kho cho mỗi"
+" công ty"
 
 #. module: stock
 #. odoo-python

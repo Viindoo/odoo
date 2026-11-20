@@ -82,6 +82,8 @@ msgid ""
 "%(order)s - %(order_line)s: Goods Delivered not Invoiced (perpetual "
 "valuation)"
 msgstr ""
+"%(order)s - %(order_line)s: Hàng hóa đã giao chưa lập hóa đơn (kê khai "
+"thường xuyên)"
 
 #. module: sale
 #. odoo-python
@@ -90,6 +92,8 @@ msgid ""
 "%(order)s - %(order_line)s: Goods Invoiced not Delivered (perpetual "
 "valuation)"
 msgstr ""
+"%(order)s - %(order_line)s: Hàng hóa đã lập hóa đơn chưa giao (kê khai "
+"thường xuyên)"
 
 #. module: sale
 #. odoo-python
@@ -98,8 +102,8 @@ msgid ""
 "%(order)s - %(order_line)s; %(quantity_invoiced)s Invoiced, %"
 "(quantity_delivered)s Delivered at %(unit_price)s each"
 msgstr ""
-"%(order)s - %(order_line)s; %(quantity_invoiced)s đã lập hóa đơn, %"
-"(quantity_delivered)s đã giao với đơn giá %(unit_price)s"
+"%(order)s - %(order_line)s; %(quantity_invoiced)s đã được lập hóa đơn, "
+"%(quantity_delivered)s đã được giao với giá %(unit_price)s mỗi đơn vị"
 
 #. module: sale
 #. odoo-python
@@ -639,6 +643,47 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"    <p style=\"margin: 0px; padding: 0px; font-size: 12px;\">\n"
+"        <t t-set=\"transaction_sudo\" t-value=\"object.get_portal_last_transaction()\"></t>\n"
+"        Xin chào,\n"
+"        <br><br>\n"
+"        Khoản thanh toán với mã số\n"
+"        <span style=\"font-weight:bold;\" t-out=\"transaction_sudo.reference or ''\">SOOO49</span>\n"
+"        và số tiền\n"
+"        <span style=\"font-weight:bold;\" t-out=\"format_amount(transaction_sudo.amount, object.currency_id) or ''\">$ 10.00</span>\n"
+"        cho đơn hàng\n"
+"        <span style=\"font-weight:bold;\" t-out=\"object.name or ''\">S00049</span>\n"
+"        <t t-if=\"transaction_sudo and transaction_sudo.state == 'pending'\">\n"
+"            đang chờ xử lý.\n"
+"            <br>\n"
+"            <t t-if=\"object.currency_id.compare_amounts(object.amount_paid + transaction_sudo.amount, object.amount_total) &gt;= 0 and object.state in ('draft', 'sent')\">\n"
+"                Đơn hàng của bạn sẽ được xác nhận sau khi chúng tôi xác nhận khoản thanh toán.\n"
+"            </t>\n"
+"            <t t-else=\"\">\n"
+"                Khi được xác nhận, số tiền\n"
+"                <span style=\"font-weight:bold;\" t-out=\"format_amount(object.amount_total - object.amount_paid - transaction_sudo.amount, object.currency_id) or ''\">$ 10.00</span>\n"
+"                sẽ còn phải thanh toán.\n"
+"            </t>\n"
+"        </t>\n"
+"        <t t-else=\"\">\n"
+"            đã được xác nhận.\n"
+"            <t t-if=\"object.currency_id.compare_amounts(object.amount_paid, object.amount_total) &lt; 0\">\n"
+"                <br>\n"
+"                <span style=\"font-weight:bold;\" t-out=\"format_amount(object.amount_total - object.amount_paid, object.currency_id) or ''\">$ 10.00</span>\n"
+"                còn phải thanh toán.\n"
+"            </t>\n"
+"        </t>\n"
+"        <br><br>\n"
+"        Cảm ơn bạn đã trao gửi niềm tin!\n"
+"        <br>\n"
+"        Nếu bạn có bất kỳ thắc mắc nào, xin đừng ngần ngại liên hệ với chúng tôi.\n"
+"        <t t-if=\"not is_html_empty(object.user_id.signature)\">\n"
+"            <div data-o-mail-quote=\"1\">--<br data-o-mail-quote=\"1\"><t t-out=\"object.user_id.signature or ''\">Mitchell Admin</t></div>\n"
+"        </t>\n"
+"    </p>\n"
+"</div>\n"
+"            "
 
 #. module: sale
 #: model:mail.template,body_html:sale.email_template_proforma
@@ -674,6 +719,31 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"    <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"        Xin chào,\n"
+"        <br><br>\n"
+"        <t t-if=\"object.state in ('draft', 'sent')\">\n"
+"            Hóa đơn chiếu lệ cho báo giá <span style=\"font-weight: bold;\" t-out=\"object.name or ''\">S00052</span>\n"
+"        </t>\n"
+"        <t t-else=\"\">\n"
+"            Hóa đơn chiếu lệ cho đơn hàng <span style=\"font-weight: bold;\" t-out=\"object.name or ''\">S00052</span>\n"
+"        </t>\n"
+"        <t t-if=\"object.origin\">\n"
+"            (với mã tham chiếu: <t t-out=\"object.origin or ''\"></t> )\n"
+"        </t>\n"
+"        <t t-if=\"object.client_order_ref\">\n"
+"            (<t t-out=\"object.client_order_ref or ''\">CUSTOMER REF</t>)\n"
+"        </t>\n"
+"        có số tiền là <span style=\"font-weight: bold;\" t-out=\"format_amount(object.amount_total, object.currency_id) or ''\">$ 10.00</span> đã sẵn sàng.\n"
+"        <br><br>\n"
+"        Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi.\n"
+"        <t t-if=\"not is_html_empty(object.user_id.signature)\">\n"
+"            <div data-o-mail-quote=\"1\">--<br data-o-mail-quote=\"1\"><t t-out=\"object.user_id.signature or ''\">Mitchell Admin</t></div>\n"
+"        </t>\n"
+"    </p>\n"
+"</div>\n"
+"            "
 
 #. module: sale
 #: model:mail.template,body_html:sale.email_template_edi_sale
@@ -794,7 +864,7 @@ msgid ""
 "                    Locked"
 msgstr ""
 "<i class=\"oi\" data-icon=\"lock\"/>\n"
-"                    Đã khoá"
+"                    Đã khóa"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_content
@@ -951,6 +1021,9 @@ msgid ""
 "                        Invoicing Address\n"
 "                    </strong>"
 msgstr ""
+"<strong>\n"
+"                        Địa chỉ lập hóa đơn\n"
+"                    </strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
@@ -967,6 +1040,9 @@ msgid ""
 "                    Invoicing and Shipping Address\n"
 "                </strong>"
 msgstr ""
+"<strong>\n"
+"                    Địa chỉ lập hóa đơn và giao hàng\n"
+"                </strong>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
@@ -1111,6 +1187,11 @@ msgid ""
 "this line\n"
 "  - Stock Moves: the quantity comes from confirmed pickings\n"
 msgstr ""
+"Theo cấu hình sản phẩm, số lượng đã giao có thể được tính tự động theo cơ chế:\n"
+"  - Thủ công: số lượng được nhập thủ công trên dòng\n"
+"  - Từ chi phí: số lượng dựa trên tổng các khoản chi phí đã ghi nhận\n"
+"  - Bảng giờ công: số lượng là tổng số giờ được ghi nhận của nhiệm vụ liên kết với dòng này\n"
+"  - Dịch chuyển kho: số lượng lấy từ các phiếu kho đã xác nhận\n"
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_product_category__property_account_invoices_to_issue_id
@@ -1264,12 +1345,12 @@ msgstr "Đơn vị tính được phép"
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
 msgid "Allows you to send Pro Forma Invoice to your customers"
-msgstr ""
+msgstr "Cho phép gửi hóa đơn chiếu lệ đến khách hàng của bạn"
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_res_config_settings__group_proforma_sales
 msgid "Allows you to send pro forma invoice."
-msgstr ""
+msgstr "Cho phép bạn gửi hóa đơn chiếu lệ."
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_product_document__attached_on_sale
@@ -1286,6 +1367,13 @@ msgid ""
 "page.\n"
 "e.g. this option can be useful to share Product description files."
 msgstr ""
+"Cho phép bạn chia sẻ tài liệu với khách hàng của mình trong quá trình bán hàng.\n"
+"Từ báo giá: tài liệu sẽ được gửi và khách hàng có thể truy cập bất cứ lúc nào.\n"
+"VD: tùy chọn này có thể hữu ích khi chia sẻ tệp mô tả sản phẩm.\n"
+"Khi xác nhận đơn hàng: tài liệu sẽ được gửi và khách hàng có thể truy cập.\n"
+"VD: tùy chọn này có thể hữu ích khi chia sẻ hướng dẫn sử dụng hoặc nội dung kỹ thuật số được mua trên sàn thương mại điện tử. \n"
+"Trên trang sản phẩm: tài liệu sẽ được khách hàng truy cập trên trang sản phẩm.\n"
+"VD: tùy chọn này có thể hữu ích khi chia sẻ tệp mô tả sản phẩm."
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_payment_link_wizard__amount_paid
@@ -2160,7 +2248,7 @@ msgstr "Trạng thái giao hàng"
 #: model:ir.model.fields,field_description:sale.field_product_product__sale_delay
 #: model:ir.model.fields,field_description:sale.field_product_template__sale_delay
 msgid "Delivery Time"
-msgstr ""
+msgstr "Thời gian giao hàng"
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_sale_order__expected_date
@@ -2596,9 +2684,8 @@ msgid ""
 "customers or sales orders/invoices. The default value comes from the "
 "customer."
 msgstr ""
-"Các vị trí tài chính được sử dụng để điều chỉnh thuế và tài khoản cho những "
-"khách hàng hoặc đơn bán hàng/hóa đơn cụ thể. Giá trị mặc định tính theo "
-"khách hàng."
+"Chế độ thuế được sử dụng để điều chỉnh thuế và tài khoản cho các khách hàng "
+"cụ thể hoặc các đơn bán/hóa đơn. Giá trị mặc định đến từ phía khách hàng."
 
 #. module: sale
 #: model:ir.model.fields.selection,name:sale.selection__sale_order_discount__discount_type__amount
@@ -3431,7 +3518,7 @@ msgstr ""
 #. module: sale
 #: model:ir.model.fields,help:sale.field_sale_order__activity_type_icon
 msgid "Material Symbols icon e.g. checklist"
-msgstr ""
+msgstr "Biểu tượng Material Symbols, ví dụ: checklist"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_account_bank_statement_line__medium_id
@@ -3683,6 +3770,8 @@ msgid ""
 "to track if something gets invoiced or delivered).\n"
 "Set the quantity to 0 instead."
 msgstr ""
+"Sau khi đơn bán được xác nhận, bạn không thể xóa một trong các dòng của đơn hàng đó (chúng tôi cần theo dõi xem có mặt hàng nào được lập hóa đơn hoặc giao hay không).\n"
+"Thay vào đó hãy đặt số lượng thành 0."
 
 #. module: sale
 #: model_terms:ir.actions.act_window,help:sale.act_res_partner_2_sale_order
@@ -4801,7 +4890,7 @@ msgstr "Bán hàng: Thanh toán hoàn thành"
 #. module: sale
 #: model:mail.template,name:sale.email_template_proforma
 msgid "Sales: Send Pro Forma"
-msgstr ""
+msgstr "Bán hàng: Gửi hóa đơn chiếu lệ"
 
 #. module: sale
 #: model:mail.template,name:sale.email_template_edi_sale
@@ -4904,7 +4993,7 @@ msgstr "Gửi"
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.view_order_form
 msgid "Send PRO FORMA Invoice"
-msgstr ""
+msgstr "Gửi hóa đơn chiếu lệ"
 
 #. module: sale
 #: model:ir.actions.server,name:sale.model_sale_order_send_mail
@@ -5287,7 +5376,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale/models/sale_order.py:0
 msgid "Template for Quotations"
-msgstr ""
+msgstr "Mẫu báo giá"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__terms_type
@@ -5912,6 +6001,8 @@ msgstr ""
 #: model:mail.template,description:sale.email_template_proforma
 msgid "Used by salespeople when they send pro forma to prospects"
 msgstr ""
+"Được nhân viên kinh doanh sử dụng khi họ gửi hóa đơn chiếu lệ cho khách hàng"
+" tiềm năng"
 
 #. module: sale
 #: model:mail.template,description:sale.email_template_edi_sale
@@ -6281,6 +6372,8 @@ msgid ""
 "{{ object.company_id.name }} {{ object.state in ('draft', 'sent') and 'Pro "
 "Forma' or 'Order'}} (Ref {{ object.name or 'n/a' }})"
 msgstr ""
+"{{ object.company_id.name }} {{ object.state in ('draft', 'sent') and 'Chiếu"
+" lệ' or 'Đơn hàng'}} (Mã {{ object.name or 'không có' }})"
 
 #. module: sale
 #: model:mail.template,subject:sale.email_template_edi_sale
@@ -6289,6 +6382,9 @@ msgid ""
 "'Quotation' or 'Order' }} {{ object.name or 'n/a' }} "
 "{{ object.client_order_ref and ('(' + object.client_order_ref + ')') or '' }}"
 msgstr ""
+"{{ object.company_id.name }} {{ object.state in ('draft', 'sent') and 'Báo "
+"giá' or 'Đơn hàng' }} {{ object.name or 'không có' }} {{ "
+"object.client_order_ref and ('(' + object.client_order_ref + ')') or '' }}"
 
 #~ msgid ""
 #~ "<div style=\"margin: 0px; padding: 0px;\">\n"

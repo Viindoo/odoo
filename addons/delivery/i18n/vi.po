@@ -193,11 +193,14 @@ msgid ""
 "customers on the Sales Order and sales confirmation email. E.g. instructions "
 "for customers to follow."
 msgstr ""
+"Mô tả về phương thức giao hàng mà bạn muốn đưa ra cho khách hàng của mình "
+"trên đơn bán và email xác nhận bán hàng. Ví dụ: hướng dẫn dành cho khách "
+"hàng."
 
 #. module: delivery
 #: model:ir.model.fields,help:delivery.field_delivery_carrier__integration_level
 msgid "Action while validating Delivery Orders."
-msgstr ""
+msgstr "Tác vụ khi xác nhận phiếu xuất kho."
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_carrier__active
@@ -239,6 +242,8 @@ msgid ""
 "Amount of the order to benefit from a free shipping, expressed in the "
 "company currency."
 msgstr ""
+"Giá trị đơn hàng tối thiểu để được miễn phí vận chuyển, tính theo tiền tệ "
+"của công ty."
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_delivery_carrier_form
@@ -312,7 +317,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/delivery/models/payment_provider.py:0
 msgid "Cash on delivery not allowed by selected delivery method"
-msgstr ""
+msgstr "Phương thức giao hàng đã chọn không cho phép thanh toán khi nhận hàng"
 
 #. module: delivery
 #. odoo-python
@@ -466,7 +471,7 @@ msgstr "Phương thức giao hàng"
 #. module: delivery
 #: model:ir.model,name:delivery.model_choose_delivery_carrier
 msgid "Delivery Method Selection Wizard"
-msgstr ""
+msgstr "Công cụ chọn phương thức giao hàng"
 
 #. module: delivery
 #: model:ir.actions.act_window,name:delivery.action_delivery_carrier_form
@@ -546,6 +551,8 @@ msgid ""
 "Delivery method details to be included at bottom sales orders and their "
 "confirmation emails. E.g. Instructions for customers to follow."
 msgstr ""
+"Chi tiết về phương thức giao hàng sẽ được đưa vào cuối đơn bán và email xác "
+"nhận đơn bán. Ví dụ: Hướng dẫn dành cho khách hàng."
 
 #. module: delivery
 #: model_terms:ir.actions.act_window,help:delivery.action_delivery_zip_prefix_list
@@ -553,6 +560,8 @@ msgid ""
 "Delivery zip prefixes are assigned to delivery methods to restrict\n"
 "            which zips it is available to."
 msgstr ""
+"Tiền tố mã bưu chính giao hàng được gán cho các phương thức giao hàng để giới hạn\n"
+"            các mã bưu chính được áp dụng."
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_carrier__carrier_description
@@ -659,6 +668,8 @@ msgid ""
 "Filling this form allows you to make the delivery method available according "
 "to the content of the order or its destination."
 msgstr ""
+"Việc điền vào biểu mẫu này cho phép bạn lựa chọn phương thức giao hàng phù "
+"hợp với thành phần đơn hàng hoặc địa điểm nhận hàng."
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.res_config_settings_view_form
@@ -965,11 +976,10 @@ msgid ""
 "lengths, i.e. '$' can be added to end of prefix to match the exact zip (e.g. "
 "'100$' will only match '100' and not '1000')"
 msgstr ""
-"Các tiền tố của mã bưu chính mà phương thức giao hàng này áp dụng. Lưu ý "
-"rằng có thể sử dụng biểu thức chính quy để hỗ trợ các quốc gia có độ dài mã "
-"bưu chính khác nhau, tức là có thể thêm ký tự '$' vào cuối tiền tố để khớp "
-"chính xác với mã bưu chính (ví dụ: '100$' chỉ khớp với '100' và không khớp "
-"với '1000')."
+"Tiền tố mã bưu chính mà phương thức giao hàng này áp dụng. Lưu ý có thể dùng"
+" biểu thức chính quy để hỗ trợ các quốc gia có độ dài mã bưu chính khác "
+"nhau, ví dụ thêm '$' vào cuối tiền tố để khớp chính xác mã bưu chính (vd: "
+"'100$' chỉ khớp với '100' mà không khớp với '1000')"
 
 #. module: delivery
 #: model:ir.model.fields.selection,name:delivery.selection__delivery_price_rule__variable__price
@@ -1343,6 +1353,11 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Bạn không thể cập nhật phí vận chuyển của đơn hàng đã được lập hóa đơn!\n"
+"\n"
+"Dòng giao hàng sau (sản phẩm, số lượng đã lập hóa đơn và giá) đã được xử lý:\n"
+"\n"
+"%s"
 
 #. module: delivery
 #. odoo-python
@@ -1351,6 +1366,8 @@ msgid ""
 "You cannot delete this product category as it is used on the products linked "
 "to delivery methods."
 msgstr ""
+"Bạn không thể xóa nhóm sản phẩm này vì nó được sử dụng cho các sản phẩm của "
+"phương thức giao hàng."
 
 #. module: delivery
 #: model_terms:payment.provider,auth_msg:delivery.payment_provider_cod
