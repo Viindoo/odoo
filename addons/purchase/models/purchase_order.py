@@ -464,7 +464,13 @@ class PurchaseOrder(models.Model):
                     seq_date = fields.Datetime.context_timestamp(self, fields.Datetime.to_datetime(vals['date_order']))
                 vals['name'] = self_comp.env['ir.sequence'].next_by_code('purchase.order', sequence_date=seq_date) or '/'
             orders |= super(PurchaseOrder, self_comp).create(vals)
+        orders.filtered(lambda po: po.state == 'purchase')._check_approval_allowed()
         return orders
+
+    def write(self, vals):
+        if vals.get('state') == 'purchase':
+            self.filtered(lambda po: po.state != 'purchase')._check_approval_allowed()
+        return super().write(vals)
 
     @api.ondelete(at_uninstall=False)
     def _unlink_if_cancelled(self):
@@ -1340,6 +1346,10 @@ class PurchaseOrder(models.Model):
                     self.date_order))
             or self.env.user.has_group('purchase.group_purchase_manager'))
 
+    def _check_approval_allowed(self):
+        if not self.env.su and not all(order._approval_allowed() for order in self):
+            raise UserError(_("Only a purchase manager can approve this purchase order."))
+
     def get_localized_date_planned(self, date_planned=False):
         """Returns the localized date planned in the timezone of the order's user or the
         company's partner or UTC if none of them are set."""
@@ -1362,7 +1372,7 @@ class PurchaseOrder(models.Model):
         # create or update the activity
         activity = self.env['mail.activity'].search([
             ('summary', '=', _('Date Updated')),
-            ('res_model_id', '=', 'purchase.order'),
+            ('res_model', '=', 'purchase.order'),
             ('res_id', '=', self.id),
             ('user_id', '=', self.user_id.id)], limit=1)
         if activity:
