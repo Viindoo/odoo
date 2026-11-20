@@ -771,7 +771,7 @@ msgstr "Đang hoạt động"
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__active_workcenter_ids
 msgid "Active Workcenter"
-msgstr ""
+msgstr "Trung tâm sản xuất đang hoạt động"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__activity_ids
@@ -1541,12 +1541,12 @@ msgstr "Hủy"
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
 msgid "Cancel Manufacturing Order"
-msgstr "Huỷ lệnh sản xuất"
+msgstr "Hủy lệnh sản xuất"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_tree_view
 msgid "Cancel Manufacturing Orders"
-msgstr "Huỷ lệnh sản xuất"
+msgstr "Hủy lệnh sản xuất"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_tree_view
@@ -1830,6 +1830,8 @@ msgstr "Đã xác nhận"
 msgid ""
 "Conflict: this work order overlaps with another one on the same work center"
 msgstr ""
+"Xung đột: lệnh công đoạn này trùng thời gian với một lệnh công đoạn khác "
+"trên cùng trung tâm sản xuất"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.view_mrp_production_workorder_form_view_filter
@@ -3721,6 +3723,9 @@ msgid ""
 "                In the Shop Floor application, you can choose the work "
 "centers you want to manage at your work station."
 msgstr ""
+"Các công đoạn sản xuất được thực hiện tại trung tâm sản xuất. Một trung tâm sản xuất có thể\n"
+"                là nhân công và/hoặc máy móc. Trung tâm sản xuất được dùng để tính giá thành, lập lịch, lập kế hoạch công suất, v.v.\n"
+"                Trong ứng dụng Xưởng, bạn có thể chọn các trung tâm sản xuất muốn quản lý tại trạm làm việc của mình."
 
 #. module: mrp
 #: model_terms:ir.actions.act_window,help:mrp.mrp_workcenter_kanban_action
@@ -3732,6 +3737,10 @@ msgid ""
 "centers you want to manage at your work station.\n"
 "                They can be defined via the configuration menu."
 msgstr ""
+"Các công đoạn sản xuất được thực hiện tại trung tâm sản xuất. Một trung tâm sản xuất có thể\n"
+"                là nhân công và/hoặc máy móc. Trung tâm sản xuất được dùng để tính giá thành, lập lịch, lập kế hoạch công suất, v.v.\n"
+"                Trong ứng dụng Xưởng, bạn có thể chọn các trung tâm sản xuất muốn quản lý tại trạm làm việc của mình.\n"
+"                Có thể thiết lập chúng trong menu Cấu hình."
 
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_mrp_production__reservation_state
@@ -5547,7 +5556,7 @@ msgstr "Lỗi gửi SMS"
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_mrp_workcenter__barcode
 msgid "Scan to select the workcenter in shopfloor."
-msgstr ""
+msgstr "Quét để chọn trung tâm sản xuất trong ứng dụng Xưởng."
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production_split_line__date
@@ -6150,7 +6159,7 @@ msgstr "Đơn hàng tách kiện %s đã được tạo."
 #. module: mrp
 #: model:ir.model.constraint,message:mrp.constraint_mrp_workcenter_barcode_company_uniq
 msgid "The barcode for a workcenter must be unique per company."
-msgstr ""
+msgstr "Mã vạch của trung tâm sản xuất phải là duy nhất trong mỗi công ty."
 
 #. module: mrp
 #. odoo-python
@@ -6194,7 +6203,7 @@ msgstr "Lệnh sản xuất đã được lên kế hoạch."
 #. odoo-python
 #: code:addons/mrp/models/mrp_production.py:0
 msgid "The manufacturing order has been unplanned."
-msgstr "Lệnh sản xuất đã được huỷ kế hoạch."
+msgstr "Lệnh sản xuất đã được hủy kế hoạch."
 
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_mrp_bom_line__operation_id
@@ -6448,6 +6457,8 @@ msgid ""
 "This work order is planned at the same time as other work orders in this "
 "work center"
 msgstr ""
+"Lệnh công đoạn này được lên kế hoạch trùng thời gian với các lệnh công đoạn "
+"khác tại trung tâm sản xuất này"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_workorder_form_view_inherit
@@ -7130,7 +7141,7 @@ msgstr "Trung tâm sản xuất"
 #. odoo-python
 #: code:addons/mrp/models/mrp_workcenter.py:0
 msgid "Work Center Blocked: %s"
-msgstr ""
+msgstr "Đã báo dừng trung tâm sản xuất: %s"
 
 #. module: mrp
 #: model:ir.model,name:mrp.model_mrp_workcenter_capacity
@@ -7157,7 +7168,7 @@ msgstr "Tên trung tâm sản xuất"
 #. odoo-python
 #: code:addons/mrp/models/mrp_workcenter.py:0
 msgid "Work Center Unblocked"
-msgstr ""
+msgstr "Đã cho trung tâm sản xuất chạy lại"
 
 #. module: mrp
 #: model:ir.model,name:mrp.model_mrp_routing_workcenter
