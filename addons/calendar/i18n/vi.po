@@ -1023,6 +1023,56 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
+"<div style=\"font-size: 13px; color: #374151; background-color: white;\">\n"
+"    <t t-set=\"mail_tz\" t-value=\"object._get_mail_tz() or ctx.get('mail_tz')\"></t>\n"
+"    <t t-set=\"event_name\" t-value=\"object.name or ''\"></t>\n"
+"    <t t-set=\"event_organizer\" t-value=\"object.user_id.name or ''\"></t>\n"
+"    <h1 style=\"font-size: 18px; font-weight: bold; color: #374151; margin-bottom: 28px;\">\n"
+"        Sự kiện đã bị hủy\n"
+"        <img src=\"/calendar/static/src/img/times-circle.png\" style=\"border:0; width: 20px; height: 20px; margin-left: 10px; text-decoration:none; vertical-align: middle; padding-bottom: 2px;\">\n"
+"    </h1>\n"
+"    <p style=\"margin: 0;\">\n"
+"        Xin chào,<br>\n"
+"        <span style=\"display: block; margin-top: 8px;\">\n"
+"            Chúng tôi xin thông báo rằng sự kiện <strong t-out=\"event_name or ''\">Follow-up đề xuất dự án</strong> <t t-if=\"event_organizer\">được tổ chức bởi</t><t t-out=\"event_organizer or ''\">Colleen Diaz</t> đã bị hủy và xóa khỏi lịch của bạn.\n"
+"        </span>\n"
+"    </p>\n"
+"    <div style=\"margin: 32px 0 0;\">\n"
+"        <h2 t-attf-style=\"margin-bottom: 12px; font-size: 14px; font-weight: bold; color: {{user.company_id.email_secondary_color or '#875A7B'}};\">Thông tin chi tiết</h2>\n"
+"        <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size: 13px; color: #374151;\">\n"
+"            <tr>\n"
+"                <td style=\"width: 100px; color: #676F7B;\">Ngày &amp; giờ</td>\n"
+"                <td style=\"font-weight: bold;\">\n"
+"                    <t t-out=\"format_datetime(dt=object.start, tz=mail_tz if not object.allday else None, dt_format='EEEE', lang_code=object.env.lang)\">Thứ Ba</t>\n"
+"                    <t t-out=\"format_datetime(dt=object.start, tz=mail_tz if not object.allday else None, dt_format='d', lang_code=object.env.lang)\">Ngày 4</t>\n"
+"                    <t t-out=\"format_datetime(dt=object.start, tz=mail_tz if not object.allday else None, dt_format='MMMM y', lang_code=object.env.lang)\">Tháng 5/2021</t>\n"
+"                    <t t-if=\"not object.allday\">\n"
+"                        <t t-out=\"format_time(time=object.start, tz=mail_tz, time_format='short', lang_code=object.env.lang)\">11:00 SA</t>\n"
+"                        <t t-if=\"mail_tz\">\n"
+"                            <span style=\"font-size: 11px; font-weight: normal;\">\n"
+"                                (<t t-out=\"mail_tz or ''\">Châu Âu/Brussels</t>)\n"
+"                            </span>\n"
+"                        </t>\n"
+"                    </t>\n"
+"                </td>\n"
+"            </tr>\n"
+"            <tr t-if=\"not object.allday and object.duration\">\n"
+"                <td style=\"width: 100px; padding-top: 6px; color: #676F7B;\">Thời lượng</td>\n"
+"                <td style=\"padding-top: 6px;\"><t t-out=\"('%dH%02d' % (object.duration,round(object.duration*60)%60))\">30 phút</t></td>\n"
+"            </tr>\n"
+"            <tr t-if=\"object.location\">\n"
+"                <td style=\"width: 100px; padding-top: 6px; color: #676F7B;\">Địa điểm</td>\n"
+"                <td style=\"padding-top: 6px;\"><t t-out=\"object.location or ''\">Bruxelles</t></td>\n"
+"            </tr>\n"
+"        </table>\n"
+"    </div>\n"
+"    <p style=\"margin: 32px 0 0;\">\n"
+"        Nếu bạn có bất kỳ thắc mắc nào, xin đừng ngần ngại liên hệ với chúng tôi. <br>\n"
+"        Trân trọng,\n"
+"        <span style=\"display: block; margin-top: 8px;\">Đội ngũ phụ trách Lịch</span>\n"
+"    </p>\n"
+"</div>\n"
+"            "
 
 #. module: calendar
 #: model_terms:ir.ui.view,arch_db:calendar.res_users_form_view
@@ -1622,7 +1672,7 @@ msgstr "Lịch: Ngày đã được cập nhật"
 #. module: calendar
 #: model:mail.template,name:calendar.calendar_template_delete_event
 msgid "Calendar: Event Canceled"
-msgstr ""
+msgstr "Lịch: Sự kiện đã bị hủy"
 
 #. module: calendar
 #: model:ir.actions.server,name:calendar.ir_cron_scheduler_alarm_ir_actions_server
@@ -1659,7 +1709,7 @@ msgstr "Có thể sửa nội dung"
 #. module: calendar
 #: model:mail.template,subject:calendar.calendar_template_delete_event
 msgid "Canceled event: {{ object.name }}"
-msgstr ""
+msgstr "Sự kiện đã bị hủy: {{ object.name }}"
 
 #. module: calendar
 #: model:ir.model.fields,help:calendar.field_calendar_event__is_organizer_alone
@@ -1879,7 +1929,7 @@ msgstr "Xóa"
 #. odoo-python
 #: code:addons/calendar/models/calendar_event.py:0
 msgid "Delete event"
-msgstr ""
+msgstr "Xóa sự kiện"
 
 #. module: calendar
 #. odoo-python
@@ -3435,7 +3485,7 @@ msgstr "Dừng"
 #. odoo-javascript
 #: code:addons/calendar/static/src/views/attendee_calendar/attendee_calendar_controller.xml:0
 msgid "Stop Sync"
-msgstr ""
+msgstr "Ngừng đồng bộ hóa"
 
 #. module: calendar
 #: model:ir.model.fields,help:calendar.field_calendar_event__stop
@@ -3467,7 +3517,7 @@ msgstr "Chủ nhật"
 #. odoo-javascript
 #: code:addons/calendar/static/src/views/attendee_calendar/attendee_calendar_controller.xml:0
 msgid "Sync is paused"
-msgstr ""
+msgstr "Đã tạm ngừng đồng bộ hóa"
 
 #. module: calendar
 #. odoo-javascript

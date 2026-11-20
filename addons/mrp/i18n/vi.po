@@ -533,6 +533,9 @@ msgid ""
 "the quantities of components to consume for this manufacturing order.\n"
 "                    </span>"
 msgstr ""
+"<span class=\"text-muted\">\n"
+"                        Việc sửa đổi số lượng cần sản xuất cũng sẽ sửa đổi số lượng thành phần cần tiêu hao cho lệnh sản xuất này.\n"
+"                    </span>"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_routing_workcenter_form_view
@@ -710,7 +713,7 @@ msgstr "<strong>Giá thành đơn vị</strong>"
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.report_mrporder
 msgid "<strong>Work Center</strong>"
-msgstr ""
+msgstr "<strong>Trung tâm sản xuất</strong>"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.stock_warn_insufficient_qty_unbuild_form_view
@@ -1967,7 +1970,7 @@ msgstr "Số lượng số sê-ri"
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.view_mrp_production_backorder_form
 msgid "Create Backorder"
-msgstr ""
+msgstr "Tạo lệnh cho phần còn lại"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__use_create_components_lots
@@ -2120,7 +2123,7 @@ msgstr "Mô tả tùy chỉnh"
 #: model:ir.model.fields,field_description:mrp.field_mrp_bom__allow_operation_dependencies
 #: model:ir.model.fields,field_description:mrp.field_mrp_routing_workcenter__allow_operation_dependencies
 msgid "Custom Operation Dependencies"
-msgstr ""
+msgstr "Phụ thuộc giữa các công đoạn tùy chỉnh"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_routing_workcenter__time_cycle
@@ -2197,7 +2200,7 @@ msgstr "Số ngày cung ứng thành phần"
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_bom__days_to_prepare_mo
 msgid "Days to prepare"
-msgstr ""
+msgstr "Số ngày chuẩn bị"
 
 #. module: mrp
 #. odoo-javascript
@@ -2233,9 +2236,8 @@ msgid ""
 "If you are in the computed duration mode, enter an estimate since there "
 "aren't any work orders yet."
 msgstr ""
-"Thời gian hoạt động mặc định. Đơn vị cơ bản tính bằng phút.\n"
-"Nếu bạn đang ở chế độ thời lượng được tính toán, hãy nhập một ước tính vì "
-"hiện tại chưa có công đoạn nào."
+"Thời gian mặc định của công đoạn. Đơn vị cơ bản là phút.\n"
+"Nếu bạn đang ở chế độ thời lượng tính toán, hãy nhập một giá trị ước tính vì hiện chưa có lệnh công đoạn nào."
 
 #. module: mrp
 #: model_terms:ir.actions.act_window,help:mrp.product_template_action
@@ -2252,6 +2254,8 @@ msgid ""
 "Define the working schedule of the resource. Assign a flexible calendar for "
 "fully flexible working hours."
 msgstr ""
+"Xác định lịch làm việc của nguồn lực. Gán lịch linh hoạt để có giờ làm việc "
+"hoàn toàn linh hoạt."
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__delay_alert_date
@@ -2314,11 +2318,9 @@ msgid ""
 "- Based on Theoretical time: the cost will be calculated based on estimated "
 "time and costs."
 msgstr ""
-"Xác định cách Odoo tính chi phí cho hoạt động:\n"
-"- Dựa trên thời gian thực tế: chi phí được tính dựa trên thời gian đã ghi "
-"nhận và chi phí thực tế của nhân viên.\n"
-"- Dựa trên thời gian dự kiến: chi phí được tính dựa trên thời gian và chi "
-"phí ước tính."
+"Xác định cách Odoo tính toán chi phí của công đoạn:\n"
+"- Dựa trên thời gian thực tế: chi phí sẽ được tính toán dựa trên thời gian theo dõi và chi phí thực tế của nhân viên.\n"
+"- Dựa trên thời gian lý thuyết: chi phí sẽ được tính toán dựa trên chi phí và thời gian ước tính."
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_stock_move__unbuild_id
@@ -2799,7 +2801,7 @@ msgstr "Tạo"
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
 msgid "Generate Lot Number"
-msgstr ""
+msgstr "Tạo số lô"
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
@@ -3138,7 +3140,7 @@ msgstr "Dịch chuyển kho"
 #. module: mrp
 #: model:ir.model,name:mrp.model_stock_route
 msgid "Inventory Route"
-msgstr "Tuyến tồn kho"
+msgstr "Tuyến cung ứng"
 
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_mrp_workorder__move_line_ids
@@ -3184,7 +3186,7 @@ msgstr "Bị khóa"
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_workorder__is_planned
 msgid "Is Planned"
-msgstr "Được lên kế hoạch"
+msgstr "Đã lập kế hoạch"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_workcenter_productivity_loss__manual
@@ -3780,7 +3782,7 @@ msgstr "Tình trạng sẵn có của nguyên vật liệu"
 #: model:ir.model.fields,help:mrp.field_mrp_unbuild__activity_type_icon
 #: model:ir.model.fields,help:mrp.field_mrp_workorder__activity_type_icon
 msgid "Material Symbols icon e.g. checklist"
-msgstr ""
+msgstr "Biểu tượng Material Symbols, ví dụ: checklist"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production_split__max_batch_size
@@ -5634,6 +5636,8 @@ msgid ""
 "Select to customise operation dependencies. When checked, operations will be "
 "in parallel by default."
 msgstr ""
+"Chọn để tùy chỉnh phụ thuộc giữa các công đoạn. Khi được chọn, các công đoạn"
+" sẽ chạy song song theo mặc định."
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_bom__sequence
@@ -6006,7 +6010,7 @@ msgstr "Địa điểm tồn kho sau sản xuất"
 #. module: mrp
 #: model:ir.model,name:mrp.model_stock_replenishment_info
 msgid "Stock delivery time information"
-msgstr ""
+msgstr "Thông tin thời gian giao hàng"
 
 #. module: mrp
 #: model:ir.model,name:mrp.model_report_stock_report_stock_rule
@@ -6114,7 +6118,7 @@ msgstr "Trường kỹ thuật dùng để điều khiển việc hiển thị n
 #. odoo-python
 #: code:addons/mrp/models/mrp_bom.py:0
 msgid "Template for Bills of Materials"
-msgstr ""
+msgstr "Mẫu định mức nguyên vật liệu"
 
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_mrp_production__is_outdated_bom
@@ -7084,8 +7088,8 @@ msgid ""
 "Wizard for warning about mismatching expected vs actual component "
 "consumption quantities for MOs"
 msgstr ""
-"Wizard cảnh báo về sự bất nhất giữa lượng tiêu thụ thành phần dự kiến và "
-"thực tế cho MO"
+"Công cụ cảnh báo khi lượng tiêu hao thành phần thực tế lệch so với dự kiến "
+"trong lệnh sản xuất"
 
 #. module: mrp
 #: model:ir.model,name:mrp.model_mrp_production_split_multi
@@ -7335,7 +7339,7 @@ msgstr "Lệnh công đoạn"
 #. module: mrp
 #: model:ir.model,name:mrp.model_mrp_workcenter_productivity_loss_type
 msgid "Workorder Productivity Loss Type"
-msgstr "Loại hao hụt năng suất công đoạn"
+msgstr "Loại tổn thất năng suất lệnh công đoạn"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_stock_picking_type__wo_properties_definition

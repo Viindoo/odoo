@@ -40,6 +40,9 @@ msgid ""
 "'carrier_tracking_ref') and object.carrier_tracking_ref else '') }}\n"
 "            "
 msgstr ""
+"\n"
+"                {{ (object.company_id.name + ': Đơn hàng n° ' + object.origin + ' của bạn đã được nhận tại cửa hàng.' if object.origin else object.company_id.name + ': Đơn hàng của bạn đã được nhận tại cửa hàng.') if hasattr(object, 'delivery_type') and object.delivery_type == 'in_store' else (object.company_id.name + ': Chúng tôi rất vui mừng thông báo đơn hàng n° ' + object.origin + ' của bạn đã được vận chuyển.' if object.origin else object.company_id.name + ': Chúng tôi rất vui mừng thông báo đơn hàng của bạn đã được vận chuyển.') + (' Mã vận đơn của bạn là ' + (object.carrier_tracking_ref) + '.' if hasattr(object, 'carrier_tracking_ref') and object.carrier_tracking_ref else '') }}\n"
+"            "
 
 #. module: stock_sms
 #: model:ir.model,name:stock_sms.model_res_company

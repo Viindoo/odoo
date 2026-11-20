@@ -344,6 +344,81 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
+"<div>\n"
+"    <t t-set=\"access_token\" t-value=\"object._rating_get_access_token()\"></t>\n"
+"    <t t-set=\"partner\" t-value=\"object._rating_get_partner()\"></t>\n"
+"    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"width:100%; margin:0px auto;\">\n"
+"    <tbody>\n"
+"        <tr><td valign=\"top\" style=\"font-size: 13px;\">\n"
+"            <t t-if=\"partner.name\">\n"
+"                Xin chào <t t-out=\"partner.name or ''\">Brandon Freeman</t>,<br><br>\n"
+"            </t>\n"
+"            <t t-else=\"\">\n"
+"                Xin chào,<br><br>\n"
+"            </t>\n"
+"            Vui lòng dành chút thời gian để đánh giá dịch vụ của chúng tôi liên quan đến nhiệm vụ <strong t-out=\"object.name or ''\">Lập kế hoạch và ngân sách</strong>\n"
+"            <t t-if=\"object._rating_get_operator().name\">\n"
+"                do <strong t-out=\"object._rating_get_operator().name or ''\">Mitchell Admin</strong> phụ trách.<br>\n"
+"            </t>\n"
+"            <t t-else=\"\">\n"
+"                .<br>\n"
+"            </t>\n"
+"        </td></tr>\n"
+"        <tr><td style=\"text-align: center;\">\n"
+"            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"width:100%; margin: 32px 0px 32px 0px; display: inline-table;\">\n"
+"                <tr><td style=\"font-size: 13px;text-align:center;\">\n"
+"                    <strong>Vui lòng cho biết cảm nghĩ của bạn về dịch vụ của chúng tôi</strong><br>\n"
+"                    <span style=\"font-size: 12px; opacity: 0.5; color: #454748;\">(nhấp vào một trong những biểu tượng cảm xúc này)</span>\n"
+"                </td></tr>\n"
+"                <tr><td style=\"font-size: 13px;\">\n"
+"                    <table style=\"width:100%;text-align:center;margin-top:2rem;\">\n"
+"                        <tr>\n"
+"                            <td>\n"
+"                                <a t-attf-href=\"/rate/{{ access_token }}/5\" t-att-class=\"'pe-none' if object._rating_get_operator() else ''\">\n"
+"                                    <img alt=\"Happy\" src=\"/rating/static/src/img/rating_5.png\" title=\"Happy\">\n"
+"                                </a>\n"
+"                            </td>\n"
+"                            <td>\n"
+"                                <a t-attf-href=\"/rate/{{ access_token }}/3\" t-att-class=\"'pe-none' if object._rating_get_operator() else ''\">\n"
+"                                    <img alt=\"Neutral\" src=\"/rating/static/src/img/rating_3.png\" title=\"Neutral\">\n"
+"                                </a>\n"
+"                            </td>\n"
+"                            <td>\n"
+"                                <a t-attf-href=\"/rate/{{ access_token }}/1\" t-att-class=\"'pe-none' if object._rating_get_operator() else ''\">\n"
+"                                    <img alt=\"Unhappy\" src=\"/rating/static/src/img/rating_1.png\" title=\"Unhappy\">\n"
+"                                </a>\n"
+"                            </td>\n"
+"                        </tr>\n"
+"                    </table>\n"
+"                </td></tr>\n"
+"            </table>\n"
+"        </td></tr>\n"
+"        <tr><td valign=\"top\" style=\"font-size: 13px;\">\n"
+"            Chúng tôi rất trân trọng phản hồi từ bạn, vì nhờ đó chúng tôi có thể liên tục cải thiện dịch vụ của mình.\n"
+"            <t t-if=\"object.stage_id.rating_status == 'stage'\">\n"
+"                <br><span style=\"margin: 0; font-size: 12px; opacity: 0.5; color: #454748;\">Bản khảo sát mức độ hài lòng này được gửi tới bạn vì nhiệm vụ của bạn đã được chuyển sang giai đoạn <b t-out=\"object.stage_id.name or ''\">Đang thực hiện</b></span>\n"
+"            </t>\n"
+"            <t t-if=\"object.stage_id.rating_status == 'periodic'\">\n"
+"                <br><span style=\"margin: 0; font-size: 12px; opacity: 0.5; color: #454748;\">Bản khảo sát mức độ hài lòng này sẽ được gửi <b t-out=\"object.stage_id.rating_status_period or ''\">hàng tuần</b> nếu nhiệm vụ vẫn còn trong giai đoạn <b t-out=\"object.stage_id.name or ''\">Đang thực hiện</b>.</span>\n"
+"            </t>\n"
+"        </td></tr>\n"
+"        <tr><td><br>Trân trọng,</td></tr>\n"
+"        <tr><td>\n"
+"           <t t-out=\"object.project_id.company_id.name or ''\">YourCompany</t>\n"
+"        </td></tr>\n"
+"        <tr><td style=\"opacity: 0.5;\">\n"
+"            <t t-out=\"object.project_id.company_id.phone or ''\">1 650-123-4567</t>\n"
+"            <t t-if=\"object.project_id.company_id.email\">\n"
+"                | <a t-attf-href=\"mailto:{{ object.project_id.company_id.email }}\" style=\"text-decoration:none; color: #454748;\" t-out=\"object.project_id.company_id.email or ''\">info@yourcompany.com</a>\n"
+"            </t>\n"
+"            <t t-if=\"object.project_id.company_id.website\">\n"
+"                | <a t-attf-href=\"{{ object.project_id.company_id.website }}\" style=\"text-decoration:none; color: #454748;\" t-out=\"object.project_id.company_id.website or ''\">http://www.example.com</a>\n"
+"            </t>\n"
+"        </td></tr>\n"
+"    </tbody>\n"
+"    </table>\n"
+"</div>\n"
+"            "
 
 #. module: project
 #: model:mail.template,body_html:project.project_done_email_template
@@ -365,6 +440,16 @@ msgid ""
 "out=\"object.stage_id.name or ''\">Done</b></span>\n"
 "            "
 msgstr ""
+"<div>\n"
+"    Xin chào <t t-out=\"object.partner_id.name or 'customer'\">Brandon Freeman</t>,<br>\n"
+"    Tôi rất vui mừng được thông báo với bạn rằng chúng tôi đã hoàn thành dự án \"<strong t-out=\"object.name or ''\">Cải tiến</strong>\" thành công.\n"
+"    <t t-if=\"user.signature\">\n"
+"        <br>\n"
+"        <div data-o-mail-quote=\"1\">--<br data-o-mail-quote=\"1\"><t t-out=\"user.signature or ''\">Mitchell Admin</t></div>\n"
+"    </t>\n"
+"</div>\n"
+"<br><span style=\"margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;\" groups=\"project.group_project_stages\">Bạn nhận được email này vì dự án của bạn đã được chuyển sang giai đoạn <b t-out=\"object.stage_id.name or ''\">Hoàn thành</b></span>\n"
+"            "
 
 #. module: project
 #: model:mail.template,body_html:project.mail_template_data_project_task
@@ -511,6 +596,9 @@ msgid ""
 "icon=\"sentiment_sad\" invisible=\"rating_avg &gt;= 2.33\" title=\"Unhappy\"/"
 ">"
 msgstr ""
+"<i class=\"oi oi-fw o_button_icon\" data-icon=\"sentiment_satisfied\" invisible=\"rating_avg &lt; 3.66\" title=\"Hài lòng\"/>\n"
+"                            <i class=\"oi oi-fw o_button_icon\" data-icon=\"sentiment_neutral\" invisible=\"rating_avg &lt; 2.33 or rating_avg &gt;= 3.66\" title=\"Bình thường\"/>\n"
+"                            <i class=\"oi oi-fw o_button_icon\" data-icon=\"sentiment_sad\" invisible=\"rating_avg &gt;= 2.33\" title=\"Không hài lòng\"/>"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.edit_project
@@ -1159,7 +1247,7 @@ msgstr "Bạn có chắc chắn muốn khôi phục phiên bản này không?"
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task_type__rating_active
 msgid "Ask for Ratings"
-msgstr ""
+msgstr "Yêu cầu đánh giá"
 
 #. module: project
 #. odoo-javascript
@@ -1690,7 +1778,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/project/wizard/project_template_create_wizard.py:0
 msgid "Create Project (Template: %s)"
-msgstr ""
+msgstr "Tạo dự án (Mẫu: %s)"
 
 #. module: project
 #: model:ir.model,website_form_label:project.model_res_partner
@@ -3050,7 +3138,7 @@ msgstr "Tìm nguồn nguyên vật liệu"
 #: model:ir.model.fields,help:project.field_project_task__activity_type_icon
 #: model:ir.model.fields,help:project.field_project_update__activity_type_icon
 msgid "Material Symbols icon e.g. checklist"
-msgstr ""
+msgstr "Biểu tượng Material Symbols, ví dụ: checklist"
 
 #. module: project
 #: model_terms:ir.actions.act_window,help:project.rating_rating_action_project_report
@@ -3741,6 +3829,8 @@ msgid ""
 "Private (non-template) tasks cannot be converted into sub-tasks. Please set "
 "a project on the task to gain access to this feature."
 msgstr ""
+"Không thể chuyển đổi nhiệm vụ riêng tư (không phải mẫu) thành nhiệm vụ phụ. "
+"Vui lòng gán dự án cho nhiệm vụ để có quyền truy cập vào tính năng này."
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.view_task_card
@@ -4132,6 +4222,22 @@ msgid ""
 "• Project admins have access to private projects, even if they are not team "
 "members."
 msgstr ""
+"Quyền truy cập dự án và nhiệm vụ\n"
+"Kiểm soát ai có thể truy cập dự án này:\n"
+"\n"
+"• Người dùng nội bộ: chọn truy cập chỉ giới hạn cho thành viên nhóm hay dành cho mọi người trong tổ chức của bạn.\n"
+"• Người dùng cổng thông tin: chọn xem các cộng tác viên được mời có thể truy cập dự án hay không.\n"
+"\n"
+"Cấp độ truy cập của người dùng cổng thông tin\n"
+"\n"
+"• Xem: có thể truy cập nhiệm vụ và gửi tin nhắn.\n"
+"• Chỉnh sửa: có thể tạo và cập nhật nhiệm vụ.\n"
+"• Chỉnh sửa nâng cao: tạo và cập nhật nhiệm vụ, thay đổi mức độ ưu tiên và chuyển nhiệm vụ giữa các giai đoạn.\n"
+"\n"
+"Các quy tắc khác\n"
+"\n"
+"• Người dùng nội bộ có thể mở một nhiệm vụ thông qua liên kết trực tiếp, ngay cả khi họ không có quyền truy cập ứng dụng Dự án.\n"
+"• Quản trị viên dự án có quyền truy cập vào các dự án riêng tư, ngay cả khi họ không phải là thành viên nhóm."
 
 #. module: project
 #. odoo-javascript
@@ -5336,12 +5442,12 @@ msgstr ""
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_project__privacy_visibility__invited_users
 msgid "Team members and invited portal users"
-msgstr ""
+msgstr "Thành viên nhóm và người dùng cổng thông tin được mời"
 
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_project__privacy_visibility__followers
 msgid "Team members only"
-msgstr ""
+msgstr "Chỉ thành viên nhóm"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_template_create_wizard__template_id
@@ -5377,7 +5483,7 @@ msgstr "Mẫu được tạo từ %s."
 #. odoo-python
 #: code:addons/project/models/project_task.py:0
 msgid "Template for Tasks"
-msgstr ""
+msgstr "Mẫu nhiệm vụ"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.view_project_project_filter
@@ -5502,6 +5608,7 @@ msgstr "Mô tả nhiệm vụ trống vào thời điểm đó."
 #: code:addons/project/report/project_task_burndown_chart_report.py:0
 msgid "The view must be grouped by date and by Stage - Burndown chart"
 msgstr ""
+"Giao diện phải được nhóm theo ngày và theo Giai đoạn - Biểu đồ burn-down"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.portal_my_projects
@@ -6114,6 +6221,9 @@ msgid ""
 "Advanced Edit: create and update tasks, change their priority, and move them "
 "between stages."
 msgstr ""
+"Xem: có thể truy cập nhiệm vụ và gửi tin nhắn.\n"
+"Chỉnh sửa: có thể tạo và cập nhật nhiệm vụ.\n"
+"Chỉnh sửa nâng cao: tạo và cập nhật nhiệm vụ, thay đổi mức độ ưu tiên và chuyển nhiệm vụ giữa các giai đoạn."
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__privacy_visibility
@@ -6165,7 +6275,7 @@ msgstr "Tuần"
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_task_type__rating_status__stage
 msgid "When reaching this stage"
-msgstr ""
+msgstr "Khi đạt đến giai đoạn này"
 
 #. module: project
 #: model:ir.model.fields,help:project.field_project_task__role_ids

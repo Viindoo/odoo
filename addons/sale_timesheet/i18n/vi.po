@@ -184,12 +184,10 @@ msgid ""
 "                        </span>"
 msgstr ""
 "<i class=\"oi\" data-icon=\"lightbulb\"/>\n"
-"                         <span>\n"
-"                         Xác định tỷ lệ tính phí cho thời gian của nhân viên "
-"dựa trên chuyên môn, kỹ năng hoặc kinh nghiệm của họ.\n"
-"                         Để lập hóa đơn cho cùng một dịch vụ ở mức phí khác, "
-"hãy tạo các mục đơn bán hàng riêng biệt.\n"
-"                          </span>"
+"                        <span>\n"
+"                            Xác định tỷ lệ tính phí cho thời gian của nhân viên dựa trên chuyên môn, kỹ năng hoặc kinh nghiệm của họ.\n"
+"                            Để lập hóa đơn cho cùng một dịch vụ ở mức phí khác, hãy tạo các dòng đơn bán riêng biệt.\n"
+"                        </span>"
 
 #. module: sale_timesheet
 #: model_terms:ir.ui.view,arch_db:sale_timesheet.hr_timesheet_line_form_inherit
@@ -214,9 +212,9 @@ msgid ""
 "order associated with this timesheet entry has been cancelled.\" "
 "invisible=\"sale_order_state != 'cancel'\"/>"
 msgstr ""
-"<span class=\"oi text-warning\" data-icon=\"warning\" title=\"Đơn bán hàng "
-"liên kết với mục nhập bảng chấm công này đã bị huỷ.\" "
-"invisible=\"sale_order_state != 'cancel'\"/>"
+"<span class=\"oi text-warning\" data-icon=\"warning\" title=\"Đơn bán liên "
+"kết với dòng giờ công này đã bị hủy.\" invisible=\"sale_order_state != "
+"'cancel'\"/>"
 
 #. module: sale_timesheet
 #: model_terms:hr.job,job_details:sale_timesheet.job_engineer
@@ -245,6 +243,8 @@ msgid ""
 "<span class=\"text-muted\">Timesheets without a sales order item are "
 "reported as </span>"
 msgstr ""
+"<span class=\"text-muted\">Giờ công không có dòng đơn bán được báo cáo dưới "
+"dạng </span>"
 
 #. module: sale_timesheet
 #: model_terms:ir.ui.view,arch_db:sale_timesheet.report_timesheet_sale_timesheet
@@ -330,6 +330,11 @@ msgid ""
 "this line\n"
 "  - Stock Moves: the quantity comes from confirmed pickings\n"
 msgstr ""
+"Theo cấu hình sản phẩm, số lượng đã giao có thể được tính tự động theo cơ chế:\n"
+"  - Thủ công: số lượng được nhập thủ công trên dòng\n"
+"  - Phân tích từ chi phí: số lượng dựa trên tổng các khoản chi phí đã ghi nhận\n"
+"  - Bảng giờ công: số lượng là tổng số giờ được ghi nhận của nhiệm vụ liên kết với dòng này\n"
+"  - Dịch chuyển kho: số lượng lấy từ các phiếu kho đã xác nhận\n"
 
 #. module: sale_timesheet
 #: model_terms:hr.job,website_description:sale_timesheet.job_engineer
@@ -784,7 +789,7 @@ msgstr "Bút toán"
 #. module: sale_timesheet
 #: model:ir.model,name:sale_timesheet.model_account_move_reversal
 msgid "Journal Entry Reversal"
-msgstr ""
+msgstr "Đảo bút toán"
 
 #. module: sale_timesheet
 #: model:ir.model,name:sale_timesheet.model_account_move_line
