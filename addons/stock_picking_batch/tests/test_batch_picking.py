@@ -677,6 +677,48 @@ class TestBatchPicking(TransactionCase):
         self.assertEqual(delivery.state, 'assigned')
         self.assertTrue(delivery.batch_id)
 
+    def test_auto_batch_skip_batch_with_done_picking(self):
+        """ A picking must not be auto-batched into a batch holding a done picking. """
+        warehouse = self.env['stock.warehouse'].search([], limit=1)
+        warehouse.out_type_id.write({
+            'auto_batch': True,
+            'batch_group_by_partner': True,
+        })
+        partner = self.env['res.partner'].create({'name': 'Lovely partner'})
+
+        def create_assigned_delivery():
+            delivery = self.env['stock.picking'].create({
+                'location_id': warehouse.lot_stock_id.id,
+                'location_dest_id': self.customer_location.id,
+                'picking_type_id': warehouse.out_type_id.id,
+                'partner_id': partner.id,
+                'move_ids': [Command.create({
+                    'product_id': self.productA.id,
+                    'product_uom_qty': 1,
+                    'product_uom': self.productA.uom_id.id,
+                    'location_id': warehouse.lot_stock_id.id,
+                    'location_dest_id': self.customer_location.id,
+                })],
+            })
+            delivery.action_confirm()
+            delivery.move_ids.quantity = 1
+            return delivery
+
+        delivery_1 = create_assigned_delivery()
+        delivery_2 = create_assigned_delivery()
+        batch = delivery_1.batch_id
+        self.assertTrue(batch)
+        self.assertEqual(delivery_2.batch_id, batch)
+
+        delivery_1.move_ids.picked = True
+        delivery_1._action_done()
+        self.assertRecordValues(delivery_1, [{'state': 'done', 'batch_id': batch.id}])
+
+        delivery_3 = create_assigned_delivery()
+        self.assertTrue(delivery_3.batch_id)
+        self.assertNotEqual(delivery_3.batch_id, batch)
+        self.assertEqual(batch.picking_ids, delivery_1 | delivery_2)
+
     def test_remove_all_transfers_from_confirmed_batch(self):
         """
             Check that the batch is canceled when all transfers are deleted
@@ -813,6 +855,28 @@ class TestBatchPicking(TransactionCase):
         self.assertEqual(batch_1.picking_ids, self.picking_client_1 | self.picking_client_2 | self.picking_client_3)
         self.assertEqual(batch_1.description, 'Amazing batch', 'The description should be the one of the earliest batch')
         self.assertEqual(batch_1.scheduled_date, early_date)
+
+    def test_batch_merge_without_scheduled_date(self):
+        # Merging batches that all lack a scheduled date must not fail.
+        batch_1, batch_2 = self.env['stock.picking.batch'].create([{
+            'company_id': self.env.company.id,
+            'description': description,
+        } for description in ['Empty batch 1', 'Empty batch 2']])
+        (batch_1 | batch_2).action_merge()
+        self.assertFalse(batch_2.exists())
+        self.assertEqual(batch_1.description, 'Empty batch 1')
+
+        # Without an earliest batch, the scheduled date of the merged batch
+        # is computed from its transfers instead of being reset.
+        pickings = self.picking_client_1 | self.picking_client_2
+        batch_3, batch_4 = self.env['stock.picking.batch'].create([{
+            'company_id': self.env.company.id,
+            'picking_ids': [Command.link(picking.id)],
+        } for picking in pickings])
+        (batch_3 | batch_4).scheduled_date = False
+        (batch_3 | batch_4).action_merge()
+        self.assertEqual(batch_3.picking_ids, pickings)
+        self.assertEqual(batch_3.scheduled_date, min(pickings.mapped('scheduled_date')))
 
 
 @tagged('-at_install', 'post_install')
