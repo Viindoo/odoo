@@ -15,4 +15,3 @@ from . import test_message
 from . import test_upload_attachment
 from . import test_res_users
 from . import test_session_history
-from . import test_visitor_leave_session
