@@ -1136,11 +1136,16 @@ class AccountEdiCommon(models.AbstractModel):
             ResPartner._import_retrieve_customer_from_name,
         ]
 
+    def _check_customer_endpoint_match(self, customer, peppol_eas, peppol_endpoint):
+        return customer.commercial_partner_id.peppol_eas == peppol_eas and customer.commercial_partner_id.peppol_endpoint == peppol_endpoint
+
     def _check_customer_vat_match(self, customer, vat, collected_values):
         """
-        Compare the VAT from an EDI document against a partner's stored VAT,
-        with country-specific normalization where needed.
-        Should stay consistent with `_get_country_specific_vat_variants`.
+        Compare the VAT from an EDI document against a partner's stored VAT:
+        - country-specific normalization where needed, which should stay consistent
+          with `_get_country_specific_vat_variants`,
+        - country prefixes are ignored, as the VAT may be stored with or without one
+          (ISO code or VAT-specific prefix, e.g. EL for Greece).
         """
         country = self._import_retrieve_country(collected_values)
         customer_vat = customer.vat.replace(' ', '').upper()
@@ -1148,39 +1153,60 @@ class AccountEdiCommon(models.AbstractModel):
         if country and country.code == 'CH':
             customer_vat = re.sub(r"(TVA|IVA|MWST)?$", "", customer_vat.replace('.', '').replace('-', ''))
             vat_to_compare = re.sub(r"(TVA|IVA|MWST)?$", "", vat_to_compare.replace('-', ''))
+        if country:
+            for prefix in {country.code, *{'GB': ('XI',), 'GR': ('EL',), 'JP': ('T',)}.get(country.code, ())}:
+                customer_vat = customer_vat.removeprefix(prefix)
+                vat_to_compare = vat_to_compare.removeprefix(prefix)
         return customer_vat == vat_to_compare
+
+    def _import_check_retrieved_customer(self, collected_values):
+        """Check whether the retrieved customer matches the one described in the EDI document."""
+        customer_values = collected_values['customer_values']
+        logs = collected_values['logs']
+        customer = customer_values['customer']
+        name = customer_values.get('name')
+        vat = customer_values.get('vat')
+
+        sender_eas = customer_values.get('sender_eas')
+        sender_endpoint = customer_values.get('sender_endpoint')
+
+        if vat:
+            country = self._import_retrieve_country(collected_values)
+            if not customer.vat:
+                if self.env['res.partner']._run_vat_test(vat, country, True):
+                    customer.vat = vat
+            else:
+                country_mismatch = bool(country and customer.country_id and customer.country_id != country)
+                if country_mismatch or not self._check_customer_vat_match(customer, vat, collected_values):
+                    logs.append(_("Could not retrieve a partner corresponding to '%s' with the same VAT and country. A new partner was created.", name))
+                    return False
+
+        if sender_eas and sender_endpoint:
+            if not customer.commercial_partner_id.peppol_eas and not customer.commercial_partner_id.peppol_endpoint:
+                customer.commercial_partner_id.peppol_eas = sender_eas
+                customer.commercial_partner_id.peppol_endpoint = sender_endpoint
+            elif not self._check_customer_endpoint_match(customer, sender_eas, sender_endpoint):
+                logs.append(_("Could not retrieve a partner corresponding to '%s' with the same endpoint. A new partner was created.", name))
+                return False
+        return True
 
     def _import_create_missing_customer(self, collected_values):
         customer_values = collected_values['customer_values']
-        logs = collected_values['logs']
         customer = customer_values.get('customer')
-
         name = customer_values.get('name')
-        vat = customer_values.get('vat')
+        logs = collected_values['logs']
+
         if not name:
             return
 
-        vat_mismatch = False
         if customer:
-            if vat:
-                country = self._import_retrieve_country(collected_values)
-                if not customer.vat:
-                    if self.env['res.partner']._run_vat_test(vat, country, True):
-                        customer.vat = vat
-                    return
-                country_mismatch = bool(country and customer.country_id and customer.country_id != country)
-                if not country_mismatch and self._check_customer_vat_match(customer, vat, collected_values):
-                    return
-                vat_mismatch = True
-            else:
+            if self._import_check_retrieved_customer(collected_values):
                 return
+        else:
+            logs.append(_("Could not retrieve a partner corresponding to '%s'. A new partner was created.", name))
 
         partner_create_values = self._import_prepare_missing_customer_create_values(collected_values)
         customer = self.env['res.partner'].create(partner_create_values)
-        if vat_mismatch:
-            logs.append(_("Could not retrieve a partner corresponding to '%s' with the same VAT and country. A new partner was created.", name))
-        else:
-            logs.append(_("Could not retrieve a partner corresponding to '%s'. A new partner was created.", name))
         customer_values['customer'] = customer
         collected_values['to_write']['partner_id'] = customer.id
 
