@@ -1673,7 +1673,7 @@ class WebsiteSale(payment_portal.PaymentPortal):
         if order_sudo.amount_total and not tx_sudo:
             return request.redirect(self._get_shop_path())
 
-        if not order_sudo.amount_total and not tx_sudo and order_sudo.state != 'sale':
+        if not order_sudo.amount_total and order_sudo.state != 'sale':
             order_sudo._check_cart_is_ready_to_be_paid()
             # Only confirm the order if it wasn't already confirmed.
             order_sudo._validate_order()
@@ -1893,11 +1893,8 @@ class WebsiteSale(payment_portal.PaymentPortal):
         """ Transforms a list of order lines into a dict for google analytics """
         ret = []
         for line in order_lines.filtered(lambda line: not line.is_delivery):
-            product = line.product_id
             ret.append({
-                'item_id': product.default_code or product.id,
-                'item_name': product.name or '-',
-                'item_category': product.categ_id.name or '-',
+                **line.product_id._get_google_analytics_item(),
                 'price': line.price_unit,
                 'quantity': line.product_uom_qty,
             })

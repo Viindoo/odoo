@@ -121,6 +121,15 @@ class AccountMove(models.Model):
         copy=False,
     )
 
+    @api.depends('pdp_is_sent')
+    def _compute_show_reset_to_draft_button(self):
+        # EXTEND 'account' to hide the reset to draft button for sent PDP invoices
+        super()._compute_show_reset_to_draft_button()
+        relevant_moves = self.filtered(
+            lambda move: move.pdp_is_sent and move.is_sale_document(include_receipts=True)
+        )
+        relevant_moves.show_reset_to_draft_button = False
+
     # TODO: remove in master
     @api.model
     def fields_get(self, allfields=None, attributes=None):
@@ -526,6 +535,7 @@ class AccountMove(models.Model):
                 or not move.company_id._pdp_get_flow_10_start_date()
                 or move.date < move.company_id._pdp_get_flow_10_start_date()
                 or not move._l10n_fr_pdp_get_transaction_type()  # is b2bi or b2c
+                or move._l10n_fr_pdp_is_exempt_from_reporting()
             ):
                 move.l10n_fr_pdp_flow_10_report_type = None
                 continue
@@ -577,6 +587,22 @@ class AccountMove(models.Model):
     def _l10n_fr_pdp_is_purchase(self):
         self.ensure_one()
         return self.is_purchase_document(include_receipts=False)  # Purchase receipts are not in Flow10 scope as they do not have VAT to report.
+
+    def _l10n_fr_pdp_is_exempt_from_reporting(self):
+        # CGI art. 290 I: operations exempt under art. 261 to 261 E are not reported.
+        self.ensure_one()
+        lines = self.invoice_line_ids.filtered(lambda line: line.display_type == 'product')
+        return bool(lines) and all(
+            line.tax_ids and all(
+                tax.country_code == 'FR'
+                and tax.ubl_cii_tax_category_code == 'E'
+                and (tax.ubl_cii_tax_exemption_reason_code or '').startswith(
+                    ('VATEX-FR-CGI261', 'VATEX-EU-132', 'VATEX-EU-135')
+                )
+                for tax in line.tax_ids.flatten_taxes_hierarchy()
+            )
+            for line in lines
+        )
 
     def _get_l10n_fr_pdp_errors(self, lazy=False):
         """Return the list of validation errors for this move in the context of PDP reporting."""

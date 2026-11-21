@@ -339,11 +339,12 @@ class StockPickingBatch(models.Model):
 
         target_batch = self[:1]
         other_batches = self[1:]
-        earliest_batch = self.filtered(lambda b: b.scheduled_date).sorted(key=lambda b: b.scheduled_date)[0]
-        merged_batch_vals = earliest_batch._get_merged_batch_vals()
+        earliest_batch = self.filtered(lambda b: b.scheduled_date).sorted(key=lambda b: b.scheduled_date)[:1]
+        merged_batch_vals = earliest_batch._get_merged_batch_vals() if earliest_batch else {}
         target_batch.move_line_ids |= other_batches.move_line_ids
         target_batch.picking_ids |= other_batches.picking_ids
-        target_batch.write(merged_batch_vals)
+        if merged_batch_vals:
+            target_batch.write(merged_batch_vals)
         other_batches.unlink()
         return {
             'type': 'ir.actions.client',
@@ -449,6 +450,9 @@ class StockPickingBatch(models.Model):
     def _is_picking_auto_mergeable(self, picking):
         """ Verifies if a picking can be safely inserted into the batch without violating auto_batch_constrains.
         """
+        # A picking done through `_action_done` (e.g. PoS closing) stays in its batch, `_sanity_check` rejects it
+        if any(p.state == 'done' for p in self.picking_ids) and picking.state != 'done':
+            return False
         res = True
         if self.picking_type_id.batch_max_lines:
             res = res and (len(self.move_ids) + len(picking.move_ids) <= self.picking_type_id.batch_max_lines)

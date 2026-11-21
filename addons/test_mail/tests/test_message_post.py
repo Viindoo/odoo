@@ -629,6 +629,36 @@ class TestMessageNotify(TestMessagePostCommon):
             }],
         )
 
+    @users('employee')
+    @mute_logger('odoo.addons.mail.models.mail_mail')
+    def test_notify_thread_references(self):
+        """ Notifying on ``mail.thread`` has no document: other messages
+        without document must not be used as ancestors in references. """
+        with self.mock_mail_gateway():
+            # unrelated previous message
+            previous = self.env['mail.thread'].message_notify(
+                body=Markup('<p>Unrelated notification</p>'),
+                partner_ids=self.partner_1.ids,
+                subject='Unrelated',
+            )
+            new_notification = self.env['mail.thread'].message_notify(
+                body=Markup('<p>You have received a notification</p>'),
+                partner_ids=self.partner_1.ids,
+                subject='Related to nothing',
+            )
+        self.assertFalse(previous.model)
+        self.assertFalse(new_notification.model)
+        self.assertNotEqual(previous.message_id, new_notification.message_id)
+        self.assertMailMail(
+            self.partner_1,
+            'sent',
+            author=self.partner_employee,
+            mail_message=new_notification,
+            fields_values={
+                'references': new_notification.message_id,
+            },
+        )
+
 
 @tagged('mail_post')
 class TestMessageLog(TestMessagePostCommon):
@@ -783,10 +813,9 @@ class TestMessagePost(TestMessagePostCommon, CronMixinCase):
         self.assertFalse(self.test_record.message_follower_ids)
         self.assertFalse(self.test_record.message_partner_ids)
 
-    @mute_logger('odoo.addons.mail.models.mail_mail')
     def test_manual_send_user_notification_email_from_queue(self):
         """ Test sending a mail from the queue that is not related to the admin user sending it.
-        Will throw a security error not having access to the mail."""
+        Admin has no write access on the user notification, but sending is allowed."""
 
         with self.mock_mail_gateway():
             new_notification = self.test_record.message_notify(
@@ -798,11 +827,12 @@ class TestMessagePost(TestMessagePostCommon, CronMixinCase):
             )
 
         self.assertNotIn(self.user_admin.partner_id, new_notification.mail_ids.partner_ids, "Our admin user should not be within the partner_ids")
+        self.assertFalse(new_notification.with_user(self.user_admin).has_access('write'))
 
         with self.mock_mail_gateway():
             new_notification.mail_ids.with_user(self.user_admin).send()
 
-        self.assertEqual(new_notification.mail_ids.state, 'exception', 'Email will be sent but with exception state - write access denied')
+        self.assertEqual(new_notification.mail_ids.state, 'sent')
 
     @mute_logger('odoo.addons.mail.models.mail_mail', 'odoo.models.unlink')
     @users('employee')
