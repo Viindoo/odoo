@@ -1,24 +1,39 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * account_test
+# 	* account_test
 #
-# Translators:
-# thanh nguyen <thanhnguyen.icsc@gmail.com>, 2018
-# Martin Trigaux, 2018
-# fanha99 <fanha99@hotmail.com>, 2018
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server saas~11.5\n"
+"Project-Id-Version: Odoo Server 20.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-26 08:16+0000\n"
-"PO-Revision-Date: 2018-09-21 13:17+0000\n"
-"Last-Translator: fanha99 <fanha99@hotmail.com>, 2018\n"
-"Language-Team: Vietnamese (https://www.transifex.com/odoo/teams/41243/vi/)\n"
-"Language: vi\n"
+"POT-Creation-Date: 2026-11-23 05:57+0000\n"
+"PO-Revision-Date: 2026-11-23 05:57+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: \n"
+
+#. module: account_test
+#: model:ir.module.module,description:base.module_account_test
+msgid ""
+"\n"
+"Asserts on accounting.\n"
+"======================\n"
+"With this module you can manually check consistencies and inconsistencies of accounting module from menu Reporting/Accounting/Accounting Tests.\n"
+"\n"
+"You can write a query in order to create Consistency Test and you will get the result of the test\n"
+"in PDF format which can be accessed by Menu Reporting -> Accounting Tests, then select the test\n"
+"and print the report from Print button in header area.\n"
+msgstr ""
+"\n"
+"Kiểm tra tính nhất quán của dữ liệu kế toán.\n"
+"==========================================\n"
+"Với module này, bạn có thể kiểm tra thủ công các điểm nhất quán và bất nhất của phân hệ kế toán từ menu Báo cáo/Kế toán/Kiểm tra kế toán.\n"
+"\n"
+"Bạn có thể viết một truy vấn để tạo bài kiểm tra tính nhất quán và nhận kết quả kiểm tra dưới dạng PDF, truy cập từ menu Báo cáo -> Kiểm tra kế toán, sau đó chọn bài kiểm tra\n"
+"và in báo cáo bằng nút In ở vùng tiêu đề.\n"
 
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.report_accounttest
@@ -43,6 +58,11 @@ msgstr "Báo cáo kiểm tra kế toán"
 #: model:ir.model,name:account_test.model_accounting_assert_test
 msgid "Accounting Assert Test"
 msgstr "Phép kiểm tra kế toán"
+
+#. module: account_test
+#: model:ir.module.module,shortdesc:base.module_account_test
+msgid "Accounting Consistency Tests"
+msgstr "Kiểm tra tính nhất quán kế toán"
 
 #. module: account_test
 #: model:ir.actions.act_window,name:account_test.action_accounting_assert
@@ -75,16 +95,17 @@ msgstr ""
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_07
 msgid ""
-"Check on bank statement that the Closing Balance = Starting Balance + sum of "
-"statement lines"
+"Check on bank statement that the Closing Balance = Starting Balance + sum of"
+" transactions"
 msgstr ""
-"Kiểm tra trên sao kê ngân hàng: Số dư cuối kỳ = Số dư đầu kỳ + tổng các dòng "
-"sao kê"
+"Kiểm tra trên sao kê ngân hàng: Số dư cuối kỳ = Số dư đầu kỳ + tổng các dòng"
+" sao kê"
 
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_06
 msgid "Check that paid/reconciled invoices are not in 'Open' state"
-msgstr "Kiểm tra các hóa đơn đã thanh toán/đã đối chiếu không ở trạng thái 'Mở'"
+msgstr ""
+"Kiểm tra các hóa đơn đã thanh toán/đã đối chiếu không ở trạng thái 'Mở'"
 
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_05_2
@@ -98,8 +119,8 @@ msgstr ""
 #. module: account_test
 #: model:accounting.assert.test,desc:account_test.account_test_05
 msgid ""
-"Check that reconciled invoice for Sales/Purchases has reconciled entries for "
-"Payable and Receivable Accounts"
+"Check that reconciled invoice for Sales/Purchases has reconciled entries for"
+" Payable and Receivable Accounts"
 msgstr ""
 "Kiểm tra hóa đơn bán/mua đã đối chiếu có các bút toán đã đối chiếu cho tài "
 "khoản phải trả và phải thu"
@@ -117,55 +138,30 @@ msgstr "Trợ giúp về mã"
 #. module: account_test
 #: model_terms:ir.ui.view,arch_db:account_test.account_assert_form
 msgid ""
-"Code should always set a variable named `result` with the result of your "
-"test, that can be a list or\n"
-"a dictionary. If `result` is an empty list, it means that the test was "
-"successful. Otherwise it will\n"
-"try to translate and print what is inside `result`.\n"
-"\n"
-"If the result of your test is a dictionary, you can set a variable named "
-"`column_order` to choose in\n"
+"Code should always set a variable named `result` with the result of your test, that can be a list or a dictionary. If `result` is an empty list, it means that the test was successful. Otherwise it will try to translate and print what is inside `result`. If the result of your test is a dictionary, you can set a variable named `column_order` to choose in\n"
 "what order you want to print `result`'s content.\n"
-"\n"
-"Should you need them, you can also use the following variables into your "
-"code:\n"
+"Should you need them, you can also use the following variables into your code:\n"
 "    * cr: cursor to the database\n"
 "    * uid: ID of the current user\n"
-"\n"
-"In any ways, the code must be legal python statements with correct "
-"indentation (if needed).\n"
-"\n"
-"Example: \n"
+"In any ways, the code must be legal python statements with correct indentation (if needed).\n"
+"Example:\n"
 "    sql = '''SELECT id, name, ref, date\n"
-"             FROM account_move_line \n"
-"             WHERE account_id IN (SELECT id FROM account_account WHERE type "
-"= 'view')\n"
+"             FROM account_move_line\n"
+"             WHERE account_id IN (SELECT id FROM account_account WHERE type = 'view')\n"
 "          '''\n"
 "    cr.execute(sql)\n"
 "    result = cr.dictfetchall()"
 msgstr ""
-"Mã phải luôn gán một biến tên là `result` chứa kết quả kiểm tra, có thể là "
-"một danh sách hoặc\n"
-"một từ điển. Nếu `result` là danh sách rỗng, nghĩa là kiểm tra đã thành "
-"công. Nếu không, hệ thống sẽ\n"
-"cố gắng dịch và in nội dung bên trong `result`.\n"
-"\n"
-"Nếu kết quả kiểm tra là một từ điển, bạn có thể gán biến tên là "
-"`column_order` để chọn\n"
+"Mã phải luôn gán một biến tên là `result` chứa kết quả kiểm tra, có thể là một danh sách hoặc một từ điển. Nếu `result` là danh sách rỗng, nghĩa là kiểm tra đã thành công. Nếu không, hệ thống sẽ cố gắng dịch và in nội dung bên trong `result`. Nếu kết quả kiểm tra là một từ điển, bạn có thể gán biến tên là `column_order` để chọn\n"
 "thứ tự in nội dung của `result`.\n"
-"\n"
 "Nếu cần, bạn cũng có thể dùng các biến sau trong mã:\n"
 "    * cr: con trỏ tới cơ sở dữ liệu\n"
 "    * uid: ID của người dùng hiện tại\n"
-"\n"
-"Trong mọi trường hợp, mã phải là các câu lệnh python hợp lệ với thụt lề đúng "
-"(nếu cần).\n"
-"\n"
-"Ví dụ: \n"
+"Trong mọi trường hợp, mã phải là các câu lệnh python hợp lệ với thụt lề đúng (nếu cần).\n"
+"Ví dụ:\n"
 "    sql = '''SELECT id, name, ref, date\n"
-"             FROM account_move_line \n"
-"             WHERE account_id IN (SELECT id FROM account_account WHERE type "
-"= 'view')\n"
+"             FROM account_move_line\n"
+"             WHERE account_id IN (SELECT id FROM account_account WHERE type = 'view')\n"
 "          '''\n"
 "    cr.execute(sql)\n"
 "    result = cr.dictfetchall()"
@@ -206,13 +202,7 @@ msgstr "Biểu thức"
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__id
 #: model:ir.model.fields,field_description:account_test.field_report_account_test_report_accounttest__id
 msgid "ID"
-msgstr "ID"
-
-#. module: account_test
-#: model:ir.model.fields,field_description:account_test.field_accounting_assert_test____last_update
-#: model:ir.model.fields,field_description:account_test.field_report_account_test_report_accounttest____last_update
-msgid "Last Modified on"
-msgstr "Sửa lần cuối vào"
+msgstr ""
 
 #. module: account_test
 #: model:ir.model.fields,field_description:account_test.field_accounting_assert_test__write_uid
@@ -277,7 +267,7 @@ msgstr "Kiểm tra 6 : Trạng thái hóa đơn"
 
 #. module: account_test
 #: model:accounting.assert.test,name:account_test.account_test_07
-msgid "Test 7 : Closing balance on bank statements"
+msgid "Test 7: Closing balance on bank statements"
 msgstr "Kiểm tra 7 : Số dư cuối kỳ trên sao kê ngân hàng"
 
 #. module: account_test
@@ -297,6 +287,7 @@ msgid "Tests"
 msgstr "Kiểm thử"
 
 #. module: account_test
+#. odoo-python
 #: code:addons/account_test/report/report_account_test.py:0
 msgid "The test was passed successfully"
 msgstr "Kiểm tra đã đạt"
