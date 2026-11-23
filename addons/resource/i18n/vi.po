@@ -1,44 +1,35 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * resource
+# 	* resource
 #
-# Translators:
-# Martin Trigaux, 2022
-# Thi Huong Nguyen, 2023
-#
-# "Dylan Kiss (dyki)" <dyki@odoo.com>, 2025.
-# "Thi Huong Nguyen (thng)" <thng@odoo.com>, 2025, 2026.
-# Weblate <noreply-mt-weblate@weblate.org>, 2025.
-# Trinh Nguyen <trng@odoo.com>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0beta\n"
+"Project-Id-Version: Odoo Server 20.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-09 17:40+0000\n"
-"PO-Revision-Date: 2026-08-31 19:45+0000\n"
-"Last-Translator: Trinh Nguyen <trng@odoo.com>\n"
-"Language-Team: Vietnamese <https://translate.odoo.com/projects/odoo-s19-4/"
-"resource/vi/>\n"
-"Language: vi\n"
+"POT-Creation-Date: 2026-11-23 04:50+0000\n"
+"PO-Revision-Date: 2026-11-23 04:50+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.1\n"
+"Plural-Forms: \n"
 
 #. module: resource
 #: model:ir.model.fields,help:resource.field_resource_calendar__calendar_type
 #: model:ir.model.fields,help:resource.field_resource_calendar_attendance__calendar_type
 msgid ""
 "\n"
-"    - Fixed: a weekly attendance pattern that repeats identically every "
-"week.\n"
-"    - Variable: attendances set on specific dates rather than a repeating "
-"weekly pattern, such as a one-off schedule or a multi-week rotation.\n"
-"    - Undefined: no predefined slots at all. The resource can work whenever "
-"it wants, optionally up to an hours target.\n"
+"    - Fixed: a weekly attendance pattern that repeats identically every week.\n"
+"    - Variable: attendances set on specific dates rather than a repeating weekly pattern, such as a one-off schedule or a multi-week rotation.\n"
+"    - Undefined: no predefined slots at all. The resource can work whenever it wants, optionally up to an hours target.\n"
 "        "
 msgstr ""
+"\n"
+"    - Cố định: khung giờ làm việc theo tuần, lặp lại giống nhau mỗi tuần.\n"
+"    - Thay đổi: khung giờ làm việc được đặt vào những ngày cụ thể thay vì theo mẫu tuần lặp lại, chẳng hạn lịch làm việc một lần hoặc luân phiên nhiều tuần.\n"
+"    - Không xác định: không có khung giờ định sẵn. Nguồn lực có thể làm việc bất cứ lúc nào, có thể kèm mục tiêu số giờ.\n"
+"        "
 
 #. module: resource
 #: model:ir.module.module,description:base.module_resource
@@ -47,22 +38,17 @@ msgid ""
 "Module for resource management.\n"
 "===============================\n"
 "\n"
-"A resource represent something that can be scheduled (a developer on a task "
-"or a\n"
-"work center on manufacturing orders). This module manages a resource "
-"calendar\n"
+"A resource represent something that can be scheduled (a developer on a task or a\n"
+"work center on manufacturing orders). This module manages a resource calendar\n"
 "associated to every resource. It also manages the leaves of every resource.\n"
 msgstr ""
 "\n"
 "Phân hệ để quản lý tài nguyên.\n"
 "===============================\n"
 "\n"
-"Một tài nguyên đại diện cho một yếu tố nào đó có thể được lên lịch (một nhà "
-"phát triển của một nhiệm\n"
-"vụ hoặc một trung tâm sản xuất của các lệnh sản xuất). Phân hệ này quản lý "
-"một lịch tài nguyên \n"
-"được liên kết với mọi tài nguyên. Nó cũng quản lý nghỉ phép của mọi tài "
-"nguyên.\n"
+"Một tài nguyên đại diện cho một yếu tố nào đó có thể được lên lịch (một nhà phát triển của một nhiệm\n"
+"vụ hoặc một trung tâm sản xuất của các lệnh sản xuất). Phân hệ này quản lý một lịch tài nguyên \n"
+"được liên kết với mọi tài nguyên. Nó cũng quản lý nghỉ phép của mọi tài nguyên.\n"
 
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_tree
@@ -73,7 +59,7 @@ msgstr "# Nguồn lực làm việc"
 #. odoo-python
 #: code:addons/resource/models/resource_calendar_attendance.py:0
 msgid "%(duration)s hours A"
-msgstr ""
+msgstr "%(duration)s giờ A"
 
 #. module: resource
 #. odoo-python
@@ -98,7 +84,7 @@ msgstr "40 giờ/tuần"
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_multi_create_form
 msgid "<i class=\"oi\" data-icon=\"east\" title=\"to\"/>"
-msgstr ""
+msgstr "<i class=\"oi\" data-icon=\"east\" title=\"đến\"/>"
 
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
@@ -113,7 +99,7 @@ msgstr ""
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
 msgid "<span class=\"text-muted\">/d</span><span class=\"text-muted\">)</span>"
-msgstr ""
+msgstr "<span class=\"text-muted\">/ngày</span><span class=\"text-muted\">)</span>"
 
 #. module: resource
 #: model:ir.model.constraint,message:resource.constraint_resource_calendar_attendance_check_recurrency_until
@@ -157,6 +143,8 @@ msgid ""
 "Are you sure? This calendar is already used.\n"
 "All the attendances will be deleted for this calendar"
 msgstr ""
+"Bạn có chắc không? Lịch này đã được sử dụng.\n"
+"Tất cả khung giờ làm việc của lịch này sẽ bị xóa"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_resource__avatar_128
@@ -180,19 +168,19 @@ msgstr ""
 #. odoo-python
 #: code:addons/resource/models/resource_calendar.py:0
 msgid "Average hours per day must be between 0 and 24."
-msgstr ""
+msgstr "Số giờ trung bình mỗi ngày phải nằm trong khoảng từ 0 đến 24."
 
 #. module: resource
 #. odoo-javascript
 #: code:addons/resource/static/src/views/fields/resource_calendar_attendance_calendar_one2many/resource_calendar_attendance_calendar_one2many_field.js:0
 msgid "Calendar One2Many"
-msgstr ""
+msgstr "Lịch One2many"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__calendar_type
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__calendar_type
 msgid "Calendar Type"
-msgstr ""
+msgstr "Loại lịch"
 
 #. module: resource
 #: model:ir.actions.act_window,name:resource.resource_calendar_closing_days
@@ -219,28 +207,28 @@ msgstr "Công ty"
 #. odoo-javascript
 #: code:addons/resource/static/src/views/fields/calendar_type_confirm_radio/calendar_type_confirm_radio_field.js:0
 msgid "Confirm the calendar type change"
-msgstr ""
+msgstr "Xác nhận đổi loại lịch"
 
 #. module: resource
 #. odoo-javascript
 #: code:addons/resource/static/src/views/fields/calendar_type_confirm_radio/calendar_type_confirm_radio_field.js:0
 msgid "Continue"
-msgstr ""
+msgstr "Tiếp tục"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__count_as
 msgid "Count As"
-msgstr ""
+msgstr "Tính là"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__country_id
 msgid "Country"
-msgstr ""
+msgstr "Quốc gia"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__country_code
 msgid "Country Code"
-msgstr ""
+msgstr "Mã quốc gia"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__create_uid
@@ -277,12 +265,12 @@ msgstr "Ngày trong tuần"
 #. module: resource
 #: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__recurrency_type__days
 msgid "Days"
-msgstr ""
+msgstr "Ngày"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__days_per_week
 msgid "Days per Week"
-msgstr ""
+msgstr "Số ngày mỗi tuần"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_res_company__resource_calendar_id
@@ -314,13 +302,13 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/resource/static/src/components/resource_calendar_attendance_popover/resource_calendar_attendance_popover.xml:0
 msgid "Delete"
-msgstr ""
+msgstr "Xóa"
 
 #. module: resource
 #. odoo-javascript
 #: code:addons/resource/static/src/components/resource_calendar_attendance_popover/resource_calendar_attendance_popover.xml:0
 msgid "Discard"
-msgstr ""
+msgstr "Hủy bỏ"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_res_company__display_name
@@ -336,7 +324,7 @@ msgstr "Tên hiển thị"
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_multi_create_form
 msgid "Duration"
-msgstr ""
+msgstr "Thời lượng"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__duration_based
@@ -351,7 +339,7 @@ msgstr "Hệ số hiệu suất"
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_resource__email
 msgid "Email"
-msgstr "Email"
+msgstr ""
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__date_to
@@ -370,12 +358,12 @@ msgstr ""
 #. module: resource
 #: model:ir.model.fields.selection,name:resource.selection__resource_calendar__calendar_type__fixed
 msgid "Fixed"
-msgstr ""
+msgstr "Cố định"
 
 #. module: resource
 #: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__recurrency_end_type__forever
 msgid "Forever"
-msgstr ""
+msgstr "Mãi mãi"
 
 #. module: resource
 #. odoo-javascript
@@ -418,7 +406,7 @@ msgstr "Giờ"
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_resource__hours_per_day
 msgid "Hours per Day"
-msgstr ""
+msgstr "Số giờ mỗi ngày"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__hours_per_week
@@ -431,7 +419,7 @@ msgstr "Giờ mỗi tuần"
 #. odoo-python
 #: code:addons/resource/models/resource_calendar.py:0
 msgid "Hours per week must be between 0 and 168."
-msgstr ""
+msgstr "Số giờ mỗi tuần phải nằm trong khoảng từ 0 đến 168."
 
 #. module: resource
 #: model:ir.model.fields.selection,name:resource.selection__resource_resource__resource_type__user
@@ -448,7 +436,7 @@ msgstr "Nhân lực"
 #: model:ir.model.fields,field_description:resource.field_resource_mixin__id
 #: model:ir.model.fields,field_description:resource.field_resource_resource__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: resource
 #: model:ir.model.fields,help:resource.field_resource_calendar_leaves__resource_id
@@ -480,7 +468,7 @@ msgstr ""
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__recurrency_interval
 msgid "Interval"
-msgstr ""
+msgstr "Khoảng cách lặp"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__is_fulltime
@@ -491,19 +479,19 @@ msgstr "Toàn thời gian"
 #. odoo-python
 #: code:addons/resource/models/resource_calendar_attendance.py:0
 msgid "Issue on %(date)s:"
-msgstr ""
+msgstr "Vấn đề vào %(date)s:"
 
 #. module: resource
 #. odoo-python
 #: code:addons/resource/models/resource_calendar_attendance.py:0
 msgid "Issue on %(dayofweek)s:"
-msgstr ""
+msgstr "Vấn đề vào %(dayofweek)s:"
 
 #. module: resource
 #. odoo-python
 #: code:addons/resource/models/resource_calendar_attendance.py:0
 msgid "Issue:"
-msgstr ""
+msgstr "Vấn đề:"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__write_uid
@@ -530,7 +518,7 @@ msgstr "Thiết bị"
 #. module: resource
 #: model:ir.actions.act_window,name:resource.action_resource_material_from_calendar
 msgid "Material Resources"
-msgstr ""
+msgstr "Nguồn lực thiết bị"
 
 #. module: resource
 #. odoo-javascript
@@ -553,30 +541,31 @@ msgstr "Tên"
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__recurrency_count
 msgid "Number of Repetitions"
-msgstr ""
+msgstr "Số lần lặp"
 
 #. module: resource
 #: model:ir.model.fields,help:resource.field_resource_calendar_attendance__recurrency_interval
 msgid "Number of days or weeks between each occurrence."
-msgstr ""
+msgstr "Số ngày hoặc số tuần giữa mỗi lần lặp."
 
 #. module: resource
 #: model:ir.model.fields,help:resource.field_resource_calendar__full_time_required_hours
 msgid ""
-"Number of hours to work on the company schedule to be considered as fulltime."
+"Number of hours to work on the company schedule to be considered as "
+"fulltime."
 msgstr ""
 "Số giờ làm việc theo lịch làm việc của công ty được coi là toàn thời gian."
 
 #. module: resource
 #: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__recurrency_end_type__times
 msgid "Occurrences"
-msgstr ""
+msgstr "Số lần xuất hiện"
 
 #. module: resource
 #. odoo-python
 #: code:addons/resource/models/resource_calendar_attendance.py:0
 msgid "Overlap of attendances"
-msgstr ""
+msgstr "Các khung giờ làm việc bị chồng chéo"
 
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_search
@@ -596,7 +585,7 @@ msgstr "Điện thoại"
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_tree
 msgid "Preview"
-msgstr ""
+msgstr "Xem trước"
 
 #. module: resource
 #. odoo-python
@@ -614,37 +603,37 @@ msgstr "Lý do"
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__recurrency_end_type
 msgid "Recurrence End Condition"
-msgstr ""
+msgstr "Điều kiện kết thúc lặp lại"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__recurrency_until
 msgid "Recurrence End Date"
-msgstr ""
+msgstr "Ngày kết thúc lặp lại"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__recurrency
 msgid "Recurrency"
-msgstr ""
+msgstr "Lặp lại"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__recurrency_excluded_occurences
 msgid "Recurrency Excluded Occurences"
-msgstr ""
+msgstr "Các lần lặp bị loại trừ"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__recurrency_type
 msgid "Recurrency Type"
-msgstr ""
+msgstr "Kiểu lặp lại"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__reference_calendar_id
 msgid "Reference Calendar"
-msgstr ""
+msgstr "Lịch tham chiếu"
 
 #. module: resource
 #: model:ir.model.fields,help:resource.field_resource_calendar__reference_calendar_id
 msgid "Reference working hours used to compute the full-time equivalent."
-msgstr ""
+msgstr "Giờ làm việc tham chiếu dùng để tính mức tương đương toàn thời gian."
 
 #. module: resource
 #: model:ir.model.fields,help:resource.field_resource_resource__user_id
@@ -654,7 +643,7 @@ msgstr "Tên người dùng liên quan của nguồn lực để quản lý quy�
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_multi_create_form
 msgid "Repeat every"
-msgstr ""
+msgstr "Lặp lại mỗi"
 
 #. module: resource
 #: model:ir.model,name:resource.model_resource_resource
@@ -698,7 +687,7 @@ msgstr "Lịch của nguồn lực"
 #. module: resource
 #: model:ir.actions.server,name:resource.ir_cron_calendar_clean_up_ir_actions_server
 msgid "Resource: Clean up calendar attendances"
-msgstr ""
+msgstr "Nguồn lực: Dọn dẹp khung giờ làm việc của lịch"
 
 #. module: resource
 #: model:ir.actions.act_window,name:resource.action_resource_resource_tree
@@ -737,7 +726,7 @@ msgstr "Thứ Bảy"
 #. odoo-javascript
 #: code:addons/resource/static/src/components/resource_calendar_attendance_popover/resource_calendar_attendance_popover.xml:0
 msgid "Save"
-msgstr ""
+msgstr "Lưu"
 
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_tree
@@ -801,21 +790,23 @@ msgid ""
 "The ISO country code in two chars. \n"
 "You can use this field for quick search."
 msgstr ""
+"Mã quốc gia ISO gồm hai ký tự. \n"
+"Có thể dùng trường này để tìm kiếm nhanh."
 
 #. module: resource
 #: model:ir.model.constraint,message:resource.constraint_resource_calendar_attendance_check_duration_hours
 msgid "The attendance should have a duration between 0 and 24 hours"
-msgstr ""
+msgstr "Mỗi khung giờ làm việc phải có thời lượng từ 0 đến 24 giờ"
 
 #. module: resource
 #: model:ir.model.constraint,message:resource.constraint_resource_calendar_attendance_check_count
 msgid "The recurrency count should be greater than 0"
-msgstr ""
+msgstr "Số lần lặp phải lớn hơn 0"
 
 #. module: resource
 #: model:ir.model.constraint,message:resource.constraint_resource_calendar_attendance_check_interval
 msgid "The recurrency interval should be greater than 0"
-msgstr ""
+msgstr "Khoảng cách lặp phải lớn hơn 0"
 
 #. module: resource
 #. odoo-python
@@ -827,21 +818,21 @@ msgstr "Ngày bắt đầu ngày nghỉ phải trước ngày kết thúc."
 #. odoo-javascript
 #: code:addons/resource/static/src/components/resource_calendar_attendance_popover/resource_calendar_attendance_popover.xml:0
 msgid "This and following events"
-msgstr ""
+msgstr "Sự kiện này và các sự kiện tiếp theo"
 
 #. module: resource
 #. odoo-python
 #: code:addons/resource/models/resource_calendar_attendance.py:0
 msgid ""
-"This date is excluded of the recurrency, to start a new one on this date you "
-"should create it from scratch"
-msgstr ""
+"This date is excluded of the recurrency, to start a new one on this date you"
+" should create it from scratch"
+msgstr "Ngày này đã bị loại khỏi chuỗi lặp lại. Để bắt đầu một chuỗi lặp lại mới vào ngày này, hãy tạo mới từ đầu"
 
 #. module: resource
 #. odoo-javascript
 #: code:addons/resource/static/src/components/resource_calendar_attendance_popover/resource_calendar_attendance_popover.xml:0
 msgid "This event"
-msgstr ""
+msgstr "Sự kiện này"
 
 #. module: resource
 #: model:ir.model.fields,help:resource.field_resource_mixin__tz
@@ -874,7 +865,7 @@ msgstr "Thứ Năm"
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_multi_create_form
 msgid "Time"
-msgstr ""
+msgstr "Thời gian"
 
 #. module: resource
 #: model:ir.model.fields,field_description:resource.field_resource_calendar__leave_ids
@@ -903,13 +894,13 @@ msgstr "Múi giờ"
 #. odoo-python
 #: code:addons/resource/models/resource_calendar_attendance.py:0
 msgid "Too Complex Calendar"
-msgstr ""
+msgstr "Lịch quá phức tạp"
 
 #. module: resource
 #. odoo-python
 #: code:addons/resource/models/resource_calendar_attendance.py:0
 msgid "Total duration of attendances cannot exceed 24 hours"
-msgstr ""
+msgstr "Tổng thời lượng các khung giờ làm việc không được vượt quá 24 giờ"
 
 #. module: resource
 #. odoo-javascript
@@ -927,12 +918,12 @@ msgstr "Loại"
 #. module: resource
 #: model:ir.model.fields.selection,name:resource.selection__resource_calendar__calendar_type__undefined
 msgid "Undefined"
-msgstr ""
+msgstr "Không xác định"
 
 #. module: resource
 #: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__recurrency_end_type__date
 msgid "Until"
-msgstr ""
+msgstr "Đến ngày"
 
 #. module: resource
 #: model:ir.model,name:resource.model_res_users
@@ -944,14 +935,14 @@ msgstr "Người dùng"
 #. module: resource
 #: model:ir.model.fields.selection,name:resource.selection__resource_calendar__calendar_type__variable
 msgid "Variable"
-msgstr ""
+msgstr "Thay đổi"
 
 #. module: resource
 #. odoo-javascript
 #: code:addons/resource/static/src/views/fields/resource_calendar_hours_by_day/resource_calendar_hours_by_day.js:0
 #: code:addons/resource/static/src/views/fields/resource_calendar_many2one/resource_calendar_many2one.js:0
 msgid "Variable (%(hours)sh on %(days)s days / week)"
-msgstr ""
+msgstr "Thay đổi (%(hours)sh trong %(days)s ngày / tuần)"
 
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
@@ -969,15 +960,16 @@ msgstr "Thứ Tư"
 #. module: resource
 #: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__recurrency_type__weeks
 msgid "Weeks"
-msgstr ""
+msgstr "Tuần"
 
 #. module: resource
 #: model:ir.model.fields,help:resource.field_resource_calendar_leaves__count_as
 msgid ""
-"Whether this should be computed as a time off or as work time (eg: formation)"
+"Whether this should be computed as a time off or as work time (eg: "
+"formation)"
 msgstr ""
-"Liệu điều này nên được tính là thời gian nghỉ hay thời gian làm việc (ví dụ: "
-"đào tạo)"
+"Liệu điều này nên được tính là thời gian nghỉ hay thời gian làm việc (ví dụ:"
+" đào tạo)"
 
 #. module: resource
 #: model:ir.model,name:resource.model_resource_calendar_attendance
@@ -1030,7 +1022,7 @@ msgstr "Giờ làm việc"
 #. odoo-javascript
 #: code:addons/resource/static/src/views/fields/resource_calendar_hours_by_day/resource_calendar_hours_by_day.js:0
 msgid "Working Hours by Day"
-msgstr ""
+msgstr "Giờ làm việc theo ngày"
 
 #. module: resource
 #. odoo-python
@@ -1063,81 +1055,15 @@ msgstr "Thời gian làm việc"
 #: code:addons/resource/models/resource_calendar_attendance.py:0
 msgid ""
 "You can't have duration based and time based attendances on the same day"
-msgstr ""
+msgstr "Trong cùng một ngày, không thể vừa có khung giờ làm việc tính theo thời lượng vừa có khung giờ tính theo giờ bắt đầu và kết thúc"
 
 #. module: resource
 #. odoo-python
 #: code:addons/resource/models/resource_calendar.py:0
 msgid "You cannot compute the intervals without a calendar on no resource."
-msgstr ""
+msgstr "Không thể tính các khoảng thời gian khi không có lịch và không có nguồn lực."
 
 #. module: resource
 #: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
 msgid "from company"
-msgstr ""
-
-#~ msgid ""
-#~ "Define the working schedule of the resource. If not set, the resource "
-#~ "will have fully flexible working hours."
-#~ msgstr ""
-#~ "Xác định lịch trình làm việc của nhân lực. Nếu không thiết lập, nhân lực "
-#~ "sẽ có giờ làm việc hoàn toàn linh hoạt."
-
-#~ msgid "<span class=\"ms-2\">hours/week</span>"
-#~ msgstr "<span class=\"ms-2\">giờ/tuần</span>"
-
-#~ msgid "<span>hours/week</span>"
-#~ msgstr "<span>giờ/tuần</span>"
-
-#~ msgid ""
-#~ "Are you sure you want to switch to a 1-week calendar? All work entries "
-#~ "will be lost."
-#~ msgstr ""
-#~ "Bạn có chắc chắn muốn chuyển sang lịch 1 tuần không? Tất cả công sẽ bị "
-#~ "mất."
-
-#~ msgid ""
-#~ "Are you sure you want to switch to a 2-week calendar? All work entries "
-#~ "will be lost."
-#~ msgstr ""
-#~ "Bạn có chắc chắn muốn chuyển sang lịch 2 tuần không? Tất cả công sẽ bị "
-#~ "mất."
-
-#~ msgid "Attendances can't overlap."
-#~ msgstr "Chấm công không được trùng lặp."
-
-#~ msgid "Avg"
-#~ msgstr "Trung bình"
-
-#~ msgid "Calendar in 2 weeks mode"
-#~ msgstr "Lịch ở chế độ 2 tuần"
-
-#~ msgid "Explanation"
-#~ msgstr "Giải trình"
-
-#~ msgid "First"
-#~ msgstr "Đầu tiên"
-
-#~ msgid "First week"
-#~ msgstr "Tuần đầu tiên"
-
-#~ msgid "Second"
-#~ msgstr "Giây"
-
-#~ msgid "Second week"
-#~ msgstr "Tuần thứ hai"
-
-#~ msgid "Switch"
-#~ msgstr "Switch"
-
-#~ msgid "Total"
-#~ msgstr "Tổng"
-
-#~ msgid "Week Number"
-#~ msgstr "Số tuần"
-
-#~ msgid "even"
-#~ msgstr "chẵn"
-
-#~ msgid "odd"
-#~ msgstr "lẻ"
+msgstr "theo công ty"
