@@ -1,30 +1,19 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * sale_stock
+# 	* sale_stock
 #
-# Translators:
-# Martin Trigaux, 2022
-# Thi Huong Nguyen, 2023
-#
-# "Dylan Kiss (dyki)" <dyki@odoo.com>, 2025.
-# "Tiffany Chang (tic)" <tic@odoo.com>, 2025.
-# Weblate <noreply-mt-weblate@weblate.org>, 2025, 2026.
-# "Thi Huong Nguyen (thng)" <thng@odoo.com>, 2025, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0beta\n"
+"Project-Id-Version: Odoo Server 20.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 17:39+0000\n"
-"PO-Revision-Date: 2026-08-31 19:47+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
-"Language-Team: Vietnamese <https://translate.odoo.com/projects/odoo-s19-4/"
-"sale_stock/vi/>\n"
-"Language: vi\n"
+"POT-Creation-Date: 2026-11-23 07:05+0000\n"
+"PO-Revision-Date: 2026-11-23 07:05+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.1\n"
+"Plural-Forms: \n"
 
 #. module: sale_stock
 #: model:ir.module.module,description:base.module_sale_stock
@@ -33,8 +22,7 @@ msgid ""
 "Manage sales quotations and orders\n"
 "==================================\n"
 "\n"
-"This module makes the link between the sales and warehouses management "
-"applications.\n"
+"This module makes the link between the sales and warehouses management applications.\n"
 "\n"
 "Preferences\n"
 "-----------\n"
@@ -43,11 +31,23 @@ msgid ""
 "* Incoterms: International Commercial terms\n"
 "\n"
 msgstr ""
+"\n"
+"Quản lý báo giá và đơn bán\n"
+"==================================\n"
+"\n"
+"Module này liên kết ứng dụng Bán hàng với ứng dụng Quản lý kho.\n"
+"\n"
+"Tùy chọn\n"
+"-----------\n"
+"* Giao hàng: Chọn giao một lần hoặc giao từng phần\n"
+"* Hóa đơn: Chọn cách thanh toán hóa đơn\n"
+"* Incoterm: Điều kiện thương mại quốc tế\n"
+"\n"
 
 #. module: sale_stock
 #: model:ir.actions.report,print_report_name:sale_stock.action_report_return_label
 msgid "\"Return - %s\" % (object.name)"
-msgstr ""
+msgstr "\"Trả hàng - %s\" % (object.name)"
 
 #. module: sale_stock
 #. odoo-python
@@ -82,6 +82,8 @@ msgid ""
 "<br/>\n"
 "                                    Quantity:"
 msgstr ""
+"<br/>\n"
+"                                    Số lượng:"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.sale_order_portal_content_inherit_sale_stock
@@ -89,16 +91,18 @@ msgid ""
 "<i class=\"oi me-1\" data-icon=\"calendar_today\"/>\n"
 "                            Expected delivery:"
 msgstr ""
+"<i class=\"oi me-1\" data-icon=\"calendar_today\"/>\n"
+"                            Ngày giao dự kiến:"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.sale_order_portal_template
 msgid "<i class=\"oi me-1\" data-icon=\"reply\"/>Return"
-msgstr ""
+msgstr "<i class=\"oi me-1\" data-icon=\"reply\"/>Trả hàng"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.sale_order_portal_template
 msgid "<i class=\"oi me-2\" data-icon=\"reply\"/>Return"
-msgstr ""
+msgstr "<i class=\"oi me-2\" data-icon=\"reply\"/>Trả hàng"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.sale_order_portal_content_inherit_sale_stock
@@ -113,7 +117,7 @@ msgstr "<i class=\"oi oi-fw\" data-icon=\"local_shipping\"/> Đã nhận"
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.sale_order_portal_content_inherit_sale_stock
 msgid "<i class=\"oi oi-fw\" data-icon=\"local_shipping\"/> Shipped"
-msgstr ""
+msgstr "<i class=\"oi oi-fw\" data-icon=\"local_shipping\"/> Đã vận chuyển"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.sale_order_portal_content_inherit_sale_stock
@@ -123,12 +127,12 @@ msgstr "<i class=\"oi oi-fw\" data-icon=\"schedule\"/> Đang chờ hàng về"
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.sale_order_portal_content_inherit_sale_stock
 msgid "<i class=\"oi oi-fw\" data-icon=\"schedule\"/> Preparation"
-msgstr ""
+msgstr "<i class=\"oi oi-fw\" data-icon=\"schedule\"/> Chuẩn bị"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.res_config_settings_view_form_stock
 msgid "<span class=\"ms-2\">days after delivery</span>"
-msgstr ""
+msgstr "<span class=\"ms-2\">ngày sau khi giao hàng</span>"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.stock_production_lot_view_form
@@ -143,36 +147,38 @@ msgstr "<strong>Mã đơn của khách</strong>"
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.report_delivery_document_inherit_sale_stock
 msgid "<strong>Incoterm</strong>"
-msgstr "<strong>Incoterm</strong>"
+msgstr ""
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.return_label
 msgid "<strong>Return reason</strong>"
-msgstr ""
+msgstr "<strong>Lý do trả hàng</strong>"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.return_label
 msgid "<strong>Returned products</strong>"
-msgstr ""
+msgstr "<strong>Sản phẩm trả lại</strong>"
 
 #. module: sale_stock
 #. odoo-python
 #: code:addons/sale_stock/controllers/return_order.py:0
 msgid "A return label has been downloaded for the following products:"
-msgstr ""
+msgstr "Nhãn trả hàng đã được tải xuống cho các sản phẩm sau:"
 
 #. module: sale_stock
 #: model:ir.model.fields,help:sale_stock.field_sale_order_line__qty_delivered_method
 msgid ""
-"According to product configuration, the delivered quantity can be "
-"automatically computed by mechanism:\n"
+"According to product configuration, the delivered quantity can be automatically computed by mechanism:\n"
 "  - Manual: the quantity is set manually on the line\n"
-"  - Analytic From expenses: the quantity is the quantity sum from posted "
-"expenses\n"
-"  - Timesheet: the quantity is the sum of hours recorded on tasks linked to "
-"this line\n"
+"  - Analytic From expenses: the quantity is the quantity sum from posted expenses\n"
+"  - Timesheet: the quantity is the sum of hours recorded on tasks linked to this line\n"
 "  - Stock Moves: the quantity comes from confirmed pickings\n"
 msgstr ""
+"Theo cấu hình sản phẩm, số lượng đã giao có thể được tính tự động theo cơ chế:\n"
+"  - Thủ công: số lượng được nhập thủ công trên dòng\n"
+"  - Từ chi phí: số lượng dựa trên tổng các khoản chi phí đã ghi nhận\n"
+"  - Bảng giờ công: số lượng là tổng số giờ được ghi nhận của nhiệm vụ liên kết với dòng này\n"
+"  - Dịch chuyển kho: số lượng lấy từ các phiếu kho đã xác nhận\n"
 
 #. module: sale_stock
 #. odoo-javascript
@@ -185,12 +191,12 @@ msgstr "Bao gồm tất cả nghiệp vụ theo kế hoạch"
 #: model:ir.model.fields,field_description:sale_stock.field_res_config_settings__allow_spontaneous_returns
 #: model:ir.model.fields,field_description:sale_stock.field_stock_picking__allow_spontaneous_returns
 msgid "Allow Spontaneous Returns"
-msgstr ""
+msgstr "Cho phép trả hàng chủ động"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.res_config_settings_view_form_stock
 msgid "Allow users to return products"
-msgstr ""
+msgstr "Cho phép người dùng trả lại sản phẩm"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_stock_rules_report__so_route_ids
@@ -211,7 +217,7 @@ msgstr "Tình trạng hàng"
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_stock_replenishment_info__sale_delay
 msgid "Availability Time"
-msgstr ""
+msgstr "Thời gian có hàng"
 
 #. module: sale_stock
 #. odoo-javascript
@@ -222,7 +228,6 @@ msgstr "Có hàng"
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/widgets/qty_at_date_widget.xml:0
-#, fuzzy
 msgid "Available in stock"
 msgstr "Còn hàng"
 
@@ -231,7 +236,7 @@ msgstr "Còn hàng"
 msgid ""
 "Choose the maximum number of days within which the product should be "
 "available for delivery to a customer or for use in other situations."
-msgstr ""
+msgstr "Chọn số ngày tối đa mà sản phẩm cần sẵn sàng để giao cho khách hàng hoặc dùng cho các trường hợp khác."
 
 #. module: sale_stock
 #: model:ir.model.fields,help:sale_stock.field_stock_rules_report__so_route_ids
@@ -257,17 +262,17 @@ msgstr "Thiết lập cấu hình"
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.xml:0
 msgid "Continue"
-msgstr ""
+msgstr "Tiếp tục"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_return_reason__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Người tạo"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_return_reason__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Ngày tạo"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.report_delivery_document_inherit_sale_stock
@@ -298,8 +303,8 @@ msgid ""
 "shipping, the shipping policy of the order will be taken into account to "
 "either use the minimum or maximum lead time of the order lines."
 msgstr ""
-"Ngày giao hàng mà bạn có thể hẹn với khách hàng, được tính từ thời gian giao "
-"hàng ngắn nhất của các dòng đơn hàng trong trường hợp sản phẩm dịch vụ. "
+"Ngày giao hàng mà bạn có thể hẹn với khách hàng, được tính từ thời gian giao"
+" hàng ngắn nhất của các dòng đơn hàng trong trường hợp sản phẩm dịch vụ. "
 "Trong trường hợp vận chuyển, chính sách giao hàng của đơn hàng sẽ được dùng "
 "để quyết định lấy thời gian giao hàng ngắn nhất hay dài nhất của các dòng "
 "đơn hàng."
@@ -308,7 +313,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.xml:0
 msgid "Delivery:"
-msgstr ""
+msgstr "Phiếu giao hàng:"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_account_move__display_name
@@ -351,7 +356,7 @@ msgstr "Đừng quên đổi đối tác trên các phiếu xuất kho sau: %s"
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.js:0
 msgid "Download Return Label"
-msgstr ""
+msgstr "Tải nhãn trả hàng"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_sale_order__effective_date
@@ -388,7 +393,7 @@ msgstr "Thời gian giao hàng dự kiến"
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.sale_order_portal_content_inherit_sale_stock
 msgid "Expected delivery"
-msgstr ""
+msgstr "Ngày giao dự kiến"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_sale_order_line__forecast_expected_date
@@ -434,7 +439,7 @@ msgstr "Có phiếu kho trễ"
 #: model:ir.model.fields,field_description:sale_stock.field_stock_rule__id
 #: model:ir.model.fields,field_description:sale_stock.field_stock_rules_report__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.exception_on_so
@@ -444,7 +449,7 @@ msgstr "(Các) phiếu kho bị ảnh hưởng:"
 #. module: sale_stock
 #: model:return.reason,name:sale_stock.return_reason_incorrect_specs
 msgid "Incorrect specifications or compatibility issues"
-msgstr ""
+msgstr "Sai thông số kỹ thuật hoặc không tương thích"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.report_delivery_document_inherit_sale_stock
@@ -453,7 +458,6 @@ msgstr "Chi tiết Incoterm"
 
 #. module: sale_stock
 #: model:ir.model,name:sale_stock.model_stock_route
-#, fuzzy
 msgid "Inventory Route"
 msgstr "Tuyến cung ứng"
 
@@ -464,14 +468,13 @@ msgstr "Là theo đơn đặt hàng (MTO)"
 
 #. module: sale_stock
 #: model:ir.model.fields,help:sale_stock.field_sale_order__picking_policy
-#, fuzzy
 msgid "It specifies goods to be deliver partially or all at once"
 msgstr "Xác định hàng hóa được giao từng phần hay giao một lần"
 
 #. module: sale_stock
 #: model:return.reason,name:sale_stock.return_reason_damaged_product
 msgid "Item arrived damaged or defective"
-msgstr ""
+msgstr "Hàng nhận được bị hư hỏng hoặc lỗi"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_sale_order__json_popover
@@ -491,12 +494,12 @@ msgstr "Phát sinh kế toán"
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_return_reason__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Người cập nhật cuối"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_return_reason__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ngày cập nhật cuối"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_sale_order__late_availability
@@ -519,12 +522,12 @@ msgstr "Lô/sê-ri"
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.xml:0
 #: model_terms:ir.ui.view,arch_db:sale_stock.return_label
 msgid "Lot/Serial Number:"
-msgstr ""
+msgstr "Số lô/sê-ri:"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.res_config_settings_view_form_stock
 msgid "Manage Return Reasons"
-msgstr ""
+msgstr "Quản lý lý do trả hàng"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.exception_on_so
@@ -548,8 +551,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sale_stock.res_config_settings_view_form_stock
 msgid ""
 "Margin of error for dates promised to customers. Products will be scheduled "
-"for procurement and delivery that many days earlier than the actual promised "
-"date, to cope with unexpected delays in the supply chain."
+"for procurement and delivery that many days earlier than the actual promised"
+" date, to cope with unexpected delays in the supply chain."
 msgstr ""
 "Biên độ sai lệch số ngày đã hẹn với khách hàng. Sản phẩm sẽ được lên kế "
 "hoạch cung ứng và giao sớm hơn từng đó ngày so với ngày thực tế đã hẹn, để "
@@ -573,7 +576,6 @@ msgstr "Chưa có phiếu xuất kho! Hãy tự động hóa chúng bằng đơn
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/widgets/qty_at_date_widget.xml:0
-#, fuzzy
 msgid "No future availability"
 msgstr "Không có hàng trong tương lai"
 
@@ -581,12 +583,11 @@ msgstr "Không có hàng trong tương lai"
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.xml:0
 msgid "No products are available to return."
-msgstr ""
+msgstr "Không có sản phẩm nào có thể trả lại."
 
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/widgets/qty_at_date_widget.xml:0
-#, fuzzy
 msgid "Not enough future availability"
 msgstr "Không đủ hàng trong tương lai"
 
@@ -595,33 +596,32 @@ msgstr "Không đủ hàng trong tương lai"
 msgid ""
 "Number of days between the order confirmation and the shipping of the "
 "products"
-msgstr ""
+msgstr "Số ngày từ khi xác nhận đơn hàng đến khi giao sản phẩm"
 
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/widgets/qty_at_date_widget.xml:0
-#, fuzzy
 msgid "On"
 msgstr "Vào"
 
 #. module: sale_stock
 #: model:return.reason,name:sale_stock.return_reason_order_by_mistake
 msgid "Ordered by mistake"
-msgstr ""
+msgstr "Đặt nhầm"
 
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_label_info.xml:0
 msgid ""
-"Please download and print the label, attach it to your package, and send the "
-"package to the address below:"
-msgstr ""
+"Please download and print the label, attach it to your package, and send the"
+" package to the address below:"
+msgstr "Vui lòng tải xuống và in nhãn, dán lên gói hàng, rồi gửi gói hàng đến địa chỉ bên dưới:"
 
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.js:0
 msgid "Print the return request label."
-msgstr ""
+msgstr "In nhãn yêu cầu trả hàng."
 
 #. module: sale_stock
 #: model:ir.model,name:sale_stock.model_product_template
@@ -636,7 +636,7 @@ msgstr "Dịch chuyển sản phẩm (Chi tiết dịch chuyển)"
 #. module: sale_stock
 #: model:return.reason,name:sale_stock.return_reason_not_meeting_expectations
 msgid "Product does not meet expectations"
-msgstr ""
+msgstr "Sản phẩm không như mong đợi"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_sale_order_line__qty_to_deliver
@@ -651,34 +651,30 @@ msgstr "Báo giá, Đơn bán, Giao hàng & Kiểm soát hóa đơn"
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/sale_stock_forecasted/forecasted_details.xml:0
-#, fuzzy
 msgid "Quotations"
 msgstr "Báo giá"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_return_reason__name
 msgid "Reason"
-msgstr ""
+msgstr "Lý do"
 
 #. module: sale_stock
 #: model:return.reason,name:sale_stock.return_reason_wrong_item
 msgid "Received the wrong item"
-msgstr ""
+msgstr "Nhận sai hàng"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.sale_stock_help_message_template
 msgid ""
 "Reduce back orders with reservations, locations management, smart\n"
-"                replenishment propositions, shipping connectors, barcode "
-"scanner, etc."
+"                replenishment propositions, shipping connectors, barcode scanner, etc."
 msgstr ""
-"Giảm phiếu còn lại bằng tính năng giữ hàng, quản lý địa điểm, đề xuất bổ sung "
-"hàng\n"
+"Giảm phiếu còn lại bằng tính năng giữ hàng, quản lý địa điểm, đề xuất bổ sung hàng\n"
 "                 thông minh, kết nối vận chuyển, máy quét mã vạch,..."
 
 #. module: sale_stock
 #: model:ir.model,name:sale_stock.model_stock_reference
-#, fuzzy
 msgid "Reference between stock documents"
 msgstr "Tham chiếu giữa các chứng từ kho"
 
@@ -690,7 +686,6 @@ msgstr "Các tham chiếu"
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/widgets/qty_at_date_widget.xml:0
-#, fuzzy
 msgid "Remaining demand available at"
 msgstr "Số lượng yêu cầu còn lại có hàng vào"
 
@@ -704,7 +699,7 @@ msgstr "Bổ sung theo đơn đặt hàng (MTO)"
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.xml:0
 msgid "Request a return"
-msgstr ""
+msgstr "Yêu cầu trả hàng"
 
 #. module: sale_stock
 #. odoo-javascript
@@ -715,36 +710,36 @@ msgstr "Đã giữ"
 #. module: sale_stock
 #: model:ir.actions.report,name:sale_stock.action_report_return_label
 msgid "Return Label"
-msgstr ""
+msgstr "Nhãn trả hàng"
 
 #. module: sale_stock
 #: model:ir.model,name:sale_stock.model_return_reason
 #: model:ir.model.fields,field_description:sale_stock.field_stock_picking__return_reason_id
 msgid "Return Reason"
-msgstr ""
+msgstr "Lý do trả hàng"
 
 #. module: sale_stock
 #: model:ir.actions.act_window,name:sale_stock.action_open_return_reasons
 msgid "Return Reasons"
-msgstr ""
+msgstr "Lý do trả hàng"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_res_company__return_validity_days
 #: model:ir.model.fields,field_description:sale_stock.field_res_config_settings__return_validity_days
 msgid "Return Validity Days"
-msgstr ""
+msgstr "Số ngày được phép trả hàng"
 
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.xml:0
 msgid "Return reason"
-msgstr ""
+msgstr "Lý do trả hàng"
 
 #. module: sale_stock
 #. odoo-python
 #: code:addons/sale_stock/controllers/return_order.py:0
 msgid "Return reason: %s"
-msgstr ""
+msgstr "Lý do trả hàng: %s"
 
 #. module: sale_stock
 #: model:ir.actions.act_window,name:sale_stock.action_stock_picking_return_report
@@ -786,7 +781,7 @@ msgstr "Báo cáo phân tích bán hàng"
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.view_stock_replenishment_info_sale_stock_inherit
 msgid "Sales Availability Time"
-msgstr ""
+msgstr "Thời gian có hàng để bán"
 
 #. module: sale_stock
 #: model:ir.model,name:sale_stock.model_sale_order
@@ -818,7 +813,7 @@ msgstr "Số ngày dự phòng bán hàng"
 #. module: sale_stock
 #: model:ir.module.module,shortdesc:base.module_sale_stock
 msgid "Sales and Warehouse Management"
-msgstr ""
+msgstr "Quản lý Bán hàng và Kho"
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.res_config_settings_view_form_stock
@@ -839,13 +834,13 @@ msgstr "Thời gian dự phòng cho bán hàng"
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.xml:0
 msgid "Select a reason..."
-msgstr ""
+msgstr "Chọn lý do..."
 
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/return_order_dialog/return_order_dialog.xml:0
 msgid "Select at least one product and a return reason."
-msgstr ""
+msgstr "Chọn ít nhất một sản phẩm và một lý do trả hàng."
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_stock_route__sale_selectable
@@ -855,7 +850,7 @@ msgstr "Có thể chọn trên dòng đơn bán"
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_return_reason__sequence
 msgid "Sequence"
-msgstr ""
+msgstr "Trình tự"
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_sale_order__picking_policy
@@ -891,7 +886,7 @@ msgstr "Báo cáo quy tắc cung ứng"
 #. module: sale_stock
 #: model:ir.model,name:sale_stock.model_stock_replenishment_info
 msgid "Stock delivery time information"
-msgstr ""
+msgstr "Thông tin thời gian giao hàng từ kho"
 
 #. module: sale_stock
 #: model:ir.model,name:sale_stock.model_report_stock_report_stock_rule
@@ -901,7 +896,6 @@ msgstr "Báo cáo quy tắc cung ứng"
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/xml/delay_alert.xml:0
-#, fuzzy
 msgid "The delivery"
 msgstr "Phiếu xuất kho"
 
@@ -909,11 +903,11 @@ msgstr "Phiếu xuất kho"
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/product_catalog/sale_order_line/sale_order_line.js:0
 msgid ""
-"The ordered quantity cannot be decreased below the amount already delivered. "
-"Instead, create a return in your inventory."
+"The ordered quantity cannot be decreased below the amount already delivered."
+" Instead, create a return in your inventory."
 msgstr ""
-"Không thể giảm số lượng đã đặt xuống dưới số lượng đã giao. Thay vào đó, hãy "
-"tạo một phiếu trả hàng trong tồn kho của bạn."
+"Không thể giảm số lượng đã đặt xuống dưới số lượng đã giao. Thay vào đó, hãy"
+" tạo một phiếu trả hàng trong tồn kho của bạn."
 
 #. module: sale_stock
 #. odoo-python
@@ -954,7 +948,6 @@ msgstr "Người dùng"
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/widgets/qty_at_date_widget.xml:0
-#, fuzzy
 msgid "View Forecast"
 msgstr "Xem dự báo"
 
@@ -1019,47 +1012,5 @@ msgstr "đã xử lý thay vì"
 #. module: sale_stock
 #. odoo-javascript
 #: code:addons/sale_stock/static/src/xml/delay_alert.xml:0
-#, fuzzy
 msgid "will be late."
 msgstr "sẽ bị trễ."
-
-#~ msgid "Accrued Orders Wizard"
-#~ msgstr "Công cụ đơn hàng dồn tích"
-
-#~ msgid "Delivered"
-#~ msgstr "Đã giao"
-
-#~ msgid "Not Available"
-#~ msgstr "Không có"
-
-#~ msgid "Not Delivered"
-#~ msgstr "Chưa giao"
-
-#~ msgid "Partially Delivered"
-#~ msgstr "Đã giao một phần"
-
-#, fuzzy
-#~ msgid "Shipping Status"
-#~ msgstr "Trạng thái vận chuyển"
-
-#~ msgid "Started"
-#~ msgstr "Đã bắt đầu"
-
-#~ msgid "<i class=\"oi oi-fw\" data-icon=\"close\"/>Cancelled"
-#~ msgstr "<i class=\"oi oi-fw\" data-icon=\"close\"/>Đã hủy"
-
-#~ msgid "<i class=\"oi oi-fw\" data-icon=\"schedule\"/>Preparation"
-#~ msgstr "<i class=\"oi oi-fw\" data-icon=\"schedule\"/>Chuẩn bị"
-
-#~ msgid ""
-#~ "<span class=\"small badge rounded-pill text-bg-success "
-#~ "orders_label_text_align\">\n"
-#~ "                                        <i class=\"oi oi-fw\" data-"
-#~ "icon=\"local_shipping\"/> Shipped\n"
-#~ "                                    </span>"
-#~ msgstr ""
-#~ "<span class=\"small badge rounded-pill text-bg-success "
-#~ "orders_label_text_align\">\n"
-#~ "                                        <i class=\"oi oi-fw\" data-"
-#~ "icon=\"local_shipping\"/> Đã vận chuyển\n"
-#~ "                                    </span>"
