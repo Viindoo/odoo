@@ -23,6 +23,7 @@ class QuotationDocument(models.Model):
         comodel_name='ir.attachment',
         ondelete='cascade',
         required=True,
+        index=True,
     )
     document_type = fields.Selection(
         string="Document Type",
