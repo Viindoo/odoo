@@ -3,6 +3,8 @@
 from datetime import datetime, timedelta
 from unittest.mock import patch
 
+from lxml import html
+
 from odoo import Command
 from odoo.exceptions import AccessError
 from odoo.tests import tagged, JsonRpcException
@@ -306,3 +308,77 @@ class TestFlows(AccountPaymentCommon, PaymentHttpCommon):
 
         self.assertEqual(resp['state'], 'done')
         self.assertTrue(invoice.payment_state == invoice._get_invoice_in_payment_state())
+
+    def _get_payment_status_blocks(self, invoice):
+        """ Return the payment status blocks of the portal page of ``invoice`` and its text. """
+        invoice._portal_ensure_token()
+        url = self._build_url(f'/my/invoices/{invoice.id}')
+        response = self._make_http_get_request(url, {'access_token': invoice.access_token})
+        self.assertEqual(response.status_code, 200)
+        page = html.fromstring(response.content)
+        blocks = page.xpath(
+            "//div[contains(concat(' ', normalize-space(@class), ' '), ' o_account_payment_tx_status ')]"
+        )
+        return blocks, response.text
+
+    def _create_invoice_with_transaction(self, state='pending'):
+        self.provider.pending_msg = '<p>Transfer the amount to our bank account</p>'
+        invoice = self._create_invoice_one_line(
+            price_unit=100.0, partner_id=self.partner, currency_id=self.currency, post=True,
+        )
+        transaction = self._create_transaction(
+            flow='redirect',
+            state=state,
+            amount=invoice.amount_total,
+            invoice_ids=[Command.set(invoice.ids)],
+        )
+        return invoice, transaction
+
+    def test_unpaid_invoice_portal_page_shows_pending_transaction_instructions(self):
+        """ While the customer's transfer is pending, the portal invoice page shows the payment status
+        block with the provider's instructions to finalize the payment. """
+        invoice, _transaction = self._create_invoice_with_transaction()
+        self.assertEqual(invoice.payment_state, 'not_paid')
+
+        blocks, page = self._get_payment_status_blocks(invoice)
+
+        self.assertEqual(len(blocks), 1)
+        self.assertIn('Transfer the amount to our bank account', page)
+
+    def test_paid_invoice_portal_page_hides_pending_transaction_instructions(self):
+        """ Once the invoice is fully paid by another payment, the pending transaction no longer
+        invites the customer to finalize a payment. """
+        invoice, _transaction = self._create_invoice_with_transaction()
+        self.env['account.payment.register'].with_context(
+            active_model='account.move', active_ids=invoice.ids,
+        ).create({})._create_payments()
+        self.assertTrue(invoice.currency_id.is_zero(invoice.amount_residual))
+
+        blocks, page = self._get_payment_status_blocks(invoice)
+
+        self.assertFalse(blocks)
+        self.assertNotIn('Transfer the amount to our bank account', page)
+
+    def test_invoice_paid_by_its_transaction_portal_page_shows_payment_status(self):
+        """ An invoice paid by its own online transaction shows the status of that payment. """
+        invoice, transaction = self._create_invoice_with_transaction(state='draft')
+        transaction._set_done()
+        transaction._post_process()
+        self.assertTrue(invoice.currency_id.is_zero(invoice.amount_residual))
+
+        blocks, _page = self._get_payment_status_blocks(invoice)
+
+        self.assertEqual(len(blocks), 1)
+
+    def test_cancelled_invoice_portal_page_hides_pending_transaction_instructions(self):
+        """ A pending transaction does not invite the customer to pay an invoice that is no longer
+        posted. """
+        invoice, _transaction = self._create_invoice_with_transaction()
+        invoice.button_draft()
+        invoice.button_cancel()
+        self.assertEqual(invoice.state, 'cancel')
+
+        blocks, page = self._get_payment_status_blocks(invoice)
+
+        self.assertFalse(blocks)
+        self.assertNotIn('Transfer the amount to our bank account', page)

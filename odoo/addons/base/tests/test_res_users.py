@@ -662,6 +662,32 @@ class TestUsersGroupWarning(TransactionCase):
             self.assertFalse(UserForm.user_group_warning)
 
 
+@tagged('post_install', '-at_install')
+class TestUserGroupsViewTranslation(TransactionCase):
+
+    def test_access_rights_headings_are_translated(self):
+        """ The headings of the Access Rights tab follow the language of the
+        user, also for application categories created after the view was built.
+        """
+        self.env['res.lang']._activate_lang('vi_VN')
+        categ = self.env['ir.module.category'].create({'name': 'Test Application'})
+        categ.with_context(lang='vi_VN').name = 'Ứng dụng thử nghiệm'
+        self.env['res.groups'].create([
+            {'name': 'Test User', 'category_id': categ.id},
+            {'name': 'Test Manager', 'category_id': categ.id},
+        ])
+        self.env['res.groups'].create({'name': 'Test Uncategorised'})
+        view = self.env.ref('base.user_groups_view').with_context(lang='vi_VN')
+        arch = view.arch_db
+        self.assertIn('string="Ứng dụng thử nghiệm"', arch)
+        self.assertNotIn('string="Test Application"', arch)
+        vi_env = self.env(context=dict(self.env.context, lang='vi_VN'))
+        for heading in (vi_env._("Other"), vi_env._("Access Rights Mismatch")):
+            self.assertIn(f'string="{heading}"', arch)
+        self.assertNotIn('string="Other"', arch)
+        self.assertNotIn('string="Access Rights Mismatch"', arch)
+
+
 class TestUsersTweaks(TransactionCase):
     def test_superuser(self):
         """ The superuser is inactive and must remain as such. """

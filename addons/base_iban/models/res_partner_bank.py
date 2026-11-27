@@ -103,6 +103,21 @@ class ResPartnerBank(models.Model):
         except ValidationError:
             return False
 
+    @api.model
+    def check_company_uses_iban(self):
+        """ Whether bank account numbers of the current company's country are IBANs.
+            A company without a country keeps the IBAN check. """
+        country_code = (self.env.company.country_code or '').lower()
+        return not country_code or _map_iban_territory.get(country_code, country_code) in _map_iban_template
+
+# Territories whose bank accounts carry the IBAN of another country.
+_map_iban_territory = {
+    'ax': 'fi',
+    'bl': 'fr', 'gf': 'fr', 'gp': 'fr', 'mf': 'fr', 'mq': 'fr', 'nc': 'fr', 'pf': 'fr',
+    'pm': 'fr', 're': 'fr', 'tf': 'fr', 'wf': 'fr', 'yt': 'fr',
+    'gg': 'gb', 'im': 'gb', 'je': 'gb',
+}
+
 # Map ISO 3166-1 -> IBAN template, as described here :
 # http://en.wikipedia.org/wiki/International_Bank_Account_Number#IBAN_formats_by_country
 _map_iban_template = {

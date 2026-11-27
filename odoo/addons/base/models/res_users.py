@@ -1821,6 +1821,29 @@ class GroupsView(models.Model):
             new_context.pop('install_filename', None)  # don't set arch_fs for this computed view
             new_context['lang'] = None
             view.with_context(new_context).write({'arch': xml_content})
+            if not (self._context.get('install_filename') or self._context.get(MODULE_UNINSTALL_FLAG)):
+                self._translate_user_groups_view(view)
+
+    def _translate_user_groups_view(self, view):
+        """ Translate the headings of the generated arch of ``view``: the
+            terms that did not exist in the previous arch have no translation
+            yet, and the translation files are not loaded again after the arch
+            is regenerated.
+        """
+        categories = self.env['ir.module.category'].search([])
+        for lang, _name in self.env['res.lang'].get_installed():
+            if lang == 'en_US':
+                continue
+            lang_env = self.env(context=dict(self._context, lang=lang))
+            terms = {
+                categ.name: categ_lang.name
+                for categ, categ_lang in zip(categories, categories.with_env(lang_env))
+            }
+            terms['Other'] = lang_env._("Other")
+            terms['Access Rights Mismatch'] = lang_env._("Access Rights Mismatch")
+            terms = {term: translation for term, translation in terms.items() if term != translation}
+            if terms:
+                view.update_field_translations('arch_db', {lang: terms})
 
     def get_application_groups(self, domain):
         """ Return the non-share groups that satisfy ``domain``. """

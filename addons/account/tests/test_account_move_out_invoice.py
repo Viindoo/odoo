@@ -4,8 +4,11 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.tests import Form, tagged
 from odoo import fields, Command
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools import file_path
+from odoo.tools.translate import code_translations
 
 from collections import defaultdict
+from pathlib import Path
 from unittest.mock import patch
 from datetime import timedelta
 from freezegun import freeze_time
@@ -2907,6 +2910,65 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             {'state': 'posted', 'date': fields.Date.from_string('2019-01-16')},
             {'state': 'posted', 'date': fields.Date.from_string('2019-01-16')},
         ])
+
+    def test_out_invoice_change_period_notes_show_percentage_with_one_percent_sign(self):
+        """ Postponing half of an invoice writes the percentage without an escaped "%%" in the
+        notes of the invoice and of both adjusting entries, in English and in a translated
+        language. """
+        self.env['res.lang']._activate_lang('vi_VN')
+        for lang in ('en_US', 'vi_VN'):
+            move = self._create_invoice_one_line(price_unit=1000.0, invoice_date='2019-01-01', post=True)
+            messages_before = move.message_ids
+            wizard = self.env['account.automatic.entry.wizard'].with_context(
+                lang=lang,
+                active_model='account.move.line',
+                active_ids=move.invoice_line_ids.ids,
+            ).create({
+                'action': 'change_period',
+                'date': '2019-02-01',
+                'percentage': 50,
+                'journal_id': self.company_data['default_journal_misc'].id,
+                'revenue_accrual_account': self.company_data['default_account_assets'].id,
+            })
+            wizard_res = wizard.do_action()
+            adjusting_moves = self.env['account.move'].browse(wizard_res['domain'][0][2])
+            self.assertEqual(len(adjusting_moves), 2)
+            (move + adjusting_moves).invalidate_recordset(['message_ids'])
+            self.assertEqual(len(move.message_ids - messages_before), 1, "The invoice gets one note.")
+            for record in move + adjusting_moves:
+                note = str(record.message_ids[:1].body)
+                self.assertIn('50.00', note, "The note states the postponed percentage.")
+                self.assertNotIn('%%', note)
+
+    def test_change_period_note_translations_fill_with_the_wizard_values(self):
+        """ Every shipped translation of the change-period notes can be filled by the wizard, so
+        the action does not fail for a user of that language. """
+        move = self._create_invoice_one_line(price_unit=1000.0, invoice_date='2019-01-01', post=True)
+        wizard = self.env['account.automatic.entry.wizard'].with_context(
+            active_model='account.move.line',
+            active_ids=move.invoice_line_ids.ids,
+        ).create({
+            'action': 'change_period',
+            'date': '2019-02-01',
+            'percentage': 50,
+            'journal_id': self.company_data['default_journal_misc'].id,
+            'revenue_accrual_account': self.company_data['default_account_assets'].id,
+        })
+        sources = (
+            "cancelling {percent}% of {amount}",
+            "Adjusting Entry {link} {percent}% of {amount} recognized from {date}",
+            "Adjusting Entry {link} {percent}% of {amount} recognized on {new_date}",
+        )
+        i18n_dir = Path(file_path('account/i18n'))
+        for po_file in sorted(i18n_dir.glob('*.po')):
+            translations = code_translations.get_python_translations('account', po_file.stem)
+            for source in sources:
+                translation = translations.get(source)
+                if not translation:
+                    continue
+                with self.subTest(language=po_file.stem, source=source):
+                    note = wizard._format_strings(translation, move, 500.0)
+                    self.assertIn('50.00', note)
 
     @freeze_time("2017-01-01")
     def test_out_invoice_change_to_future_period_accrual_1(self):
