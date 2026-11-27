@@ -310,7 +310,7 @@
         </xpath>
         <xpath expr="//div[@id='invoice_content']//div[hasclass('o_portal_html_view')]" position="before">
             <t t-set="tx" t-value="invoice.get_portal_last_transaction()"/>
-            <div t-if="invoice.get_portal_last_transaction() and invoice.amount_total and not success and not error and (invoice.payment_state != 'not_paid' or tx.state in ('pending', 'authorized')) and (invoice.payment_state != 'paid' and tx.state == 'done')"
+            <div t-if="invoice.get_portal_last_transaction() and invoice.state == 'posted' and invoice.amount_total and not success and not error and (invoice.payment_state != 'not_paid' or tx.state in ('pending', 'authorized')) and (not invoice.currency_id.is_zero(invoice.amount_residual) or tx.state == 'done')"
                  class="o_account_payment_tx_status"
                  t-att-data-invoice-id="invoice.id">
                 <t t-call="payment.state_header"/>
