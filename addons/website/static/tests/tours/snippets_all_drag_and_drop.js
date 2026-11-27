@@ -48,11 +48,14 @@ for (let snippet of snippetsNames) {
     const isModal = ['s_popup', 's_newsletter_subscribe_popup'].includes(snippet.name);
     const isDropInOnlySnippet = Object.keys(dropInOnlySnippets).includes(snippet.name);
 
+    // The editor ignores the drag of a thumbnail until the insertion of the
+    // previous snippet is over (see the handle of its draggable): a popup is
+    // hidden instead of removed, so nothing else waits for its insertion.
     let draggableElSelector = "";
     if (snippet.group) {
-        draggableElSelector = `#oe_snippets .oe_snippet[data-snippet-group="${snippet.group}"] .oe_snippet_thumbnail`;
+        draggableElSelector = `#oe_snippets .oe_snippet[data-snippet-group="${snippet.group}"] .oe_snippet_thumbnail:not(.o_we_ongoing_insertion)`;
     } else {
-        draggableElSelector = `#oe_snippets .oe_snippet:has( > [data-snippet="${snippet.name}"]) .oe_snippet_thumbnail`;
+        draggableElSelector = `#oe_snippets .oe_snippet:has( > [data-snippet="${snippet.name}"]) .oe_snippet_thumbnail:not(.o_we_ongoing_insertion)`;
     }
 
     const snippetSteps = [{
