@@ -70,3 +70,59 @@ test("Iban Widget full flow", async () => {
     await click(".o_form_button_save");
     await contains(".o_iban", { count: 0 }); // "Shouldn't display any validation while not editing"
 });
+
+async function editBankAccountNumber({ companyUsesIban }) {
+    const pyEnv = await startServer();
+    const bankId = pyEnv["res.partner.bank"].create({ acc_number: "" });
+    const partnerId = pyEnv["res.partner"].create({
+        name: "Awesome partner",
+        bank_ids: [bankId],
+    });
+    await start();
+    onRpc("res.partner.bank", "check_company_uses_iban", () => companyUsesIban);
+    onRpc("res.partner.bank", "check_iban", (params) => {
+        const iban = params.args[1].replace(/\s/g, "");
+        return iban === "DE89370400440532013000";
+    });
+    await openFormView("res.partner", partnerId, {
+        arch: `<form>
+                <sheet>
+                    <field name="bank_ids">
+                        <list editable="bottom">
+                            <field name="acc_number" widget="iban"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>`,
+    });
+    await click("td.o_iban_cell");
+    await contains(".o_iban_input_with_validator");
+}
+
+async function typeAccountNumber(accountNumber) {
+    await insertText(".o_iban_input_with_validator", accountNumber, { replace: true });
+    await advanceTime(DELAY);
+}
+
+test.tags("focus required");
+test("Domestic account number is not flagged when the company country does not use IBAN", async () => {
+    await editBankAccountNumber({ companyUsesIban: false });
+    await typeAccountNumber("0123456789");
+    await contains(".o_iban", { count: 0 });
+    await typeAccountNumber("DE89370400440532013000");
+    await contains("i.fa.fa-check.o_iban");
+    await contains("i.fa.fa-times.o_iban_fail", { count: 0 });
+    await typeAccountNumber("DE00370400440532013000");
+    await contains("i.fa.fa-times.o_iban_fail");
+    await contains("i.fa.fa-check.o_iban", { count: 0 });
+});
+
+test.tags("focus required");
+test("Non-IBAN account number is flagged when the company country uses IBAN", async () => {
+    await editBankAccountNumber({ companyUsesIban: true });
+    await typeAccountNumber("0123456789");
+    await contains("i.fa.fa-times.o_iban_fail");
+    await contains("i.fa.fa-check.o_iban", { count: 0 });
+    await typeAccountNumber("DE89370400440532013000");
+    await contains("i.fa.fa-check.o_iban");
+});

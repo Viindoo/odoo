@@ -19,11 +19,23 @@ export class IbanWidget extends CharField {
             if (!iban) {
                 this.state.isValidIBAN = null;
             } else if (!/[A-Za-z]{2}.{3,}/.test(iban)) {
-                this.state.isValidIBAN = false;
+                // A domestic account number is only an error where IBAN is the norm.
+                this.state.isValidIBAN = (await this.companyUsesIban()) ? false : null;
             } else {
                 this.state.isValidIBAN = await this.orm.call("res.partner.bank", "check_iban", [[], iban]);
             }
         }, DELAY);
+    }
+
+    async companyUsesIban() {
+        if (this._companyUsesIban === undefined) {
+            this._companyUsesIban = await this.orm.call(
+                "res.partner.bank",
+                "check_company_uses_iban",
+                []
+            );
+        }
+        return this._companyUsesIban;
     }
 }
 
