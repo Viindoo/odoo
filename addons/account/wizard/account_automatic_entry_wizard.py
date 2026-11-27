@@ -424,20 +424,20 @@ class AutomaticEntryWizard(models.TransientModel):
             body = Markup("%(title)s<ul><li>%(link1)s %(second)s</li><li>%(link2)s %(third)s</li></ul>") % {
                 'title': _("Adjusting Entries have been created for this invoice:"),
                 'link1': self._format_move_link(accrual_move),
-                'second': self._format_strings(_("cancelling {percent}%% of {amount}"), move, amount),
+                'second': self._format_strings(_("cancelling {percent}% of {amount}"), move, amount),
                 'link2': self._format_move_link(destination_move),
                 'third': self._format_strings(_("postponing it to {new_date}"), move, amount),
             }
             move.message_post(body=body)
             destination_messages += [
                 self._format_strings(
-                    escape(_("Adjusting Entry {link} {percent}%% of {amount} recognized from {date}")),
+                    escape(_("Adjusting Entry {link} {percent}% of {amount} recognized from {date}")),
                     move, amount,
                 )
             ]
             accrual_move_messages[accrual_move] += [
                 self._format_strings(
-                    escape(_("Adjusting Entry {link} {percent}%% of {amount} recognized on {new_date}")),
+                    escape(_("Adjusting Entry {link} {percent}% of {amount} recognized on {new_date}")),
                     move, amount,
                 )
             ]
