@@ -90,6 +90,13 @@ registerWebsitePreviewTour(
             trigger: ".modal-footer .btn-primary",
             run: "click",
         },
+        {
+            // The editor drops the Edit button 200ms after it opened. Saving
+            // before that lets the late drop hide the button again once the
+            // editor is closed.
+            content: "Wait until the editor has dropped the Edit button",
+            trigger: "body.o_builder_open:not(:has(.o_menu_systray .o_edit_website_container))",
+        },
         ...clickOnSave(),
         ...clickOnEditAndWaitEditModeInTranslatedPage(),
         ...insertSnippet({ name: "Cover", id: "s_cover", groupName: "Intro" }),
