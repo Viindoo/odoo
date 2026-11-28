@@ -43,6 +43,13 @@ registry.category("web_tour.tours").add("PosHrTour", {
             NumberPopup.isShown("••••"),
             Dialog.confirm(),
             Dialog.confirm("Open Register"),
+            {
+                // the opening control dialog closes once the session is opened on
+                // the server: a cashier change before that makes the server open it
+                // for the new cashier, who may have no email to post the message as
+                content: "wait for the register to be opened",
+                trigger: "body:not(.modal-open)",
+            },
             ProductScreen.isShown(),
             PosHr.cashierNameIs("Pos Employee1"),
             PosHr.clickCashierName(),
